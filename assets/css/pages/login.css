@@ -1,0 +1,165 @@
+@import url('https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+body {
+    /* background-image: url("../../images/login-svg.svg");
+    background-position: cover;
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 100vh;
+    width: 100%;
+    background-attachment: fixed; */
+    background-color: #ffffff;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='152' height='152' viewBox='0 0 152 152'%3E%3Cg fill-rule='evenodd'%3E%3Cg id='temple' fill='%23e4e4e4' fill-opacity='0.18'%3E%3Cpath d='M152 150v2H0v-2h28v-8H8v-20H0v-2h8V80h42v20h20v42H30v8h90v-8H80v-42h20V80h42v40h8V30h-8v40h-42V50H80V8h40V0h2v8h20v20h8V0h2v150zm-2 0v-28h-8v20h-20v8h28zM82 30v18h18V30H82zm20 18h20v20h18V30h-20V10H82v18h20v20zm0 2v18h18V50h-18zm20-22h18V10h-18v18zm-54 92v-18H50v18h18zm-20-18H28V82H10v38h20v20h38v-18H48v-20zm0-2V82H30v18h18zm-20 22H10v18h18v-18zm54 0v18h38v-20h20V82h-18v20h-20v20H82zm18-20H82v18h18v-18zm2-2h18V82h-18v18zm20 40v-18h18v18h-18zM30 0h-2v8H8v20H0v2h8v40h42V50h20V8H30V0zm20 48h18V30H50v18zm18-20H48v20H28v20H10V30h20V10h38v18zM30 50h18v18H30V50zm-2-40H10v18h18V10z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    font-family: "Fira Sans", serif;
+    position: relative;
+}
+
+.logo {
+    height: 40px;
+}
+
+.fs-14 {
+    font-size: 14px !important;
+}
+
+.fs-12 {
+    font-size: 12px !important;
+}
+
+.form-control {
+    border-radius: 2px !important;
+    font-size: 14px !important;
+}
+
+.form-control:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+label {
+    font-weight: bold;
+    font-size: 12px;
+    color: #777777;
+}
+
+/* Continuous spinning animation */
+.animate-spin {
+    animation: spin 1s linear infinite;
+}
+
+/* Keyframes for spinning */
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.shadow-green {
+    position: relative;
+    text-shadow:
+        0 0 10px rgba(0, 255, 0, 0.8),
+        /* Outer glow */
+        0 0 20px rgba(0, 255, 0, 0.6),
+        /* Medium glow */
+        0 0 30px rgba(0, 255, 0, 0.4);
+    /* Inner glow */
+}
+
+.shadow-green::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 255, 0, 0.3);
+    filter: blur(15px);
+    z-index: -1;
+    /* Behind the text */
+    border-radius: 5px;
+}
+
+
+/* Animated Circle  */
+/* Circle balloon animation */
+.circle {
+    position: absolute;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #004d00, #006600, #009900, #33cc33, #66ff66);
+    /* Rich green gradient */
+    /* Green gradient */
+    opacity: 0.7;
+    animation: float 10s infinite ease-in-out;
+    z-index: -1;
+    width: 100px;
+    height: 100px;
+    top: 20%;
+    left: 60%;
+    animation-duration: 8s;
+}
+
+
+/* Float animation */
+@keyframes float {
+    0% {
+        transform: translateY(0) translateX(0);
+    }
+
+    50% {
+        transform: translateY(-20px) translateX(20px);
+    }
+
+    100% {
+        transform: translateY(0) translateX(0);
+    }
+}
+
+
+/* News ANimation section  */
+/* Marquee container */
+.marquee-container {
+    overflow: hidden;
+    white-space: nowrap;
+    position: relative;
+}
+
+/* Marquee content */
+.marquee-content {
+    display: inline-block;
+    white-space: wrap;
+    width: 300px;
+    animation: marquee 30s linear infinite;
+    font-size: 12px;
+}
+
+/* Marquee animation */
+@keyframes marquee {
+    0% {
+        transform: translateX(100%);
+    }
+
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
+/* Pause animation on hover */
+.marquee-container:hover .marquee-content {
+    animation-play-state: paused;
+}
+
+
+/* Side login image  */
+.login-side {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    z-index: -1;
+}
+.login-side img {
+    width: 500px;
+}

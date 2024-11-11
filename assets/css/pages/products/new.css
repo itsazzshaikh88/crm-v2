@@ -1,0 +1,20 @@
+/* Styling for upload box */
+.upload-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 30px;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+.upload-box:hover {
+    background-color: #f0f8ff;
+}
+.upload-icon {
+    font-size: 2rem;
+    margin-bottom: 5px;
+}
