@@ -104,9 +104,25 @@ var myModal = new bootstrap.Modal(document.getElementById("client-list-modal"), 
     keyboard: false,        // Disable closing on escape key
     backdrop: 'static'      // Disable closing when clicking outside the modal
 });
+
+// Modal Related Code
+var newClientModal = new bootstrap.Modal(document.getElementById("new-client-modal"), {
+    keyboard: false,        // Disable closing on escape key
+    backdrop: 'static'      // Disable closing when clicking outside the modal
+});
 function openClientListModal() {
     myModal.show();
     fetchClients();
+}
+
+function openNewClientModal() {
+    // Set new UUID to modal input
+    const uuidForClientModal = uuid_v4()
+    const modalUUIDInput = document.getElementById("lbl-modal-UUID")
+    if (modalUUIDInput)
+        modalUUIDInput.value = uuidForClientModal
+
+    newClientModal.show()
 }
 
 function filterProducts() {
@@ -159,5 +175,11 @@ function removeClientName() {
     emailAddress.value = ''
     chooseClientBtn.classList.toggle("d-none")
     clientNameBtn.classList.toggle("d-none")
+}
+
+// reset new client form
+function resetNewClientForm() {
+    const form = document.getElementById("new_client_form");
+    form.reset()
 }
 

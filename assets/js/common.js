@@ -77,7 +77,7 @@ function toasterNotification(option) {
 }
 
 function filterCriterias(filters = []) {
-    
+
     if (filters != []) {
         // Create an object to hold the values
         let filteredObject = {};
@@ -92,4 +92,22 @@ function filterCriterias(filters = []) {
         return filteredObject;
     }
     return {};
+}
+
+function uuid_v4() {
+    // Generate 16 random bytes (128 bits)
+    const data = crypto.getRandomValues(new Uint8Array(16));
+
+    // Set the version to 4 (UUID v4)
+    data[6] = (data[6] & 0x0f) | 0x40;
+
+    // Set the variant to RFC 4122
+    data[8] = (data[8] & 0x3f) | 0x80;
+
+    // Format as UUID (xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx)
+    return [...data]
+        .map((b, i) =>
+            [4, 6, 8, 10].includes(i) ? `-${b.toString(16).padStart(2, '0')}` : b.toString(16).padStart(2, '0')
+        )
+        .join('');
 }

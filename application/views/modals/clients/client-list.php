@@ -20,7 +20,7 @@
                         </div>
                         <div class="d-flex align-items-center justify-content-center fw-bold">OR</div>
                         <div class="d-flex align-items-center justify-content-center">
-                            <a href="javascript:void(0)" class="btn btn-sm btn-primary">Create New Client</a>
+                            <a href="javascript:void(0)" class="btn btn-sm btn-primary" onclick="openNewClientModal()">Create New Client</a>
                         </div>
                     </div>
                 </div>
