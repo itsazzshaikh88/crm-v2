@@ -94,7 +94,7 @@ class Product_model extends CI_Model
         }
     }
 
-    function get_products($type = 'list', $limit = 10, $currentPage = 1, $filters = [])
+    function get_products($type = 'list', $limit = 10, $currentPage = 1, $filters = [], $search = [])
     {
         $offset = get_limit_offset($currentPage, $limit);
 
@@ -112,6 +112,16 @@ class Product_model extends CI_Model
                 $this->db->where($key, $value);
             }
         }
+
+        if (!empty($search) && is_array($search)) {
+            if (isset($search['product'])) {
+                $this->db->group_start(); // Begin group for OR conditions
+                $this->db->like('p.PRODUCT_NAME', $search['product'], 'both', false);
+                $this->db->or_like('p.PRODUCT_CODE', $search['product'], 'both', false);
+                $this->db->group_end(); // End group for OR conditions
+            }
+        }
+
 
         // Apply limit and offset only if 'list' type and offset is greater than zero
         if ($type == 'list') {

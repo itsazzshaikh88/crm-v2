@@ -5,32 +5,24 @@
         <div class="card">
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-row-bordered gy-7">
+                    <table class="table table-row-dashed gy-7" id="request-list">
                         <thead>
                             <tr class="fw-bold fs-6 text-gray-800">
                                 <th>#</th>
-                                <th>Request #</th>
-                                <th>Title</th>
-                                <th>Mobile #</th>
+                                <th class="w-350">Request Details</th>
+                                <th class="w-250">Company Details</th>
+                                <th>Contact #</th>
                                 <th>Email</th>
-                                <th>Company</th>
-                                <th>Date</th>
+                                <th>Request Date</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td colspan="8" class="text-center text-danger">
-                                    <div class="d-flex justify-content-center align-items-center flex-column">
-                                        <img src="assets/images/no-data.png" class="no-data-img-table" alt="">
-                                        <h4 class="text-danger">No data available</h4>
-                                    </div>
-                                </td>
-                            </tr>
+                        <tbody id="request-list-tbody">
+                            
                         </tbody>
                     </table>
                 </div>
-                <?php include_once 'application/views/common/paginate.php' ?>
+                <?= renderPaginate('current-page', 'total-pages', 'page-of-pages', 'range-of-records') ?>
             </div>
         </div>
         <!--end::PAGE CONTENT GOES FROM HERE-->

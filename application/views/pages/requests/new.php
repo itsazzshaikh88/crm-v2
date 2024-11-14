@@ -29,7 +29,7 @@
                                 <input type="hidden" name="ID" id="ID" value="">
                                 <input type="hidden" name="CLIENT_ID" id="CLIENT_ID" value="">
                             </h1>
-                            <h4 class="text-muted fw-normal" id="REQUEST_NUMBER">Request Number: <span class="text-black">REQ-0000-00-00</span> </h4>
+                            <h4 class="text-muted fw-normal">Request Number: <span class="text-black" id="REQUEST_NUMBER">REQ-0000-00-00</span> </h4>
 
                         </div>
                         <div class="col-md-12 mb-2">
@@ -39,7 +39,7 @@
                                 </div>
                                 <div class="col-md-9">
                                     <input type="text" name="REQUEST_TITLE" id="REQUEST_TITLE" class="form-control" placeholder="Enter request title">
-                                    <span class="text-danger err-lbl" id="lbl-STATE"></span>
+                                    <span class="text-danger err-lbl" id="lbl-REQUEST_TITLE"></span>
                                 </div>
                             </div>
                         </div>
@@ -49,8 +49,8 @@
                                     <label for="COMPANY_ADDRESS" class="fs-6 fw-bold required">Company Address</label>
                                 </div>
                                 <div class="col-md-9">
-                                    <input type="text" class="form-control" placeholder="Enter request title" name="COMPANY_ADDRESS" id="COMPANY_ADDRESS">
-                                    <span class="text-danger err-lbl" id="lbl-STATE"></span>
+                                    <input type="text" class="form-control" placeholder="Enter client company address" name="COMPANY_ADDRESS" id="COMPANY_ADDRESS">
+                                    <span class="text-danger err-lbl" id="lbl-COMPANY_ADDRESS"></span>
                                 </div>
                             </div>
                         </div>
@@ -61,7 +61,7 @@
                                 </div>
                                 <div class="col-md-9">
                                     <input type="text" class="form-control" placeholder="Write your billing address" name="BILLING_ADDRESS" id="BILLING_ADDRESS">
-                                    <span class="text-danger err-lbl" id="lbl-STATE"></span>
+                                    <span class="text-danger err-lbl" id="lbl-BILLING_ADDRESS"></span>
                                 </div>
                             </div>
                         </div>
@@ -72,7 +72,7 @@
                                 </div>
                                 <div class="col-md-9">
                                     <input type="text" class="form-control" placeholder="Write your shipping address" name="SHIPPING_ADDRESS" id="SHIPPING_ADDRESS">
-                                    <span class="text-danger err-lbl" id="lbl-STATE"></span>
+                                    <span class="text-danger err-lbl" id="lbl-SHIPPING_ADDRESS"></span>
                                 </div>
                             </div>
                         </div>
@@ -82,15 +82,15 @@
                                     <label for="" class="fs-6 fw-bold required">Mobile Number</label>
                                 </div>
                                 <div class="col-md-3">
-                                    <input type="text" class="form-control" placeholder="Write your shipping address" name="CONTACT_NUMBER" id="CONTACT_NUMBER">
-                                    <span class="text-danger err-lbl" id="lbl-STATE"></span>
+                                    <input type="text" class="form-control" placeholder="Contact Number" name="CONTACT_NUMBER" id="CONTACT_NUMBER">
+                                    <span class="text-danger err-lbl" id="lbl-CONTACT_NUMBER"></span>
                                 </div>
                                 <div class="col-md-3 d-flex align-items-center justify-content-end">
                                     <label for="" class="fs-6 fw-bold required">Email Address</label>
                                 </div>
                                 <div class="col-md-3">
-                                    <input type="text" class="form-control" placeholder="Write your shipping address" name="EMAIL_ADDRESS" id="EMAIL_ADDRESS">
-                                    <span class="text-danger err-lbl" id="lbl-STATE"></span>
+                                    <input type="text" class="form-control" placeholder="Email address " name="EMAIL_ADDRESS" id="EMAIL_ADDRESS">
+                                    <span class="text-danger err-lbl" id="lbl-EMAIL_ADDRESS"></span>
                                 </div>
                             </div>
                         </div>
@@ -105,7 +105,7 @@
                         <table class="table table-row-bordered align-middle gy-4 gs-9" id="request-lines-table">
                             <thead class="border-bottom border-gray-200 fs-6 text-gray-600 fw-bold bg-light bg-opacity-75">
                                 <tr>
-                                    <td class="min-w-150px">Product Code</td>
+                                    <td class="min-w-150px">Product</td>
                                     <td class="min-w-250px">Product Desc</td>
                                     <td class="min-w-150px">Qty</td>
                                     <td class="min-w-150px">Req Date</td>
@@ -122,27 +122,27 @@
                             <tbody>
                                 <tr>
                                     <td>
-                                        <select name="PRODUCT_ID[]" id="PRODUCT_ID_1" class="form-control">
-                                            <option value="">Select</option>
+                                        <select name="PRODUCT_ID[]" id="PRODUCT_ID_1" class="form-control" onclick="chooseProduct(1)">
+                                            <option value="">Choose</option>
                                         </select>
                                     </td>
                                     <td>
-                                        <input type="text" name="" id="" class="form-control" name="PRODUCT_DESC[]" id="PRODUCT_DESC_1">
+                                        <input type="text" class="form-control" name="PRODUCT_DESC[]" id="PRODUCT_DESC_1">
                                     </td>
                                     <td>
-                                        <input type="text" name="" id="" class="form-control" name="QUANTITY[]" id="QUANTITY_1">
+                                        <input type="text" class="form-control" name="QUANTITY[]" id="QUANTITY_1">
                                     </td>
                                     <td>
                                         <input type="date" class="form-control" name="REQUIRED_DATE[]" id="REQUIRED_DATE_1">
                                     </td>
                                     <td>
-                                        <input type="text" name="" id="" class="form-control" name="COLOR[]" id="COLOR_1">
+                                        <input type="text" class="form-control" name="COLOR[]" id="COLOR_1">
                                     </td>
                                     <td>
-                                        <input type="text" name="" id="" class="form-control" name="TRANSPORTATION[]" id="TRANSPORTATION_1">
+                                        <input type="text" class="form-control" name="TRANSPORTATION[]" id="TRANSPORTATION_1">
                                     </td>
                                     <td>
-                                        <input type="text" name="" id="" class="form-control" name="COMMENTS[]" id="COMMENTS_1">
+                                        <input type="text" class="form-control" name="COMMENTS[]" id="COMMENTS_1">
                                     </td>
                                     <td>
                                         <button class="btn btn-sm border border-danger" type="button" onclick="removeRow(this)">
@@ -217,4 +217,5 @@
 $this->load->view('loaders/full-page-loader');
 $this->load->view('modals/clients/client-list');
 $this->load->view('modals/clients/new-client');
+$this->load->view('modals/products/product-list');
 ?>

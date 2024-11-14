@@ -13,7 +13,7 @@ class Requests extends App_Controller
         $data['navlink'] = 'requests';
         // $data['css_files'] = ['assets/css/pages/requests/new.css'];
         $data['scripts'] = ['assets/js/pages/clients/modals/modal-list.js', 'assets/js/pages/requests/new.js'];
-        $data['toolbar'] = 'new-request';
+        $data['toolbar'] = ['name' => 'new-request', 'action' => 'form'];
         $this->load->view('layout', $data);
     }
     public function list()
@@ -22,6 +22,21 @@ class Requests extends App_Controller
         $data['page_title'] = 'Requests - CRM Application';
         $data['page_heading'] = 'All Requests';
         $data['navlink'] = 'requests';
+        $data['toolbar'] = ['name' => 'new-request', 'action' => 'list'];
+        $data['scripts'] = ['assets/js/pages/requests/list.js'];
+        $this->load->view('layout', $data);
+    }
+
+    public function view($uuid = null)
+    {
+        $data['uuid'] = $uuid;
+        $data['view_path'] = 'pages/requests/view';
+        $data['page_title'] = 'Request Details - CRM Application';
+        $data['page_heading'] = 'Request Details';
+        $data['navlink'] = 'requests';
+        $data['css_files'] = [];
+        $data['scripts'] = ['assets/js/pages/requests/view.js'];
+        $data['toolbar'] = ['name' => 'new-request', 'action' => 'view'];
         $this->load->view('layout', $data);
     }
 }

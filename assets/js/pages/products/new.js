@@ -60,7 +60,7 @@ async function submitForm(e) {
         if (response.ok) {
             const data = await response.json();
             toasterNotification({ type: 'success', message: "Product Saved Successfully!" });
-            form.reset();
+            window.location.reload()
         } else {
             const errorData = await response.json();
             if (errorData.status === 422) {
@@ -152,9 +152,9 @@ function displayFiles() {
     fileList.innerHTML = ''; // Clear current list
     selectedFiles.forEach((file, index) => {
         let content = '';
-        content += `<div class="relative d-flex align-items-center justify-content-between gap-8 bg-light rounded px-4 py-2 cursor-pointer position-relative" onclick="removeFile(${index})">
+        content += `<div class="relative d-flex align-items-center justify-content-between gap-8 bg-light rounded px-4 py-2 cursor-pointer position-relative">
                         <p class="mb-0">${file.name}</p>
-                        <span class="text-white"><i class="fa-solid fa-x text-danger"></i></span>
+                        <span class="text-white" onclick="removeFile(${index})"><i class="fa-solid fa-x text-danger"></i></span>
                         <div class="position-absolute top-0 start-0 translate-middle">
                             <div class="bg-primary rounded-circle" style="width: 5px; height: 5px;"></div>
                         </div>
@@ -171,9 +171,9 @@ function displayUploadedFiles(productID) {
     fileList.innerHTML = ''; // Clear current list
     uploadedFiles.forEach((filename, index) => {
         let content = '';
-        content += `<div class="relative d-flex align-items-center justify-content-between gap-8 bg-light rounded px-4 py-2 cursor-pointer position-relative" onclick="deleteFileFromServer('${uploadedFiles}', ${productID})">
+        content += `<div class="relative d-flex align-items-center justify-content-between gap-8 bg-light rounded px-4 py-2 cursor-pointer position-relative">
                         <p class="mb-0">${filename}</p>
-                        <span class="text-white"><i class="fa-solid fa-x text-danger"></i></span>
+                        <span class="text-white" onclick="deleteFileFromServer('${uploadedFiles}', ${productID})"><i class="fa-solid fa-x text-danger"></i></span>
                     </div>`;
 
         // Append the content as HTML to the fileList element

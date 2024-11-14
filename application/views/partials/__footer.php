@@ -72,6 +72,7 @@ $cpyright_years = ($start_year == $current_year) ? $current_year : "$start_year-
     var APIUrl = "<?= base_url() ?>api";
     var hostUrl = "assets/";
     const PRODUCT_IMAGES_URL = `${baseUrl}uploads/products/`;
+    const REQUEST_DOCS_URL = `${baseUrl}uploads/requests/`;
 
     const loginUserType = "<?= $loggedInUser['usertype'] ?? 'Guest' ?>";
     if (loginUserType) {

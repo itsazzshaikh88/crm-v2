@@ -132,9 +132,10 @@ class Products extends Api_controller
         $limit = isset($data['limit']) ? $data['limit'] : null;
         $currentPage = isset($data['currentPage']) ? $data['currentPage'] : null;
         $filters = isset($data['filters']) ? $data['filters'] : [];
+        $search = isset($data['search']) ? $data['search'] : [];
 
-        $total_products = $this->Product_model->get_products('total', $limit, $currentPage, $filters);
-        $products = $this->Product_model->get_products('list', $limit, $currentPage, $filters);
+        $total_products = $this->Product_model->get_products('total', $limit, $currentPage, $filters, $search);
+        $products = $this->Product_model->get_products('list', $limit, $currentPage, $filters, $search);
 
         $response = [
             'pagination' => [

@@ -8,7 +8,7 @@ class Requests extends Api_controller
         parent::__construct();
     }
 
-    function new($product_id = null)
+    function new($request_id = null)
     {
         // Check if the authentication is valid
         $isAuthorized = $this->isAuthorized();
@@ -33,16 +33,13 @@ class Requests extends Api_controller
             }
 
             // Set validation rules
-            $this->form_validation->set_rules('DIVISION', 'Division', 'required');
-            $this->form_validation->set_rules('CATEGORY_ID', 'Category ID', 'required|integer');
-            $this->form_validation->set_rules('STATUS', 'Status', 'required');
-            $this->form_validation->set_rules('PRODUCT_NAME', 'Product Name', 'required|min_length[3]');
-            $this->form_validation->set_rules('DESCRIPTION', 'Description', 'required');
-            $this->form_validation->set_rules('BASE_PRICE', 'Base Price', 'required|numeric');
-            $this->form_validation->set_rules('CURRENCY', 'Currency', 'required');
-            $this->form_validation->set_rules('DISCOUNT_TYPE', 'Discount Type', 'required');
-            $this->form_validation->set_rules('TAXABLE', 'Taxable', 'required|in_list[yes,no]');
-            $this->form_validation->set_rules('TAX_PERCENTAGE', 'Tax Percentage', 'required|greater_than_equal_to[0]|less_than_equal_to[100]');
+            $this->form_validation->set_rules('REQUEST_TITLE', 'Request Title', 'required');
+            $this->form_validation->set_rules('COMPANY_ADDRESS', 'Company Address', 'required|min_length[3]');
+            $this->form_validation->set_rules('BILLING_ADDRESS', 'Billing Address', 'required|min_length[3]');
+            $this->form_validation->set_rules('SHIPPING_ADDRESS', 'Shipping Address', 'required|min_length[3]');
+            $this->form_validation->set_rules('CONTACT_NUMBER', 'Company Contact Number', 'required');
+            $this->form_validation->set_rules('EMAIL_ADDRESS', 'Company Email Address', 'required|valid_email');
+
 
             // Run validation
             if ($this->form_validation->run() == FALSE) {
@@ -59,8 +56,8 @@ class Requests extends Api_controller
             }
 
             // Directory to upload files
-            $uploadPath = './uploads/products/';
-            $allowedTypes = ['jpg', 'jpeg', 'png', 'gif', 'pdf', 'doc', 'docx', 'txt'];
+            $uploadPath = './uploads/requests/';
+            $allowedTypes = ['jpg', 'jpeg', 'png', 'gif', 'pdf', 'doc', 'docx', 'txt', 'xls', 'xlsx'];
             $uploadedFiles = null;
 
             // Check if files are attached
@@ -75,17 +72,16 @@ class Requests extends Api_controller
 
             $data = array_map([$this->security, 'xss_clean'], $data);
 
-
-            // Save Data to the product table
-            $created = $this->Product_model->add_product($product_id, $data, $isAuthorized['userid']);
+            // Save Data to the Request table
+            $created = $this->Request_model->add_request($request_id, $data, $isAuthorized['userid'], $isAuthorized['role']);
             if ($created) {
                 $this->sendHTTPResponse(201, [
                     'status' => 201,
-                    'message' => 'Product created successfully.',
+                    'message' => 'Request Saved Successfully',
                     'data' => $data
                 ]);
             } else {
-                throw new Exception('Failed to create new product.');
+                throw new Exception('Failed to create new request.');
             }
         } catch (Exception $e) {
             // Catch any unexpected errors and respond with a standardized error
@@ -133,17 +129,17 @@ class Requests extends Api_controller
         $currentPage = isset($data['currentPage']) ? $data['currentPage'] : null;
         $filters = isset($data['filters']) ? $data['filters'] : [];
 
-        $total_products = $this->Product_model->get_products('total', $limit, $currentPage, $filters);
-        $products = $this->Product_model->get_products('list', $limit, $currentPage, $filters);
+        $total_requests = $this->Request_model->get_requests('total', $limit, $currentPage, $filters);
+        $requests = $this->Request_model->get_requests('list', $limit, $currentPage, $filters);
 
         $response = [
             'pagination' => [
-                'total_records' => $total_products,
-                'total_pages' => generatePages($total_products, $limit),
+                'total_records' => $total_requests,
+                'total_pages' => generatePages($total_requests, $limit),
                 'current_page' => $currentPage,
                 'limit' => $limit
             ],
-            'products' => $products,
+            'requests' => $requests,
         ];
         return $this->output
             ->set_content_type('application/json')
@@ -170,49 +166,48 @@ class Requests extends Api_controller
         // Decode the JSON data as an associative array
         $data = json_decode($input, true);
 
-        // Validate input and check if `productUUID` is provided
-        if (!$data || !isset($data['productUUID'])) {
+        // Validate input and check if `requestUUID` is provided
+        if (!$data || !isset($data['requestUUID'])) {
             return $this->output
                 ->set_status_header(400)
                 ->set_content_type('application/json')
                 ->set_output(json_encode([
                     'status' => 'error',
                     'code' => 400,
-                    'message' => 'Invalid JSON input or missing productUUID'
+                    'message' => 'Invalid JSON input or missing requestUUID'
                 ]));
         }
 
-        // Retrieve product details using the provided productUUID
-        $productUUID = $data['productUUID'];
-        $productData = $this->Product_model->get_product_by_uuid($productUUID);
+        // Retrieve Request details using the provided requestUUID
+        $requestUUID = $data['requestUUID'];
+        $requestData = $this->Request_model->get_request_by_uuid($requestUUID);
 
-        // Check if product data exists
-        if (empty($productData['product'])) {
+        // Check if Request data exists
+        if (empty($requestData['header'])) {
             return $this->output
                 ->set_status_header(404)
                 ->set_content_type('application/json')
                 ->set_output(json_encode([
                     'status' => 'error',
                     'code' => 404,
-                    'message' => 'Product not found'
+                    'message' => 'Request not found'
                 ]));
         }
 
-        // Successful response with product data
+        // Successful response with Request data
         return $this->output
             ->set_status_header(200)
             ->set_content_type('application/json')
             ->set_output(json_encode([
                 'status' => 'success',
                 'code' => 200,
-                'message' => 'Product details retrieved successfully',
-                'data' => $productData
+                'message' => 'Request details retrieved successfully',
+                'data' => $requestData
             ]));
     }
 
-    function delete($productId)
+    function delete($requestId)
     {
-
         // Check if the authentication is valid
         $isAuthorized = $this->isAuthorized();
         if (!$isAuthorized['status']) {
@@ -233,27 +228,27 @@ class Requests extends Api_controller
             return;
         }
 
-        // Validate the product ID
-        if (empty($productId) || !is_numeric($productId)) {
+        // Validate the Request ID
+        if (empty($requestId) || !is_numeric($requestId)) {
             $this->output
                 ->set_content_type('application/json')
                 ->set_status_header(400) // 400 Bad Request status code
-                ->set_output(json_encode(['error' => 'Invalid product ID.']));
+                ->set_output(json_encode(['error' => 'Invalid Request ID.']));
             return;
         }
 
-        // Attempt to delete the product
-        $result = $this->Product_model->delete_product_by_id($productId);
+        // Attempt to delete the Request
+        $result = $this->Request_model->delete_Request_by_id($requestId);
         if ($result) {
             $this->output
                 ->set_content_type('application/json')
                 ->set_status_header(200) // 200 OK status code
-                ->set_output(json_encode(['status' => true, 'message' => 'Product deleted successfully.']));
+                ->set_output(json_encode(['status' => true, 'message' => 'Request deleted successfully.']));
         } else {
             $this->output
                 ->set_content_type('application/json')
                 ->set_status_header(500) // 500 Internal Server Error status code
-                ->set_output(json_encode(['status' => false, 'message' => 'Failed to delete the product.']));
+                ->set_output(json_encode(['status' => false, 'message' => 'Failed to delete the Request.']));
         }
     }
 }

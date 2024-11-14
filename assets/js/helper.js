@@ -140,3 +140,28 @@ function capitalizeWords(str, capitalizeAll = false) {
         return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
     }
 }
+
+/**
+ * Formats a date string from "YYYY-MM-DD" or "YYYY-MM-DD HH:mm:ss" to "Sat, Aug 24 2024" format.
+ *
+ * @param {string} dateString - The date string in "YYYY-MM-DD" or "YYYY-MM-DD HH:mm:ss" format.
+ * @returns {string|null} The formatted date string, or null if input is invalid or null.
+ */
+function formatAppDate(dateString) {
+    console.log(dateString);
+    
+    // Return null for null, undefined, or empty input
+    if (!dateString) return null;
+
+    // Ensure the date string matches "YYYY-MM-DD" or "YYYY-MM-DD HH:mm:ss" format
+    const dateRegex = /^\d{4}-\d{2}-\d{2}(?: \d{2}:\d{2}:\d{2})?$/;
+    if (!dateRegex.test(dateString)) return null;
+
+    // Parse the date and check validity
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return null;
+
+    // Format the date to "Sat, Aug 24 2024"
+    const options = { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' };
+    return date.toLocaleDateString('en-US', options);
+}

@@ -111,3 +111,26 @@ function uuid_v4() {
         )
         .join('');
 }
+
+/**
+ * Escapes special characters in a string to make it safe for use in code.
+ * Specifically, it escapes single quotes, double quotes, and backslashes.
+ * @param {string} str - The input string to be escaped.
+ * @returns {string} - The escaped string.
+ */
+function escapeSpecialCharacters(str) {
+    if (typeof str !== 'string') {
+        throw new TypeError('Input must be a string');
+    }
+    // Escape single quotes, double quotes, and backslashes
+    return str.replace(/['"\\]/g, '\\$&');
+}
+
+// Debounce function
+function debounce(func, delay = 300) {
+    let timer;
+    return function (...args) {
+        clearTimeout(timer); // Clear the previous timeout
+        timer = setTimeout(() => func.apply(this, args), delay); // Set a new timeout
+    };
+}
