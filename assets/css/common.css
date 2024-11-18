@@ -1,7 +1,14 @@
-.err-lbl p {
+.err-lbl p,
+.err-lbl-mdl p {
     margin-bottom: 0px !important;
     font-weight: normal;
     font-size: 12px !important;
+}
+
+.err-lbl-mdl {
+    margin-bottom: 0px !important;
+    font-weight: normal;
+    font-size: 10px !important;
 }
 
 /* pagination buttons  */

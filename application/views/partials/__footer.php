@@ -106,6 +106,7 @@ $cpyright_years = ($start_year == $current_year) ? $current_year : "$start_year-
 <script src="assets/js/app.js"></script>
 <script src="assets/js/pagination.js"></script>
 <script src="assets/js/skeleton/skeleton-table.js"></script>
+<script src="assets/js/skeleton/widget-skeleton.js"></script>
 <!--end::Page Custom Javascript-->
 
 <!--begin::Page Custom Javascript(Dynamic Included)-->

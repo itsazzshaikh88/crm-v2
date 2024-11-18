@@ -198,6 +198,9 @@ function getSkeletonStructure(list) {
                     </td>
                 </tr>
                 `;
+
+    if (list === 'open-order-list-tracking')
+        return ``;
 }
 
 function clientListModalSkeleton(container, rows) {

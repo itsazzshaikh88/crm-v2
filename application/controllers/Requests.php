@@ -11,8 +11,12 @@ class Requests extends App_Controller
         $data['page_title'] = 'Create New Request - CRM Application';
         $data['page_heading'] = 'Create New Request';
         $data['navlink'] = 'requests';
-        // $data['css_files'] = ['assets/css/pages/requests/new.css'];
-        $data['scripts'] = ['assets/js/pages/clients/modals/modal-list.js', 'assets/js/pages/requests/new.js'];
+        $data['css_files'] = ['assets/css/pages/requests/new.css'];
+        $data['scripts'] = [
+                            'assets/js/pages/clients/modals/modal-list.js', 
+                            'assets/js/pages/clients/modals/create-new-client.js', 
+                            'assets/js/pages/requests/new.js'
+                            ];
         $data['toolbar'] = ['name' => 'new-request', 'action' => 'form'];
         $this->load->view('layout', $data);
     }

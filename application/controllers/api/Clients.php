@@ -90,11 +90,15 @@ class Clients extends Api_controller
 
             // Save Data to the product table
             $created = $this->User_model->add_client($client_id, $data, $isAuthorized['userid']);
+            $newlyCreatedClient = $this->User_model->get_client_by_uuid($data['UUID']);
+
+            $source = $data['SOURCE_OF_DATA'] ?? '';
+
             if ($created) {
                 $this->sendHTTPResponse(201, [
                     'status' => 201,
                     'message' => 'Client Details Saved successfully.',
-                    'data' => $data
+                    'data' => $source === 'modal' ? $newlyCreatedClient : $data
                 ]);
             } else {
                 throw new Exception('Failed to create new client.');

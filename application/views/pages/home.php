@@ -22,7 +22,9 @@ include_once 'application/views/data/data-home.php';
 							<!--begin::Section-->
 							<div class="d-flex flex-column my-7">
 								<!--begin::Number-->
-								<span class="fw-bolder fs-3x text-gray-800 lh-1 ls-n2" id="<?= strtolower(str_replace(" ", "-", $card['label'])) ?>">0</span>
+								<span class="fw-bolder fs-3x text-gray-800 lh-1 ls-n2 card-stats-label-preview" id="<?= strtolower(str_replace(" ", "_", $card['label'])) ?>">
+									0
+								</span>
 								<!--end::Number-->
 								<!--begin::Follower-->
 								<div class="m-0">
@@ -45,7 +47,7 @@ include_once 'application/views/data/data-home.php';
 					<div class="card-body">
 						<h2 class="fw-semibold text-gray-800 text-start">Open Orders</h2>
 						<div class="table-responsive">
-							<table class="table">
+							<table class="table" id="open-orders-list">
 								<thead>
 									<tr class="fw-semibold fs-6 text-gray-800 border-bottom border-gray-200 bg-light">
 										<th>PO</th>
@@ -56,91 +58,10 @@ include_once 'application/views/data/data-home.php';
 										<th>Track</th>
 									</tr>
 								</thead>
-								<tbody>
-									<tr>
-										<td>PO-0001</td>
-										<td>123 Elm St, NY</td>
-										<td>$1,200.00</td>
-										<td class="text-primary fw-bold">Shipped</td>
-										<td>2024-10-01</td>
-										<td><a href="#" class="badge bg-light text-gray-900 fw-normal rounded-0">Track</a></td>
-									</tr>
-									<tr>
-										<td>PO-0002</td>
-										<td>456 Oak Ave, CA</td>
-										<td>$2,500.00</td>
-										<td class="fw-bold">Pending</td>
-										<td>2024-10-05</td>
-										<td><a href="#" class="badge bg-light text-gray-900 fw-normal rounded-0">Track</a></td>
-									</tr>
-									<tr>
-										<td>PO-0003</td>
-										<td>789 Maple Dr, TX</td>
-										<td>$850.00</td>
-										<td class="text-success fw-bold">Delivered</td>
-										<td>2024-09-28</td>
-										<td><a href="#" class="badge bg-light text-gray-900 fw-normal rounded-0">Track</a></td>
-									</tr>
-									<tr>
-										<td>PO-0004</td>
-										<td>101 Pine Rd, FL</td>
-										<td>$3,200.00</td>
-										<td class="text-danger fw-bold">Canceled</td>
-										<td>2024-10-03</td>
-										<td><a href="#" class="badge bg-light text-gray-900 fw-normal rounded-0">Track</a></td>
-									</tr>
-									<tr>
-										<td>PO-0005</td>
-										<td>222 Cedar Ln, NV</td>
-										<td>$950.00</td>
-										<td class="text-primary fw-bold">Shipped</td>
-										<td>2024-09-30</td>
-										<td><a href="#" class="badge bg-light text-gray-900 fw-normal rounded-0">Track</a></td>
-									</tr>
-									<tr>
-										<td>PO-0006</td>
-										<td>333 Birch Blvd, IL</td>
-										<td>$1,750.00</td>
-										<td class="fw-bold">Pending</td>
-										<td>2024-10-07</td>
-										<td><a href="#" class="badge bg-light text-gray-900 fw-normal rounded-0">Track</a></td>
-									</tr>
-									<tr>
-										<td>PO-0007</td>
-										<td>444 Spruce St, WA</td>
-										<td>$4,000.00</td>
-										<td class="text-success fw-bold">Delivered</td>
-										<td>2024-09-25</td>
-										<td><a href="#" class="badge bg-light text-gray-900 fw-normal rounded-0">Track</a></td>
-									</tr>
-									<tr>
-										<td>PO-0008</td>
-										<td>555 Willow Ave, OR</td>
-										<td>$1,100.00</td>
-										<td class="text-primary fw-bold">Shipped</td>
-										<td>2024-10-08</td>
-										<td><a href="#" class="badge bg-light text-gray-900 fw-normal rounded-0">Track</a></td>
-									</tr>
-									<tr>
-										<td>PO-0009</td>
-										<td>666 Palm Dr, AZ</td>
-										<td>$2,300.00</td>
-										<td class="fw-bold">Pending</td>
-										<td>2024-10-02</td>
-										<td><a href="#" class="badge bg-light text-gray-900 fw-normal rounded-0">Track</a></td>
-									</tr>
-									<tr>
-										<td>PO-0010</td>
-										<td>777 Redwood Rd, CO</td>
-										<td>$5,500.00</td>
-										<td class="text-success fw-bold">Delivered</td>
-										<td>2024-09-27</td>
-										<td><a href="#" class="badge bg-light text-gray-900 fw-normal rounded-0">Track</a></td>
-									</tr>
-								</tbody>
+								<tbody id="open-borders-tbody"></tbody>
 							</table>
 						</div>
-						<?php include_once 'application/views/common/paginate.php' ?>
+						<?= renderPaginate('oo-current-page', 'oo-total-pages', 'oo-page-of-pages', 'oo-range-of-records') ?>
 					</div>
 				</div>
 			</div>

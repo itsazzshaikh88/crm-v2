@@ -9,6 +9,7 @@ class Welcome extends App_Controller
 		$data['page_title'] = 'Home - Fixed Assets Application';
 		$data['page_heading'] = 'Dashboard';
 		$data['navlink'] = 'home';
+		$data['scripts'] = ['assets/js/pages/dashboard/stats.js'];
 		$this->load->view('layout', $data);
 	}
 
