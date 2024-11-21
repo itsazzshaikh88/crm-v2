@@ -188,7 +188,7 @@ function removeFile(index) {
     displayFiles();
 }
 
-async function fetctProduct(productUUID) {
+async function fetchProduct(productUUID) {
     const apiUrl = `${APIUrl}/products/detail`;
     const authToken = getCookie('auth_token');
     if (!authToken) {
@@ -276,7 +276,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Fetch product details if action is edit and id is available
     if (searchParams.get('action') === 'edit') {
         // Your code to fetch product details
-        fetctProduct(productUUID);
+        fetchProduct(productUUID);
     } else {
         initializeQuill();
     }

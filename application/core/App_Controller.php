@@ -64,7 +64,7 @@ class App_Controller extends CI_Controller
             // If no token is found, redirect to login
             redirect(base_url() . 'login');
         } else {
-
+            
             $tokenData = $this->Auth_model->validate_token($auth_token);
             if (empty($tokenData) || time() > $tokenData['EXPIRY']) {
                 // If token is not valid then delete cookie and redirect

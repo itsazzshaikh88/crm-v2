@@ -88,3 +88,9 @@ defined('EXIT__AUTO_MAX')      or define('EXIT__AUTO_MAX', 125); // highest auto
 
 // user definded constants
 defined('APP_SECRET_KEY')       or define('APP_SECRET_KEY', 'secretkeyforanapplicationiskismatji7246');
+
+
+// NAVIGATION LINK ACTIVE ITEMS
+
+define('HOME_ACTIVE_LINK', 'home');
+define('PRODUCT_ACTIVE_LINK', 'product');

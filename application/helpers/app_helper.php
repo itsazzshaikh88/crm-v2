@@ -74,3 +74,10 @@ if (! function_exists('uuid_v4')) {
         return 'no discount';
     }
 }
+
+function setNavigationLinkActive($current, $target, $class)
+{
+    if ($current === $target)
+        return $class;
+    return '';
+}

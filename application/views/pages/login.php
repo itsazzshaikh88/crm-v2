@@ -73,13 +73,13 @@
                                 <button class="w-100 btn btn-outline-success" id="submit-btn">Sign In</button>
                             </div>
 
-                            <!-- <div class="my-2 text-center">
-                                <p class="">Or Log in as</p>
+                            <div class="mt-4 mb-2 text-center">
+                                <p class="mb-0 text-muted"><small>Choose your account type</small></p>
                             </div>
                             <div class="d-flex align-items-center justify-content-center gap-2">
-                                <a href="login?account=admin-central" class="py-2 text-white badge bg-primary text-decoration-none fw-normal">Admin</a>
-                                <a href="login?account=client-connect" class="py-2 text-white badge bg-info text-decoration-none fw-normal">Client</a>
-                            </div> -->
+                                <a href="login?account=admin-central" class="py-2 text-white badge bg-primary text-decoration-none fw-normal w-50">Admin</a>
+                                <a href="login?account=client-connect" class="py-2 text-white badge bg-info text-decoration-none fw-normal w-50">Client</a>
+                            </div>
                         </form>
                     </div>
                 </div>

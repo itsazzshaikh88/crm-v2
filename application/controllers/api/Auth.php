@@ -27,7 +27,7 @@ class Auth extends CI_Controller
         }
 
         // Validate User Data
-        $this->form_validation->set_rules('email', 'Email', 'required|trim|htmlspecialchars|valid_email');
+        $this->form_validation->set_rules('email', 'Email', 'required|trim|htmlspecialchars');
         $this->form_validation->set_rules('password', 'Password', 'required|trim|htmlspecialchars');
         // Check if form validation fails
         if ($this->form_validation->run() == FALSE) {
@@ -106,6 +106,8 @@ class Auth extends CI_Controller
                 ];
             } else {
                 // If user doesn't exist
+                // make account in active or suspened if login failed three times
+                
                 $response = [
                     'status' => false,
                     'message' => 'Invalid username or password'
