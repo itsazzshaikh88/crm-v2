@@ -296,7 +296,7 @@
                         </div>
                         <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}"
                             data-kt-menu-placement="bottom-start"
-                            class="menu-item menu-lg-down-accordion me-lg-1"><!--begin:Menu link-->
+                            class="menu-item menu-lg-down-accordion me-lg-1 <?= setNavigationLinkActive($navlink['main-link'] ?? '', ADMIN_ACTIVE_LINK, 'here show') ?>"><!--begin:Menu link-->
                             <span class="menu-link py-3">
                                 <span class="menu-title text-warning">Admin Suite</span>
                                 <span class="menu-arrow d-lg-none"></span>
@@ -326,7 +326,7 @@
                                                 </div>
                                                 <!--end:Menu item-->
                                                 <!--begin:Menu item-->
-                                                <div class="menu-item p-0 m-0">
+                                                <div class="menu-item p-0 m-0 <?= setNavigationLinkActive($navlink['sub-link'] ?? '', 'leads', 'here show') ?>">
                                                     <!--begin:Menu link-->
                                                     <a href="leads"
                                                         class="menu-link ">

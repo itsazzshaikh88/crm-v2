@@ -94,3 +94,19 @@ defined('APP_SECRET_KEY')       or define('APP_SECRET_KEY', 'secretkeyforanappli
 
 define('HOME_ACTIVE_LINK', 'home');
 define('PRODUCT_ACTIVE_LINK', 'product');
+define('ADMIN_ACTIVE_LINK', 'admin');
+$activities = [
+    [
+        'name' => 'Call',
+        'id' => 'custom-activity-modal-call',  // Unique ID for Call activity modal
+    ],
+    [
+        'name' => 'Meeting',
+        'id' => 'custom-activity-modal-meeting',  // Unique ID for Meeting activity modal
+    ],
+    [
+        'name' => 'Note',
+        'id' => 'custom-activity-modal-notes',  // Unique ID for Note activity modal
+    ],
+];
+define('LEAD_ACTIVITY_OPTIONS', $activities);

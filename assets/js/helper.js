@@ -6,7 +6,7 @@
 function stripHtmlTags(inputString) {
     // Check if the input is a string
     if (typeof inputString !== 'string') {
-        throw new TypeError('Expected a string as input.');
+        return ''
     }
 
     // Remove HTML tags and decode HTML entities
@@ -148,7 +148,6 @@ function capitalizeWords(str, capitalizeAll = false) {
  * @returns {string|null} The formatted date string, or null if input is invalid or null.
  */
 function formatAppDate(dateString) {
-    console.log(dateString);
     
     // Return null for null, undefined, or empty input
     if (!dateString) return null;

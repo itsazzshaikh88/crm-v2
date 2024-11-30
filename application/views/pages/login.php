@@ -51,7 +51,7 @@
         <div class="row mt-4 justify-content-center">
             <div class="col-md-3">
                 <div class="card shadow rounded">
-                    <div class="card-body bg-light rounded">
+                    <div class="card-body bg-light rounded pb-5">
                         <form id="form" onsubmit="validate(event)" method="post">
                             <div class="form-group mb-2">
                                 <label for="email" class="mb-1 fw-normal">Email:</label>
@@ -72,13 +72,9 @@
                             <div class="form-group ">
                                 <button class="w-100 btn btn-outline-success" id="submit-btn">Sign In</button>
                             </div>
-
-                            <div class="mt-4 mb-2 text-center">
-                                <p class="mb-0 text-muted"><small>Choose your account type</small></p>
-                            </div>
                             <div class="d-flex align-items-center justify-content-center gap-2">
-                                <a href="login?account=admin-central" class="py-2 text-white badge bg-primary text-decoration-none fw-normal w-50">Admin</a>
-                                <a href="login?account=client-connect" class="py-2 text-white badge bg-info text-decoration-none fw-normal w-50">Client</a>
+                                <!-- <a href="login?account=admin-central" class="py-2 text-white badge bg-primary text-decoration-none fw-normal w-50">Admin</a>
+                                <a href="login?account=client-connect" class="py-2 text-white badge bg-info text-decoration-none fw-normal w-50">Client</a> -->
                             </div>
                         </form>
                     </div>
@@ -93,7 +89,7 @@
 
     <!-- Aidelogin images  -->
     <div class="login-side d-none d-md-block">
-        <img src="assets/images/login-side.png" alt="">
+        <img src="assets/images/lg-bg.png" class="" alt="">
     </div>
 
 

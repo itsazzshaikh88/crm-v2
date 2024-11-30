@@ -62,3 +62,11 @@
     text-overflow: ellipsis;
     white-space: normal;
 }
+
+.fs-xs {
+    font-size: 11px !important;
+}
+
+.fs-sm {
+    font-size: 12px !important;
+}

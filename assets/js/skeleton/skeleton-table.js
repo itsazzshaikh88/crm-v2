@@ -201,6 +201,57 @@ function getSkeletonStructure(list) {
 
     if (list === 'open-order-list-tracking')
         return ``;
+    if (list === 'leads')
+        return `<tr class="skeleton-loader">
+                    <td class="text-center">
+                        <div class="skeleton-box" style="width: 20px; height: 20px;"></div>
+                    </td>
+                    <td>
+                        <div>
+                            <!-- Placeholder for Name -->
+                            <div class="skeleton-box" style="width: 100px; height: 20px; margin-bottom: 5px;"></div>
+                            <!-- Placeholder for ID -->
+                            <div class="skeleton-box" style="width: 150px; height: 14px;"></div>
+                        </div>
+                    </td>
+                    <td>
+                        <!-- Placeholder for Company -->
+                        <div class="skeleton-box" style="width: 150px; height: 20px;"></div>
+                    </td>
+                    <td>
+                        <!-- Placeholder for Job Title -->
+                        <div class="skeleton-box" style="width: 150px; height: 20px;"></div>
+                    </td>
+                    <td>
+                        <div>
+                            <!-- Placeholder for Email -->
+                            <div class="skeleton-box" style="width: 200px; height: 14px; margin-bottom: 5px;"></div>
+                            <!-- Placeholder for Phone -->
+                            <div class="skeleton-box" style="width: 120px; height: 14px;"></div>
+                        </div>
+                    </td>
+                    <td>
+                        <!-- Placeholder for Date -->
+                        <div class="skeleton-box" style="width: 100px; height: 20px;"></div>
+                    </td>
+                    <td>
+                        <!-- Placeholder for Source -->
+                        <div class="skeleton-box" style="width: 80px; height: 20px;"></div>
+                    </td>
+                    <td>
+                        <!-- Placeholder for Status -->
+                        <div class="skeleton-box" style="width: 50px; height: 20px;"></div>
+                    </td>
+                    <td class="text-end">
+                        <div class="d-flex align-items-center justify-content-end gap-4">
+                            <!-- Placeholders for Action Icons -->
+                            <div class="skeleton-box" style="width: 20px; height: 20px;"></div>
+                            <div class="skeleton-box" style="width: 20px; height: 20px;"></div>
+                            <div class="skeleton-box" style="width: 20px; height: 20px;"></div>
+                        </div>
+                    </td>
+                </tr>
+                `;
 }
 
 function clientListModalSkeleton(container, rows) {
@@ -249,5 +300,75 @@ function productModalListingSkeleton(container, rows) {
         if (i < (rows - 1))
             skeleton += divider
         container.insertAdjacentHTML('beforeend', skeleton);
+    }
+}
+
+function appendSkeletonContent({
+    elementId,
+    position = "end",
+    skeletonType = "default",
+    count = 1
+}) {
+    const element = document.getElementById(elementId);
+
+    if (!element) {
+        console.error(`Element with ID "${elementId}" not found.`);
+        return;
+    }
+
+    // Generate skeleton HTML for the given count
+    let skeletonHTML = "";
+    for (let i = 0; i < count; i++) {
+        skeletonHTML += generateSkeletonHTML(skeletonType);
+    }
+
+    // Append content based on position
+    switch (position) {
+        case "before":
+            element.insertAdjacentHTML("beforebegin", skeletonHTML);
+            break;
+        case "after":
+            element.insertAdjacentHTML("afterend", skeletonHTML);
+            break;
+        case "start":
+            element.insertAdjacentHTML("afterbegin", skeletonHTML);
+            break;
+        case "end":
+        default:
+            element.insertAdjacentHTML("beforeend", skeletonHTML);
+            break;
+    }
+}
+
+// Helper function to generate skeleton HTML dynamically
+function generateSkeletonHTML(type) {
+    switch (type) {
+        case "lead-activities":
+            return `
+                <div class="position-relative ps-6 pe-3 py-4 bg-gray-50 mb-2">
+                    <div class="position-absolute start-0 top-0 w-4px h-100 rounded-2 bg-gray-300"></div>
+                    <div class="d-flex align-items-center justify-content-between">
+                        <span class="skeleton-box" style="width: 100px; height: 20px;"></span>
+                        <div class="d-flex align-items-center gap-12">
+                            <span class="skeleton-box" style="width: 100px; height: 14px;"></span>
+                            <div class="d-flex align-items-center gap-4">
+                                <span class="skeleton-box" style="width: 20px; height: 20px;"></span>
+                                <span class="skeleton-box" style="width: 20px; height: 20px;"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="my-4">
+                        <div>
+                            <span class="skeleton-box" style="width: 350px; height: 14px; margin-bottom: 5px;"></span>
+                            <br />
+                            <span class="skeleton-box" style="width: 100px; height: 14px;"></span>
+                            <span class="skeleton-box" style="width: 120px; height: 14px;"></span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        case "default":
+        default:
+            return `<div class="skeleton-box" style="width: 100%; height: 20px;"></div>`;
     }
 }

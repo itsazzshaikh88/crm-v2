@@ -340,3 +340,24 @@
 .shake {
     animation: shake 0.5s ease-in-out;
 }
+
+/* Define the floating animation */
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0);
+        /* Initial and final positions */
+    }
+
+    50% {
+        transform: translateY(-10px);
+        /* Move up */
+    }
+}
+
+/* Apply the animation to the image */
+.float-animation {
+    animation: float 3s ease-in-out infinite;
+    /* Duration: 3s, infinite loop */
+}

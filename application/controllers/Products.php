@@ -12,6 +12,7 @@ class Products extends App_Controller
         $data['page_heading'] = 'Add New Product';
         $data['navlink'] = 'product';
         $data['css_files'] = ['assets/css/pages/products/new.css'];
+        $data['toolbar'] = ['name' => 'new-product', 'action' => 'form'];
         $data['scripts'] = ['assets/js/pages/products/new.js'];
         $this->load->view('layout', $data);
     }
@@ -23,7 +24,7 @@ class Products extends App_Controller
         $data['navlink'] = 'products';
         $data['css_files'] = [];
         $data['scripts'] = ['assets/js/pages/products/list.js'];
-        $data['toolbar'] = 'new-product';
+        $data['toolbar'] = ['name' => 'new-product', 'action' => 'list'];
         $this->load->view('layout', $data);
     }
 
@@ -36,7 +37,7 @@ class Products extends App_Controller
         $data['navlink'] = 'products';
         $data['css_files'] = [];
         $data['scripts'] = ['assets/js/pages/products/view.js'];
-        $data['toolbar'] = 'new-product';
+        $data['toolbar'] = ['name' => 'new-product', 'action' => 'view'];
         $this->load->view('layout', $data);
     }
 }

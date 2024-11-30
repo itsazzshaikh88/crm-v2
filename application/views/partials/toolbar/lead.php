@@ -6,12 +6,12 @@
 <!--begin::Button-->
 <?php if (isset($options) && is_array($options)): ?>
     <?php if ($options['action'] === 'list'): ?>
-        <a href="products/new" class="btn btn-success my-2">Create New Product</a>
+        <a href="javascript:void(0)" onclick="openLeadModal()" class="btn btn-success my-2">Add New Lead</a>
     <?php elseif ($options['action'] === 'form'): ?>
-        <a href="products/list" class="btn btn-success my-2">Product List</a>
+        <a href="leads" class="btn btn-success my-2">Created Leads</a>
     <?php else: ?>
-        <a href="products/list" class="btn border text-white my-2 mx-2">Product List</a>
-        <a href="products/new" class="btn btn-success my-2 mx-2">Create New Product</a>
+        <a href="leads" class="btn border text-white my-2 mx-2">Created Leads</a>
+        <a href="javascript:void(0)" onclick="openLeadModal()" class="btn btn-success my-2 mx-2">Add New Lead</a>
     <?php endif; ?>
 <?php endif; ?>
 <!--end::Button-->
