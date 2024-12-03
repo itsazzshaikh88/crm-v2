@@ -4,5 +4,5 @@
 </a>
 <!--end::Action-->
 <!--begin::Button-->
-<a href="javascript:void(0)" class="btn btn-success my-2">New Goal</a>
+<a href="javascript:void(0)" class="btn btn-success my-2">Default CTA</a>
 <!--end::Button-->

@@ -220,14 +220,14 @@ function showLeadActivities(activities) {
 
 function showCallLogsActivity(activity) {
     if (!activity) return '';
-    return `<div class="position-relative ps-6 pe-3 py-2 bg-gray-50s" onclick="viewActivityDetail(this)">
+    return `<div class="position-relative ps-6 pe-3 py-2 bg-gray-50s" id="activity-inline-container-${activity?.ACTIVITY_ID}">
                                     <div class="position-absolute start-0 top-0 w-4px h-100 rounded-2 bg-warning"></div>
                                     <div class="d-flex align-items-center justify-content-between">
                                         <a href="javascript:void(0)" class="mb-1 text-hover-primary fw-bold badge bg-warning text-white"> <i class="fa-solid fa-headset text-white"></i> Call Log</a>
                                         <div class="d-flex align-items-center gap-12">
                                             <div class="fs-8 text-warning fw-normal">Created on ${formatAppDate(activity?.ACTIVITY_DATE)}</div>
                                             <div class="d-flex align-items-center gap-4">
-                                                <a href="javascript:void(0)" title="Edit Activity" onclick="editCurrentActivityDetail(${activity?.ACTIVITY_ID})"><i class="fa-solid fa-file-pen cursor-pointer text-success fs-4"></i></a>
+                                                <a href="javascript:void(0)" title="Edit Activity" onclick="editCurrentActivityDetail('${activity?.ACTIVITY_TYPE?.toLowerCase()}',${activity?.ACTIVITY_ID})"><i class="fa-solid fa-file-pen cursor-pointer text-success fs-4"></i></a>
                                                 <a href="javascript:void(0)" title="Delete Activity" onclick="deleteCurrentActivity(${activity?.ACTIVITY_ID})"><i class="fa-solid fa-trash cursor-pointer text-danger fs-4"></i></a>
                                             </div>
                                         </div>
@@ -246,14 +246,14 @@ function showCallLogsActivity(activity) {
 }
 function showNotesActivity(activity) {
     if (!activity) return '';
-    return `<div class="position-relative ps-6 pe-3 py-2 bg-gray-50s" onclick="viewActivityDetail(this)">
+    return `<div class="position-relative ps-6 pe-3 py-2 bg-gray-50s" id="activity-inline-container-${activity?.ACTIVITY_ID}">
                                     <div class="position-absolute start-0 top-0 w-4px h-100 rounded-2 bg-primary"></div>
                                     <div class="d-flex align-items-center justify-content-between">
                                         <a href="javascript:void(0)" class="mb-1 text-hover-primary fw-bold badge bg-primary text-white"><i class="fa-solid fa-notes-medical text-white"></i> Note</a>
                                         <div class="d-flex align-items-center gap-12">
                                             <div class="fs-8 text-primary fw-normal">Created on ${formatAppDate(activity?.ACTIVITY_DATE)}</div>
                                             <div class="d-flex align-items-center gap-4">
-                                                <a href="javascript:void(0)" title="Edit Activity" onclick="editCurrentActivityDetail(${activity?.ACTIVITY_ID})"><i class="fa-solid fa-file-pen cursor-pointer text-success fs-4"></i></a>
+                                                <a href="javascript:void(0)" title="Edit Activity" onclick="editCurrentActivityDetail('${activity?.ACTIVITY_TYPE?.toLowerCase()}',${activity?.ACTIVITY_ID})"><i class="fa-solid fa-file-pen cursor-pointer text-success fs-4"></i></a>
                                                 <a href="javascript:void(0)" title="Delete Activity" onclick="deleteCurrentActivity(${activity?.ACTIVITY_ID})"><i class="fa-solid fa-trash cursor-pointer text-danger fs-4"></i></a>
                                             </div>
                                         </div>
@@ -269,14 +269,14 @@ function showNotesActivity(activity) {
 }
 function showMeetingActivity(activity) {
     if (!activity) return '';
-    return `<div class="position-relative ps-6 pe-3 py-2 bg-gray-50s" onclick="viewActivityDetail(this)">
+    return `<div class="position-relative ps-6 pe-3 py-2 bg-gray-50s" id="activity-inline-container-${activity?.ACTIVITY_ID}">
                                     <div class="position-absolute start-0 top-0 w-4px h-100 rounded-2 bg-info"></div>
                                     <div class="d-flex align-items-center justify-content-between">
                                         <a href="javascript:void(0)" class="mb-1 text-hover-primary fw-bold badge bg-info text-white"> <i class="fa-solid fa-chalkboard-user text-white"></i> Meeting Details</a>
                                         <div class="d-flex align-items-center gap-12">
                                             <div class="fs-8 text-info fw-normal">Created on ${formatAppDate(activity?.ACTIVITY_DATE)}</div>
                                             <div class="d-flex align-items-center gap-4">
-                                                <a href="javascript:void(0)" title="Edit Activity" onclick="editCurrentActivityDetail(${activity?.ACTIVITY_ID})"><i class="fa-solid fa-file-pen cursor-pointer text-success fs-4"></i></a>
+                                                <a href="javascript:void(0)" title="Edit Activity" onclick="editCurrentActivityDetail('${activity?.ACTIVITY_TYPE?.toLowerCase()}',${activity?.ACTIVITY_ID})"><i class="fa-solid fa-file-pen cursor-pointer text-success fs-4"></i></a>
                                                 <a href="javascript:void(0)" title="Delete Activity" onclick="deleteCurrentActivity(${activity?.ACTIVITY_ID})"><i class="fa-solid fa-trash cursor-pointer text-danger fs-4"></i></a>
                                             </div>
                                         </div>

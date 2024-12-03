@@ -345,7 +345,7 @@ class Leads extends Api_controller
         }
 
         // Attempt to delete the product
-        $result = $this->User_model->delete_client_by_id($leadID);
+        $result = $this->Lead_model->delete_lead_by_id($leadID);
         if ($result) {
             $this->output
                 ->set_content_type('application/json')

@@ -316,11 +316,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Fetch product details if action is edit and id is available
     if (searchParams.get('action') === 'edit') {
         // Your code to fetch product details
-        fetchRequest(requestUUID);
+        fetchRequestToDisplayForEdit(requestUUID);
     }
 });
 
-async function fetchRequest(requestUUID) {
+async function fetchRequestToDisplayForEdit(requestUUID) {
     const apiUrl = `${APIUrl}/requests/detail`;
     const authToken = getCookie('auth_token');
     if (!authToken) {

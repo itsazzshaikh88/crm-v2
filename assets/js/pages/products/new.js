@@ -188,7 +188,7 @@ function removeFile(index) {
     displayFiles();
 }
 
-async function fetchProduct(productUUID) {
+async function fetchProductToDisplayForEdit(productUUID) {
     const apiUrl = `${APIUrl}/products/detail`;
     const authToken = getCookie('auth_token');
     if (!authToken) {
@@ -237,8 +237,6 @@ async function fetchProduct(productUUID) {
         // Show Product Files attached
         if (data?.data?.product?.PRODUCT_IMAGES) {
             uploadedFiles = JSON.parse(data?.data?.product?.PRODUCT_IMAGES) || []
-            console.log(uploadedFiles);
-
             displayUploadedFiles(data?.data?.product?.PRODUCT_ID || 0);
         }
 
@@ -276,7 +274,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Fetch product details if action is edit and id is available
     if (searchParams.get('action') === 'edit') {
         // Your code to fetch product details
-        fetchProduct(productUUID);
+        fetchProductToDisplayForEdit(productUUID);
     } else {
         initializeQuill();
     }

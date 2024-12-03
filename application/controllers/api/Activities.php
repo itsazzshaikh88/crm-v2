@@ -101,7 +101,7 @@ class Activities extends Api_controller
         }
     }
 
-    function update($leadID)
+    function update($activityID)
     {
         // Check if the authentication is valid
         $isAuthorized = $this->isAuthorized();
@@ -125,26 +125,28 @@ class Activities extends Api_controller
                 return;
             }
 
-            // Validate the product ID
-            if (empty($leadID) || !is_numeric($leadID)) {
-                $this->output
-                    ->set_content_type('application/json')
-                    ->set_status_header(400) // 400 Bad Request status code
-                    ->set_output(json_encode(['error' => 'Invalid Lead ID.']));
+            $activity_type = strtolower($this->input->post('ACTION'));
+            if (!isset($activity_type)) {
+                $this->sendHTTPResponse(404, [
+                    'status' => 404,
+                    'error' => 'Data not found',
+                    'message' => 'Activity type not found.'
+                ]);
                 return;
             }
 
-            // Set validation rules
-            $this->form_validation->set_rules('FIRST_NAME', 'First Name', 'required');
-            $this->form_validation->set_rules('LAST_NAME', 'Last Name', 'required');
-            $this->form_validation->set_rules('EMAIL', 'Email', 'required|valid_email');
-            $this->form_validation->set_rules('PHONE', 'Contact Number', 'required');
-            $this->form_validation->set_rules('JOB_TITLE', 'Job Title', 'required');
-            $this->form_validation->set_rules('STATUS', 'Status', 'required');
-            $this->form_validation->set_rules('COMPANY_NAME', 'Company Name', 'required');
-            $this->form_validation->set_rules('LEAD_SOURCE', 'Lead Source', 'required');
-            $this->form_validation->set_rules('ASSIGNED_TO', 'Sales Person Name', 'required');
-
+            if (strtolower($activity_type) === 'call') {
+                $this->form_validation->set_rules('CALL_DURATION', 'Call Duration', 'required');
+                $this->form_validation->set_rules('CALL_PURPOSE', 'Call Purpose', 'required');
+                $this->form_validation->set_rules('FOLLOW_UP_DATE', 'Follow up Date', 'required');
+            } else if (strtolower($activity_type) === 'notes') {
+                $this->form_validation->set_rules('NOTES', 'Note Details', 'required');
+            } elseif (strtolower($activity_type) === 'meeting') {
+                $this->form_validation->set_rules('LOCATION', 'Meeting Location', 'required');
+                $this->form_validation->set_rules('AGENDA', 'Meeting Agenda', 'required');
+                $this->form_validation->set_rules('ATTENDEES', 'Meeting Attendees', 'required');
+                $this->form_validation->set_rules('NOTES', 'Meeting Outcome', 'required');
+            }
 
             // Run validation
             if ($this->form_validation->run() == FALSE) {
@@ -164,32 +166,21 @@ class Activities extends Api_controller
             $data = $this->input->post();
             $data = array_map([$this->security, 'xss_clean'], $data);
 
-            // Check if lead details are present in table with existing ID
-            $lead = $this->Lead_model->get_lead_by_id($leadID ?? 0);
-            if (empty($lead)) {
-                $this->sendHTTPResponse(409, [
-                    'status' => 'error',
-                    'code' => 404,
-                    'error' => 'Not Found',
-                    'message' => 'A Lead with provided Id does not found to update.'
-                ]);
-                return;
-            }
+            $activity_UUID = $data["custom-activity-modal-" . $activity_type . "-ACTIVITY_UUID"] ?? '-';
 
-
-            // Save Data to the lead table
-            $updated = $this->Lead_model->update_lead($leadID, $data, $isAuthorized['userid']);
-            $updatedLead = $this->Lead_model->get_lead_by_id($leadID);
+            // Save Data to the product table
+            $updated = $this->Activity_model->update_activity($activityID, $data, $isAuthorized['userid']);
+            $newlyUpdatedActivity = $this->Activity_model->get_activity_by_id($activityID);
 
             if ($updated) {
                 $this->sendHTTPResponse(201, [
                     'status' => 201,
-                    'message' => 'Lead Updated Successfully',
+                    'message' => ucfirst($activity_type) . ' Activity Updated Successfully',
                     'type' => 'update',
-                    'data' => $updatedLead,
+                    'data' => $newlyUpdatedActivity,
                 ]);
             } else {
-                throw new Exception('Error saving lead details');
+                throw new Exception('Failed to create new lead.');
             }
         } catch (Exception $e) {
             // Catch any unexpected errors and respond with a standardized error
@@ -275,7 +266,7 @@ class Activities extends Api_controller
         $data = json_decode($input, true);
 
         // Validate input and check if `productUUID` is provided
-        if (!$data || !isset($data['leadID'])) {
+        if (!$data || !isset($data['activityID'])) {
             return $this->output
                 ->set_status_header(400)
                 ->set_content_type('application/json')
@@ -286,19 +277,19 @@ class Activities extends Api_controller
                 ]));
         }
 
-        // Retrieve product details using the provided leadID
-        $leadID = $data['leadID'];
-        $lead = $this->Lead_model->get_lead_and_activities_by_id($leadID);
+        // Retrieve product details using the provided activityID
+        $activityID = $data['activityID'];
+        $activity = $this->Activity_model->get_activity_by_id($activityID);
 
         // Check if product data exists
-        if (empty($lead)) {
+        if (empty($activity)) {
             return $this->output
                 ->set_status_header(404)
                 ->set_content_type('application/json')
                 ->set_output(json_encode([
                     'status' => 'error',
                     'code' => 404,
-                    'message' => 'Lead details not found'
+                    'message' => 'Activity details not found'
                 ]));
         }
 
@@ -309,12 +300,12 @@ class Activities extends Api_controller
             ->set_output(json_encode([
                 'status' => 'success',
                 'code' => 200,
-                'message' => 'Lead details retrieved successfully',
-                'data' => $lead
+                'message' => 'Activity details retrieved successfully',
+                'data' => $activity
             ]));
     }
 
-    function delete($leadID)
+    function delete($activityID)
     {
         // Check if the authentication is valid
         $isAuthorized = $this->isAuthorized();
@@ -336,27 +327,27 @@ class Activities extends Api_controller
             return;
         }
 
-        // Validate the product ID
-        if (empty($leadID) || !is_numeric($leadID)) {
+        // Validate the activity ID
+        if (empty($activityID) || !is_numeric($activityID)) {
             $this->output
                 ->set_content_type('application/json')
                 ->set_status_header(400) // 400 Bad Request status code
-                ->set_output(json_encode(['error' => 'Invalid product ID.']));
+                ->set_output(json_encode(['error' => 'Invalid Activity ID.']));
             return;
         }
 
-        // Attempt to delete the product
-        $result = $this->User_model->delete_client_by_id($leadID);
+        // Attempt to delete the activity
+        $result = $this->Activity_model->delete_activity_by_id($activityID);
         if ($result) {
             $this->output
                 ->set_content_type('application/json')
                 ->set_status_header(200) // 200 OK status code
-                ->set_output(json_encode(['status' => true, 'message' => 'Product deleted successfully.']));
+                ->set_output(json_encode(['status' => true, 'message' => 'Activity deleted successfully.']));
         } else {
             $this->output
                 ->set_content_type('application/json')
                 ->set_status_header(500) // 500 Internal Server Error status code
-                ->set_output(json_encode(['status' => false, 'message' => 'Failed to delete the product.']));
+                ->set_output(json_encode(['status' => false, 'message' => 'Failed to delete the Activity.']));
         }
     }
 }

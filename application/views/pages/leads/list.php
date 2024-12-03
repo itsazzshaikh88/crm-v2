@@ -74,7 +74,7 @@
 
 <!-- Include modals to add new lead  -->
 <?php
-
+$this->load->view('loaders/full-page-loader');
 $this->load->view('pages/leads/modals/new-lead');
 $this->load->view('modals/activities/activity-modal');
 ?>

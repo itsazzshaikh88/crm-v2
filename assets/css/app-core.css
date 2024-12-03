@@ -991,3 +991,301 @@
 .border-green-900 {
     border-color: #14532d !important;
 }
+
+/* Margin Classes */
+.app-m-0 {
+    margin: 0 !important;
+    /* 0px */
+}
+
+.app-m-1 {
+    margin: 0.25rem !important;
+    /* 4px */
+}
+
+.app-m-2 {
+    margin: 0.5rem !important;
+    /* 8px */
+}
+
+.app-m-3 {
+    margin: 0.75rem !important;
+    /* 12px */
+}
+
+.app-m-4 {
+    margin: 1rem !important;
+    /* 16px */
+}
+
+.app-m-5 {
+    margin: 1.25rem !important;
+    /* 20px */
+}
+
+.app-m-6 {
+    margin: 1.5rem !important;
+    /* 24px */
+}
+
+.app-m-8 {
+    margin: 2rem !important;
+    /* 32px */
+}
+
+.app-m-10 {
+    margin: 2.5rem !important;
+    /* 40px */
+}
+
+.app-m-12 {
+    margin: 3rem !important;
+    /* 48px */
+}
+
+.app-m-16 {
+    margin: 4rem !important;
+    /* 64px */
+}
+
+.app-m-20 {
+    margin: 5rem !important;
+    /* 80px */
+}
+
+.app-m-24 {
+    margin: 6rem !important;
+    /* 96px */
+}
+
+.app-m-32 {
+    margin: 8rem !important;
+    /* 128px */
+}
+
+.app-m-40 {
+    margin: 10rem !important;
+    /* 160px */
+}
+
+.app-m-48 {
+    margin: 12rem !important;
+    /* 192px */
+}
+
+.app-m-56 {
+    margin: 14rem !important;
+    /* 224px */
+}
+
+.app-m-64 {
+    margin: 16rem !important;
+    /* 256px */
+}
+
+.app-m-auto {
+    margin: auto !important;
+    /* auto */
+}
+
+/* Margin - X Axis */
+.app-mx-0 {
+    margin-left: 0 !important;
+    /* 0px */
+    margin-right: 0 !important;
+    /* 0px */
+}
+
+.app-mx-1 {
+    margin-left: 0.25rem !important;
+    /* 4px */
+    margin-right: 0.25rem !important;
+    /* 4px */
+}
+
+.app-mx-2 {
+    margin-left: 0.5rem !important;
+    /* 8px */
+    margin-right: 0.5rem !important;
+    /* 8px */
+}
+
+/* Repeat up to app-mx-64 */
+
+/* Margin - Y Axis */
+.app-my-0 {
+    margin-top: 0 !important;
+    /* 0px */
+    margin-bottom: 0 !important;
+    /* 0px */
+}
+
+.app-my-1 {
+    margin-top: 0.25rem !important;
+    /* 4px */
+    margin-bottom: 0.25rem !important;
+    /* 4px */
+}
+
+/* Repeat up to app-my-64 */
+
+/* Margin - Top */
+.app-mt-0 {
+    margin-top: 0 !important;
+    /* 0px */
+}
+
+.app-mt-1 {
+    margin-top: 0.25rem !important;
+    /* 4px */
+}
+
+.app-mt-40 {
+    margin-top: 10rem !important;
+    /* 160px */
+}
+
+/* Repeat up to app-mt-64 */
+
+/* Margin - Right */
+.app-mr-0 {
+    margin-right: 0 !important;
+    /* 0px */
+}
+
+.app-mr-1 {
+    margin-right: 0.25rem !important;
+    /* 4px */
+}
+
+/* Repeat up to app-mr-64 */
+
+/* Margin - Bottom */
+.app-mb-0 {
+    margin-bottom: 0 !important;
+    /* 0px */
+}
+
+.app-mb-1 {
+    margin-bottom: 0.25rem !important;
+    /* 4px */
+}
+
+/* Repeat up to app-mb-64 */
+
+/* Margin - Left */
+.app-ml-0 {
+    margin-left: 0 !important;
+    /* 0px */
+}
+
+.app-ml-1 {
+    margin-left: 0.25rem !important;
+    /* 4px */
+}
+
+/* Repeat up to app-ml-64 */
+
+/* Padding Classes */
+.app-p-0 {
+    padding: 0 !important;
+    /* 0px */
+}
+
+.app-p-1 {
+    padding: 0.25rem !important;
+    /* 4px */
+}
+
+.app-p-2 {
+    padding: 0.5rem !important;
+    /* 8px */
+}
+
+/* Repeat up to app-p-64 */
+
+/* Padding - X Axis */
+.app-px-0 {
+    padding-left: 0 !important;
+    /* 0px */
+    padding-right: 0 !important;
+    /* 0px */
+}
+
+.app-px-1 {
+    padding-left: 0.25rem !important;
+    /* 4px */
+    padding-right: 0.25rem !important;
+    /* 4px */
+}
+
+/* Repeat up to app-px-64 */
+
+/* Padding - Y Axis */
+.app-py-0 {
+    padding-top: 0 !important;
+    /* 0px */
+    padding-bottom: 0 !important;
+    /* 0px */
+}
+
+.app-py-1 {
+    padding-top: 0.25rem !important;
+    /* 4px */
+    padding-bottom: 0.25rem !important;
+    /* 4px */
+}
+
+/* Repeat up to app-py-64 */
+
+/* Padding - Top */
+.app-pt-0 {
+    padding-top: 0 !important;
+    /* 0px */
+}
+
+.app-pt-1 {
+    padding-top: 0.25rem !important;
+    /* 4px */
+}
+
+/* Repeat up to app-pt-64 */
+
+/* Padding - Right */
+.app-pr-0 {
+    padding-right: 0 !important;
+    /* 0px */
+}
+
+.app-pr-1 {
+    padding-right: 0.25rem !important;
+    /* 4px */
+}
+
+/* Repeat up to app-pr-64 */
+
+/* Padding - Bottom */
+.app-pb-0 {
+    padding-bottom: 0 !important;
+    /* 0px */
+}
+
+.app-pb-1 {
+    padding-bottom: 0.25rem !important;
+    /* 4px */
+}
+
+/* Repeat up to app-pb-64 */
+
+/* Padding - Left */
+.app-pl-0 {
+    padding-left: 0 !important;
+    /* 0px */
+}
+
+.app-pl-1 {
+    padding-left: 0.25rem !important;
+    /* 4px */
+}
+
+/* Repeat up to app-pl-64 */

@@ -79,6 +79,7 @@ function populateFormFields(data) {
                 case 'email':
                 case 'password':
                 case 'hidden':
+                case 'date':
                     element.value = value;
                     break;
                 case 'number':
@@ -148,7 +149,7 @@ function capitalizeWords(str, capitalizeAll = false) {
  * @returns {string|null} The formatted date string, or null if input is invalid or null.
  */
 function formatAppDate(dateString) {
-    
+
     // Return null for null, undefined, or empty input
     if (!dateString) return null;
 

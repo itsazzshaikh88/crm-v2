@@ -16,11 +16,11 @@
                         <!--end::Close-->
                     </div>
                 </div>
-                    <?php
-                    $modal_list = ['call', 'event', 'meeting', 'note', 'task'];
-                    foreach ($modal_list as $mdl_list)
-                        $this->load->view('modals/activities/partials/activity-' . $mdl_list);
-                    ?>
+                <?php
+                $modal_list = ['call', 'event', 'meeting', 'note', 'task'];
+                foreach ($modal_list as $mdl_list)
+                    $this->load->view('modals/activities/partials/activity-' . $mdl_list);
+                ?>
             </div>
         </div>
     </div>

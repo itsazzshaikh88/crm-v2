@@ -1,6 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
-class Request_model extends CI_Model
+require_once APPPATH . 'models/App_model.php';
+class Request_model extends App_model
 {
     protected $product_table; // Holds the name of the user table
     protected $inventory_table; // Holds the name of the token table
@@ -72,7 +73,7 @@ class Request_model extends CI_Model
             // Insert new product
             $inserted = $this->db->insert($this->req_header_table, $header_data);
             if ($inserted) {
-                $inserted_id = $this->db->insert_id();
+                $inserted_id = $this->get_column_value($this->req_header_table, 'ID', ['UUID' => $header_data['UUID']]);
                 // Create request_number in the required format
                 $request_number = "REQ-" . date('dmy') . str_pad($inserted_id, 6, '0', STR_PAD_LEFT);
                 // Update the request_number field for the newly inserted product

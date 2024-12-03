@@ -1,6 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
-class Product_model extends CI_Model
+require_once APPPATH . 'models/App_model.php';
+class Product_model extends App_model
 {
     protected $product_table; // Holds the name of the user table
     protected $inventory_table; // Holds the name of the token table
@@ -62,10 +63,10 @@ class Product_model extends CI_Model
 
             // Update existing product
             $this->db->where('PRODUCT_ID', $product_id);
-            $this->db->update($this->product_table, $product_data);
+            $updated_action = $this->db->update($this->product_table, $product_data);
 
             // Check if update was successful
-            if ($this->db->affected_rows() > 0) {
+            if ($updated_action) {
                 $this->db->where('PRODUCT_ID', $product_id);
                 $this->db->update($this->inventory_table, $inventory_data);
                 return true;
@@ -79,7 +80,7 @@ class Product_model extends CI_Model
             // Insert new product
             $inserted = $this->db->insert($this->product_table, $product_data);
             if ($inserted) {
-                $inserted_id = $this->db->insert_id();
+                $inserted_id = $this->get_column_value($this->product_table, 'PRODUCT_ID', ['UUID' => $product_data['UUID']]);
                 // Create product_code in the required format
                 $product_code = date('dmy') . str_pad($inserted_id, 6, '0', STR_PAD_LEFT);
                 // Update the product_code field for the newly inserted product

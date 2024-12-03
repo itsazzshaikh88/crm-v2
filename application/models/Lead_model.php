@@ -108,6 +108,7 @@ class Lead_model extends App_Model
         $this->db->trans_complete();
 
         if ($this->db->trans_status() === FALSE) {
+            return false;
         } else {
             return true;
         }

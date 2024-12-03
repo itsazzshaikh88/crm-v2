@@ -338,9 +338,9 @@
                                                 <!--begin:Menu item-->
                                                 <div class="menu-item p-0 m-0">
                                                     <!--begin:Menu link-->
-                                                    <a href="deals"
+                                                    <a href="contacts"
                                                         class="menu-link ">
-                                                        <span class="menu-title">Deals</span>
+                                                        <span class="menu-title">Contacts</span>
                                                     </a>
                                                     <!--end:Menu link-->
                                                 </div>
@@ -348,9 +348,9 @@
                                                 <!--begin:Menu item-->
                                                 <div class="menu-item p-0 m-0">
                                                     <!--begin:Menu link-->
-                                                    <a href="contacts"
+                                                    <a href="deals"
                                                         class="menu-link ">
-                                                        <span class="menu-title">Contacts</span>
+                                                        <span class="menu-title">Deals</span>
                                                     </a>
                                                     <!--end:Menu link-->
                                                 </div>

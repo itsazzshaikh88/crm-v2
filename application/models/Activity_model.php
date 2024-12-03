@@ -68,85 +68,49 @@ class Activity_model extends App_Model
     }
 
     // Function to add or update product
-    public function update_lead($leadID, $data, $userid)
+    public function update_activity($activity_id, $data, $userid)
     {
-        $lead_data = [
-            'FIRST_NAME' => $data['FIRST_NAME'],
-            'LAST_NAME' => $data['LAST_NAME'],
-            'EMAIL' => $data['EMAIL'],
-            'PHONE' => $data['PHONE'],
-            'COMPANY_NAME' => $data['COMPANY_NAME'],
-            'JOB_TITLE' => $data['JOB_TITLE'],
-            'LEAD_SOURCE' => $data['LEAD_SOURCE'],
-            'STATUS' => $data['STATUS'],
-            'ASSIGNED_TO' => $data['ASSIGNED_TO'],
-            'UPDATED_AT' => date('Y-m-d'),
+        $activity_type = strtolower($this->input->post('ACTION'));
+        $activity_type_input = $data["custom-activity-modal-" . $activity_type . "-ACTIVITY_TYPE"] ?? '';
+        $activity_uuid_input = $data["custom-activity-modal-" . $activity_type . "-ACTIVITY_UUID"] ?? '';
+        $activity_leadid_input = $data["custom-activity-modal-" . $activity_type . "-ACTIVITY_LEAD_ID"] ?? '';
+        $activity_data = [
+            'UUID' => $activity_uuid_input,
+            'LEAD_ID' => $activity_leadid_input,
+            'USER_ID' => $userid,
+            'ACTIVITY_TYPE' => $activity_type_input,
+            'ACTIVITY_DATE' => date('Y-m-d'),
+            'STATUS' => 'active',
+            'NOTES' => $data['NOTES'] ?? null,
         ];
 
         // Insert new lead
-        return $this->db->where('LEAD_ID', $leadID)->update($this->lead_table, $lead_data);
-    }
-
-    function get_leads($type = 'list', $limit = 10, $currentPage = 1, $filters = [], $search = [])
-    {
-        $offset = get_limit_offset($currentPage, $limit);
-
-        $this->db->select("l.LEAD_ID, l.LEAD_NUMBER, l.FIRST_NAME, l.LAST_NAME, l.EMAIL, l.PHONE, l.COMPANY_NAME, l.JOB_TITLE, l.LEAD_SOURCE, l.STATUS, l.ASSIGNED_TO, l.LEAD_SCORE, l.NOTES, l.CREATED_AT");
-        $this->db->from("xx_crm_leads l");
-        $this->db->order_by("l.LEAD_ID", "DESC");
-
-        // Apply filters dynamically from the $filters array
-        if (!empty($filters) && is_array($filters)) {
-            foreach ($filters as $key => $value) {
-                $this->db->where($key, $value);
+        $updated = $this->db->where('ACTIVITY_ID', $activity_id)->update($this->lead_activity_table, $activity_data);
+        if ($updated) {
+            if (strtolower($activity_type_input) === 'call') {
+                $call_data = [
+                    'CALL_DURATION' => $data['CALL_DURATION'],
+                    'CALL_PURPOSE' => $data['CALL_PURPOSE'],
+                    'FOLLOW_UP_DATE' => $data['FOLLOW_UP_DATE'],
+                ];
+                $this->db->where('ACTIVITY_ID', $activity_id)->update($this->activity_call_table, $call_data);
+            } else if (strtolower($activity_type_input) === 'notes') {
+                $notes_data = [
+                    'NOTE_CONTENT' => $data['NOTES'] ?? null,
+                ];
+                $this->db->where('ACTIVITY_ID', $activity_id)->update($this->activity_note_table, $notes_data);
+            } else if (strtolower($activity_type_input) === 'meeting') {
+                $meeting_data = [
+                    'LOCATION' => $data['LOCATION'],
+                    'AGENDA' => $data['AGENDA'],
+                    'ATTENDEES' => $data['ATTENDEES'],
+                    'OUTCOME' => $data['NOTES'] ?? '',
+                ];
+                $this->db->where('ACTIVITY_ID', $activity_id)->update($this->activity_meeting_table, $meeting_data);
             }
-        }
-
-
-        // Apply limit and offset only if 'list' type and offset is greater than zero
-        if ($type == 'list') {
-            if ($limit > 0) {
-                $this->db->limit($limit, ($offset > 0 ? $offset : 0));
-            }
-        }
-
-        // Execute query
-        $query = $this->db->get();
-
-        if ($type == 'list') {
-            return $query->result_array();
-        } else {
-            return $query->num_rows();
-        }
-    }
-
-
-    public function delete_lead_by_id($leadID)
-    {
-        $this->db->trans_start();
-
-        $this->db->delete($this->lead_activity_table, array('LEAD_ID' => $leadID));
-
-        $this->db->delete($this->lead_table, array('LEAD_ID' => $leadID));
-
-        $this->db->trans_complete();
-
-        if ($this->db->trans_status() === FALSE) {
-        } else {
             return true;
-        }
-    }
-
-    /**
-     * Get user by email
-     *
-     * @param string $email User email
-     * @return array|null User data or null if not found
-     */
-    public function get_lead_by_email(string $email): ?array
-    {
-        $query = $this->db->get_where($this->lead_table, ['EMAIL' => $email]);
-        return $query->row_array(); // Return user data or null
+        } else
+            return false;
     }
 
     public function get_activity_by_uuid($activityUUID)
@@ -177,93 +141,62 @@ class Activity_model extends App_Model
         return $data;
     }
 
-    public function get_lead_by_id($leadID)
+    public function get_activity_by_id($activityID)
     {
-        $data = [];
-        if ($leadID) {
-            $data = $this->db
-                ->where('LEAD_ID', $leadID)
-                ->get($this->lead_table)
+        $data = ['activity' => [], 'details' => []];
+        if ($activityID) {
+            $data['activity'] = $this->db
+                ->where('ACTIVITY_ID', $activityID)
+                ->get($this->lead_activity_table)
                 ->row_array();
+
+            if (isset($data['activity']['ACTIVITY_ID']) && isset($data['activity']['ACTIVITY_TYPE'])) {
+                $activity_id = $data['activity']['ACTIVITY_ID'];
+                if (strtolower($data['activity']['ACTIVITY_TYPE']) === 'call')
+                    $details_table = $this->activity_call_table;
+                else if (strtolower($data['activity']['ACTIVITY_TYPE']) === 'notes')
+                    $details_table = $this->activity_note_table;
+                else if (strtolower($data['activity']['ACTIVITY_TYPE']) === 'meeting')
+                    $details_table = $this->activity_meeting_table;
+
+                $data['details'] = $this->db
+                    ->where('ACTIVITY_ID', $activity_id)
+                    ->get($details_table)
+                    ->row_array();
+            }
         }
 
         return $data;
     }
-    public function get_lead_and_activities_by_id($leadID)
+
+    public function delete_activity_by_id($activityID)
     {
-        $data = ['lead' => [], 'activities' => []];
-        if ($leadID) {
-            $data['lead'] = $this->db
-                ->where('LEAD_ID', $leadID)
-                ->get($this->lead_table)
+        if ($activityID) {
+            $data['activity'] = $this->db
+                ->where('ACTIVITY_ID', $activityID)
+                ->get($this->lead_activity_table)
                 ->row_array();
-            $data['activities']['data'] = $this->get_activities_by_leadID($leadID);
-        }
 
-        return $data;
-    }
+            if (isset($data['activity']['ACTIVITY_ID']) && isset($data['activity']['ACTIVITY_TYPE'])) {
+                $activity_id = $data['activity']['ACTIVITY_ID'];
+                if (strtolower($data['activity']['ACTIVITY_TYPE']) === 'call')
+                    $details_table = $this->activity_call_table;
+                else if (strtolower($data['activity']['ACTIVITY_TYPE']) === 'notes')
+                    $details_table = $this->activity_note_table;
+                else if (strtolower($data['activity']['ACTIVITY_TYPE']) === 'meeting')
+                    $details_table = $this->activity_meeting_table;
 
-    function get_activities_by_leadID($leadID, $type = 'list', $limit = 10, $currentPage = 1, $filters = [], $search = [])
-    {
-        $offset = get_limit_offset($currentPage, $limit);
-        $activities = [];
+                // Delete Activity details and then delete activity
+                $this->db
+                    ->where('ACTIVITY_ID', $activity_id)
+                    ->delete($details_table);
 
-        if (isset($leadID)) {
-            $leadID = intval($leadID);  // Sanitize leadID to ensure it's an integer
-
-            $sql = "SELECT 
-                    a.ACTIVITY_ID,
-                    a.LEAD_ID,
-                    a.USER_ID,
-                    a.ACTIVITY_TYPE,
-                    a.ACTIVITY_DATE,
-                    a.STATUS,
-                    a.NOTES,
-                    a.CREATED_AT,
-                    a.UPDATED_AT,
-                    c.CALL_DURATION, c.CALL_PURPOSE, c.FOLLOW_UP_DATE,
-                    e.SUBJECT, e.BODY, e.ATTACHMENTS, e.READ_STATUS,
-                    m.LOCATION, m.AGENDA, m.ATTENDEES, m.OUTCOME,
-                    t.TASK_DESCRIPTION, t.DUE_DATE, t.PRIORITY,
-                    n.NOTE_CONTENT,
-                    ev.EVENT_NAME, ev.EVENT_TYPE, ev.FEEDBACK
-                FROM 
-                    XX_CRM_LEAD_ACTIVITIES a
-                LEFT JOIN XX_CRM_ACT_CALL c ON a.ACTIVITY_ID = c.ACTIVITY_ID
-                LEFT JOIN XX_CRM_ACT_EMAIL e ON a.ACTIVITY_ID = e.ACTIVITY_ID
-                LEFT JOIN XX_CRM_ACT_MEETING m ON a.ACTIVITY_ID = m.ACTIVITY_ID
-                LEFT JOIN XX_CRM_ACT_TASK t ON a.ACTIVITY_ID = t.ACTIVITY_ID
-                LEFT JOIN XX_CRM_ACT_NOTE n ON a.ACTIVITY_ID = n.ACTIVITY_ID
-                LEFT JOIN XX_CRM_ACT_EVENT ev ON a.ACTIVITY_ID = ev.ACTIVITY_ID
-                WHERE 
-                    a.LEAD_ID = $leadID";  // Ensure $leadID is sanitized
-
-            // Add filtering logic here if necessary (based on $filters or $search)
-            // For example:
-            // if (!empty($search)) {
-            //     $sql .= " AND (a.NOTES LIKE '%" . $this->db->escape_like_str($search['notes']) . "%')";
-            // }
-
-            // Order by Activity ID descending
-            $sql .= " ORDER BY a.ACTIVITY_ID DESC";
-
-            // Add LIMIT and OFFSET for pagination
-            if ($limit > 0) {
-                $sql .= " LIMIT $limit";
-            }
-
-            if ($offset > 0) {
-                $sql .= " OFFSET $offset";
-            }
-
-            // Execute the query
-            $activities = $this->db->query($sql);
-
-            if ($type == 'list') {
-                return $activities->result_array();  // Return result as an array
-            } else {
-                return $activities->num_rows();  // Return the count of activities
+                $this->db
+                    ->where('ACTIVITY_ID', $activityID)
+                    ->delete($this->lead_activity_table);
+                return true;
             }
         }
+        return false;
     }
 }

@@ -34,8 +34,14 @@
             </div>
             <div id="custom-activity-modal-notes-editor" name="custom-activity-modal-notes-editor" class="h-100px mb-2 quill-editor-container bg-white border-blue-100"></div>
             <span class="text-danger err-lbl fs-8 mb-1" id="act-lbl-NOTES"></span>
+
+            <div class="position-absolute start-0 top-0 h-100 w-100 d-flex flex-column align-items-center justify-content-center notes-activity-loader-container activity-loader-container d-none">
+                <div class="spinner app-mt-40"></div>
+                <p><small class="text-slate-500 fw-normal">Fetching Activity Details, Please Wait ....</small></p>
+            </div>
+
             <div class="my-3 text-end">
-                <button class="btn btn-sm btn-primary" id="btn-add-activities">Add New Note</button>
+                <button class="btn btn-sm btn-primary" id="btn-add-activities">Save Note</button>
             </div>
         </div>
     </div>

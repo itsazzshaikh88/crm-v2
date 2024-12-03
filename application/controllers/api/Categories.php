@@ -12,7 +12,14 @@ class Categories extends Api_controller
     {
         // Check if the authentication is valid
         $isAuthorized = $this->isAuthorized();
-        if (!$isAuthorized['status']) return;
+        if (!$isAuthorized['status']) {
+            $this->output
+                ->set_status_header(401) // Set HTTP response status to 400 Bad Request
+                ->set_content_type('application/json')
+                ->set_output(json_encode(['error' => 'Unauthorized access. You do not have permission to perform this action.']))
+                ->_display();
+            exit;
+        };
 
         $categories = $this->Category_model->get_all_categories();
         return $this->output

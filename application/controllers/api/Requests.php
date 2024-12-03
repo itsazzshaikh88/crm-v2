@@ -176,7 +176,7 @@ class Requests extends Api_controller
                     'code' => 400,
                     'message' => 'Invalid JSON input or missing requestUUID'
                 ]));
-        }
+        } 
 
         // Retrieve Request details using the provided requestUUID
         $requestUUID = $data['requestUUID'];

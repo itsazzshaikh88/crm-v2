@@ -95,7 +95,7 @@ function showLeads(leads, tbody) {
     if (leads?.length > 0) {
         // show leads
         leads.forEach(lead => {
-            content += `<tr>
+            content += `<tr data-lead-id="${lead?.LEAD_ID}">
                                 <td class="text-center">${++counter}</td>
                                 <td>
                                     <p class="mb-0 text-primary">${lead?.FIRST_NAME} ${lead?.LAST_NAME}</p>
@@ -128,7 +128,7 @@ function showLeads(leads, tbody) {
                                                 <i class="fs-5 fa-regular fa-pen-to-square text-gray-700"></i>
                                             </small>
                                         </a>
-                                        <a href="javascript:void(0)" onclick="deleteLead()">
+                                        <a href="javascript:void(0)" onclick="deleteLead(${lead?.LEAD_ID})">
                                             <small>
                                                 <i class="fs-5 fa-solid fa-trash-can text-danger"></i>
                                             </small>
@@ -217,13 +217,48 @@ async function deleteLead(leadID) {
     if (!leadID) {
         throw new Error("Invalid Lead ID, Please try Again");
     }
+
     try {
+
+        // Show a confirmation alert
+        const confirmation = await Swal.fire({
+            title: "Are you sure?",
+            text: "Do you really want to delete lead? This action cannot be undone.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, delete it",
+            cancelButtonText: "Cancel",
+            customClass: {
+                popup: 'small-swal',
+                confirmButton: 'swal-confirm-btn',
+                cancelButton: 'swal-cancel-btn',
+            },
+        });
+
+        if (!confirmation.isConfirmed) return;
+
         const authToken = getCookie('auth_token');
         if (!authToken) {
-            throw new Error("Authorization token is missing. Please Login again to make API request.");
+            toasterNotification({
+                type: 'error',
+                message: "Authorization token is missing. Please login again to make an API request."
+            });
+            return;
         }
 
-        const url = `${APIUrl}/requests/delete/${leadID}`;
+        // Show a non-closable alert box while the activity is being deleted
+        Swal.fire({
+            title: "Deleting Lead...",
+            text: "Please wait while the lead is being deleted.",
+            icon: "info",
+            showConfirmButton: false,
+            allowOutsideClick: false,
+            customClass: {
+                popup: 'small-swal',
+            },
+        });
+
+        const url = `${APIUrl}/leads/delete/${leadID}`;
 
         const response = await fetch(url, {
             method: 'DELETE', // Change to DELETE for a delete request
@@ -234,6 +269,9 @@ async function deleteLead(leadID) {
 
         const data = await response.json(); // Parse the JSON response
 
+        // Close the loading alert box
+        Swal.close();
+
         if (!response.ok) {
             // If the response is not ok, throw an error with the message from the response
             throw new Error(data.error || 'Failed to delete lead details');
@@ -243,15 +281,16 @@ async function deleteLead(leadID) {
             // Here, we directly handle the deletion without checking data.status
             toasterNotification({ type: 'success', message: 'Lead Deleted Successfully' });
             // Logic to remove the current row from the table
-            const row = document.querySelector(`#request-list-tbody tr[data-request-id="${requestID}"]`);
+            const row = document.querySelector(`#lead-list-tbody tr[data-lead-id="${leadID}"]`);
             if (row) {
                 row.remove(); // Remove the row from the table
             }
         } else {
-            throw new Error(data.message || 'Failed to delete request details');
+            throw new Error(data.message || 'Failed to delete lead details');
         }
 
     } catch (error) {
         toasterNotification({ type: 'error', message: 'Request failed: ' + error.message });
+        Swal.close();
     }
 }
