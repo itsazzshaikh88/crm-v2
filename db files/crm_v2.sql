@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 21, 2024 at 01:44 PM
+-- Generation Time: Dec 05, 2024 at 06:34 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -20,6 +20,164 @@ SET time_zone = "+00:00";
 --
 -- Database: `crm_v2`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `xx_crm_act_call`
+--
+
+CREATE TABLE `xx_crm_act_call` (
+  `CALL_ID` int(11) NOT NULL,
+  `ACTIVITY_ID` int(11) NOT NULL,
+  `CALL_DURATION` varchar(50) DEFAULT NULL,
+  `CALL_PURPOSE` varchar(255) DEFAULT NULL,
+  `FOLLOW_UP_DATE` date DEFAULT NULL,
+  `SOURCE_TYPE` varchar(30) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `xx_crm_act_call`
+--
+
+INSERT INTO `xx_crm_act_call` (`CALL_ID`, `ACTIVITY_ID`, `CALL_DURATION`, `CALL_PURPOSE`, `FOLLOW_UP_DATE`, `SOURCE_TYPE`) VALUES
+(13, 19, '25 Minutes', 'Introduction with Leads', '2024-12-01', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `xx_crm_act_email`
+--
+
+CREATE TABLE `xx_crm_act_email` (
+  `EMAIL_ID` int(11) NOT NULL,
+  `ACTIVITY_ID` int(11) NOT NULL,
+  `SUBJECT` varchar(255) DEFAULT NULL,
+  `BODY` text DEFAULT NULL,
+  `ATTACHMENTS` text DEFAULT NULL,
+  `READ_STATUS` enum('READ','UNREAD') DEFAULT 'UNREAD',
+  `SOURCE_TYPE` varchar(50) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `xx_crm_act_event`
+--
+
+CREATE TABLE `xx_crm_act_event` (
+  `EVENT_ID` int(11) NOT NULL,
+  `ACTIVITY_ID` int(11) NOT NULL,
+  `EVENT_NAME` varchar(255) DEFAULT NULL,
+  `EVENT_TYPE` varchar(255) DEFAULT NULL,
+  `FEEDBACK` text DEFAULT NULL,
+  `SOURCE_TYPE` varchar(50) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `xx_crm_act_meeting`
+--
+
+CREATE TABLE `xx_crm_act_meeting` (
+  `MEETING_ID` int(11) NOT NULL,
+  `ACTIVITY_ID` int(11) NOT NULL,
+  `LOCATION` varchar(255) DEFAULT NULL,
+  `AGENDA` text DEFAULT NULL,
+  `ATTENDEES` varchar(255) DEFAULT NULL,
+  `OUTCOME` text DEFAULT NULL,
+  `SOURCE_TYPE` varchar(50) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `xx_crm_act_meeting`
+--
+
+INSERT INTO `xx_crm_act_meeting` (`MEETING_ID`, `ACTIVITY_ID`, `LOCATION`, `AGENDA`, `ATTENDEES`, `OUTCOME`, `SOURCE_TYPE`) VALUES
+(5, 20, 'Zoom Caling', 'Lead Meetup', 'shaikh Ab Azim,Zaid Khan', '<h2>Meeting:</h2><p>The meeting is scheduled after getting call with lead</p>', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `xx_crm_act_note`
+--
+
+CREATE TABLE `xx_crm_act_note` (
+  `NOTE_ID` int(11) NOT NULL,
+  `ACTIVITY_ID` int(11) NOT NULL,
+  `NOTE_CONTENT` text DEFAULT NULL,
+  `SOURCE_TYPE` varchar(50) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `xx_crm_act_note`
+--
+
+INSERT INTO `xx_crm_act_note` (`NOTE_ID`, `ACTIVITY_ID`, `NOTE_CONTENT`, `SOURCE_TYPE`) VALUES
+(4, 23, '<p>This is the test note activity and it has been updated to check the node content is updating it self</p>', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `xx_crm_act_task`
+--
+
+CREATE TABLE `xx_crm_act_task` (
+  `TASK_ID` int(11) NOT NULL,
+  `ACTIVITY_ID` int(11) NOT NULL,
+  `TASK_DESCRIPTION` text DEFAULT NULL,
+  `DUE_DATE` datetime DEFAULT NULL,
+  `PRIORITY` enum('HIGH','MEDIUM','LOW') DEFAULT 'MEDIUM',
+  `SOURCE_TYPE` varchar(50) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `xx_crm_asn_header`
+--
+
+CREATE TABLE `xx_crm_asn_header` (
+  `ASN_ID` int(11) NOT NULL COMMENT 'Auto-incrementing unique identifier for each ASN.',
+  `UUID` varchar(50) NOT NULL COMMENT 'Universally Unique Identifier for the ASN.',
+  `ASN_NUMBER` varchar(20) NOT NULL COMMENT 'Unique number assigned to the ASN.',
+  `CLIENT_ID` int(11) NOT NULL COMMENT 'Client identifier associated with the ASN.',
+  `ASN_STATUS` varchar(50) DEFAULT NULL COMMENT 'Current status of the ASN (e.g., Draft, Confirmed, Shipped).',
+  `DELIVERY_NUMBER` varchar(255) DEFAULT NULL COMMENT 'Delivery reference number linked to the shipment.',
+  `CARRIER_NAME` varchar(255) DEFAULT NULL COMMENT 'Name of the carrier handling the shipment.',
+  `TRUCK_NUMBER` varchar(100) DEFAULT NULL COMMENT 'Truck or vehicle number for the shipment.',
+  `CUSTOMER_SUPPLIER` varchar(255) DEFAULT NULL COMMENT 'Customer or supplier involved in the ASN.',
+  `SHIPPING_ADDRESS` text DEFAULT NULL COMMENT 'Full shipping address for the delivery.',
+  `TRANSPORT` varchar(255) DEFAULT NULL COMMENT 'Mode of transport (e.g., Air, Sea, Road).',
+  `LEG_DR` varchar(255) DEFAULT NULL COMMENT 'Leg or delivery route information.',
+  `CREATED_AT` timestamp NOT NULL DEFAULT current_timestamp() COMMENT 'Timestamp when the record was created.',
+  `CREATED_BY` int(11) DEFAULT NULL COMMENT 'User or system that created the record.',
+  `UPDATED_AT` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'Timestamp when the record was last updated.',
+  `UPDATED_BY` int(11) DEFAULT NULL COMMENT 'User or system that last updated the record.',
+  `VERSION` int(11) DEFAULT 1 COMMENT 'Version number for the ASN record.'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `xx_crm_asn_lines`
+--
+
+CREATE TABLE `xx_crm_asn_lines` (
+  `LINE_ID` int(11) NOT NULL COMMENT 'Auto-incrementing unique identifier for each line item.',
+  `ASN_ID` int(11) NOT NULL COMMENT 'Foreign key linking to XX_CRM_ASN_HEADER.',
+  `PO_NUM` varchar(20) DEFAULT NULL COMMENT 'Purchase Order number associated with the line item.',
+  `SOC_NUM` varchar(20) DEFAULT NULL COMMENT 'Sales Order Confirmation number for the line item.',
+  `PRODUCT_ID` varchar(20) DEFAULT NULL COMMENT 'Unique identifier for the product.',
+  `PRODUCT_DESC` varchar(500) DEFAULT NULL COMMENT 'Description of the product.',
+  `COLOR` varchar(100) DEFAULT NULL COMMENT 'Color of the product, if applicable.',
+  `TRANSPORT` varchar(255) DEFAULT NULL COMMENT 'Mode of transport for the specific line item.',
+  `UOM` varchar(50) DEFAULT NULL COMMENT 'Unit of Measure for the product (e.g., KG, PCS).',
+  `QTY` decimal(18,2) DEFAULT NULL COMMENT 'Quantity of the product in the specified unit of measure.',
+  `PACKING` varchar(255) DEFAULT NULL COMMENT 'Details about the packing (e.g., Box, Pallet).',
+  `INVOICE_NUM` varchar(50) DEFAULT NULL COMMENT 'Invoice number associated with the line item.'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -84,7 +242,33 @@ INSERT INTO `xx_crm_authtokens` (`ID`, `USER_ID`, `TOKEN`, `TOKEN_TYPE`, `EXPIRY
 (45, 1, 'eyJ1c2VyaWQiOiIxIiwidXNlcnR5cGUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AY3JtLmxpdmUiLCJ1c2VybmFtZSI6IlN5cyBBZG1pbiIsInRpbWVzdGFtcCI6MTczMTkyNDQyNH0=.acfe7987044b5509394556876e9653394380dbc702e38f04867950f413feec38', 'auth', '1731935224', '2024-11-18 05:37:04', '2024-11-18 10:07:04'),
 (47, 1, 'eyJ1c2VyaWQiOiIxIiwidXNlcnR5cGUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AY3JtLmxpdmUiLCJ1c2VybmFtZSI6IlN5cyBBZG1pbiIsInRpbWVzdGFtcCI6MTczMjE4ODA4Mn0=.dba313568672052bfdf4a52c886a66e39b476bf76dbdbe575637b8df5135726a', 'auth', '1732198882', '2024-11-21 06:51:22', '2024-11-21 11:21:22'),
 (48, 1, 'eyJ1c2VyaWQiOiIxIiwidXNlcnR5cGUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AY3JtLmxpdmUiLCJ1c2VybmFtZSI6IlN5cyBBZG1pbiIsInRpbWVzdGFtcCI6MTczMjE4ODI1Nn0=.315b768cb71b6225ad9908656dbf87b17d28e5e10b91e365256a3f7b10173a61', 'auth', '1732199056', '2024-11-21 06:54:16', '2024-11-21 11:24:16'),
-(49, 1, 'eyJ1c2VyaWQiOiIxIiwidXNlcnR5cGUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AY3JtLmxpdmUiLCJ1c2VybmFtZSI6IlN5cyBBZG1pbiIsInRpbWVzdGFtcCI6MTczMjE4ODQzOX0=.0785b1bc726cef4269ebc1a70aa113bb6ab8870a5b5c10a5d631076aed32d4d7', 'auth', '1732199239', '2024-11-21 06:57:19', '2024-11-21 11:27:19');
+(49, 1, 'eyJ1c2VyaWQiOiIxIiwidXNlcnR5cGUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AY3JtLmxpdmUiLCJ1c2VybmFtZSI6IlN5cyBBZG1pbiIsInRpbWVzdGFtcCI6MTczMjE4ODQzOX0=.0785b1bc726cef4269ebc1a70aa113bb6ab8870a5b5c10a5d631076aed32d4d7', 'auth', '1732199239', '2024-11-21 06:57:19', '2024-11-21 11:27:19'),
+(50, 1, 'eyJ1c2VyaWQiOiIxIiwidXNlcnR5cGUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AY3JtLmxpdmUiLCJ1c2VybmFtZSI6IlN5cyBBZG1pbiIsInRpbWVzdGFtcCI6MTczMjI1NDAzMX0=.89408720d6442782795cf0f12eb688a698b423d68b5902f55a00d35302e254ef', 'auth', '1732264831', '2024-11-22 01:10:31', '2024-11-22 05:40:31'),
+(51, 1, 'eyJ1c2VyaWQiOiIxIiwidXNlcnR5cGUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AY3JtLmxpdmUiLCJ1c2VybmFtZSI6IlN5cyBBZG1pbiIsInRpbWVzdGFtcCI6MTczMjI2ODIwM30=.0dc9883c2e616e40ac8af37d256d3a6858d7146ab87222fe80972c44ff540824', 'auth', '1732279003', '2024-11-22 05:06:43', '2024-11-22 09:36:43'),
+(52, 1, 'eyJ1c2VyaWQiOiIxIiwidXNlcnR5cGUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AY3JtLmxpdmUiLCJ1c2VybmFtZSI6IlN5cyBBZG1pbiIsInRpbWVzdGFtcCI6MTczMjMzOTY3MH0=.9847e0ea7a2c4a50c12a338bd6a48a91c71dfb9d6d8a8fcfb72b14e63eb44843', 'auth', '1732350470', '2024-11-23 00:57:50', '2024-11-23 05:27:50'),
+(53, 1, 'eyJ1c2VyaWQiOiIxIiwidXNlcnR5cGUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AY3JtLmxpdmUiLCJ1c2VybmFtZSI6IlN5cyBBZG1pbiIsInRpbWVzdGFtcCI6MTczMjM1NTY1OH0=.0ca23d5f02aec82e3ee991a481080c44940b041ac7503d48dff575b9f4df68c9', 'auth', '1732366458', '2024-11-23 05:24:18', '2024-11-23 09:54:18'),
+(54, 1, 'eyJ1c2VyaWQiOiIxIiwidXNlcnR5cGUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AY3JtLmxpdmUiLCJ1c2VybmFtZSI6IlN5cyBBZG1pbiIsInRpbWVzdGFtcCI6MTczMjUxMjQ5OX0=.571edf38d0fd8aa17c81e8e22be22cee06da28b68b121af83713367c3c75fa70', 'auth', '1732523299', '2024-11-25 00:58:19', '2024-11-25 05:28:19'),
+(55, 1, 'eyJ1c2VyaWQiOiIxIiwidXNlcnR5cGUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AY3JtLmxpdmUiLCJ1c2VybmFtZSI6IlN5cyBBZG1pbiIsInRpbWVzdGFtcCI6MTczMjUyMzUxNH0=.b8546438a5b881c7163a90bd8fb3b0a2ef55643349c732b3c5386a0ab1c264a2', 'auth', '1732534314', '2024-11-25 04:01:54', '2024-11-25 08:31:54'),
+(56, 1, 'eyJ1c2VyaWQiOiIxIiwidXNlcnR5cGUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AY3JtLmxpdmUiLCJ1c2VybmFtZSI6IlN5cyBBZG1pbiIsInRpbWVzdGFtcCI6MTczMjUzNDM4Nn0=.7734404a109bdbcbc912d1bbea81233c7a5abdcd92e3bfa8f10c3d03ae3a59e7', 'auth', '1732545186', '2024-11-25 07:03:06', '2024-11-25 11:33:06'),
+(57, 1, 'eyJ1c2VyaWQiOiIxIiwidXNlcnR5cGUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AY3JtLmxpdmUiLCJ1c2VybmFtZSI6IlN5cyBBZG1pbiIsInRpbWVzdGFtcCI6MTczMjYwNDEwMH0=.c9e3dfec4e23a08e125497fa7b72807c85eb320d6b0a812d5ebf410b30eaf9f3', 'auth', '1732614900', '2024-11-26 02:25:00', '2024-11-26 06:55:00'),
+(58, 1, 'eyJ1c2VyaWQiOiIxIiwidXNlcnR5cGUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AY3JtLmxpdmUiLCJ1c2VybmFtZSI6IlN5cyBBZG1pbiIsInRpbWVzdGFtcCI6MTczMjYxNTI0N30=.33efc1a64247e9032d2eaf18cb84e11472b2ffb22dbe1390d66d26e82838cbf2', 'auth', '1732626047', '2024-11-26 05:30:47', '2024-11-26 10:00:47'),
+(59, 1, 'eyJ1c2VyaWQiOiIxIiwidXNlcnR5cGUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AY3JtLmxpdmUiLCJ1c2VybmFtZSI6IlN5cyBBZG1pbiIsInRpbWVzdGFtcCI6MTczMjYyNzg3MX0=.81b1197532a91edc571728c42a8ba0cba93aaad76453a1aef61f86417c6defb2', 'auth', '1732638671', '2024-11-26 09:01:11', '2024-11-26 13:31:11'),
+(60, 1, 'eyJ1c2VyaWQiOiIxIiwidXNlcnR5cGUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AY3JtLmxpdmUiLCJ1c2VybmFtZSI6IlN5cyBBZG1pbiIsInRpbWVzdGFtcCI6MTczMjY4NTYwMn0=.97f0ae84184ca73f6f2caf34a5505c03fa138e27a94a2762fbae2fb0ef944e8b', 'auth', '1732696402', '2024-11-27 01:03:22', '2024-11-27 05:33:22'),
+(61, 1, 'eyJ1c2VyaWQiOiIxIiwidXNlcnR5cGUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AY3JtLmxpdmUiLCJ1c2VybmFtZSI6IlN5cyBBZG1pbiIsInRpbWVzdGFtcCI6MTczMjY5NzAzMn0=.14faffaa26d3f1754a7f4bf2c148401d0ff91b2c3c04afa9655f833013953047', 'auth', '1732707832', '2024-11-27 04:13:52', '2024-11-27 08:43:52'),
+(62, 1, 'eyJ1c2VyaWQiOiIxIiwidXNlcnR5cGUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AY3JtLmxpdmUiLCJ1c2VybmFtZSI6IlN5cyBBZG1pbiIsInRpbWVzdGFtcCI6MTczMjcwOTU4OX0=.35b6ffea18568229f7557350be247c77779df8272b131d9ba6cf6779847d7d42', 'auth', '1732720389', '2024-11-27 07:43:09', '2024-11-27 12:13:09'),
+(63, 1, 'eyJ1c2VyaWQiOiIxIiwidXNlcnR5cGUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AY3JtLmxpdmUiLCJ1c2VybmFtZSI6IlN5cyBBZG1pbiIsInRpbWVzdGFtcCI6MTczMjc2OTY0MX0=.a666fa256d7b137533a47c66535f0a2ed21ab0d819e1d904e6ee86e8ab6a5929', 'auth', '1732780441', '2024-11-28 00:24:01', '2024-11-28 04:54:01'),
+(64, 1, 'eyJ1c2VyaWQiOiIxIiwidXNlcnR5cGUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AY3JtLmxpdmUiLCJ1c2VybmFtZSI6IlN5cyBBZG1pbiIsInRpbWVzdGFtcCI6MTczMjc4MDU5OH0=.2d6c717788af45be8f78d6728f1cd7f2b70088645af46fca600ba159d43ecdd9', 'auth', '1732791398', '2024-11-28 03:26:38', '2024-11-28 07:56:38'),
+(65, 1, 'eyJ1c2VyaWQiOiIxIiwidXNlcnR5cGUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AY3JtLmxpdmUiLCJ1c2VybmFtZSI6IlN5cyBBZG1pbiIsInRpbWVzdGFtcCI6MTczMjc5MTgxOX0=.83dba10eb9bcba31d3345e31b7af2a085afce5570504b22f0b040ebada9630ef', 'auth', '1732802619', '2024-11-28 06:33:39', '2024-11-28 11:03:39'),
+(66, 1, 'eyJ1c2VyaWQiOiIxIiwidXNlcnR5cGUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AY3JtLmxpdmUiLCJ1c2VybmFtZSI6IlN5cyBBZG1pbiIsInRpbWVzdGFtcCI6MTczMjg1NTEyN30=.aa413037d4ec520673ea6ecfbab20985f8b19d5ac93da349423ec6db9735a945', 'auth', '1732865927', '2024-11-29 00:08:47', '2024-11-29 04:38:47'),
+(67, 1, 'eyJ1c2VyaWQiOiIxIiwidXNlcnR5cGUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AY3JtLmxpdmUiLCJ1c2VybmFtZSI6IlN5cyBBZG1pbiIsInRpbWVzdGFtcCI6MTczMjg3MjM4Mn0=.5fcc0a37260032db758ac6a650fd8a568a6356a9a2e83a36e67f0f6afbe373f9', 'auth', '1732883182', '2024-11-29 04:56:22', '2024-11-29 09:26:22'),
+(68, 1, 'eyJ1c2VyaWQiOiIxIiwidXNlcnR5cGUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AY3JtLmxpdmUiLCJ1c2VybmFtZSI6IlN5cyBBZG1pbiIsInRpbWVzdGFtcCI6MTczMjk0MzUzMX0=.34bb29ad8060b3abaa5bb98c4a9c59ede4c75839a2605552e16a7bd6eecae4c6', 'auth', '1732954331', '2024-11-30 00:42:11', '2024-11-30 05:12:11'),
+(69, 1, 'eyJ1c2VyaWQiOiIxIiwidXNlcnR5cGUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AY3JtLmxpdmUiLCJ1c2VybmFtZSI6IlN5cyBBZG1pbiIsInRpbWVzdGFtcCI6MTczMzExNjg1Nn0=.0a334b9be57833884c5c176fe14fa775c93ae2a198262f7e9d426f4bee970472', 'auth', '1733127656', '2024-12-02 00:50:56', '2024-12-02 05:20:56'),
+(71, 1, 'eyJ1c2VyaWQiOiIxIiwidXNlcnR5cGUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AY3JtLmxpdmUiLCJ1c2VybmFtZSI6IlN5cyBBZG1pbiIsInRpbWVzdGFtcCI6MTczMzE0MDI0OX0=.7e13221d13e295e2cf1d4c2c8a88602a96240f5abc7479fe1a393092eb9a4fa3', 'auth', '1733151049', '2024-12-02 07:20:49', '2024-12-02 11:50:49'),
+(74, 1, 'eyJ1c2VyaWQiOiIxIiwidXNlcnR5cGUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AY3JtLmxpdmUiLCJ1c2VybmFtZSI6IlN5cyBBZG1pbiIsInRpbWVzdGFtcCI6MTczMzIwMDAwOH0=.c406ef52a70f3544faf046cea9dd834eec4161a09fa90cc47cbf7e11d781814b', 'auth', '1733210808', '2024-12-02 23:56:48', '2024-12-03 04:26:48'),
+(75, 1, 'eyJ1c2VyaWQiOiIxIiwidXNlcnR5cGUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AY3JtLmxpdmUiLCJ1c2VybmFtZSI6IlN5cyBBZG1pbiIsInRpbWVzdGFtcCI6MTczMzIxMzU5OX0=.13fd7df869949e4c1726bb0d1781b1428f40f99673fbe159dfc318615a709969', 'auth', '1733224399', '2024-12-03 03:43:19', '2024-12-03 08:13:19'),
+(76, 1, 'eyJ1c2VyaWQiOiIxIiwidXNlcnR5cGUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AY3JtLmxpdmUiLCJ1c2VybmFtZSI6IlN5cyBBZG1pbiIsInRpbWVzdGFtcCI6MTczMzIyNjkxNH0=.1e793123b716192346704ae787e49d4a00966f5ba03d43d5efa5f0e95104a97b', 'auth', '1733237714', '2024-12-03 07:25:14', '2024-12-03 11:55:14'),
+(77, 1, 'eyJ1c2VyaWQiOiIxIiwidXNlcnR5cGUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AY3JtLmxpdmUiLCJ1c2VybmFtZSI6IlN5cyBBZG1pbiIsInRpbWVzdGFtcCI6MTczMzI4NjE4MX0=.b02381c253f65aa9d4f02da4e11960027335bbc6c368ddd313171f52dd9abf2a', 'auth', '1733296981', '2024-12-03 23:53:01', '2024-12-04 04:23:01'),
+(78, 1, 'eyJ1c2VyaWQiOiIxIiwidXNlcnR5cGUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AY3JtLmxpdmUiLCJ1c2VybmFtZSI6IlN5cyBBZG1pbiIsInRpbWVzdGFtcCI6MTczMzMxMDUzN30=.1a0c6413fd7f53b49305e21547803cba86ee255e0cd3535536d8f04b564984da', 'auth', '1733321337', '2024-12-04 06:38:57', '2024-12-04 11:08:57');
 
 -- --------------------------------------------------------
 
@@ -157,6 +341,255 @@ INSERT INTO `xx_crm_client_detail` (`ID`, `CLIENT_ID`, `COMPANY_NAME`, `SITE_NAM
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `xx_crm_compl_header`
+--
+
+CREATE TABLE `xx_crm_compl_header` (
+  `COMPLAINT_ID` int(11) NOT NULL COMMENT 'Auto-incrementing unique identifier for each complaint.',
+  `UUID` varchar(50) NOT NULL COMMENT 'Universally Unique Identifier for the complaint record.',
+  `COMPLAINT_NUMBER` varchar(50) DEFAULT NULL COMMENT 'Unique number assigned to the complaint.',
+  `COMPLAINT_DATE` date NOT NULL COMMENT 'Date when the complaint was raised.',
+  `CLIENT_ID` int(11) NOT NULL COMMENT 'Identifier of the client associated with the complaint.',
+  `CUSTOMER_NAME` varchar(255) NOT NULL COMMENT 'Name of the customer raising the complaint.',
+  `EMAIL` varchar(255) NOT NULL COMMENT 'Email address of the customer.',
+  `COMPLAINT_RAISED_BY` varchar(255) DEFAULT NULL COMMENT 'Person who raised the complaint.',
+  `MOBILE_NUMBER` varchar(20) DEFAULT NULL COMMENT 'Mobile number of the person raising the complaint.',
+  `STATUS` varchar(20) DEFAULT 'OPEN' COMMENT 'Current status of the complaint (e.g., OPEN, RESOLVED).',
+  `COMPLAINT` text DEFAULT NULL COMMENT 'Details of the complaint.',
+  `ATTACHMENTS` varchar(500) DEFAULT NULL COMMENT 'File paths or references to attachments.',
+  `IS_RESOLVED` tinyint(1) DEFAULT 0 COMMENT 'Indicates whether the complaint is resolved (TRUE/FALSE).',
+  `CREATED_AT` timestamp NOT NULL DEFAULT current_timestamp() COMMENT 'Timestamp when the complaint was created.',
+  `CREATED_BY` varchar(100) DEFAULT NULL COMMENT 'User or system that created the complaint record.',
+  `UPDATED_AT` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'Timestamp when the record was last updated.',
+  `UPDATED_BY` varchar(100) DEFAULT NULL COMMENT 'User or system that last updated the record.',
+  `VERSION` int(11) DEFAULT 1 COMMENT 'Version number of the complaint record.'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `xx_crm_compl_lines`
+--
+
+CREATE TABLE `xx_crm_compl_lines` (
+  `LINE_ID` int(11) NOT NULL COMMENT 'Auto-incrementing unique identifier for each complaint line.',
+  `COMPLAINT_ID` int(11) NOT NULL COMMENT 'Foreign key linking to XX_CRM_COMPL_HEADER.',
+  `PO_NUMBER` varchar(50) DEFAULT NULL COMMENT 'Purchase Order number associated with the complaint line.',
+  `DELIVERY_NUMBER` varchar(50) DEFAULT NULL COMMENT 'Delivery number associated with the complaint line.',
+  `PRODUCT_CODE` varchar(50) NOT NULL COMMENT 'Code of the product being complained about.',
+  `PRODUCT_DESC` varchar(255) DEFAULT NULL COMMENT 'Description of the product.',
+  `DELIVERY_DATE` date DEFAULT NULL COMMENT 'Delivery date of the product.',
+  `QTY` decimal(18,2) DEFAULT NULL COMMENT 'Quantity of the product in the complaint.',
+  `ISSUE` text DEFAULT NULL COMMENT 'Details of the issue reported in the complaint line.',
+  `REMARK` text DEFAULT NULL COMMENT 'Remarks or additional comments.',
+  `RETURN_DATE` date DEFAULT NULL COMMENT 'Date when the product is to be returned or was returned.'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `xx_crm_compl_resolution`
+--
+
+CREATE TABLE `xx_crm_compl_resolution` (
+  `RESOLUTION_ID` int(11) NOT NULL COMMENT 'Auto-incrementing unique identifier for each resolution.',
+  `COMPLAINT_ID` int(11) NOT NULL COMMENT 'Foreign key linking to XX_CRM_COMPL_HEADER.',
+  `RESOLUTION_NUMBER` varchar(50) DEFAULT NULL COMMENT 'Unique number assigned to the resolution.',
+  `COMPLAINT_NUMBER` varchar(50) DEFAULT NULL COMMENT 'Complaint number associated with this resolution.',
+  `RECEIVED_BY` varchar(255) DEFAULT NULL COMMENT 'Person who received the complaint resolution.',
+  `RECEIVED_DATE` date DEFAULT NULL COMMENT 'Date when the resolution was received.',
+  `ESCALATION_NEEDED` tinyint(1) DEFAULT 0 COMMENT 'Indicates if escalation is required (TRUE/FALSE).',
+  `ACTIONS` text DEFAULT NULL COMMENT 'Actions taken to resolve the complaint.',
+  `ROOT_CAUSE` text DEFAULT NULL COMMENT 'Root cause analysis of the complaint.',
+  `OUTCOME` text DEFAULT NULL COMMENT 'Outcome of the resolution process.',
+  `ATTACHMENTS` varchar(500) DEFAULT NULL COMMENT 'File paths or references to attachments.',
+  `CREATED_AT` timestamp NOT NULL DEFAULT current_timestamp() COMMENT 'Timestamp when the resolution was created.',
+  `CREATED_BY` varchar(100) DEFAULT NULL COMMENT 'User or system that created the resolution record.',
+  `UPDATED_AT` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'Timestamp when the record was last updated.',
+  `UPDATED_BY` varchar(100) DEFAULT NULL COMMENT 'User or system that last updated the record.'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `xx_crm_contacts`
+--
+
+CREATE TABLE `xx_crm_contacts` (
+  `CONTACT_ID` int(10) NOT NULL COMMENT 'Unique identifier for the contact (Primary Key)',
+  `UUID` varchar(50) NOT NULL COMMENT 'Universally Unique Identifier for the contact',
+  `FIRST_NAME` varchar(100) NOT NULL COMMENT 'Contact''s first name',
+  `LAST_NAME` varchar(100) NOT NULL COMMENT 'Contact''s last name',
+  `EMAIL` varchar(255) DEFAULT NULL COMMENT 'Contact''s email address',
+  `PHONE` varchar(20) DEFAULT NULL COMMENT 'Contact''s phone number',
+  `MOBILE` varchar(20) DEFAULT NULL COMMENT 'Contact''s mobile phone number',
+  `COMPANY_NAME` varchar(255) DEFAULT NULL COMMENT 'Company associated with the contact',
+  `JOB_TITLE` varchar(100) DEFAULT NULL COMMENT 'Job title of the contact',
+  `DEPARTMENT` varchar(100) DEFAULT NULL COMMENT 'Department of the contact (e.g., Sales, IT)',
+  `CONTACT_SOURCE` varchar(50) DEFAULT NULL COMMENT 'Origin/source of the contact (e.g., Web, Referral, Event)',
+  `LEAD_SOURCE` varchar(50) DEFAULT NULL COMMENT 'Lead source, if tracked separately (e.g., Marketing, Referral)',
+  `STATUS` varchar(20) DEFAULT NULL COMMENT 'Status of the contact (e.g., Active, Inactive)',
+  `ASSIGNED_TO` varchar(100) DEFAULT NULL COMMENT 'User or team managing the contact',
+  `CREATED_AT` timestamp NOT NULL DEFAULT current_timestamp() COMMENT 'Timestamp of when the contact was created',
+  `UPDATED_AT` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'Timestamp of the last update to the contact',
+  `LAST_CONTACTED` date DEFAULT NULL COMMENT 'Last time the contact was engaged or contacted',
+  `NOTES` text DEFAULT NULL COMMENT 'Additional notes about the contact',
+  `PREFERRED_CONTACT_METHOD` varchar(50) DEFAULT NULL COMMENT 'Preferred method of contact (e.g., Email, Phone)',
+  `ADDRESS` text DEFAULT NULL COMMENT 'Contact address'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `xx_crm_deals`
+--
+
+CREATE TABLE `xx_crm_deals` (
+  `DEAL_ID` int(10) NOT NULL COMMENT 'Unique identifier for the deal (Primary Key)',
+  `UUID` char(36) NOT NULL COMMENT 'Universally Unique Identifier for the deal',
+  `DEAL_NAME` varchar(255) NOT NULL COMMENT 'Name or description of the deal',
+  `ASSOCIATED_CONTACT_ID` int(10) DEFAULT NULL COMMENT 'Foreign key linking the deal to a contact',
+  `DEAL_STAGE` varchar(50) DEFAULT NULL COMMENT 'Current stage of the deal (e.g., Prospecting, Negotiation, Closed-Won)',
+  `DEAL_TYPE` varchar(50) DEFAULT NULL COMMENT 'Type of the deal (e.g., New, Renewal, Upsell)',
+  `DEAL_VALUE` decimal(15,2) DEFAULT NULL COMMENT 'Estimated revenue value of the deal',
+  `DEAL_PRIORITY` varchar(20) DEFAULT NULL COMMENT 'Priority level of the deal (e.g., High, Medium, Low)',
+  `EXPECTED_CLOSE_DATE` date DEFAULT NULL COMMENT 'Expected date for deal closure',
+  `ACTUAL_CLOSE_DATE` date DEFAULT NULL COMMENT 'Actual date of deal closure',
+  `PROBABILITY` int(3) DEFAULT NULL COMMENT 'Probability of winning the deal (in percentage)',
+  `ASSIGNED_TO` varchar(100) DEFAULT NULL COMMENT 'User or team managing the deal',
+  `DEAL_SOURCE` varchar(50) DEFAULT NULL COMMENT 'Origin/source of the deal (e.g., Marketing Campaign, Referral)',
+  `DEAL_STATUS` varchar(20) DEFAULT NULL COMMENT 'Current status of the deal (e.g., Open, Closed-Won, Closed-Lost)',
+  `DEAL_DESCRIPTION` text DEFAULT NULL COMMENT 'Detailed description of the deal',
+  `CREATED_AT` timestamp NOT NULL DEFAULT current_timestamp() COMMENT 'Timestamp of when the deal was created',
+  `UPDATED_AT` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'Timestamp of the last update to the deal',
+  `LAST_ACTIVITY_DATE` date DEFAULT NULL COMMENT 'Date of the most recent activity related to the deal',
+  `NOTES` text DEFAULT NULL COMMENT 'Additional notes or comments about the deal',
+  `CONTRACT_TERMS` text DEFAULT NULL COMMENT 'Terms and conditions of the deal or contract',
+  `CLOSE_REASON` varchar(50) DEFAULT NULL COMMENT 'Reason why the deal was closed (e.g., Won, Lost, Stalled)'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `xx_crm_leads`
+--
+
+CREATE TABLE `xx_crm_leads` (
+  `LEAD_ID` int(11) NOT NULL COMMENT 'Primary key for the lead record',
+  `UUID` varchar(50) NOT NULL COMMENT 'Unique Identifier UUID',
+  `LEAD_NUMBER` varchar(20) DEFAULT NULL COMMENT 'Lead number for tracking of lead and lead activities',
+  `FIRST_NAME` varchar(100) NOT NULL COMMENT 'First name of the lead',
+  `LAST_NAME` varchar(100) NOT NULL COMMENT 'Last name of the lead',
+  `EMAIL` varchar(255) NOT NULL COMMENT 'Email address of the lead',
+  `PHONE` varchar(20) DEFAULT NULL COMMENT 'Phone number of the lead',
+  `COMPANY_NAME` varchar(255) DEFAULT NULL COMMENT 'Company name associated with the lead',
+  `JOB_TITLE` varchar(255) DEFAULT NULL COMMENT 'Job Title of the lead if lead associated with an employee',
+  `LEAD_SOURCE` varchar(100) DEFAULT NULL COMMENT 'Source of the lead (e.g., Website, Referral)',
+  `STATUS` varchar(20) DEFAULT 'new' COMMENT 'Current status of the lead',
+  `ASSIGNED_TO` int(11) DEFAULT NULL COMMENT 'User ID of the assigned salesperson',
+  `LEAD_SCORE` int(11) DEFAULT NULL COMMENT 'Score indicating lead quality',
+  `CREATED_AT` datetime DEFAULT current_timestamp() COMMENT 'Timestamp when the lead was created',
+  `UPDATED_AT` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'Timestamp when the lead was last updated',
+  `NOTES` text DEFAULT NULL COMMENT 'Additional notes about the lead'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `xx_crm_leads`
+--
+
+INSERT INTO `xx_crm_leads` (`LEAD_ID`, `UUID`, `LEAD_NUMBER`, `FIRST_NAME`, `LAST_NAME`, `EMAIL`, `PHONE`, `COMPANY_NAME`, `JOB_TITLE`, `LEAD_SOURCE`, `STATUS`, `ASSIGNED_TO`, `LEAD_SCORE`, `CREATED_AT`, `UPDATED_AT`, `NOTES`) VALUES
+(4, 'bbea2ade-d1df-4991-81de-08bd843438ff', 'L261124000004', 'Zoheb', 'Shaikh', 'zoheb@kisworld.com', '5487542154', 'Kissu Group Pvt Ltd', 'Chairman', 'Marketing', 'engaged', 0, NULL, '2024-11-26 00:00:00', '2024-11-27 00:00:00', NULL),
+(5, 'a1c2232d-dfb9-49cf-8103-314d171c3ea7', 'L261124000005', 'Ab Azim', 'Shaikh R', 'azz.kis@kisworld.com', '8754214587', 'Kissu Group Pvt Ltd', 'Chief Technology Officer', 'Reference, Marketing', 'new', 0, NULL, '2024-11-26 00:00:00', '2024-11-27 00:00:00', NULL),
+(6, '1f6e23b8-d09b-4133-b751-6959695816f4', 'L261124000006', 'Sayyed', 'Zaid', 'zaid@con.com', '89764523', 'Sayyed Consultancy', 'CEO', 'Marketing', 'contacted', 0, NULL, '2024-11-26 00:00:00', '2024-11-27 00:00:00', NULL),
+(7, '818a4645-7aa8-4ffa-8a8f-29cfae986514', 'L271124000007', 'Ansari', 'Awais', 'awais.an@ca.com', '54785421', 'Ansari Account Services', 'Chartered Accountant', 'Adverticement', 'demo-scheduled', 0, NULL, '2024-11-27 00:00:00', '2024-11-27 00:00:00', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `xx_crm_lead_activities`
+--
+
+CREATE TABLE `xx_crm_lead_activities` (
+  `ACTIVITY_ID` int(11) NOT NULL,
+  `UUID` varchar(50) DEFAULT NULL,
+  `LEAD_ID` int(11) NOT NULL,
+  `USER_ID` int(11) DEFAULT NULL,
+  `ACTIVITY_TYPE` varchar(30) NOT NULL,
+  `ACTIVITY_DATE` date NOT NULL,
+  `STATUS` enum('active','inactive') NOT NULL,
+  `NOTES` text DEFAULT NULL,
+  `CREATED_AT` timestamp NOT NULL DEFAULT current_timestamp(),
+  `UPDATED_AT` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `xx_crm_lead_activities`
+--
+
+INSERT INTO `xx_crm_lead_activities` (`ACTIVITY_ID`, `UUID`, `LEAD_ID`, `USER_ID`, `ACTIVITY_TYPE`, `ACTIVITY_DATE`, `STATUS`, `NOTES`, `CREATED_AT`, `UPDATED_AT`) VALUES
+(19, '279da757-92d1-44ca-b68e-8eba4df1b01d', 7, 1, 'Call', '2024-12-03', 'active', '<h1>Introduction</h1><p>Lead call to discuss meeting and meetup</p><p><br></p>', '2024-11-29 18:30:00', '2024-12-03 12:35:52'),
+(20, '7f64f2ac-a136-4a53-9676-041de950feaa', 7, 1, 'Meeting', '2024-12-03', 'active', '<h2>Meeting:</h2><p>The meeting is scheduled after getting call with lead</p>', '2024-11-29 18:30:00', '2024-12-03 12:35:26'),
+(23, '678018e0-7e7b-474f-8513-a8247f573663', 7, 1, 'Notes', '2024-12-03', 'active', '<p>This is the test note activity and it has been updated to check the node content is updating it self</p>', '2024-12-02 18:30:00', '2024-12-03 12:31:45');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `xx_crm_po_header`
+--
+
+CREATE TABLE `xx_crm_po_header` (
+  `PO_ID` int(11) NOT NULL COMMENT 'Unique Identifier for the Purchase Order',
+  `PO_NUMBER` varchar(50) NOT NULL COMMENT 'Sequential or Generated Number for the Purchase Order',
+  `UUID` varchar(50) NOT NULL COMMENT 'Universally Unique Identifier for the Purchase Order',
+  `QUOTE_ID` int(11) DEFAULT NULL COMMENT 'Reference to the Quotation ID',
+  `REQUEST_ID` int(11) DEFAULT NULL COMMENT 'Reference to the Associated Request ID',
+  `COMPANY_NAME` varchar(255) NOT NULL COMMENT 'Name of the Company',
+  `EMAIL_ADDRESS` varchar(255) DEFAULT NULL COMMENT 'Email Address of the Company Contact',
+  `COMPANY_ADDRESS` varchar(255) DEFAULT NULL COMMENT 'Address of the Company',
+  `CONTACT_NUMBER` varchar(20) DEFAULT NULL COMMENT 'Contact Number of the Company',
+  `CURRENCY` varchar(10) DEFAULT NULL COMMENT 'Currency for the Purchase Order (e.g., USD, EUR)',
+  `PAYMENT_TERM` varchar(255) DEFAULT NULL COMMENT 'Payment Terms for the Purchase Order',
+  `PO_STATUS` varchar(50) NOT NULL COMMENT 'Status of the Purchase Order (e.g., Draft, Approved, Rejected)',
+  `SUBTOTAL` decimal(15,2) DEFAULT NULL COMMENT 'Subtotal Amount Before Discounts and Taxes',
+  `DISCOUNT_PERCENTAGE` decimal(5,2) DEFAULT NULL COMMENT 'Percentage Discount Applied to the Subtotal',
+  `TAX_PERCENTAGE` decimal(5,2) DEFAULT NULL COMMENT 'Tax Percentage Applied After Discounts',
+  `TOTAL_AMOUNT` decimal(15,2) DEFAULT NULL COMMENT 'Total Amount After Discounts and Taxes',
+  `COMMENTS` text DEFAULT NULL COMMENT 'Additional Comments for the Purchase Order',
+  `ATTACHMENTS` text DEFAULT NULL COMMENT 'Links or References to Attached Files',
+  `ACTION_BY` varchar(50) DEFAULT NULL COMMENT 'User type of the User Who Performed the Last Action',
+  `VERSION` varchar(10) DEFAULT '1' COMMENT 'Version Number of the Purchase Order',
+  `IS_CONVERTED` tinyint(1) DEFAULT 0 COMMENT 'Indicates if the Purchase Order is Converted from Another Document',
+  `CONVERTED_FROM` int(11) DEFAULT NULL COMMENT 'Reference to the Original PO ID if Converted',
+  `CREATED_AT` datetime DEFAULT current_timestamp() COMMENT 'Timestamp When the Purchase Order was Created',
+  `CREATED_BY` int(11) NOT NULL COMMENT 'ID of the User Who Created the Purchase Order',
+  `UPDATED_AT` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'Timestamp When the Purchase Order was Last Updated',
+  `UPDATED_BY` int(11) DEFAULT NULL COMMENT 'ID of the User Who Last Updated the Purchase Order'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `xx_crm_po_lines`
+--
+
+CREATE TABLE `xx_crm_po_lines` (
+  `LINE_ID` int(11) NOT NULL COMMENT 'Unique Identifier for the Purchase Order Line',
+  `PO_ID` int(11) NOT NULL COMMENT 'Reference to the Purchase Order Header ID',
+  `PRODUCT_ID` int(11) NOT NULL COMMENT 'Reference to the Product ID',
+  `PRODUCT_DESC` text DEFAULT NULL COMMENT 'Description of the Product or Item',
+  `QTY` int(11) NOT NULL COMMENT 'Quantity Ordered',
+  `UNIT_PRICE` decimal(15,2) NOT NULL COMMENT 'Price per Unit of the Product or Item',
+  `TOTAL` decimal(15,2) DEFAULT NULL COMMENT 'Total Price for the Line Item',
+  `COLOR` varchar(50) DEFAULT NULL COMMENT 'Color or Variant of the Product',
+  `TRANSPORT` varchar(255) DEFAULT NULL COMMENT 'Transport Details for the Line Item',
+  `SOC` varchar(50) DEFAULT NULL COMMENT 'Shipping Order Code (SOC) or Similar Reference',
+  `REC_QTY` varchar(50) DEFAULT '0' COMMENT 'Quantity Received',
+  `BAL_QTY` varchar(50) DEFAULT NULL COMMENT 'Balance Quantity Remaining to be Received'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `xx_crm_products`
 --
 
@@ -195,7 +628,7 @@ INSERT INTO `xx_crm_products` (`PRODUCT_ID`, `UUID`, `PRODUCT_CODE`, `DIVISION`,
 (3, '93c2b033-0dd5-42d4-aa07-a0fc0653d540', '291024000003', '242', 1, 'active', 'SF Semi Finished', 'null', 123.00, 'SAR', 'no discount', NULL, 'yes', 15.00, '[\"default-image1.png\",\"favicon1.png\"]', 0.00, NULL, 0.00, '', 1, '2024-10-29 09:35:29', '2024-10-29 09:35:30'),
 (4, '6700119b-456d-4dd1-85b7-ac147e5e76c8', '291024000004', '242', 1, 'active', 'Black Lead', 'null', 123.00, 'SAR', 'no discount', NULL, 'yes', 15.00, '[\"avatar1.png\",\"avatar-user1.png\",\"bg-patterns1.png\",\"default-image2.png\",\"favicon3.png\",\"graph1.png\",\"login-side.png\",\"survey.png\"]', 0.00, 0.00, 0.00, '', 1, '2024-10-29 09:52:54', '2024-11-04 08:52:33'),
 (5, '994237a0-4992-4443-80a3-d7e7353238c9', '021124000005', '242', 2, 'active', 'Test Product Name - under semi  finished goods', '<h3>Product Description:</h3><p>This product false under category <strong>SF</strong> which is <em>Semi Finished</em> good.</p><p><br></p><p>And this is the main base product to order from the company which is in <u>low</u> price.</p>', 1.30, 'SAR', 'no discount', NULL, 'yes', 15.00, '[\"survey1.png\"]', 0.30, 0.00, 12.00, '120', 1, '2024-11-02 09:08:50', '2024-11-04 08:41:43'),
-(7, 'd287478f-4b36-44ac-8330-d4b1c12be53a', '051124000007', '444', 2, 'active', 'Kismat Ji Product', '<h1>Kismat Ji</h1><p><strong>Lorem ipsum dolor sit amet,</strong> consectetur adipiscing elit. Vivamus lacinia odio vitae vestibulum. Nulla facilisi. Sed sit amet accumsan arcu. In non felis justo. Mauris varius tortor vel mi elementum, nec aliquam arcu lacinia. Duis dapibus, purus vel convallis auctor, <u>nisi </u>massa volutpat mi, vitae gravida libero eros in justo.</p><p><br></p><p><em>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</em></p>', 123.00, 'SAR', 'no discount', NULL, 'yes', 15.00, '[\"avatar3.png\",\"default-image3.png\",\"zpil-logo.png\"]', 0.30, 120.00, 120.00, '120', 1, '2024-11-05 08:06:22', '2024-11-05 08:08:32');
+(7, 'd287478f-4b36-44ac-8330-d4b1c12be53a', '051124000007', '444', 2, 'active', 'Kismat Ji Product', '<h1>Kismat Ji</h1><p><strong>Lorem ipsum dolor sit amet,</strong> consectetur adipiscing elit. Vivamus lacinia odio vitae vestibulum. Nulla facilisi. Sed sit amet accumsan arcu. In non felis justo. Mauris varius tortor vel mi elementum, nec aliquam arcu lacinia. Duis dapibus, purus vel convallis auctor, <u>nisi </u>massa volutpat mi, vitae gravida libero eros in justo.</p><p><br></p><p><em>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</em></p>', 123.00, 'SAR', 'no discount', NULL, 'yes', 15.00, '[\"avatar3.png\",\"default-image3.png\",\"zpil-logo.png\"]', 0.33, 120.00, 120.00, '120', 1, '2024-11-05 08:06:22', '2024-12-03 05:09:10');
 
 -- --------------------------------------------------------
 
@@ -273,6 +706,64 @@ CREATE TABLE `xx_crm_product_variants` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `xx_crm_quotations`
+--
+
+CREATE TABLE `xx_crm_quotations` (
+  `QUOTE_ID` int(11) NOT NULL COMMENT 'Unique Identifier for the Quotation Header',
+  `UUID` varchar(50) NOT NULL COMMENT 'Unique UUID for the quotation',
+  `QUOTE_NUMBER` varchar(50) DEFAULT NULL COMMENT 'Random or Sequential Number for the Quotation',
+  `CLIENT_ID` int(11) NOT NULL COMMENT 'Reference to the Client ID',
+  `REQUEST_ID` int(11) NOT NULL COMMENT 'Reference to the Associated Request ID',
+  `COMPANY_ADDRESS` varchar(500) DEFAULT NULL COMMENT 'Address of the Client Company',
+  `JOB_TITLE` varchar(255) DEFAULT NULL COMMENT 'Title of the Job or Project',
+  `EMPLOYEE_NAME` varchar(255) DEFAULT NULL COMMENT 'Name of the Employee Creating the Quotation',
+  `EMAIL_ADDRESS` varchar(255) DEFAULT NULL COMMENT 'Address of the Employee',
+  `MOBILE_NUMBER` varchar(30) DEFAULT NULL COMMENT 'Mobile Number of the Employee or Client',
+  `SALES_PERSON` varchar(255) DEFAULT NULL COMMENT 'Salesperson Assigned to the Quotation',
+  `CURRENCY` varchar(10) DEFAULT NULL COMMENT 'Currency for the Quotation (e.g., USD, EUR)',
+  `PAYMENT_TERM` varchar(255) DEFAULT NULL COMMENT 'Payment Terms for the Quotation',
+  `SUB_TOTAL` decimal(15,2) DEFAULT NULL COMMENT 'Subtotal Amount Before Discounts and Taxes',
+  `DISCOUNT_PERCENTAGE` decimal(5,2) DEFAULT NULL COMMENT 'Percentage Discount Applied to the Subtotal',
+  `TAX_PERCENTAGE` decimal(5,2) DEFAULT NULL COMMENT 'Tax Percentage Applied After Discounts',
+  `TOTAL_AMOUNT` decimal(15,2) DEFAULT NULL COMMENT 'Total Amount After Discounts and Taxes',
+  `COMMENTS` text DEFAULT NULL COMMENT 'Additional Comments for the Quotation',
+  `INTERNAL_NOTES` text DEFAULT NULL COMMENT 'Internal Notes Not Visible to the Client',
+  `ATTACHMENTS` text DEFAULT NULL COMMENT 'Links or References to Attached Files',
+  `QUOTE_STATUS` varchar(50) NOT NULL COMMENT 'Status of the Quotation (e.g., Draft, Approved, Rejected)',
+  `VERSION` varchar(10) DEFAULT '1' COMMENT 'Version Number of the Quotation',
+  `IS_CONVERTED` tinyint(1) DEFAULT 0 COMMENT 'Indicates if the Quotation is Converted from old quotation',
+  `CONVERTED_FROM` int(11) DEFAULT NULL COMMENT 'Reference to the Original Quotation if Converted',
+  `ACTION_BY` int(11) DEFAULT NULL COMMENT 'User type of the User Who Performed the Last Action',
+  `CREATED_AT` datetime DEFAULT current_timestamp() COMMENT 'Timestamp When the Quotation was Created',
+  `CREATED_BY` int(11) NOT NULL COMMENT 'ID of the User Who Created the Quotation',
+  `UPDATED_AT` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'Timestamp When the Quotation was Last Updated',
+  `UPDATED_BY` int(11) DEFAULT NULL COMMENT 'ID of the User Who Last Updated the Quotation'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `xx_crm_quotation_lines`
+--
+
+CREATE TABLE `xx_crm_quotation_lines` (
+  `LINE_ID` int(11) NOT NULL COMMENT 'Unique Identifier for the Quotation Line',
+  `QUOTE_ID` int(11) NOT NULL COMMENT 'Reference to the Quotation Header ID',
+  `PRODUCT_ID` int(11) NOT NULL COMMENT 'Reference to the Product ID',
+  `PRODUCT` varchar(255) NOT NULL COMMENT 'Name of the Product or Item',
+  `DESCRIPTION` text DEFAULT NULL COMMENT 'Description of the Product or Item',
+  `QTY` int(11) NOT NULL COMMENT 'Quantity of the Product or Item',
+  `UNIT_PRICE` decimal(15,2) NOT NULL COMMENT 'Price per Unit of the Product or Item',
+  `TOTAL` decimal(15,2) DEFAULT NULL COMMENT 'Total Price for the Line Item',
+  `COLOR` varchar(50) DEFAULT NULL COMMENT 'Color or Variant of the Product',
+  `TRANSPORTATION` varchar(255) DEFAULT NULL COMMENT 'transportation type Related to Transportation or Delivery',
+  `LINE_COMMENTS` varchar(255) DEFAULT NULL COMMENT 'Comments Related to current line'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `xx_crm_req_header`
 --
 
@@ -305,7 +796,7 @@ CREATE TABLE `xx_crm_req_header` (
 
 INSERT INTO `xx_crm_req_header` (`ID`, `REQUEST_NUMBER`, `UUID`, `CLIENT_ID`, `REQUEST_TITLE`, `COMPANY_ADDRESS`, `BILLING_ADDRESS`, `SHIPPING_ADDRESS`, `CONTACT_NUMBER`, `EMAIL_ADDRESS`, `REQUEST_DETAILS`, `INTERNAL_NOTES`, `ATTACHMENTS`, `CREATED_AT`, `CREATED_BY`, `UPDATED_AT`, `UPDATED_BY`, `STATUS`, `ACTION_BY`, `VERSION`) VALUES
 (5, 'REQ-131124000005', '2829e87c-7466-40a4-8755-421b75e313f4', 4, 'Request For Following Products in Kismatji', 'Kismatji Info Pvt Ltd', 'Address Line 1, Address Street', 'Shipping Address, Line 2 Address', '8805629207', 'user1@crm.live', 'Request comments - lorem ipsum doller sit amet, that can be illustrated and shown in the lorem text ipsum millets this is request', 'this is the internal notes for the request ', '[\"OEE_OLD_MODEL_SCRIPT.txt\",\"Semester_1_Papers.xlsx\",\"user-profile-icon-avatar.jpg\",\"avatar.png\",\"avatar-user.png\",\"avatar-user-placeholder.PNG\"]', '2024-11-13 07:01:33', 1, '2024-11-14 07:57:25', NULL, 'draft', 'admin', '1'),
-(7, 'REQ-151124000007', '2f89c632-b7fe-44eb-b23d-8849c42f6a85', 7, 'Kismatji Beauty World Product Quotes', 'Kismatji Beauty World', 'Address Line 1, Address Street', 'Hxjxjxj', '7854215487', 'kis.beauty@kisworld.com', 'This request is made from kismatji world beauty products.', 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellat nulla porro voluptate eius, sit harum ad provident aliquid veniam officiis cum odit culpa esse deserunt rerum, nisi maiores. Consectetur voluptate nesciunt deserunt aliquam sequi at et! Temporibus quasi, quos vero repellendus deserunt quis totam quibusdam quia, ipsum perspiciatis dolores nam earum tempore natus aliquid incidunt fugit fugiat assumenda quo eos tenetur. Vitae nesciunt dolorum a obcaecati dicta, deserunt iste saepe? Hic delectus dolore at rem, voluptates itaque sunt magnam. Optio eveniet deserunt illo ut iste commodi eius est accusamus quam in officiis aliquam, consectetur ipsa, sequi nesciunt modi voluptas voluptatibus.', '[\"avatar1.png\",\"avatar-user1.png\",\"avatar-user-placeholder1.PNG\",\"user-profile-icon-avatar1.jpg\"]', '2024-11-15 10:09:19', 1, '2024-11-15 10:11:00', NULL, 'draft', 'admin', '1');
+(7, 'REQ-151124000007', '2f89c632-b7fe-44eb-b23d-8849c42f6a85', 7, 'Kismatji Beauty World Product Quotes', 'Kismatji Beauty World', 'Address Line 1, Address Street', 'Hxjxjxj', '7854215487', 'kis.beauty@kisworld.com', 'This request is made from kismatji world beauty products.', 'Lorem ipsum dolor sit', '[\"avatar1.png\",\"avatar-user1.png\",\"avatar-user-placeholder1.PNG\",\"user-profile-icon-avatar1.jpg\"]', '2024-11-15 10:09:19', 1, '2024-11-22 06:12:58', NULL, 'draft', 'admin', '1');
 
 -- --------------------------------------------------------
 
@@ -333,7 +824,64 @@ INSERT INTO `xx_crm_req_lines` (`LINE_ID`, `REQ_ID`, `PRODUCT_ID`, `PRODUCT_DESC
 (13, 5, '7', 'Kismat JiLorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vitae vestibulum. Nulla facilisi. Sed sit amet accumsan arcu. In non felis justo. Mauris varius tortor vel mi elementum, nec aliquam arcu lacinia. Duis dapibus, purus vel convallis auctor, nisi massa volutpat mi, vitae gravida libero eros in justo.Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et q', 130, '2024-11-15', 'Black', 'Ship', ''),
 (14, 5, '2', 'Semi Finished good with IBM', 100, '2024-11-15', 'White', 'Ship', ''),
 (15, 5, '5', 'Product Description:This product false under category SF which is Semi Finished good.And this is the main base product to order from the company which is in low price.', 100, '2024-11-16', 'Black', 'Shipping', ''),
-(18, 7, '7', 'Kismat JiLorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vitae vestibulum. Nulla facilisi. Sed sit amet accumsan arcu. In non felis justo. Mauris varius tortor vel mi elementum, nec aliquam arcu lacinia. Duis dapibus, purus vel convallis auctor, nisi massa volutpat mi, vitae gravida libero eros in justo.Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et q', 1000, '2024-11-23', 'All', 'Shipping', '');
+(19, 7, '7', 'Kismat JiLorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vitae vestibulum. Nulla facilisi. Sed sit amet accumsan arcu. In non felis justo. Mauris varius tortor vel mi elementum, nec aliquam arcu lacinia. Duis dapibus, purus vel convallis auctor, nisi massa volutpat mi, vitae gravida libero eros in justo.Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et q', 1000, '2024-11-23', 'All', 'Shipping', '');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `xx_crm_survey`
+--
+
+CREATE TABLE `xx_crm_survey` (
+  `SURVEY_ID` int(11) NOT NULL COMMENT 'Unique identifier for the survey record',
+  `UUID` varchar(50) NOT NULL COMMENT 'Universally unique identifier for the survey',
+  `SURVEY_NUMBER` varchar(50) DEFAULT NULL COMMENT 'Unique survey number for tracking',
+  `SURVEY_NAME` varchar(100) NOT NULL COMMENT 'Name of the survey',
+  `SURVEY_DESC` text NOT NULL COMMENT 'Detailed description of the survey',
+  `START_DATE` date NOT NULL COMMENT 'Survey start date',
+  `END_DATE` date NOT NULL COMMENT 'Survey end date',
+  `CONDUCTED_BY` varchar(100) NOT NULL COMMENT 'Name of the person or entity conducting the survey',
+  `STATUS` varchar(30) NOT NULL COMMENT 'Current status of the survey (e.g., Active, Inactive, Completed)',
+  `SURVEY_YEAR` varchar(10) DEFAULT NULL COMMENT 'Year associated with the survey',
+  `VERSION` int(11) NOT NULL DEFAULT 1 COMMENT 'Version number of the survey record',
+  `CREATED_BY` varchar(100) NOT NULL COMMENT 'User who created the record',
+  `CREATED_AT` datetime NOT NULL COMMENT 'Timestamp when the record was created',
+  `UPDATED_BY` varchar(100) NOT NULL COMMENT 'User who last updated the record',
+  `UPDATED_AT` datetime NOT NULL COMMENT 'Timestamp when the record was last updated'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `xx_crm_survey_header`
+--
+
+CREATE TABLE `xx_crm_survey_header` (
+  `HEADER_ID` int(11) NOT NULL COMMENT 'Unique identifier for the survey response header',
+  `SURVEY_ID` int(11) DEFAULT NULL COMMENT 'Foreign key linking to the survey in XX_CRM_SURVEY',
+  `UUID` varchar(50) NOT NULL COMMENT 'Universally unique identifier for the survey response',
+  `FILLED_DATE` date NOT NULL COMMENT 'Date when the survey was filled out',
+  `CLIENT_ID` int(11) NOT NULL COMMENT 'Unique identifier for the client responding to the survey',
+  `RECOMMENDATION` varchar(255) DEFAULT NULL COMMENT 'Recommendations based on the survey',
+  `COMMENTS` text DEFAULT NULL COMMENT 'Additional comments provided in the survey',
+  `SURVEY_YEAR` varchar(4) DEFAULT NULL COMMENT 'Year associated with the survey response',
+  `CREATED_BY` varchar(100) NOT NULL COMMENT 'User who created the record',
+  `CREATED_AT` datetime NOT NULL COMMENT 'Timestamp when the record was created',
+  `UPDATED_BY` varchar(100) NOT NULL COMMENT 'User who last updated the record',
+  `UPDATED_AT` datetime NOT NULL COMMENT 'Timestamp when the record was last updated'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `xx_crm_survey_lines`
+--
+
+CREATE TABLE `xx_crm_survey_lines` (
+  `LINE_ID` int(11) NOT NULL COMMENT 'Unique identifier for the survey line item',
+  `SURVEY_HEADER_ID` int(11) NOT NULL COMMENT 'Foreign key linking to the survey header in XX_CRM_SURVEY_HEADER',
+  `OPTIONS` longtext DEFAULT NULL COMMENT 'Categories associated with this survey line item'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -351,6 +899,25 @@ CREATE TABLE `xx_crm_unit_of_measurement` (
   `IS_ACTIVE` tinyint(1) DEFAULT 1 COMMENT 'Status of the unit (1 = active, 0 = inactive)',
   `CREATED_AT` datetime DEFAULT current_timestamp() COMMENT 'Timestamp for when the record was created',
   `UPDATED_AT` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'Timestamp for when the record was last updated'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `xx_crm_uom`
+--
+
+CREATE TABLE `xx_crm_uom` (
+  `UOM_ID` int(11) NOT NULL COMMENT 'Auto-incrementing unique identifier for each UOM.',
+  `UUID` varchar(50) NOT NULL COMMENT 'Universally Unique Identifier for the UOM record.',
+  `UOM_CODE` varchar(50) NOT NULL COMMENT 'Code representing the unit of measurement (e.g., KG, PCS).',
+  `UOM_NAME` varchar(100) NOT NULL COMMENT 'Name of the unit of measurement.',
+  `UOM_DESCRIPTION` varchar(255) DEFAULT NULL COMMENT 'Description of the unit of measurement.',
+  `STATUS` varchar(20) DEFAULT 'ACTIVE' COMMENT 'Indicates whether the UOM is active or inactive (e.g., ACTIVE, INACTIVE).',
+  `CREATED_AT` timestamp NOT NULL DEFAULT current_timestamp() COMMENT 'Timestamp when the record was created.',
+  `CREATED_BY` varchar(100) DEFAULT NULL COMMENT 'User or system that created the record.',
+  `UPDATED_AT` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'Timestamp when the record was last updated.',
+  `UPDATED_BY` varchar(100) DEFAULT NULL COMMENT 'User or system that last updated the record.'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
@@ -390,6 +957,61 @@ INSERT INTO `xx_crm_users` (`ID`, `USER_ID`, `UUID`, `USER_TYPE`, `FIRST_NAME`, 
 --
 
 --
+-- Indexes for table `xx_crm_act_call`
+--
+ALTER TABLE `xx_crm_act_call`
+  ADD PRIMARY KEY (`CALL_ID`),
+  ADD KEY `ACTIVITY_ID` (`ACTIVITY_ID`);
+
+--
+-- Indexes for table `xx_crm_act_email`
+--
+ALTER TABLE `xx_crm_act_email`
+  ADD PRIMARY KEY (`EMAIL_ID`),
+  ADD KEY `ACTIVITY_ID` (`ACTIVITY_ID`);
+
+--
+-- Indexes for table `xx_crm_act_event`
+--
+ALTER TABLE `xx_crm_act_event`
+  ADD PRIMARY KEY (`EVENT_ID`),
+  ADD KEY `ACTIVITY_ID` (`ACTIVITY_ID`);
+
+--
+-- Indexes for table `xx_crm_act_meeting`
+--
+ALTER TABLE `xx_crm_act_meeting`
+  ADD PRIMARY KEY (`MEETING_ID`),
+  ADD KEY `ACTIVITY_ID` (`ACTIVITY_ID`);
+
+--
+-- Indexes for table `xx_crm_act_note`
+--
+ALTER TABLE `xx_crm_act_note`
+  ADD PRIMARY KEY (`NOTE_ID`),
+  ADD KEY `ACTIVITY_ID` (`ACTIVITY_ID`);
+
+--
+-- Indexes for table `xx_crm_act_task`
+--
+ALTER TABLE `xx_crm_act_task`
+  ADD PRIMARY KEY (`TASK_ID`),
+  ADD KEY `ACTIVITY_ID` (`ACTIVITY_ID`);
+
+--
+-- Indexes for table `xx_crm_asn_header`
+--
+ALTER TABLE `xx_crm_asn_header`
+  ADD PRIMARY KEY (`ASN_ID`);
+
+--
+-- Indexes for table `xx_crm_asn_lines`
+--
+ALTER TABLE `xx_crm_asn_lines`
+  ADD PRIMARY KEY (`LINE_ID`),
+  ADD KEY `ASN_ID` (`ASN_ID`);
+
+--
 -- Indexes for table `xx_crm_authtokens`
 --
 ALTER TABLE `xx_crm_authtokens`
@@ -409,6 +1031,64 @@ ALTER TABLE `xx_crm_client_address`
 ALTER TABLE `xx_crm_client_detail`
   ADD PRIMARY KEY (`ID`),
   ADD KEY `USER_ID` (`USER_ID`);
+
+--
+-- Indexes for table `xx_crm_compl_header`
+--
+ALTER TABLE `xx_crm_compl_header`
+  ADD PRIMARY KEY (`COMPLAINT_ID`);
+
+--
+-- Indexes for table `xx_crm_compl_lines`
+--
+ALTER TABLE `xx_crm_compl_lines`
+  ADD PRIMARY KEY (`LINE_ID`),
+  ADD KEY `COMPLAINT_ID` (`COMPLAINT_ID`);
+
+--
+-- Indexes for table `xx_crm_compl_resolution`
+--
+ALTER TABLE `xx_crm_compl_resolution`
+  ADD PRIMARY KEY (`RESOLUTION_ID`),
+  ADD KEY `COMPLAINT_ID` (`COMPLAINT_ID`);
+
+--
+-- Indexes for table `xx_crm_contacts`
+--
+ALTER TABLE `xx_crm_contacts`
+  ADD PRIMARY KEY (`CONTACT_ID`);
+
+--
+-- Indexes for table `xx_crm_deals`
+--
+ALTER TABLE `xx_crm_deals`
+  ADD PRIMARY KEY (`DEAL_ID`),
+  ADD KEY `ASSOCIATED_CONTACT_ID` (`ASSOCIATED_CONTACT_ID`);
+
+--
+-- Indexes for table `xx_crm_leads`
+--
+ALTER TABLE `xx_crm_leads`
+  ADD PRIMARY KEY (`LEAD_ID`);
+
+--
+-- Indexes for table `xx_crm_lead_activities`
+--
+ALTER TABLE `xx_crm_lead_activities`
+  ADD PRIMARY KEY (`ACTIVITY_ID`),
+  ADD KEY `LEAD_ID` (`LEAD_ID`);
+
+--
+-- Indexes for table `xx_crm_po_header`
+--
+ALTER TABLE `xx_crm_po_header`
+  ADD PRIMARY KEY (`PO_ID`);
+
+--
+-- Indexes for table `xx_crm_po_lines`
+--
+ALTER TABLE `xx_crm_po_lines`
+  ADD PRIMARY KEY (`LINE_ID`);
 
 --
 -- Indexes for table `xx_crm_products`
@@ -437,6 +1117,18 @@ ALTER TABLE `xx_crm_product_variants`
   ADD KEY `PRODUCT_ID` (`PRODUCT_ID`);
 
 --
+-- Indexes for table `xx_crm_quotations`
+--
+ALTER TABLE `xx_crm_quotations`
+  ADD PRIMARY KEY (`QUOTE_ID`);
+
+--
+-- Indexes for table `xx_crm_quotation_lines`
+--
+ALTER TABLE `xx_crm_quotation_lines`
+  ADD PRIMARY KEY (`LINE_ID`);
+
+--
 -- Indexes for table `xx_crm_req_header`
 --
 ALTER TABLE `xx_crm_req_header`
@@ -450,11 +1142,35 @@ ALTER TABLE `xx_crm_req_lines`
   ADD KEY `FK_REQ_HEADER` (`REQ_ID`);
 
 --
+-- Indexes for table `xx_crm_survey`
+--
+ALTER TABLE `xx_crm_survey`
+  ADD PRIMARY KEY (`SURVEY_ID`);
+
+--
+-- Indexes for table `xx_crm_survey_header`
+--
+ALTER TABLE `xx_crm_survey_header`
+  ADD PRIMARY KEY (`HEADER_ID`);
+
+--
+-- Indexes for table `xx_crm_survey_lines`
+--
+ALTER TABLE `xx_crm_survey_lines`
+  ADD PRIMARY KEY (`LINE_ID`);
+
+--
 -- Indexes for table `xx_crm_unit_of_measurement`
 --
 ALTER TABLE `xx_crm_unit_of_measurement`
   ADD PRIMARY KEY (`UOM_ID`),
   ADD KEY `BASE_UOM_ID` (`BASE_UOM_ID`);
+
+--
+-- Indexes for table `xx_crm_uom`
+--
+ALTER TABLE `xx_crm_uom`
+  ADD PRIMARY KEY (`UOM_ID`);
 
 --
 -- Indexes for table `xx_crm_users`
@@ -468,10 +1184,58 @@ ALTER TABLE `xx_crm_users`
 --
 
 --
+-- AUTO_INCREMENT for table `xx_crm_act_call`
+--
+ALTER TABLE `xx_crm_act_call`
+  MODIFY `CALL_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+
+--
+-- AUTO_INCREMENT for table `xx_crm_act_email`
+--
+ALTER TABLE `xx_crm_act_email`
+  MODIFY `EMAIL_ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `xx_crm_act_event`
+--
+ALTER TABLE `xx_crm_act_event`
+  MODIFY `EVENT_ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `xx_crm_act_meeting`
+--
+ALTER TABLE `xx_crm_act_meeting`
+  MODIFY `MEETING_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `xx_crm_act_note`
+--
+ALTER TABLE `xx_crm_act_note`
+  MODIFY `NOTE_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `xx_crm_act_task`
+--
+ALTER TABLE `xx_crm_act_task`
+  MODIFY `TASK_ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `xx_crm_asn_header`
+--
+ALTER TABLE `xx_crm_asn_header`
+  MODIFY `ASN_ID` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Auto-incrementing unique identifier for each ASN.';
+
+--
+-- AUTO_INCREMENT for table `xx_crm_asn_lines`
+--
+ALTER TABLE `xx_crm_asn_lines`
+  MODIFY `LINE_ID` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Auto-incrementing unique identifier for each line item.';
+
+--
 -- AUTO_INCREMENT for table `xx_crm_authtokens`
 --
 ALTER TABLE `xx_crm_authtokens`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Primary key, unique token identifier', AUTO_INCREMENT=50;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Primary key, unique token identifier', AUTO_INCREMENT=79;
 
 --
 -- AUTO_INCREMENT for table `xx_crm_client_address`
@@ -484,6 +1248,60 @@ ALTER TABLE `xx_crm_client_address`
 --
 ALTER TABLE `xx_crm_client_detail`
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT for table `xx_crm_compl_header`
+--
+ALTER TABLE `xx_crm_compl_header`
+  MODIFY `COMPLAINT_ID` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Auto-incrementing unique identifier for each complaint.';
+
+--
+-- AUTO_INCREMENT for table `xx_crm_compl_lines`
+--
+ALTER TABLE `xx_crm_compl_lines`
+  MODIFY `LINE_ID` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Auto-incrementing unique identifier for each complaint line.';
+
+--
+-- AUTO_INCREMENT for table `xx_crm_compl_resolution`
+--
+ALTER TABLE `xx_crm_compl_resolution`
+  MODIFY `RESOLUTION_ID` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Auto-incrementing unique identifier for each resolution.';
+
+--
+-- AUTO_INCREMENT for table `xx_crm_contacts`
+--
+ALTER TABLE `xx_crm_contacts`
+  MODIFY `CONTACT_ID` int(10) NOT NULL AUTO_INCREMENT COMMENT 'Unique identifier for the contact (Primary Key)';
+
+--
+-- AUTO_INCREMENT for table `xx_crm_deals`
+--
+ALTER TABLE `xx_crm_deals`
+  MODIFY `DEAL_ID` int(10) NOT NULL AUTO_INCREMENT COMMENT 'Unique identifier for the deal (Primary Key)';
+
+--
+-- AUTO_INCREMENT for table `xx_crm_leads`
+--
+ALTER TABLE `xx_crm_leads`
+  MODIFY `LEAD_ID` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Primary key for the lead record', AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT for table `xx_crm_lead_activities`
+--
+ALTER TABLE `xx_crm_lead_activities`
+  MODIFY `ACTIVITY_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+
+--
+-- AUTO_INCREMENT for table `xx_crm_po_header`
+--
+ALTER TABLE `xx_crm_po_header`
+  MODIFY `PO_ID` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Unique Identifier for the Purchase Order';
+
+--
+-- AUTO_INCREMENT for table `xx_crm_po_lines`
+--
+ALTER TABLE `xx_crm_po_lines`
+  MODIFY `LINE_ID` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Unique Identifier for the Purchase Order Line';
 
 --
 -- AUTO_INCREMENT for table `xx_crm_products`
@@ -510,6 +1328,18 @@ ALTER TABLE `xx_crm_product_variants`
   MODIFY `VARIANT_ID` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique identifier for the product variant';
 
 --
+-- AUTO_INCREMENT for table `xx_crm_quotations`
+--
+ALTER TABLE `xx_crm_quotations`
+  MODIFY `QUOTE_ID` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Unique Identifier for the Quotation Header';
+
+--
+-- AUTO_INCREMENT for table `xx_crm_quotation_lines`
+--
+ALTER TABLE `xx_crm_quotation_lines`
+  MODIFY `LINE_ID` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Unique Identifier for the Quotation Line';
+
+--
 -- AUTO_INCREMENT for table `xx_crm_req_header`
 --
 ALTER TABLE `xx_crm_req_header`
@@ -519,13 +1349,37 @@ ALTER TABLE `xx_crm_req_header`
 -- AUTO_INCREMENT for table `xx_crm_req_lines`
 --
 ALTER TABLE `xx_crm_req_lines`
-  MODIFY `LINE_ID` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Auto-incremented primary key for each request line', AUTO_INCREMENT=19;
+  MODIFY `LINE_ID` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Auto-incremented primary key for each request line', AUTO_INCREMENT=20;
+
+--
+-- AUTO_INCREMENT for table `xx_crm_survey`
+--
+ALTER TABLE `xx_crm_survey`
+  MODIFY `SURVEY_ID` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Unique identifier for the survey record';
+
+--
+-- AUTO_INCREMENT for table `xx_crm_survey_header`
+--
+ALTER TABLE `xx_crm_survey_header`
+  MODIFY `HEADER_ID` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Unique identifier for the survey response header';
+
+--
+-- AUTO_INCREMENT for table `xx_crm_survey_lines`
+--
+ALTER TABLE `xx_crm_survey_lines`
+  MODIFY `LINE_ID` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Unique identifier for the survey line item';
 
 --
 -- AUTO_INCREMENT for table `xx_crm_unit_of_measurement`
 --
 ALTER TABLE `xx_crm_unit_of_measurement`
   MODIFY `UOM_ID` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Unique identifier for the unit of measurement';
+
+--
+-- AUTO_INCREMENT for table `xx_crm_uom`
+--
+ALTER TABLE `xx_crm_uom`
+  MODIFY `UOM_ID` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Auto-incrementing unique identifier for each UOM.';
 
 --
 -- AUTO_INCREMENT for table `xx_crm_users`
@@ -536,6 +1390,48 @@ ALTER TABLE `xx_crm_users`
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `xx_crm_act_call`
+--
+ALTER TABLE `xx_crm_act_call`
+  ADD CONSTRAINT `xx_crm_act_call_ibfk_1` FOREIGN KEY (`ACTIVITY_ID`) REFERENCES `xx_crm_lead_activities` (`ACTIVITY_ID`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `xx_crm_act_email`
+--
+ALTER TABLE `xx_crm_act_email`
+  ADD CONSTRAINT `xx_crm_act_email_ibfk_1` FOREIGN KEY (`ACTIVITY_ID`) REFERENCES `xx_crm_lead_activities` (`ACTIVITY_ID`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `xx_crm_act_event`
+--
+ALTER TABLE `xx_crm_act_event`
+  ADD CONSTRAINT `xx_crm_act_event_ibfk_1` FOREIGN KEY (`ACTIVITY_ID`) REFERENCES `xx_crm_lead_activities` (`ACTIVITY_ID`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `xx_crm_act_meeting`
+--
+ALTER TABLE `xx_crm_act_meeting`
+  ADD CONSTRAINT `xx_crm_act_meeting_ibfk_1` FOREIGN KEY (`ACTIVITY_ID`) REFERENCES `xx_crm_lead_activities` (`ACTIVITY_ID`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `xx_crm_act_note`
+--
+ALTER TABLE `xx_crm_act_note`
+  ADD CONSTRAINT `xx_crm_act_note_ibfk_1` FOREIGN KEY (`ACTIVITY_ID`) REFERENCES `xx_crm_lead_activities` (`ACTIVITY_ID`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `xx_crm_act_task`
+--
+ALTER TABLE `xx_crm_act_task`
+  ADD CONSTRAINT `xx_crm_act_task_ibfk_1` FOREIGN KEY (`ACTIVITY_ID`) REFERENCES `xx_crm_lead_activities` (`ACTIVITY_ID`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `xx_crm_asn_lines`
+--
+ALTER TABLE `xx_crm_asn_lines`
+  ADD CONSTRAINT `xx_crm_asn_lines_ibfk_1` FOREIGN KEY (`ASN_ID`) REFERENCES `xx_crm_asn_header` (`ASN_ID`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `xx_crm_authtokens`
@@ -554,6 +1450,30 @@ ALTER TABLE `xx_crm_client_address`
 --
 ALTER TABLE `xx_crm_client_detail`
   ADD CONSTRAINT `xx_crm_client_detail_ibfk_1` FOREIGN KEY (`USER_ID`) REFERENCES `xx_crm_users` (`ID`);
+
+--
+-- Constraints for table `xx_crm_compl_lines`
+--
+ALTER TABLE `xx_crm_compl_lines`
+  ADD CONSTRAINT `xx_crm_compl_lines_ibfk_1` FOREIGN KEY (`COMPLAINT_ID`) REFERENCES `xx_crm_compl_header` (`COMPLAINT_ID`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `xx_crm_compl_resolution`
+--
+ALTER TABLE `xx_crm_compl_resolution`
+  ADD CONSTRAINT `xx_crm_compl_resolution_ibfk_1` FOREIGN KEY (`COMPLAINT_ID`) REFERENCES `xx_crm_compl_header` (`COMPLAINT_ID`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `xx_crm_deals`
+--
+ALTER TABLE `xx_crm_deals`
+  ADD CONSTRAINT `xx_crm_deals_ibfk_1` FOREIGN KEY (`ASSOCIATED_CONTACT_ID`) REFERENCES `xx_crm_contacts` (`CONTACT_ID`);
+
+--
+-- Constraints for table `xx_crm_lead_activities`
+--
+ALTER TABLE `xx_crm_lead_activities`
+  ADD CONSTRAINT `xx_crm_lead_activities_ibfk_1` FOREIGN KEY (`LEAD_ID`) REFERENCES `xx_crm_leads` (`LEAD_ID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `xx_crm_product_inventory`
