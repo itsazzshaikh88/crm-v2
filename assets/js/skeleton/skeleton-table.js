@@ -367,7 +367,20 @@ function generateSkeletonHTML(type) {
                     </div>
                 </div>
             `;
-        case "default":
+        case "contacts-list":
+            return `<div class="col-md-4 mb-2 border border-dashed border-secondary">
+                        <div class="row">
+                            <div class="col-4 d-flex align-items-center justify-content-center py-4">
+                                <div class="skeleton-box" style="width: 80px; height: 80px;"></div>
+                            </div>
+                            <div class="col-8 py-4 bg-slate-50 position-relative">
+                                <div class="skeleton-box" style="width: 150px; height: 20px;"></div> <br>
+                                <div class="skeleton-box" style="width: 10px; height: 10px;"></div> <div class="skeleton-box" style="width: 100px; height: 10px;"></div> <br>
+                                <div class="skeleton-box" style="width: 10px; height: 10px;"></div> <div class="skeleton-box" style="width: 130px; height: 10px;"></div> <br>
+                                <div class="skeleton-box" style="width: 80px; height: 10px;"></div>
+                            </div>
+                        </div>
+                    </div>`
         default:
             return `<div class="skeleton-box" style="width: 100%; height: 20px;"></div>`;
     }

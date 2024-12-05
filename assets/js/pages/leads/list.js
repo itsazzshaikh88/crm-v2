@@ -11,8 +11,6 @@ function renderNoResponseCode(option, isAdmin = false) {
                                             <p class="fs-4">Oops! Looks like you don't have any leads yet. <br> Start building your pipeline by creating a <span class="text-primary">new lead</span>!</p>
                                             <div class="d-flex align-items-center justify-content-center gap-5 ">
                                                 <button  onclick="openLeadModal()" type="button" class="btn btn-success"><i class="fa-solid fa-wand-magic-sparkles"></i> Create New Lead</button>
-                                                <div class="px-2">OR</div>
-                                                <button onclick="importLeads()" type="button" class="btn border border-primary text-primary"><i class="fa-solid fa-upload text-primary"></i> Import Leads</button>
                                             </div>
                                         </div>
                                     </div>

@@ -20,47 +20,6 @@
                             </tr>
                         </thead>
                         <tbody id="lead-list-tbody">
-                            <tr>
-                                <td class="text-center">1</td>
-                                <td>
-                                    <p class="mb-0 text-primary">Shaikh Ab Azim</p>
-                                    <small class="fs-xs text-muted">LD-2024042002</small>
-                                </td>
-                                <td>
-                                    <p class="mb-0 fw-bold">KismatJi Pvt Ltd</p>
-                                </td>
-                                <td>software Developer</td>
-                                <td>
-                                    <p class="mb-0">kissu@kis.com</p>
-                                    <p class="mb-0"><small>8805629207</small></p>
-                                </td>
-                                <td>23 Nov,2024</td>
-                                <td>
-                                    <p class="mb-0 badge bg-light text-info"><small>Facebook</small></p>
-                                </td>
-                                <td>
-                                    <span class="badge bg-success">New</span>
-                                </td>
-                                <td class="text-end">
-                                    <div class="d-flex align-items-center justify-content-end gap-4">
-                                        <a href="">
-                                            <small>
-                                                <i class="fs-5 fa-solid fa-file-lines text-info"></i>
-                                            </small>
-                                        </a>
-                                        <a href="">
-                                            <small>
-                                                <i class="fs-5 fa-regular fa-pen-to-square text-gray-700"></i>
-                                            </small>
-                                        </a>
-                                        <a href="javascript:void(0)" onclick="deleteLead()">
-                                            <small>
-                                                <i class="fs-5 fa-solid fa-trash-can text-danger"></i>
-                                            </small>
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
                         </tbody>
                     </table>
                 </div>
