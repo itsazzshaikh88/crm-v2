@@ -3,7 +3,9 @@
         <div class="modal-content p-0">
             <div class="modal-header d-flex flex-column align-items-center justify-content-between p-4 ">
                 <div class="w-100 d-flex align-items-center justify-content-between p-0">
-                    <h3 class="modal-title text-primary fw-normal" id="contact-modal-title"></h3>
+                    <h3 class="modal-title text-primary fw-normal" id="contact-modal-title">
+                        Contact Details
+                    </h3>
                     <!--begin::Close-->
                     <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
                         <i class="fa-solid fa-xmark"></i>
@@ -19,25 +21,7 @@
                     </p>
                 </div>
                 <div class="separator separator-dashed"></div>
-                <form action="" class="px-6 bg-gray-50 py-4">
-                    <?php
-                    $fields = [
-                        [
-                            'name' => '',
-                            'required' => true,
-                            'element' => 'input',
-                            'type' => 'text'
-                        ]
-                    ]
-
-                    ?>
-                    <!--begin::Input group-->
-                    <div class="form-floating mb-7">
-                        <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-                        <label for="floatingInput">Email address</label>
-                    </div>
-                    <!--end::Input group-->
-                </form>
+                <div id="contact-detail-container" class="px-10 py-4"></div>
             </div>
         </div>
     </div>

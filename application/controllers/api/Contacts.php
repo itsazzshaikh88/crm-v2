@@ -33,7 +33,7 @@ class Contacts extends Api_controller
             }
 
             // Set validation rules
-            $fields = ['FIRST_NAME', 'LAST_NAME', 'PHONE', 'MOBILE', 'COMPANY_NAME', 'JOB_TITLE', 'DEPARTMENT', 'CONTACT_SOURCE', 'LEAD_SOURCE', 'STATUS', 'ASSIGNED_TO', 'NOTES', 'PREFERRED_CONTACT_METHOD', 'ADDRESS'];
+            $fields = ['FIRST_NAME', 'LAST_NAME', 'PHONE', 'COMPANY_NAME', 'JOB_TITLE', 'DEPARTMENT', 'CONTACT_SOURCE', 'STATUS', 'ASSIGNED_TO', 'NOTES', 'PREFERRED_CONTACT_METHOD', 'ADDRESS'];
             foreach ($fields as $field):
                 $this->form_validation->set_rules($field, ucwords(str_replace("_", "", $field)), 'required');
             endforeach;
@@ -129,7 +129,7 @@ class Contacts extends Api_controller
             }
 
             // Set validation rules
-            $fields = ['FIRST_NAME', 'LAST_NAME', 'PHONE', 'MOBILE', 'COMPANY_NAME', 'JOB_TITLE', 'DEPARTMENT', 'CONTACT_SOURCE', 'LEAD_SOURCE', 'STATUS', 'ASSIGNED_TO', 'NOTES', 'PREFERRED_CONTACT_METHOD', 'ADDRESS'];
+            $fields = ['FIRST_NAME', 'LAST_NAME', 'PHONE', 'COMPANY_NAME', 'JOB_TITLE', 'DEPARTMENT', 'CONTACT_SOURCE', 'STATUS', 'ASSIGNED_TO', 'NOTES', 'PREFERRED_CONTACT_METHOD', 'ADDRESS'];
             foreach ($fields as $field):
                 $this->form_validation->set_rules($field, ucwords(str_replace("_", "", $field)), 'required');
             endforeach;
@@ -265,7 +265,7 @@ class Contacts extends Api_controller
         $data = json_decode($input, true);
 
         // Validate input and check if `productUUID` is provided
-        if (!$data || !isset($data['contactID'])) {
+        if (!$data || !isset($data['contactUUID'])) {
             return $this->output
                 ->set_status_header(400)
                 ->set_content_type('application/json')
@@ -276,9 +276,9 @@ class Contacts extends Api_controller
                 ]));
         }
 
-        // Retrieve product details using the provided contactID
-        $contactID = $data['contactID'];
-        $contact = $this->Contact_model->get_contact_by_uuid($contactID);
+        // Retrieve product details using the provided contactUUID
+        $contactUUID = $data['contactUUID'];
+        $contact = $this->Contact_model->get_contact_by_uuid($contactUUID);
 
         // Check if product data exists
         if (empty($contact)) {
@@ -326,27 +326,27 @@ class Contacts extends Api_controller
             return;
         }
 
-        // Validate the product ID
+        // Validate the Contact ID
         if (empty($contactID) || !is_numeric($contactID)) {
             $this->output
                 ->set_content_type('application/json')
                 ->set_status_header(400) // 400 Bad Request status code
-                ->set_output(json_encode(['error' => 'Invalid product ID.']));
+                ->set_output(json_encode(['error' => 'Invalid Contact ID.']));
             return;
         }
 
-        // Attempt to delete the product
-        $result = $this->Contact_model->delete_lead_by_id($contactID);
+        // Attempt to delete the Contact
+        $result = $this->Contact_model->delete_contact_by_id($contactID);
         if ($result) {
             $this->output
                 ->set_content_type('application/json')
                 ->set_status_header(200) // 200 OK status code
-                ->set_output(json_encode(['status' => true, 'message' => 'Product deleted successfully.']));
+                ->set_output(json_encode(['status' => true, 'message' => 'Contact deleted successfully.']));
         } else {
             $this->output
                 ->set_content_type('application/json')
                 ->set_status_header(500) // 500 Internal Server Error status code
-                ->set_output(json_encode(['status' => false, 'message' => 'Failed to delete the product.']));
+                ->set_output(json_encode(['status' => false, 'message' => 'Failed to delete the Contact.']));
         }
     }
 }

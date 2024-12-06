@@ -5,22 +5,22 @@
         <div class="card">
             <div class="card-body pt-8">
                 <div class="table-responsive">
-                    <table class="table align-middle table-row-dashed fs-6 gy-5 table-row-bordered " id="contact-list">
+                    <table class="table align-middle table-row-dashed fs-6 gy-5 dataTable table-row-bordered " id="lead-list">
                         <thead>
                             <tr class="fw-bold fs-6 text-gray-800">
                                 <th class="text-center">#</th>
-                                <th>Contact</th>
+                                <th>Name</th>
                                 <th>Company Name</th>
-                                <th>Job Title</th>
-                                <th>Contact Details</th>
-                                <th>Assigned To</th>
-                                <th>Contact Source</th>
-                                <th>Prefered Method</th>
+                                <th>Role</th>
+                                <th>Contact</th>
+                                <th>Lead Created</th>
+                                <th>Lead Source</th>
                                 <th>Status</th>
                                 <th class="text-end">Action</th>
                             </tr>
                         </thead>
-                        <tbody id="contact-list-tbody"></tbody>
+                        <tbody id="lead-list-tbody">
+                        </tbody>
                     </table>
                 </div>
                 <?= renderPaginate('current-page', 'total-pages', 'page-of-pages', 'range-of-records') ?>
@@ -34,5 +34,6 @@
 <!-- Include modals to add new lead  -->
 <?php
 $this->load->view('loaders/full-page-loader');
-$this->load->view('modals/contact/new-contact');
+$this->load->view('pages/deals/modals/new-lead');
+$this->load->view('modals/activities/deal-activity-modal');
 ?>

@@ -40,8 +40,9 @@ async function submitForm(e) {
         // Check if the response is OK (status 200-299)
         if (response.ok) {
             const data = await response.json();
-            toasterNotification({ type: 'success', message: "Contact Created Successfully!" });
-            form.reset()
+            toasterNotification({ type: 'success', message: "Contact Saved Successfully!" });
+            if (data?.type === 'insert')
+                form.reset()
         } else {
             const errorData = await response.json();
             if (errorData.status === 422) {
@@ -94,22 +95,8 @@ async function fetchContactDetailsToEdit(contactUUID) {
             throw new Error(errorMessage);
         }
 
-        // assign the category id to the variable
-        selectCategoryID = data?.data?.product?.CATEGORY_ID || '';
-        // Display the product information on the page if response is successful
-        displayProductInfo(data.data);
 
-        // set data to the description box
-        if (data?.data?.product?.DESCRIPTION && data?.data?.product?.DESCRIPTION != 'null')
-            initializeQuill('productDescription', quillOptions, data?.data?.product?.DESCRIPTION || '');
-        else
-            initializeQuill()
-
-        // Show Product Files attached
-        if (data?.data?.product?.PRODUCT_IMAGES) {
-            uploadedFiles = JSON.parse(data?.data?.product?.PRODUCT_IMAGES) || []
-            displayUploadedFiles(data?.data?.product?.PRODUCT_ID || 0);
-        }
+        displayContactInfo(data.data);
 
     } catch (error) {
         // Show error notification
@@ -119,7 +106,7 @@ async function fetchContactDetailsToEdit(contactUUID) {
     }
 }
 
-function displayProductInfo(data) {
+function displayContactInfo(data) {
     if (!data) return;
 
     if (Object.keys(data).length > 0) {

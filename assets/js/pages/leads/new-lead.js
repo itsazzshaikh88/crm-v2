@@ -103,6 +103,11 @@ async function submitLead(e) {
             } else {
                 toasterNotification({ type: 'error', message: 'Internal Server Error' });
             }
+
+            if (data?.data?.STATUS === "qualified") {
+                convertLeadToContact(data?.data?.LEAD_ID);
+            }
+
         } else {
             const errorData = await response.json();
             if (errorData.status === 422) {
@@ -346,4 +351,65 @@ function startNewLead() {
     activityButtonContainer.classList.add("d-none")
     leadForm.reset()
     document.getElementById("STATUS").value = 'new'
+}
+
+
+async function convertLeadToContact(leadID) {
+    if (!leadID) {
+        throw new Error("Invalid Lead ID, Please try Again");
+    }
+
+    try {
+
+        const authToken = getCookie('auth_token');
+        if (!authToken) {
+            toasterNotification({
+                type: 'error',
+                message: "Authorization token is missing. Please login again to make an API request."
+            });
+            return;
+        }
+
+        // Show a non-closable alert box while the activity is being deleted
+        Swal.fire({
+            title: "Lead Conversion ...",
+            text: "Please wait while the lead is being converted to contact.",
+            icon: "info",
+            showConfirmButton: false,
+            allowOutsideClick: false,
+            customClass: {
+                popup: 'small-swal',
+            },
+        });
+
+        const url = `${APIUrl}/leads/convert/${leadID}`;
+
+        const response = await fetch(url, {
+            method: 'DELETE', // Change to DELETE for a delete request
+            headers: {
+                'Authorization': `Bearer ${authToken}`
+            }
+        });
+
+        const data = await response.json(); // Parse the JSON response
+
+        // Close the loading alert box
+        Swal.close();
+
+        if (!response.ok) {
+            // If the response is not ok, throw an error with the message from the response
+            throw new Error(data.error || 'Failed to convert lead to contact');
+        }
+
+        if (data.status) {
+            // Here, we directly handle the deletion without checking data.status
+            toasterNotification({ type: 'success', message: 'Lead Converted to Contact Successfully' });
+        } else {
+            throw new Error(data.message || 'Failed to convert lead to contact');
+        }
+
+    } catch (error) {
+        toasterNotification({ type: 'error', message: 'Error: ' + error.message });
+        Swal.close();
+    }
 }

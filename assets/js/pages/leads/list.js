@@ -71,21 +71,11 @@ async function fetchLeads() {
 
 function showLeads(leads, tbody) {
     const leadStatusColors = {
-        new: "#007bff",           // Blue - Represents new beginnings
-        contacted: "#6c757d",     // Gray - Neutral, awaiting response
+        new: "#6610f2",           // Blue - Represents new beginnings
+        contacted: "#0078d7",     // Gray - Neutral, awaiting response
         engaged: "#17a2b8",       // Teal - Active engagement
         qualified: "#28a745",     // Green - Qualified and ready to move forward
         disqualified: "#dc3545",  // Red - Disqualified or not suitable
-        converted: "#ffc107",     // Yellow - Successfully converted
-        "follow-up": "#fd7e14",   // Orange - Needs additional nurturing
-        lost: "#343a40",          // Dark gray - Lost opportunity
-        "in-progress": "#20c997", // Light green - Currently in progress
-        nurturing: "#6610f2",     // Purple - Long-term relationship building
-        unresponsive: "#adb5bd",  // Light gray - No response
-        "demo-scheduled": "#0078d7", // Bright blue - Demo planned
-        "trial-period": "#38bdf8",   // Sky blue - Testing the waters
-        "proposal-sent": "#17c0eb",  // Cyan - Awaiting decision
-        recycled: "#f36",          // Pink - Re-engaged after inactivity
     };
 
     let content = '';

@@ -80,10 +80,10 @@
                             <span class="text-danger err-lbl" id="lbl-CONTACT_SOURCE"></span>
                         </div>
                         <div class="col-md-3 d-flex align-items-center justify-content-start">
-                            <label for="Status" class="fs-6 fw-bold required">Status</label>
+                            <label for="STATUS" class="fs-6 fw-bold required">Status</label>
                         </div>
                         <div class="col-md-3">
-                            <select name="Status" id="Status" class="form-control">
+                            <select name="STATUS" id="STATUS" class="form-control">
                                 <option value="">Choose</option>
                                 <option value="new" selected>New</option>
                                 <option value="qualified">Qualified</option>
@@ -93,7 +93,7 @@
                                 <option value="no-response">No Response</option>
                                 <option value="in-active">In-Active</option>
                             </select>
-                            <span class="text-danger err-lbl" id="lbl-Status"></span>
+                            <span class="text-danger err-lbl" id="lbl-STATUS"></span>
                         </div>
                     </div>
                     <div class="row mb-2">

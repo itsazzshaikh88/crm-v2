@@ -54,14 +54,12 @@ class Contact_model extends App_Model
             'LAST_NAME' => $data['LAST_NAME'],
             'EMAIL' => $data['EMAIL'],
             'PHONE' => $data['PHONE'],
-            'MOBILE' => $data['MOBILE'],
             'COMPANY_NAME' => $data['COMPANY_NAME'],
             'JOB_TITLE' => $data['JOB_TITLE'],
             'DEPARTMENT' => $data['DEPARTMENT'],
             'CONTACT_SOURCE' => $data['CONTACT_SOURCE'],
             'STATUS' => $data['STATUS'],
             'ASSIGNED_TO' => $data['ASSIGNED_TO'],
-            'CREATED_AT' => $data['CREATED_AT'],
             'NOTES' => $data['NOTES'],
             'PREFERRED_CONTACT_METHOD' => $data['PREFERRED_CONTACT_METHOD'],
             'ADDRESS' => $data['ADDRESS']
@@ -85,14 +83,12 @@ class Contact_model extends App_Model
             'LAST_NAME' => $data['LAST_NAME'],
             'EMAIL' => $data['EMAIL'],
             'PHONE' => $data['PHONE'],
-            'MOBILE' => $data['MOBILE'],
             'COMPANY_NAME' => $data['COMPANY_NAME'],
             'JOB_TITLE' => $data['JOB_TITLE'],
             'DEPARTMENT' => $data['DEPARTMENT'],
             'CONTACT_SOURCE' => $data['CONTACT_SOURCE'],
             'STATUS' => $data['STATUS'],
             'ASSIGNED_TO' => $data['ASSIGNED_TO'],
-            'CREATED_AT' => $data['CREATED_AT'],
             'NOTES' => $data['NOTES'],
             'PREFERRED_CONTACT_METHOD' => $data['PREFERRED_CONTACT_METHOD'],
             'ADDRESS' => $data['ADDRESS']
@@ -148,7 +144,20 @@ class Contact_model extends App_Model
         $data = [];
         if ($contactID) {
             $data = $this->db
-                ->where('LEAD_ID', $contactID)
+                ->where('CONTACT_ID', $contactID)
+                ->get($this->contact_table)
+                ->row_array();
+        }
+
+        return $data;
+    }
+
+    public function get_contact_by_lead_id($leadID)
+    {
+        $data = [];
+        if ($leadID) {
+            $data = $this->db
+                ->where('LEAD_SOURCE', $leadID)
                 ->get($this->contact_table)
                 ->row_array();
         }

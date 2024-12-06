@@ -4,6 +4,7 @@ require_once APPPATH . 'models/App_model.php';
 class Lead_model extends App_Model
 {
     protected $lead_table;
+    protected $contact_table;
     protected $lead_activity_table;
 
     public function __construct()
@@ -11,6 +12,7 @@ class Lead_model extends App_Model
         parent::__construct();
         $this->lead_activity_table = 'xx_crm_lead_activities';
         $this->lead_table = 'xx_crm_leads'; // Initialize token table
+        $this->contact_table = 'xx_crm_contacts'; // Initialize token table
     }
     // Function to add or update product
     public function add_lead($data, $userid)
@@ -227,5 +229,36 @@ class Lead_model extends App_Model
                 return $activities->num_rows();  // Return the count of activities
             }
         }
+    }
+
+    public function convert_lead_by_id($leadID)
+    {
+
+        if ($leadID) {
+            $lead = $this->db
+                ->where('LEAD_ID', $leadID)
+                ->get($this->lead_table)
+                ->row_array();
+
+            if (empty($lead)) {
+                return false;
+            }
+            // Convert lead to contact
+            $contact = [
+                'UUID' => uuid_v4(),
+                'FIRST_NAME' => $lead['FIRST_NAME'],
+                'LAST_NAME' => $lead['LAST_NAME'],
+                'EMAIL' => $lead['EMAIL'],
+                'PHONE' => $lead['PHONE'],
+                'COMPANY_NAME' => $lead['COMPANY_NAME'],
+                'JOB_TITLE' => $lead['JOB_TITLE'],
+                'CONTACT_SOURCE' => 'lead',
+                'LEAD_SOURCE' => $lead['LEAD_ID'],
+                'STATUS' => 'new',
+                'PREFERRED_CONTACT_METHOD' => 'email'
+            ];
+            return $this->db->insert($this->contact_table, $contact);
+        }
+        return false;
     }
 }

@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 require_once(APPPATH . 'core/Api_controller.php');
-class Leads extends Api_controller
+class Deals extends Api_controller
 {
     public function __construct()
     {
@@ -166,7 +166,7 @@ class Leads extends Api_controller
             // Check if lead details are present in table with existing ID
             $lead = $this->Lead_model->get_lead_by_id($leadID ?? 0);
             if (empty($lead)) {
-                $this->sendHTTPResponse(404, [
+                $this->sendHTTPResponse(409, [
                     'status' => 'error',
                     'code' => 404,
                     'error' => 'Not Found',
@@ -356,88 +356,6 @@ class Leads extends Api_controller
                 ->set_content_type('application/json')
                 ->set_status_header(500) // 500 Internal Server Error status code
                 ->set_output(json_encode(['status' => false, 'message' => 'Failed to delete the product.']));
-        }
-    }
-
-    function convert($leadID)
-    {
-        // Check if the authentication is valid
-        $isAuthorized = $this->isAuthorized();
-        if (!$isAuthorized['status']) {
-            $this->output
-                ->set_status_header(401) // Set HTTP response status to 400 Bad Request
-                ->set_content_type('application/json')
-                ->set_output(json_encode(['error' => 'Unauthorized access. You do not have permission to perform this action.']))
-                ->_display();
-            exit;
-        };
-
-        // Check if the user is admin or not
-        if (isset($isAuthorized['role']) && $isAuthorized['role'] !== 'admin') {
-            $this->output
-                ->set_content_type('application/json')
-                ->set_status_header(403) // 403 Forbidden status code
-                ->set_output(json_encode(['error' => 'You do not have permission to perform this action.']));
-            return;
-        }
-
-        // Validate the product ID
-        if (empty($leadID) || !is_numeric($leadID)) {
-            $this->output
-                ->set_content_type('application/json')
-                ->set_status_header(400) // 400 Bad Request status code
-                ->set_output(json_encode(['error' => 'Invalid product ID.']));
-            return;
-        }
-
-        // Check if lead details are present in table with existing ID
-        $lead = $this->Lead_model->get_lead_by_id($leadID ?? 0);
-        if (empty($lead)) {
-            $this->sendHTTPResponse(404, [
-                'status' => 'error',
-                'code' => 404,
-                'error' => 'A Lead with provided Id does not found to convert to contact.',
-                'message' => 'A Lead with provided Id does not found to convert to contact.'
-            ]);
-            return;
-        }
-
-        // Check if lead is already converted to contact
-        $contact = $this->Contact_model->get_contact_by_lead_id($leadID ?? 0);
-        if (!empty($contact)) {
-            $this->sendHTTPResponse(409, [
-                'status' => 'error',
-                'code' => 409,
-                'error' => 'The lead with the provided ID has already been converted to a contact.',
-                'message' => 'The lead with the provided ID has already been converted to a contact.'
-            ]);
-            return;
-        }
-
-        // Check if contact is already created with same email
-        $contactByEmail = $this->Contact_model->get_contact_by_email($lead['EMAIL'] ?? '-');
-        if (!empty($contactByEmail)) {
-            $this->sendHTTPResponse(409, [
-                'status' => 'error',
-                'code' => 409,
-                'error' => 'The lead with the provided Email has already a contact.',
-                'message' => 'The lead with the provided Email has already a contact.'
-            ]);
-            return;
-        }
-
-        // Attempt to delete the product
-        $result = $this->Lead_model->convert_lead_by_id($leadID);
-        if ($result) {
-            $this->output
-                ->set_content_type('application/json')
-                ->set_status_header(200) // 200 OK status code
-                ->set_output(json_encode(['status' => true, 'message' => 'Lead converted to contact successfully']));
-        } else {
-            $this->output
-                ->set_content_type('application/json')
-                ->set_status_header(500) // 500 Internal Server Error status code
-                ->set_output(json_encode(['status' => false, 'message' => 'Failed to convert lead to contact.']));
         }
     }
 }

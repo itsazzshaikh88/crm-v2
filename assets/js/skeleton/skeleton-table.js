@@ -252,6 +252,56 @@ function getSkeletonStructure(list) {
                     </td>
                 </tr>
                 `;
+    if (list === 'contacts')
+        return `<tr class="skeleton-loader">
+                                <td class="text-center">
+                                    <div class="skeleton-box" style="width: 20px; height: 20px;"></div>
+                                </td>
+                                <td>
+                                    <div>
+                                        <!-- Placeholder for Name -->
+                                        <div class="skeleton-box" style="width: 150px; height: 20px; margin-bottom: 5px;"></div>
+                                        <!-- Placeholder for ID -->
+                                        <div class="skeleton-box" style="width: 120px; height: 14px;"></div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <!-- Placeholder for Company -->
+                                    <div class="skeleton-box" style="width: 200px; height: 20px;"></div>
+                                </td>
+                                <td>
+                                    <!-- Placeholder for Job Title -->
+                                    <div class="skeleton-box" style="width: 180px; height: 20px;"></div>
+                                </td>
+                                <td>
+                                    <div>
+                                        <!-- Placeholder for Email -->
+                                        <div class="skeleton-box" style="width: 180px; height: 14px; margin-bottom: 5px;"></div>
+                                        <!-- Placeholder for Phone -->
+                                        <div class="skeleton-box" style="width: 120px; height: 14px;"></div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <!-- Placeholder for Date -->
+                                    <div class="skeleton-box" style="width: 150px; height: 20px;"></div>
+                                </td>
+                                <td>
+                                    <!-- Placeholder for Source -->
+                                    <div class="skeleton-box" style="width: 120px; height: 20px;"></div>
+                                </td>
+                                <td>
+                                    <!-- Placeholder for Status -->
+                                    <div class="skeleton-box" style="width: 100px; height: 20px;"></div>
+                                </td>
+                                <td class="text-end">
+                                    <div class="d-flex align-items-center justify-content-end gap-4">
+                                        <!-- Placeholders for Action Icons -->
+                                        <div class="skeleton-box" style="width: 20px; height: 20px;"></div>
+                                        <div class="skeleton-box" style="width: 20px; height: 20px;"></div>
+                                        <div class="skeleton-box" style="width: 20px; height: 20px;"></div>
+                                    </div>
+                                </td>
+                            </tr>`
 }
 
 function clientListModalSkeleton(container, rows) {

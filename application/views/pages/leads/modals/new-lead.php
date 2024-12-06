@@ -90,16 +90,6 @@ $activities = LEAD_ACTIVITY_OPTIONS;
                                             <option value="engaged">Engaged</option>
                                             <option value="qualified">Qualified</option>
                                             <option value="disqualified">Disqualified</option>
-                                            <option value="converted">Converted</option>
-                                            <option value="follow-up">Follow-Up</option>
-                                            <option value="lost">Lost</option>
-                                            <option value="in-progress">In Progress</option>
-                                            <option value="nurturing">Nurturing</option>
-                                            <option value="unresponsive">Unresponsive</option>
-                                            <option value="demo-scheduled">Demo Scheduled</option>
-                                            <option value="trial-period">Trial Period</option>
-                                            <option value="proposal-sent">Proposal Sent</option>
-                                            <option value="recycled">Recycled</option>
                                         </select>
                                         <label for="STATUS">Status <span class="text-danger">*</span></label>
                                     </div>
