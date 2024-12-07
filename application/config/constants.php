@@ -110,3 +110,22 @@ $activities = [
     ],
 ];
 define('LEAD_ACTIVITY_OPTIONS', $activities);
+$deal_activities = [
+    [
+        'name' => 'Call',
+        'id' => 'custom-activity-modal-call',  // Unique ID for Call activity modal
+    ],
+    [
+        'name' => 'Meeting',
+        'id' => 'custom-activity-modal-meeting',  // Unique ID for Meeting activity modal
+    ],
+    [
+        'name' => 'Note',
+        'id' => 'custom-activity-modal-notes',  // Unique ID for Note activity modal
+    ],
+    [
+        'name' => 'Task',
+        'id' => 'custom-activity-modal-task',  // Unique ID for Note activity modal
+    ],
+];
+define('DEAL_ACTIVITY_OPTIONS', $deal_activities);

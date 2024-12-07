@@ -7,9 +7,11 @@ function resetForm() {
 function showErrors(errors, id_lbl = "lbl") {
     // Loop through each error field in the errors object
     for (const fieldName in errors) {
+
         if (errors.hasOwnProperty(fieldName)) {
             const errorMessage = errors[fieldName];
             const errorElement = document.getElementById(`${id_lbl}-${fieldName}`);
+            console.log(errorElement);
             if (errorElement) {
                 // Update the span element with the error message
                 errorElement.innerHTML = errorMessage;

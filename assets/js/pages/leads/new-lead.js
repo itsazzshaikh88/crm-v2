@@ -288,8 +288,8 @@ function showMeetingActivity(activity) {
                                     </div>
                                     <div class="mt-2">
                                         <div>
-                                            <p for="" class="mb-0 fw-bold">Agenda:<span class="text-gray-800 fw-normal line-clamp-2"> ${activity?.AGENDA}</span></p>
-                                            <p for="" class="mb-0 fw-bold">Location:<span class="text-gray-800 fw-normal line-clamp-2"> ${activity?.LOCATION}</span></p>
+                                            <p for="" class="mb-0 fw-bold">Agenda:<span class="text-gray-800 fw-normal"> ${activity?.AGENDA}</span></p>
+                                            <p for="" class="mb-0 fw-bold">Location:<span class="text-gray-800 fw-normal"> ${activity?.LOCATION}</span></p>
                                             <p for="" class="mb-0 fw-bold">Attended By:<span class="text-gray-800 fw-normal "> ${activity?.ATTENDEES}</span></p>
                                             <p for="" class="mb-0 fw-bold">Meeting Outcome:</p>
                                             <p class="line-clamp-2 text-gray-800 mb-0">${stripHtmlTags(activity?.NOTES)}</p>

@@ -33,16 +33,11 @@ class Deals extends Api_controller
             }
 
             // Set validation rules
-            $this->form_validation->set_rules('FIRST_NAME', 'First Name', 'required');
-            $this->form_validation->set_rules('LAST_NAME', 'Last Name', 'required');
+            $fields = ['DEAL_NAME',  'DEAL_STAGE', 'DEAL_TYPE', 'DEAL_VALUE', 'DEAL_PRIORITY', 'EXPECTED_CLOSE_DATE', 'ASSIGNED_TO', 'DEAL_SOURCE', 'DEAL_STATUS', 'CONTACT_NUMBER'];
+            foreach ($fields as $field):
+                $this->form_validation->set_rules($field, ucwords(strtolower(str_replace("_", " ", $field))), 'required');
+            endforeach;
             $this->form_validation->set_rules('EMAIL', 'Email', 'required|valid_email');
-            $this->form_validation->set_rules('PHONE', 'Contact Number', 'required');
-            $this->form_validation->set_rules('JOB_TITLE', 'Job Title', 'required');
-            $this->form_validation->set_rules('STATUS', 'Status', 'required');
-            $this->form_validation->set_rules('COMPANY_NAME', 'Company Name', 'required');
-            $this->form_validation->set_rules('LEAD_SOURCE', 'Lead Source', 'required');
-            $this->form_validation->set_rules('ASSIGNED_TO', 'Sales Person Name', 'required');
-
 
             // Run validation
             if ($this->form_validation->run() == FALSE) {
@@ -51,7 +46,7 @@ class Deals extends Api_controller
 
                 $this->sendHTTPResponse(422, [
                     'status' => 422,
-                    'error' => 'Unprocessable Entity',
+                    'error' => 'The submitted data failed validation.',
                     'message' => 'The submitted data failed validation.',
                     'validation_errors' => $errors
                 ]);
@@ -63,28 +58,28 @@ class Deals extends Api_controller
             $data = array_map([$this->security, 'xss_clean'], $data);
 
             // Check if the lead is already registered with the existing email address
-            $lead = $this->Lead_model->get_lead_by_email($data['EMAIL']);
-            if (!empty($lead)) {
+            $deal = $this->Deal_model->get_deal_by_email($data['EMAIL']);
+            if (!empty($deal)) {
                 $this->sendHTTPResponse(409, [
                     'status' => 'error',
                     'code' => 409,
-                    'error' => 'Conflict',
-                    'message' => 'A Lead with this email already exists.'
+                    'error' => 'A Deal with this email already exists.',
+                    'message' => 'A Deal with this email already exists.'
                 ]);
                 return;
             }
 
 
             // Save Data to the product table
-            $created = $this->Lead_model->add_lead($data, $isAuthorized['userid']);
-            $newlyCreatedLead = $this->Lead_model->get_lead_by_uuid($data['UUID']);
+            $created = $this->Deal_model->add_deal($data, $isAuthorized['userid']);
+            $newlyCreatedDeal = $this->Deal_model->get_deal_by_uuid($data['UUID']);
 
             if ($created) {
                 $this->sendHTTPResponse(201, [
                     'status' => 201,
-                    'message' => 'Lead Created Successfully',
+                    'message' => 'Deal Created Successfully',
                     'type' => 'insert',
-                    'data' => $newlyCreatedLead,
+                    'data' => $newlyCreatedDeal,
                 ]);
             } else {
                 throw new Exception('Failed to create new lead.');
@@ -100,7 +95,7 @@ class Deals extends Api_controller
         }
     }
 
-    function update($leadID)
+    function update($dealID)
     {
         // Check if the authentication is valid
         $isAuthorized = $this->isAuthorized();
@@ -125,7 +120,7 @@ class Deals extends Api_controller
             }
 
             // Validate the product ID
-            if (empty($leadID) || !is_numeric($leadID)) {
+            if (empty($dealID) || !is_numeric($dealID)) {
                 $this->output
                     ->set_content_type('application/json')
                     ->set_status_header(400) // 400 Bad Request status code
@@ -134,15 +129,11 @@ class Deals extends Api_controller
             }
 
             // Set validation rules
-            $this->form_validation->set_rules('FIRST_NAME', 'First Name', 'required');
-            $this->form_validation->set_rules('LAST_NAME', 'Last Name', 'required');
+            $fields = ['DEAL_NAME',  'DEAL_STAGE', 'DEAL_TYPE', 'DEAL_VALUE', 'DEAL_PRIORITY', 'EXPECTED_CLOSE_DATE', 'ASSIGNED_TO', 'DEAL_SOURCE', 'DEAL_STATUS', 'CONTACT_NUMBER'];
+            foreach ($fields as $field):
+                $this->form_validation->set_rules($field, ucwords(strtolower(str_replace("_", " ", $field))), 'required');
+            endforeach;
             $this->form_validation->set_rules('EMAIL', 'Email', 'required|valid_email');
-            $this->form_validation->set_rules('PHONE', 'Contact Number', 'required');
-            $this->form_validation->set_rules('JOB_TITLE', 'Job Title', 'required');
-            $this->form_validation->set_rules('STATUS', 'Status', 'required');
-            $this->form_validation->set_rules('COMPANY_NAME', 'Company Name', 'required');
-            $this->form_validation->set_rules('LEAD_SOURCE', 'Lead Source', 'required');
-            $this->form_validation->set_rules('ASSIGNED_TO', 'Sales Person Name', 'required');
 
 
             // Run validation
@@ -163,29 +154,29 @@ class Deals extends Api_controller
             $data = $this->input->post();
             $data = array_map([$this->security, 'xss_clean'], $data);
 
-            // Check if lead details are present in table with existing ID
-            $lead = $this->Lead_model->get_lead_by_id($leadID ?? 0);
-            if (empty($lead)) {
-                $this->sendHTTPResponse(409, [
+            // Check if deal details are present in table with existing ID
+            $deal = $this->Deal_model->get_deal_by_id($dealID ?? 0);
+            if (empty($deal)) {
+                $this->sendHTTPResponse(404, [
                     'status' => 'error',
                     'code' => 404,
-                    'error' => 'Not Found',
-                    'message' => 'A Lead with provided Id does not found to update.'
+                    'error' => 'A deal with provided Id does not found to update.',
+                    'message' => 'A deal with provided Id does not found to update.'
                 ]);
                 return;
             }
 
 
             // Save Data to the lead table
-            $updated = $this->Lead_model->update_lead($leadID, $data, $isAuthorized['userid']);
-            $updatedLead = $this->Lead_model->get_lead_by_id($leadID);
+            $updated = $this->Deal_model->update_deal($dealID, $data, $isAuthorized['userid']);
+            $updatedDeal = $this->Deal_model->get_deal_by_id($dealID);
 
             if ($updated) {
                 $this->sendHTTPResponse(201, [
                     'status' => 201,
-                    'message' => 'Lead Updated Successfully',
+                    'message' => 'Deal Updated Successfully',
                     'type' => 'update',
-                    'data' => $updatedLead,
+                    'data' => $updatedDeal,
                 ]);
             } else {
                 throw new Exception('Error saving lead details');
@@ -236,17 +227,17 @@ class Deals extends Api_controller
         $currentPage = isset($data['currentPage']) ? $data['currentPage'] : null;
         $filters = isset($data['filters']) ? $data['filters'] : [];
 
-        $total_leads = $this->Lead_model->get_leads('total', $limit, $currentPage, $filters);
-        $leads = $this->Lead_model->get_leads('list', $limit, $currentPage, $filters);
+        $total_deals = $this->Deal_model->get_deals('total', $limit, $currentPage, $filters);
+        $deals = $this->Deal_model->get_deals('list', $limit, $currentPage, $filters);
 
         $response = [
             'pagination' => [
-                'total_records' => $total_leads,
-                'total_pages' => generatePages($total_leads, $limit),
+                'total_records' => $total_deals,
+                'total_pages' => generatePages($total_deals, $limit),
                 'current_page' => $currentPage,
                 'limit' => $limit
             ],
-            'leads' => $leads,
+            'deals' => $deals,
         ];
         return $this->output
             ->set_content_type('application/json')
@@ -274,7 +265,7 @@ class Deals extends Api_controller
         $data = json_decode($input, true);
 
         // Validate input and check if `productUUID` is provided
-        if (!$data || !isset($data['leadID'])) {
+        if (!$data || !isset($data['dealID'])) {
             return $this->output
                 ->set_status_header(400)
                 ->set_content_type('application/json')
@@ -285,19 +276,19 @@ class Deals extends Api_controller
                 ]));
         }
 
-        // Retrieve product details using the provided leadID
-        $leadID = $data['leadID'];
-        $lead = $this->Lead_model->get_lead_and_activities_by_id($leadID);
+        // Retrieve product details using the provided dealID
+        $dealID = $data['dealID'];
+        $deal = $this->Deal_model->get_deal_and_activities_by_id($dealID);
 
         // Check if product data exists
-        if (empty($lead)) {
+        if (empty($deal)) {
             return $this->output
                 ->set_status_header(404)
                 ->set_content_type('application/json')
                 ->set_output(json_encode([
                     'status' => 'error',
                     'code' => 404,
-                    'message' => 'Lead details not found'
+                    'message' => 'Deal details not found'
                 ]));
         }
 
@@ -308,12 +299,12 @@ class Deals extends Api_controller
             ->set_output(json_encode([
                 'status' => 'success',
                 'code' => 200,
-                'message' => 'Lead details retrieved successfully',
-                'data' => $lead
+                'message' => 'Deal details retrieved successfully',
+                'data' => $deal
             ]));
     }
 
-    function delete($leadID)
+    function delete($dealID)
     {
         // Check if the authentication is valid
         $isAuthorized = $this->isAuthorized();
@@ -336,7 +327,7 @@ class Deals extends Api_controller
         }
 
         // Validate the product ID
-        if (empty($leadID) || !is_numeric($leadID)) {
+        if (empty($dealID) || !is_numeric($dealID)) {
             $this->output
                 ->set_content_type('application/json')
                 ->set_status_header(400) // 400 Bad Request status code
@@ -345,17 +336,17 @@ class Deals extends Api_controller
         }
 
         // Attempt to delete the product
-        $result = $this->Lead_model->delete_lead_by_id($leadID);
+        $result = $this->Deal_model->delete_deal_by_id($dealID);
         if ($result) {
             $this->output
                 ->set_content_type('application/json')
                 ->set_status_header(200) // 200 OK status code
-                ->set_output(json_encode(['status' => true, 'message' => 'Product deleted successfully.']));
+                ->set_output(json_encode(['status' => true, 'message' => 'Deal deleted successfully.']));
         } else {
             $this->output
                 ->set_content_type('application/json')
                 ->set_status_header(500) // 500 Internal Server Error status code
-                ->set_output(json_encode(['status' => false, 'message' => 'Failed to delete the product.']));
+                ->set_output(json_encode(['status' => false, 'message' => 'Failed to delete the Deal.']));
         }
     }
 }

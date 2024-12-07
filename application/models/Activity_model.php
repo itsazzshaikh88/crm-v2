@@ -7,6 +7,7 @@ class Activity_model extends App_Model
     protected $activity_call_table;
     protected $activity_meeting_table;
     protected $activity_note_table;
+    protected $activity_task_table;
 
     public function __construct()
     {
@@ -15,6 +16,7 @@ class Activity_model extends App_Model
         $this->activity_call_table = 'xx_crm_act_call';
         $this->activity_meeting_table = 'xx_crm_act_meeting';
         $this->activity_note_table = 'xx_crm_act_note';
+        $this->activity_task_table = 'xx_crm_act_task';
     }
     // Function to add or update product
     public function add_activity($data, $userid)
@@ -32,6 +34,7 @@ class Activity_model extends App_Model
             'STATUS' => 'active',
             'NOTES' => $data['NOTES'] ?? null,
             'CREATED_AT' => date('Y-m-d'),
+            'ACTIVITY_SOURCE' => $data['ACTIVITY_SOURCE'] ?? null
         ];
 
         // Insert new lead
@@ -61,6 +64,14 @@ class Activity_model extends App_Model
                     'OUTCOME' => $data['NOTES'] ?? '',
                 ];
                 $this->db->insert($this->activity_meeting_table, $meeting_data);
+            } else if (strtolower($activity_type_input) === 'task') {
+                $task_data = [
+                    'ACTIVITY_ID' => $activity_id_created,
+                    'TASK_DESCRIPTION' => $data['NOTES'] ?? '',
+                    'DUE_DATE' => $data['DUE_DATE'],
+                    'PRIORITY' => $data['PRIORITY'],
+                ];
+                $this->db->insert($this->activity_task_table, $task_data);
             }
             return true;
         } else
@@ -107,6 +118,13 @@ class Activity_model extends App_Model
                     'OUTCOME' => $data['NOTES'] ?? '',
                 ];
                 $this->db->where('ACTIVITY_ID', $activity_id)->update($this->activity_meeting_table, $meeting_data);
+            } else if (strtolower($activity_type_input) === 'task') {
+                $task_data = [
+                    'TASK_DESCRIPTION' => $data['NOTES'] ?? '',
+                    'DUE_DATE' => $data['DUE_DATE'],
+                    'PRIORITY' => $data['PRIORITY'],
+                ];
+                $this->db->where('ACTIVITY_ID', $activity_id)->update($this->activity_task_table, $task_data);
             }
             return true;
         } else
@@ -130,6 +148,8 @@ class Activity_model extends App_Model
                     $details_table = $this->activity_note_table;
                 else if (strtolower($data['activity']['ACTIVITY_TYPE']) === 'meeting')
                     $details_table = $this->activity_meeting_table;
+                else if (strtolower($data['activity']['ACTIVITY_TYPE']) === 'task')
+                    $details_table = $this->activity_task_table;
 
                 $data['details'] = $this->db
                     ->where('ACTIVITY_ID', $activity_id)
@@ -158,6 +178,8 @@ class Activity_model extends App_Model
                     $details_table = $this->activity_note_table;
                 else if (strtolower($data['activity']['ACTIVITY_TYPE']) === 'meeting')
                     $details_table = $this->activity_meeting_table;
+                else if (strtolower($data['activity']['ACTIVITY_TYPE']) === 'task')
+                    $details_table = $this->activity_task_table;
 
                 $data['details'] = $this->db
                     ->where('ACTIVITY_ID', $activity_id)
@@ -169,7 +191,7 @@ class Activity_model extends App_Model
         return $data;
     }
 
-    public function delete_activity_by_id($activityID)
+    public function delete_activity_by_id($activityID, $type)
     {
         if ($activityID) {
             $data['activity'] = $this->db
@@ -185,6 +207,8 @@ class Activity_model extends App_Model
                     $details_table = $this->activity_note_table;
                 else if (strtolower($data['activity']['ACTIVITY_TYPE']) === 'meeting')
                     $details_table = $this->activity_meeting_table;
+                else if (strtolower($data['activity']['ACTIVITY_TYPE']) === 'task')
+                    $details_table = $this->activity_task_table;
 
                 // Delete Activity details and then delete activity
                 $this->db

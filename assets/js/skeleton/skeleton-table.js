@@ -301,6 +301,54 @@ function getSkeletonStructure(list) {
                                         <div class="skeleton-box" style="width: 20px; height: 20px;"></div>
                                     </div>
                                 </td>
+                            </tr>`;
+
+    if (list === 'deals')
+        return `<tr class="skeleton-loader">
+                                <td class="min-w-175px">
+                                    <div class="position-relative ps-6 pe-3 py-2">
+                                        <div class="position-absolute start-0 top-0 w-4px h-100 rounded-2 bg-secondary"></div>
+                                        <!-- Placeholder for Deal Name -->
+                                        <div class="skeleton-box" style="width: 120px; height: 20px; margin-bottom: 5px;"></div>
+                                        <!-- Placeholder for Date -->
+                                        <div class="skeleton-box" style="width: 100px; height: 14px;"></div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <!-- Placeholder for Age Group -->
+                                    <div class="skeleton-box" style="width: 150px; height: 14px;"></div>
+                                </td>
+                                <td>
+                                    <!-- Placeholder for Deal Stage -->
+                                    <div class="skeleton-box" style="width: 120px; height: 20px;"></div>
+                                </td>
+                                <td>
+                                    <!-- Placeholder for Deal Type -->
+                                    <div class="skeleton-box" style="width: 120px; height: 20px;"></div>
+                                </td>
+                                <td>
+                                    <!-- Placeholder for Team Members -->
+                                    <div class="skeleton-box" style="width: 150px; height: 14px;"></div>
+                                </td>
+                                <td>
+                                    <!-- Placeholder for Date Range -->
+                                    <div class="skeleton-box" style="width: 160px; height: 20px;"></div>
+                                </td>
+                                <td>
+                                    <!-- Placeholder for Pending Status -->
+                                    <div class="skeleton-box" style="width: 80px; height: 20px;"></div>
+                                </td>
+                                <td>
+                                    <!-- Placeholder for Active Status -->
+                                    <div class="skeleton-box" style="width: 80px; height: 20px;"></div>
+                                </td>
+                                <td class="text-end">
+                                    <div class="d-flex align-items-center justify-content-end gap-4">
+                                        <!-- Placeholder for Action Icons -->
+                                        <div class="skeleton-box" style="width: 20px; height: 20px;"></div>
+                                        <div class="skeleton-box" style="width: 20px; height: 20px;"></div>
+                                    </div>
+                                </td>
                             </tr>`
 }
 

@@ -25,7 +25,7 @@
             <div class="d-flex mb-1 gap-2">
                 <div class="d-inline-flex form-floating w-50">
                     <input type="text" placeholder="Enter Value" class="form-control border border-blue-100 text-gray-700 " name="custom-activity-modal-meeting-lbl-LEAD_NUMBER" id="custom-activity-modal-meeting-lbl-LEAD_NUMBER" readonly>
-                    <label for="custom-activity-modal-meeting-lbl-LEAD_NUMBER" class="text-gray-600">Lead Number <span class="text-danger">*</span></label>
+                    <label for="custom-activity-modal-meeting-lbl-LEAD_NUMBER" class="text-gray-600">Reference Number <span class="text-danger">*</span></label>
                 </div>
                 <div class="d-inline-flex form-floating w-50">
                     <input type="text" placeholder="Enter Value" class="form-control border border-blue-100 text-gray-700 " name="custom-activity-modal-meeting-ACTIVITY_TYPE" id="custom-activity-modal-meeting-ACTIVITY_TYPE" readonly value="Meeting">

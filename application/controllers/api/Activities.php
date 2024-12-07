@@ -54,6 +54,10 @@ class Activities extends Api_controller
                 $this->form_validation->set_rules('AGENDA', 'Meeting Agenda', 'required');
                 $this->form_validation->set_rules('ATTENDEES', 'Meeting Attendees', 'required');
                 $this->form_validation->set_rules('NOTES', 'Meeting Outcome', 'required');
+            } else if (strtolower($activity_type) === 'task') {
+                $this->form_validation->set_rules('DUE_DATE', 'Task Due Date', 'required');
+                $this->form_validation->set_rules('PRIORITY', 'Task Priority', 'required');
+                $this->form_validation->set_rules('NOTES', 'Note Details', 'required');
             }
 
             // Run validation
@@ -146,6 +150,10 @@ class Activities extends Api_controller
                 $this->form_validation->set_rules('AGENDA', 'Meeting Agenda', 'required');
                 $this->form_validation->set_rules('ATTENDEES', 'Meeting Attendees', 'required');
                 $this->form_validation->set_rules('NOTES', 'Meeting Outcome', 'required');
+            } else if (strtolower($activity_type) === 'task') {
+                $this->form_validation->set_rules('DUE_DATE', 'Task Due Date', 'required');
+                $this->form_validation->set_rules('PRIORITY', 'Task Priority', 'required');
+                $this->form_validation->set_rules('NOTES', 'Note Details', 'required');
             }
 
             // Run validation
@@ -305,7 +313,7 @@ class Activities extends Api_controller
             ]));
     }
 
-    function delete($activityID)
+    function delete($activityID, $type = null)
     {
         // Check if the authentication is valid
         $isAuthorized = $this->isAuthorized();
@@ -337,7 +345,7 @@ class Activities extends Api_controller
         }
 
         // Attempt to delete the activity
-        $result = $this->Activity_model->delete_activity_by_id($activityID);
+        $result = $this->Activity_model->delete_activity_by_id($activityID, $type);
         if ($result) {
             $this->output
                 ->set_content_type('application/json')
