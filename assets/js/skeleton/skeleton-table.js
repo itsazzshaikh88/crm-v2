@@ -350,6 +350,59 @@ function getSkeletonStructure(list) {
                                     </div>
                                 </td>
                             </tr>`
+
+    if (list === 'moms')
+        return `<tr class="skeleton-loader">
+                    <td>
+                        <div class="form-check form-check-sm form-check-custom form-check-solid">
+                            <div class="skeleton-box" style="width: 20px; height: 20px;"></div>
+                        </div>
+                    </td>
+                    <td class="w-400">
+                        <div class="d-flex align-items-center">
+                            <!-- Placeholder for the image -->
+                            <div class="skeleton-box" style="width: 40px; height: 40px; margin-right: 10px;"></div>
+                            <div class="ms-5">
+                                <!-- Placeholder for name -->
+                                <div class="skeleton-box" style="width: 150px; height: 20px; margin-bottom: 5px;"></div>
+                                <!-- Placeholder for subtitle --> <br/>
+                                <div class="skeleton-box" style="width: 100px; height: 14px;"></div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="pe-0 dt-type-numeric">
+                        <div class="skeleton-box" style="width: 80px; height: 20px;"></div>
+                    </td>
+                    <td class="pe-0 dt-type-numeric">
+                        <div class="skeleton-box" style="width: 150px; height: 20px;"></div>
+                    </td>
+                    <td class="pe-0 dt-type-numeric">
+                        <div class="skeleton-box" style="width: 80px; height: 20px;"></div>
+                    </td>
+                    <td class="pe-0 dt-type-numeric">
+                        <div class="skeleton-box" style="width: 60px; height: 20px;"></div>
+                    </td>
+                    <td class="pe-0 dt-type-numeric">
+                        <div class="skeleton-box" style="width: 50px; height: 20px;"></div>
+                    </td>
+                    <td class="pe-0 dt-type-numeric">
+                        <div class="skeleton-box" style="width: 40px; height: 20px;"></div>
+                    </td>
+                    <td class="pe-0 dt-type-numeric">
+                        <div class="skeleton-box" style="width: 30px; height: 20px;"></div>
+                    </td>
+                    <td class="pe-0 dt-type-numeric">
+                        <div class="skeleton-box" style="width: 50px; height: 20px;"></div>
+                    </td>
+                    <td class="text-end">
+                        <div class="d-flex align-items-center justify-content-end gap-4">
+                            <div class="skeleton-box" style="width: 20px; height: 20px;"></div>
+                            <div class="skeleton-box" style="width: 20px; height: 20px;"></div>
+                            <div class="skeleton-box" style="width: 20px; height: 20px;"></div>
+                        </div>
+                    </td>
+                </tr>
+                `
 }
 
 function clientListModalSkeleton(container, rows) {

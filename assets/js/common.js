@@ -11,7 +11,6 @@ function showErrors(errors, id_lbl = "lbl") {
         if (errors.hasOwnProperty(fieldName)) {
             const errorMessage = errors[fieldName];
             const errorElement = document.getElementById(`${id_lbl}-${fieldName}`);
-            console.log(errorElement);
             if (errorElement) {
                 // Update the span element with the error message
                 errorElement.innerHTML = errorMessage;

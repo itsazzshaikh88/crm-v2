@@ -138,10 +138,10 @@ function showDeals(deals, tbody) {
                                 </td>
                                 <td class="">
 
-                                    <div class="fs-7 fw-bold text-muted">${deal?.DEAL_VALUE}</div>
+                                    <div class="fs-7 fw-normal text-gray-600">${deal?.DEAL_VALUE}</div>
                                 </td>
                                 <td class="">
-                                    <div class="mb-2 fw-bold">${formatAppDate(deal?.EXPECTED_CLOSE_DATE)}</div>
+                                    <div class="mb-2 fw-normal text-gray-600">${formatAppDate(deal?.EXPECTED_CLOSE_DATE)}</div>
                                 </td>
                                 <td><span class="badge text-white" style="background-color: ${priorityColors[deal?.DEAL_PRIORITY]}">${capitalizeWords(deal?.DEAL_PRIORITY)}</span></td>
                                 <td><span class="bg-light badge" style="color: ${dealStatusColors[deal?.DEAL_STATUS]}">${capitalizeWords(deal?.DEAL_STATUS)}</span></td>
