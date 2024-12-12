@@ -128,6 +128,7 @@ function showFieldContent(data) {
 }
 
 function capitalizeWords(str, capitalizeAll = false) {
+    str = str.toLowerCase();
     // Validate input
     if (typeof str !== 'string' || str.trim() === '') {
         return ''; // Return an empty string if input is not a valid string

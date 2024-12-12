@@ -403,6 +403,48 @@ function getSkeletonStructure(list) {
                     </td>
                 </tr>
                 `
+    if (list === 'project')
+        return `<tr class="skeleton-loader">
+                                <td class="min-w-175px">
+                                    <div class="position-relative ps-6 pe-3 py-2">
+                                        <div class="position-absolute start-0 top-0 w-4px h-100 rounded-2 bg-light"></div>
+                                        <div class="skeleton-box" style="width: 150px; height: 20px; margin-bottom: 5px;"></div> <br />
+                                        <div class="skeleton-box" style="width: 100px; height: 14px;"></div>
+                                    </div>
+                                </td>
+                                <td class="min-w-200px">
+                                    <div class="fs-7 text-muted fw-normal">
+                                        <div class="skeleton-box" style="width: 200px; height: 50px;"></div>
+                                    </div>
+                                </td>
+                                <td class="min-w-150px">
+                                    <div class="skeleton-box" style="width: 120px; height: 20px;"></div>
+                                </td>
+                                <td>
+                                    <div class="skeleton-box" style="width: 80px; height: 20px; border-radius: 4px;"></div>
+                                </td>
+                                <td class="min-w-125px">
+                                    <div class="skeleton-box" style="width: 100px; height: 20px;"></div>
+                                </td>
+                                <td class="min-w-150px">
+                                    <div class="skeleton-box" style="width: 70px; height: 20px; border-radius: 4px;"></div>
+                                </td>
+                                <td>
+                                    <div class="d-flex flex-column w-100 me-2 mt-2">
+                                        <div class="skeleton-box" style="width: 50px; height: 14px; margin-bottom: 5px;"></div>
+                                        <div class="progress bg-light w-100 h-5px">
+                                            <div class="skeleton-box" style="width: 100%; height: 5px;"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="text-end">
+                                    <div class="d-flex align-items-center justify-content-end gap-3">
+                                        <div class="skeleton-box" style="width: 20px; height: 20px; border-radius: 50%;"></div>
+                                        <div class="skeleton-box" style="width: 20px; height: 20px; border-radius: 50%;"></div>
+                                        <div class="skeleton-box" style="width: 20px; height: 20px; border-radius: 50%;"></div>
+                                    </div>
+                                </td>
+                </tr>`
 }
 
 function clientListModalSkeleton(container, rows) {
