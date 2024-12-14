@@ -633,7 +633,7 @@
                             <!--end::Menu separator-->
                             <!--begin::Menu item-->
                             <div class="menu-item px-5">
-                                <a href="account/profile" class="menu-link px-5">My Profile</a>
+                                <a href="account/profile/edit" class="menu-link px-5">Edit Profile</a>
                             </div>
                             <!--end::Menu item-->
                             <!--begin::Menu item-->

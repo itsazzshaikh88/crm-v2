@@ -4,11 +4,15 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class User_model extends CI_Model
 {
     protected $user_table; // Holds the name of the user table
+    protected $user_2fa_table; // Holds the name of the user table
+    protected $client_table; // Holds the name of the user table
+    protected $client_address_table; // Holds the name of the user table
 
     public function __construct()
     {
         parent::__construct();
         $this->user_table = 'xx_crm_users'; // Initialize user table
+        $this->user_2fa_table = 'XX_CRM_USER_2FA_DETAILS'; // Initialize user 2fa table
         $this->client_table = 'xx_crm_client_detail'; // Initialize client table
         $this->client_address_table = 'xx_crm_client_address'; // Initialize client address table
 
@@ -34,7 +38,7 @@ class User_model extends CI_Model
      */
     public function get_user_by_id(int $user_id): ?array
     {
-        $query = $this->db->get_where($this->user_table, ['id' => $user_id]);
+        $query = $this->db->get_where($this->user_table, ['ID' => $user_id]);
         return $query->row_array(); // Return user data or null
     }
 
@@ -265,5 +269,21 @@ class User_model extends CI_Model
         } else {
             return true;
         }
+    }
+
+    // Function to update user password
+    function update_password($password, $userid)
+    {
+        // Generate the hashed password using ARGON2ID
+        $hashedPassword = password_hash($password, PASSWORD_ARGON2ID);
+        $this->db->where('ID', $userid);
+        return $this->db->update($this->user_table, ['PASSWORD' => $hashedPassword]);
+    }
+
+    // Multi factor authentication account enable and disable
+    public function get_2fa_details(int $user_id): ?array
+    {
+        $query = $this->db->get_where($this->user_2fa_table, ['USER_ID' => $user_id, 'IS_ACTIVE' => TRUE]);
+        return $query->row_array(); // Return user data or null
     }
 }
