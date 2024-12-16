@@ -166,3 +166,53 @@ function formatAppDate(dateString) {
     const options = { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' };
     return date.toLocaleDateString('en-US', options);
 }
+
+function get2FAActions(type = 'enable') {
+    let className = type === 'enable' ? "primary" : "danger";
+    if (type === 'enable')
+        return `
+                    <!--begin::Icon-->
+                    <i class="fa-solid fa-shield-halved fs-2tx text-primary me-4"></i>
+                    <!--end::Icon-->
+                    <!--begin::Wrapper-->
+                    <div class="d-flex flex-stack flex-grow-1 flex-wrap flex-md-nowrap">
+                        <!--begin::Content-->
+                        <div class="mb-3 mb-md-0 fw-semibold">
+                            <h4 class="text-gray-900 fw-bold">Secure Your Account</h4>
+                            <div class="fs-6 text-gray-700 pe-7 fw-normal">
+                                Two-factor authentication adds an extra layer of security to your account. In addition to your password, you'll need to provide a time-based One-Time Password (OTP) to log in. <br /><br /> This unique, <b>6-digit code</b> changes every 30 seconds and ensures that only you can access your account.
+                            </div>
+                        </div>
+                        <!--end::Content-->
+                        <!--begin::Action-->
+                        <button type="button" class="btn btn-primary px-6 align-self-center text-nowrap" id="enable2FAButton" onclick="enable2FA('enable')">Enable</button>
+                        <!--end::Action-->
+                    </div>
+                    <!--end::Wrapper-->`;
+    if (type === 'disable')
+        return `
+                    <!--begin::Icon-->
+                    <i class="fa-solid fa-shield-halved fs-2tx text-danger me-4"></i>
+                    <!--end::Icon-->
+                    <!--begin::Wrapper-->
+                    <div class="d-flex flex-stack flex-grow-1 flex-wrap flex-md-nowrap">
+                        <!--begin::Content-->
+                        <div class="mb-3 mb-md-0 fw-semibold">
+                            <h4 class="text-gray-900 fw-bold">Disable Two-Factor Authentication</h4>
+                            <div class="fs-6 text-gray-700 pe-7 fw-normal">
+                                Disabling two-factor authentication will remove an extra layer of security from your account. After disabling, you will only need your password to log in, which may make your account more vulnerable to unauthorized access. <br /><br /> We recommend keeping two-factor authentication enabled to protect your account.
+                            </div>
+                        </div>
+                        <!--end::Content-->
+                        <!--begin::Action-->
+                        <button type="button" class="btn btn-danger px-6 align-self-center text-nowrap" id="enable2FAButton" onclick="enable2FA('disable')">Disable</button>
+                        <!--end::Action-->
+                    </div>
+                    <!--end::Wrapper-->`;
+}
+
+function toggleMFADetails(action = 'show', data = {}) {
+    if (action == 'show') {
+        return ``
+    }
+}

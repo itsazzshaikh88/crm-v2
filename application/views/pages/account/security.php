@@ -115,31 +115,20 @@
             <!--begin::Card body-->
             <div class="card-body border-top p-9">
 
-                <!--begin::Notice-->
-                <div class="notice d-flex bg-light-primary rounded border-primary border border-dashed  p-6">
-                    <!--begin::Icon-->
-                    <i class="fa-solid fa-shield-halved fs-2tx text-primary me-4"></i>
-                    <!--end::Icon-->
-
-                    <!--begin::Wrapper-->
-                    <div class="d-flex flex-stack flex-grow-1 flex-wrap flex-md-nowrap">
-                        <!--begin::Content-->
-                        <div class="mb-3 mb-md-0 fw-semibold">
-                            <h4 class="text-gray-900 fw-bold">Secure Your Account</h4>
-
-                            <div class="fs-6 text-gray-700 pe-7 fw-normal">
-                                Two-factor authentication adds an extra layer of security to your account. In addition to your password, you'll need to provide a time-based One-Time Password (OTP) to log in. <br /><br /> This unique, <b>6-digit code</b> changes every 30 seconds and ensures that only you can access your account.
-                            </div>
+                <div class="row mb-4">
+                    <div class="col-md-12">
+                        <div id="totp-setup">
+                            
                         </div>
-                        <!--end::Content-->
-
-                        <!--begin::Action-->
-                        <button type="button" class="btn btn-primary px-6 align-self-center text-nowrap" id="enable2FAButton" onclick="enable2FA('enable')">Enable</button>
-                        <!--end::Action-->
                     </div>
-                    <!--end::Wrapper-->
                 </div>
+
+                <!--begin::Notice-->
+                <div class="notice d-flex bg-light-secondary rounded border-secondary border border-dashed  p-6" id="container-enable-disable-2fa"></div>
                 <!--end::Notice-->
+
+                <!-- 2 Step Authentication Secret and QR Code = START -->
+                <!-- 2 Step Authentication Secret and QR Code = END -->
             </div>
             <!--end::Card body-->
         </div>

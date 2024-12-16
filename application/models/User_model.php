@@ -286,4 +286,14 @@ class User_model extends CI_Model
         $query = $this->db->get_where($this->user_2fa_table, ['USER_ID' => $user_id, 'IS_ACTIVE' => TRUE]);
         return $query->row_array(); // Return user data or null
     }
+
+    function set_2fa_status($userid, $action)
+    {
+        return $this->db->where('ID', $userid)->update($this->user_table, ['IS_2FA_ENABLED' => $action === 'enable' ? 1 : 0]);
+    }
+
+    public function add_2fa_details($data)
+    {
+        return $this->db->insert($this->user_2fa_table, $data);
+    }
 }

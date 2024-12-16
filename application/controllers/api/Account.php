@@ -1,11 +1,15 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
+
+use RobThree\Auth\TwoFactorAuth;
+
 require_once(APPPATH . 'core/Api_controller.php');
 class Account extends Api_controller
 {
     public function __construct()
     {
         parent::__construct();
+        $this->tfa = new TwoFactorAuth('Zamil CRM Authenticator');
     }
 
     function update_password()
@@ -131,7 +135,7 @@ class Account extends Api_controller
         };
 
         $user = $this->User_model->get_user_by_id($isAuthorized['userid'] ?? 0);
-
+        $mfa_details = $this->User_model->get_2fa_details($isAuthorized['userid'] ?? 0);
         // Validate the product ID
         if (empty($user)) {
             $this->sendHTTPResponse(404, [
@@ -145,11 +149,11 @@ class Account extends Api_controller
         return $this->output
             ->set_content_type('application/json')
             ->set_status_header(200)
-            ->set_output(json_encode(['user' => $user]));
+            ->set_output(json_encode(['user' => $user, 'mfa' => $mfa_details]));
     }
 
     // Enable ad Disable Multi factor authentication
-    function multifactor()
+    function multifactor($action = null)
     {
         // Check if the authentication is valid
         $isAuthorized = $this->isAuthorized();
@@ -164,7 +168,7 @@ class Account extends Api_controller
 
         $user = $this->User_model->get_user_by_id($isAuthorized['userid'] ?? 0);
 
-        // Validate the product ID
+        // check user exist or not
         if (empty($user)) {
             $this->sendHTTPResponse(404, [
                 'status' => 404,
@@ -174,19 +178,81 @@ class Account extends Api_controller
             return;
         }
 
+        // check action is provided
+        if (!$action) {
+            $this->sendHTTPResponse(404, [
+                'status' => 404,
+                'error' => 'Two Factor Authentication Action is not defined.',
+                'message' => 'Two Factor Authentication Action is not defined.'
+            ]);
+            return;
+        }
+
         // Check action and update multi factor authentication
         $multifactor_details = $this->User_model->get_2fa_details($isAuthorized['userid']);
-        
-        if (empty($multifactor_details)) {
-            // Insert TOTP Token details and Enable 2FA Account
 
-        }else {
-            // Enable and Disable Account
+        // Enable and Disable it in the User table
+        $action_updated = $this->User_model->set_2fa_status($isAuthorized['userid'], $action);
+        if ($action_updated) {
+            if (empty($multifactor_details) && $action == 'enable') {
+                // Generate Secret key and QR Code data
+                $secret = $this->tfa->createSecret();
+                $clientID = $user['USER_ID'] ?? 'ZMLCRM-' . time();
+                $qrCodeUrl = $this->tfa->getQRCodeImageAsDataUri("$clientID.loc", $secret);
 
+                $mfa_data = [
+                    'USER_ID' => $isAuthorized['userid'],
+                    'TOTP_SECRET' => $secret,
+                    'BACKUP_CODES' => $this->generateTOTPBackupCodes(),
+                    'IS_ACTIVE' => TRUE,
+                    'QR_DATA' => $qrCodeUrl
+                ];
+                $status = $this->User_model->add_2fa_details($mfa_data);
+                if ($status) {
+                    $this->sendHTTPResponse(201, [
+                        'status' => 201,
+                        'message' => 'Two Factor Autentication ' . ucfirst($action) . "d successfully.",
+                        'action' => 'success',
+                        'mfa' => $this->User_model->get_2fa_details($isAuthorized['userid'])
+                    ]);
+                    return;
+                } else {
+                    $this->sendHTTPResponse(400, [
+                        'status' => 400,
+                        'status' => 404,
+                        'error' => 'Failed to save two step authentication details.',
+                        'message' => 'Failed to save two step authentication details.'
+                    ]);
+                    return;
+                }
+            } else {
+                $this->sendHTTPResponse(201, [
+                    'status' => 201,
+                    'message' => 'Two Factor Autentication ' . ucfirst($action) . "d successfully.",
+                    'action' => 'success',
+                    'mfa' => $this->User_model->get_2fa_details($isAuthorized['userid'])
+                ]);
+                return;
+            }
+        } else {
+            $this->sendHTTPResponse(400, [
+                'status' => 400,
+                'status' => 404,
+                'error' => 'Failed to update authentication status',
+                'message' => 'Failed to update authentication status'
+            ]);
+            return;
         }
-        return $this->output
-            ->set_content_type('application/json')
-            ->set_status_header(200)
-            ->set_output(json_encode(['user' => $user]));
+        return;
+    }
+
+    function generateTOTPBackupCodes($numCodes = 10)
+    {
+        $codes = [];
+        for ($i = 0; $i < $numCodes; $i++) {
+            $codes[] = ['code' => strtoupper(bin2hex(random_bytes(4))), 'is_used' => 'no'];  // Generates a random 8-character code
+        }
+        $json_codes = json_encode($codes);
+        return $json_codes || null;
     }
 }
