@@ -10,7 +10,6 @@ class Account extends App_Controller
 		$data['page_title'] = 'Account and Settings - Fixed Assets Application';
 		$data['page_heading'] = 'Account and Settings';
 		$data['navlink'] = ['main-link' => 'account', 'sub-link' => 'settings'];
-		$data['scripts'] = ['assets/js/pages/accounts/password-management.js'];
 		$this->load->view('layout', $data);
 	}
 	public function security()
