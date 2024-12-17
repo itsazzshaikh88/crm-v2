@@ -130,52 +130,6 @@ function filterProducts() {
     fetchClients();
 }
 
-const chooseClientBtn = document.getElementById("choose-client-btn");
-const clientNameBtn = document.getElementById("client-name-btn");
-const clientName = document.getElementById("client-name-element");
-const clientID = document.getElementById("CLIENT_ID");
-const companyAddress = document.getElementById("COMPANY_ADDRESS");
-const billingAddress = document.getElementById("BILLING_ADDRESS");
-const shippingAddress = document.getElementById("SHIPPING_ADDRESS");
-const contactNumber = document.getElementById("CONTACT_NUMBER");
-const emailAddress = document.getElementById("EMAIL_ADDRESS");
-
-// Set and Toggle clients
-function setClient(clientid) {
-    const client = fetchedClients[clientid];
-    clientID.value = ''
-    clientName.innerHTML = 'Client Name Here ...'
-    companyAddress.value = ''
-    billingAddress.value = ''
-    shippingAddress.value = ''
-    contactNumber.value = ''
-    emailAddress.value = ''
-    if (client) {
-        clientID.value = client?.ID || 0
-        clientName.innerHTML = `${client?.FIRST_NAME || ''} ${client?.LAST_NAME || ''}`
-        companyAddress.value = `${client?.COMPANY_NAME || ''}`
-        billingAddress.value = `${client?.ADDRESS_LINE_1 || ''}`
-        shippingAddress.value = `${client?.SHIPPING_ADDRESS || ''}`
-        contactNumber.value = `${client?.PHONE_NUMBER || ''}`
-        emailAddress.value = `${client?.EMAIL || ''}`
-    }
-    myModal.hide();
-    // Toggle Buttons
-    chooseClientBtn.classList.toggle("d-none")
-    clientNameBtn.classList.toggle("d-none")
-}
-
-function removeClientName() {
-    clientID.value = ''
-    clientName.innerHTML = 'Client Name Here ...'
-    companyAddress.value = ''
-    billingAddress.value = ''
-    shippingAddress.value = ''
-    contactNumber.value = ''
-    emailAddress.value = ''
-    chooseClientBtn.classList.toggle("d-none")
-    clientNameBtn.classList.toggle("d-none")
-}
 
 // reset new client form
 function resetNewClientForm() {

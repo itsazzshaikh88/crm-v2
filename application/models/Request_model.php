@@ -196,4 +196,38 @@ class Request_model extends App_model
             return true;
         }
     }
+
+    public function get_request_by_search_term($searchkey, $searchvalue)
+    {
+        $data = ['header' => []];
+
+        if ($searchkey && $searchvalue) {
+            // Fetch product details
+            $data['header'] = $this->db->select("rh.ID, rh.REQUEST_NUMBER, rh.UUID, rh.CLIENT_ID, rh.REQUEST_TITLE, rh.COMPANY_ADDRESS, rh.BILLING_ADDRESS, rh.SHIPPING_ADDRESS, rh.CONTACT_NUMBER, 
+            rh.EMAIL_ADDRESS, rh.REQUEST_DETAILS, rh.INTERNAL_NOTES, rh.ATTACHMENTS, 
+            cl.COMPANY_NAME, u.FIRST_NAME, u.LAST_NAME, u.EMAIL, CONCAT(u.FIRST_NAME, ' ', u.LAST_NAME) as FULLNAME")
+                ->from('xx_crm_req_header rh')
+                ->join('xx_crm_client_detail cl', 'cl.USER_ID = rh.CLIENT_ID', 'inner')
+                ->join('xx_crm_users u', 'u.ID = rh.CLIENT_ID', 'inner')
+                ->where('rh.' . $searchkey, $searchvalue)
+                ->get()
+                ->row_array();
+
+
+            // Fetch inventory details if product exists and has a PRODUCT_ID
+            if (isset($data['header']['ID'])) {
+                $data['lines'] = $this->db
+                    ->select('rl.LINE_ID, rl.REQ_ID, rl.PRODUCT_ID, rl.PRODUCT_DESC, rl.QUANTITY, rl.REQUIRED_DATE, 
+                          rl.COLOR, rl.TRANSPORTATION, rl.COMMENTS, pr.PRODUCT_CODE,pr.PRODUCT_NAME, pr.DESCRIPTION, pr.BASE_PRICE')
+                    ->from('xx_crm_req_lines rl')
+                    ->join('xx_crm_products pr', 'pr.PRODUCT_ID = rl.PRODUCT_ID', 'left')
+                    ->where('rl.REQ_ID', $data['header']['ID'])
+                    ->order_by('rl.LINE_ID')
+                    ->get()
+                    ->result_array(); // Fetch the result as an array of associative arrays
+            }
+        }
+
+        return $data;
+    }
 }

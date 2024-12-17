@@ -43,21 +43,26 @@ async function createClientFromModal(e) {
             const contactNumber = document.getElementById("CONTACT_NUMBER");
             const emailAddress = document.getElementById("EMAIL_ADDRESS");
             const client = data?.data ?? {}
-            clientID.value = client?.ID || 0
-            clientName.innerHTML = `${client?.FIRST_NAME || ''} ${client?.LAST_NAME || ''}`
-            companyAddress.value = `${client?.COMPANY_NAME || ''}`
-            billingAddress.value = `${client?.ADDRESS_LINE_1 || ''}`
-            shippingAddress.value = `${client?.SHIPPING_ADDRESS || ''}`
-            contactNumber.value = `${client?.PHONE_NUMBER || ''}`
-            emailAddress.value = `${client?.EMAIL || ''}`
+            if (clientID)
+                clientID.value = client?.ID || 0;
+            if (clientName)
+                clientName.innerHTML = `${client?.FIRST_NAME || ''} ${client?.LAST_NAME || ''}`;
+            if (companyAddress)
+                companyAddress.value = `${client?.COMPANY_NAME || ''}`;
+            if (billingAddress)
+                billingAddress.value = `${client?.ADDRESS_LINE_1 || ''}`;
+            if (shippingAddress)
+                shippingAddress.value = `${client?.SHIPPING_ADDRESS || ''}`;
+            if (contactNumber)
+                contactNumber.value = `${client?.PHONE_NUMBER || ''}`;
+            if (emailAddress)
+                emailAddress.value = `${client?.EMAIL || ''}`;
 
             myModal.hide();
             newClientModal.hide()
             // Toggle Buttons
-            chooseClientBtn.classList.add("d-none")
-            clientNameBtn.classList.remove("d-none")
-
-
+            chooseClientBtn.classList.add("d-none");
+            clientNameBtn.classList.remove("d-none");
         } else {
             const errorData = await response.json();
             if (errorData.status === 422) {

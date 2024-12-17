@@ -1,14 +1,15 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 require_once(APPPATH . 'core/Api_controller.php');
-class Requests extends Api_controller
+class Quotes extends Api_controller
 {
     public function __construct()
     {
         parent::__construct();
+        $this->load->model('quotes_model');
     }
 
-    function new($request_id = null)
+    function new($quote_id = null)
     {
         // Check if the authentication is valid
         $isAuthorized = $this->isAuthorized();
@@ -33,11 +34,11 @@ class Requests extends Api_controller
             }
 
             // Set validation rules
-            $this->form_validation->set_rules('REQUEST_TITLE', 'Request Title', 'required');
+            $this->form_validation->set_rules('JOB_TITLE', 'Job Title', 'required');
             $this->form_validation->set_rules('COMPANY_ADDRESS', 'Company Address', 'required|min_length[3]');
-            $this->form_validation->set_rules('BILLING_ADDRESS', 'Billing Address', 'required|min_length[3]');
-            $this->form_validation->set_rules('SHIPPING_ADDRESS', 'Shipping Address', 'required|min_length[3]');
-            $this->form_validation->set_rules('CONTACT_NUMBER', 'Company Contact Number', 'required');
+            $this->form_validation->set_rules('SALES_PERSON', 'Sales Person', 'required');
+            $this->form_validation->set_rules('EMPLOYEE_NAME', 'Employee Name', 'required');
+            $this->form_validation->set_rules('MOBILE_NUMBER', 'Company Mobile Number', 'required');
             $this->form_validation->set_rules('EMAIL_ADDRESS', 'Company Email Address', 'required|valid_email');
 
 
@@ -56,7 +57,7 @@ class Requests extends Api_controller
             }
 
             // Directory to upload files
-            $uploadPath = './uploads/requests/';
+            $uploadPath = './uploads/quotes/';
             $allowedTypes = ['jpg', 'jpeg', 'png', 'gif', 'pdf', 'doc', 'docx', 'txt', 'xls', 'xlsx'];
             $uploadedFiles = null;
 
@@ -72,13 +73,15 @@ class Requests extends Api_controller
 
             $data = array_map([$this->security, 'xss_clean'], $data);
 
+
             // Save Data to the Request table
-            $created = $this->Request_model->add_request($request_id, $data, $isAuthorized['userid'], $isAuthorized['role']);
+            $created = $this->Quotes_model->add_quote($quote_id, $data, $isAuthorized['userid'], $isAuthorized['role']);
             if ($created) {
                 $this->sendHTTPResponse(201, [
                     'status' => 201,
-                    'message' => 'Request Saved Successfully',
-                    'data' => $data
+                    'message' => 'Quote Saved Successfully',
+                    'data' => $data,
+                    'type' => $quote_id != null ? 'update' : 'insert'
                 ]);
             } else {
                 throw new Exception('Failed to create new request.');
@@ -129,17 +132,17 @@ class Requests extends Api_controller
         $currentPage = isset($data['currentPage']) ? $data['currentPage'] : null;
         $filters = isset($data['filters']) ? $data['filters'] : [];
 
-        $total_requests = $this->Request_model->get_requests('total', $limit, $currentPage, $filters);
-        $requests = $this->Request_model->get_requests('list', $limit, $currentPage, $filters);
+        $total_quotes = $this->Quotes_model->get_quotes('total', $limit, $currentPage, $filters);
+        $quotes = $this->Quotes_model->get_quotes('list', $limit, $currentPage, $filters);
 
         $response = [
             'pagination' => [
-                'total_records' => $total_requests,
-                'total_pages' => generatePages($total_requests, $limit),
+                'total_records' => $total_quotes,
+                'total_pages' => generatePages($total_quotes, $limit),
                 'current_page' => $currentPage,
                 'limit' => $limit
             ],
-            'requests' => $requests,
+            'quotes' => $quotes,
         ];
         return $this->output
             ->set_content_type('application/json')
@@ -147,7 +150,6 @@ class Requests extends Api_controller
             ->set_output(json_encode($response));
     }
 
-    /* --- Shaikh Ab Azim ---
     public function detail()
     {
         // Check if the authentication is valid
@@ -168,94 +170,20 @@ class Requests extends Api_controller
         $data = json_decode($input, true);
 
         // Validate input and check if `requestUUID` is provided
-        if (!$data || !isset($data['requestUUID'])) {
+        if (!$data || !isset($data['quoteUUID'])) {
             return $this->output
                 ->set_status_header(400)
                 ->set_content_type('application/json')
                 ->set_output(json_encode([
                     'status' => 'error',
                     'code' => 400,
-                    'message' => 'Invalid JSON input or missing requestUUID'
+                    'message' => 'Invalid JSON input or missing quoteUUID'
                 ]));
         }
 
-        // Retrieve Request details using the provided requestUUID
-        $requestUUID = $data['requestUUID'];
-        $requestData = $this->Request_model->get_request_by_uuid($requestUUID);
-
-        // Check if Request data exists
-        if (empty($requestData['header'])) {
-            return $this->output
-                ->set_status_header(404)
-                ->set_content_type('application/json')
-                ->set_output(json_encode([
-                    'status' => 'error',
-                    'code' => 404,
-                    'message' => 'Request not found'
-                ]));
-        }
-
-        // Successful response with Request data
-        return $this->output
-            ->set_status_header(200)
-            ->set_content_type('application/json')
-            ->set_output(json_encode([
-                'status' => 'success',
-                'code' => 200,
-                'message' => 'Request details retrieved successfully',
-                'data' => $requestData
-            ]));
-    }
-
-    -- End of the code
-    */
-    public function detail()
-    {
-        // Check if the authentication is valid
-        $isAuthorized = $this->isAuthorized();
-        if (!$isAuthorized['status']) {
-            $this->output
-                ->set_status_header(401) // Set HTTP response status to 400 Bad Request
-                ->set_content_type('application/json')
-                ->set_output(json_encode(['error' => 'Unauthorized access. You do not have permission to perform this action.']))
-                ->_display();
-            exit;
-        };
-
-        // Get the raw input data from the request
-        $input = $this->input->raw_input_stream;
-
-        // Decode the JSON data as an associative array
-        $data = json_decode($input, true);
-
-        // Validate input and check if `requestUUID` is provided
-        if (!$data || !isset($data['searchkey']) || !isset($data['searchvalue'])) {
-            return $this->output
-                ->set_status_header(400)
-                ->set_content_type('application/json')
-                ->set_output(json_encode([
-                    'status' => 'error',
-                    'code' => 400,
-                    'message' => 'Invalid JSON input or missing request credentials'
-                ]));
-        }
-
-        // Retrieve Request details using the provided requestUUID
-        $searchkey = $data['searchkey'];
-        $searchvalue = $data['searchvalue'];
-        // Check if Request data exists
-        if ($searchkey == '' || $searchvalue == '') {
-            return $this->output
-                ->set_status_header(404)
-                ->set_content_type('application/json')
-                ->set_output(json_encode([
-                    'status' => 'error',
-                    'code' => 404,
-                    'message' => 'Invalid Search or Search Value'
-                ]));
-        }
-
-        $requestData = $this->Request_model->get_request_by_search_term($searchkey, $searchvalue);
+        // Retrieve Request details using the provided quoteUUID
+        $quoteUUID = $data['quoteUUID'];
+        $requestData = $this->Quotes_model->get_quote_by_uuid($quoteUUID);
 
         // Check if Request data exists
         if (empty($requestData['header'])) {
@@ -313,7 +241,7 @@ class Requests extends Api_controller
         }
 
         // Attempt to delete the Request
-        $result = $this->Request_model->delete_Request_by_id($requestId);
+        $result = $this->Quotes_model->delete_quote_by_id($requestId);
         if ($result) {
             $this->output
                 ->set_content_type('application/json')
@@ -325,5 +253,147 @@ class Requests extends Api_controller
                 ->set_status_header(500) // 500 Internal Server Error status code
                 ->set_output(json_encode(['status' => false, 'message' => 'Failed to delete the Request.']));
         }
+    }
+
+    function ConvertNewQuote($requestId)
+    {
+        // Check if the authentication is valid
+        $isAuthorized = $this->isAuthorized();
+        if (!$isAuthorized['status']) {
+            $this->output
+                ->set_status_header(401) // Set HTTP response status to 400 Bad Request
+                ->set_content_type('application/json')
+                ->set_output(json_encode(['error' => 'Unauthorized access. You do not have permission to perform this action.']))
+                ->_display();
+            exit;
+        };
+
+        // Check if the user is admin or not
+        if (isset($isAuthorized['role']) && $isAuthorized['role'] !== 'admin') {
+            $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(403) // 403 Forbidden status code
+                ->set_output(json_encode(['error' => 'You do not have permission to perform this action.']));
+            return;
+        }
+
+        // Validate the Request ID
+        if (empty($requestId) || !is_numeric($requestId)) {
+            $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(400) // 400 Bad Request status code
+                ->set_output(json_encode(['error' => 'Invalid Request ID.']));
+            return;
+        }
+
+        // Check if lead is already converted to contact
+        //   $quote = $this->Quotes_model->get_quote_by_quote_id($requestId ?? 0);
+        //   if (!empty($quote)) {
+        //       $this->sendHTTPResponse(409, [
+        //           'status' => 'error',
+        //           'code' => 409,
+        //           'error' => 'The lead with the provided ID has already been converted to a contact.',
+        //           'message' => 'The lead with the provided ID has already been converted to a contact.'
+        //       ]);
+        //       return;
+        //   }
+
+        // Attempt to delete the Request
+        $result = $this->Quotes_model->convert_new_quote_by_id($requestId);
+        if ($result) {
+            $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(200) // 200 OK status code
+                ->set_output(json_encode(['status' => true, 'message' => 'Convert to new Quote successfully.']));
+        } else {
+            $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(500) // 500 Internal Server Error status code
+                ->set_output(json_encode(['status' => false, 'message' => 'Convert to new Quote failed.']));
+        }
+
+        // $quote = $this->Quotes_model->get_quote_by_id($requestId );
+        // if (!empty($quote)) {
+        //     $this->sendHTTPResponse(409, [
+        //         'status' => 'error',
+        //         'code' => 409,
+        //         'error' => 'The quote with the provided ID has already been converted to new quote.',
+        //         'message' => 'The lead with the provided ID has already been converted to new quote.'
+        //     ]);
+        //     return;
+        // }
+
+    }
+    public function get_request_numbers()
+    {
+        // Check if the authentication is valid
+        $isAuthorized = $this->isAuthorized();
+        if (!$isAuthorized['status']) {
+            $this->output
+                ->set_status_header(401)
+                ->set_content_type('application/json')
+                ->set_output(json_encode(['error' => 'Unauthorized access.']));
+            return;
+        }
+
+        // Fetch request numbers from the database
+        $requestNumbers = $this->db->select('UUID, REQUEST_NUMBER')
+            ->from('xx_crm_req_header')
+            ->get()
+            ->result_array();
+
+        // Check if data exists
+        if (empty($requestNumbers)) {
+            $this->output
+                ->set_status_header(404)
+                ->set_content_type('application/json')
+                ->set_output(json_encode(['error' => 'No request numbers found.']));
+            return;
+        }
+
+        // Return the data
+        $this->output
+            ->set_status_header(200)
+            ->set_content_type('application/json')
+            ->set_output(json_encode([
+                'status' => 'success',
+                'data' => $requestNumbers
+            ]));
+    }
+
+    function fetchClientRequests($ClientID)
+    {
+        // Check if the authentication is valid
+        $isAuthorized = $this->isAuthorized();
+        if (!$isAuthorized['status']) {
+            $this->output
+                ->set_status_header(401) // Set HTTP response status to 400 Bad Request
+                ->set_content_type('application/json')
+                ->set_output(json_encode(['error' => 'Unauthorized access. You do not have permission to perform this action.']))
+                ->_display();
+            exit;
+        };
+
+        // Validate input and check if `requestUUID` is provided
+        if (!$ClientID) {
+            return $this->output
+                ->set_status_header(400)
+                ->set_content_type('application/json')
+                ->set_output(json_encode([
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'Invalid Client ID'
+                ]));
+        }
+        // Successful response with Request data
+        return $this->output
+            ->set_status_header(200)
+            ->set_content_type('application/json')
+            ->set_output(json_encode([
+                'status' => 'success',
+                'code' => 200,
+                'message' => 'Request details retrieved successfully',
+                'data' => $this->quotes_model->fetchClientRequests($ClientID)
+            ]));
     }
 }
