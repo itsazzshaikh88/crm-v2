@@ -108,22 +108,6 @@
                                         <span class="menu-title">Quotation List</span>
                                     </a>
                                 </div>
-                                <div class="menu-item">
-                                    <a class="menu-link py-3" href="quotes/convert/convert-request" title="" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right">
-                                        <span class="menu-icon">
-                                            <i class="las la-sign-in-alt fs-3"></i>
-                                        </span>
-                                        <span class="menu-title">Convert Request to Quote</span>
-                                    </a>
-                                </div>
-                                <div class="menu-item">
-                                    <a class="menu-link py-3" href="quotes/convert/convert-to-new-quote" title="" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right">
-                                        <span class="menu-icon">
-                                            <i class="las la-exchange-alt fs-3"></i>
-                                        </span>
-                                        <span class="menu-title">Convert to New Quote</span>
-                                    </a>
-                                </div>
                             </div>
                         </div>
                         <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="bottom-start" class="menu-item menu-lg-down-accordion me-lg-1">
@@ -646,7 +630,7 @@
                             <!--end::Menu separator-->
                             <!--begin::Menu item-->
                             <div class="menu-item px-5 my-1">
-                                <a href="account/settings" class="menu-link px-5">Account Settings</a>
+                                <a href="account" class="menu-link px-5">Account and Settings</a>
                             </div>
                             <!--end::Menu item-->
                             <!--begin::Menu item-->

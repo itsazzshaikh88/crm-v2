@@ -50,8 +50,8 @@ function showAttachedFiles(attachedFiles) {
 
 }
 
-async function fetchRequest(requestUUID) {
-    const apiUrl = `${APIUrl}/requests/detail`;
+async function fetchPODetails(poUUID) {
+    const apiUrl = `${APIUrl}/purchase/detail`;
     const authToken = getCookie('auth_token');
     if (!authToken) {
         toasterNotification({
@@ -70,7 +70,7 @@ async function fetchRequest(requestUUID) {
                 'Authorization': `Bearer ${authToken}`,
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ searchkey: 'UUID', searchvalue: requestUUID })
+            body: JSON.stringify({ poUUID })
         });
 
         // Parse the JSON response
@@ -84,7 +84,7 @@ async function fetchRequest(requestUUID) {
 
         displayRequestInfo(data.data);
 
-        // Show Product Files attached
+
         if (data?.data?.header?.ATTACHMENTS) {
             showAttachedFiles(JSON.parse(data?.data?.header?.ATTACHMENTS) || []);
         }
@@ -112,8 +112,6 @@ async function fetchRequest(requestUUID) {
 }
 
 
-
-
 function displayRequestInfo(data) {
 
     if (!data || !data) return;
@@ -134,21 +132,36 @@ function generateLines(lines) {
     if (!lines && lines?.length <= 0) return ''
     return lines.map(line => {
         let desc = stripHtmlTags(line?.DESCRIPTION || '');
+        console.log(line);
         return `<tr id="${line.LINE_ID}">
                     <td>
+                 
                         <div>
-                            <p class="mb-0 text-info"><small>${line.PRODUCT_CODE}</small></p>
-                            <p class="fw-bold mb-1 text-black line-clamp-1">${line.PRODUCT_NAME}</p>
-                            <p class="line-clamp-2 mb-0"><small>${(desc == 'null' ? '' : desc)}</small></p>
+                            <p class="mb-0 text-info"><small>${line.QTY}</small></p>
+                        
                         </div>
+
                     </td>
-                    <td>${line.QUANTITY || ''}</td>
-                    <td>${formatAppDate(line?.REQUIRED_DATE || '') ?? ''}</td>
-                    <td>${line.COLOR || ''}</td>
-                    <td>${line.TRANSPORTATION || ''}</td>
-                    <td>
+                   
+                   <td>
+                        <p class="mb-0 line-clamp-2">${line.TOTAL || ''}</p>
+                    </td>
+<td>
                         <p class="mb-0 line-clamp-2">${line.COMMENTS || ''}</p>
                     </td>
+                       <td>
+                        <p class="mb-0 line-clamp-2">${line.COLOR || ''}</p>
+                    </td>
+                    <td>
+                        <p class="mb-0 line-clamp-2">${line.TRANSPORT || ''}</p>
+                    </td>
+                    <td>${formatAppDate(line?.REQUIRED_DATE || '') ?? ''}</td>
+                   
+                
+                    
+                    
+                 
+                    
                 </tr>
                 
     `;
@@ -157,13 +170,13 @@ function generateLines(lines) {
 
 function showLinesFields(lines) {
     if (!lines)
-        document.getElementById("request-lines").innerHTML = ''
+        document.getElementById("purchase-lines").innerHTML = ''
 
-    document.getElementById("request-lines").innerHTML = generateLines(lines)
+    document.getElementById("purchase-lines").innerHTML = generateLines(lines)
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    const requestUUID = document.getElementById("UUID").value;
-    fetchRequest(requestUUID);
+    const poUUID = document.getElementById("UUID").value;
+    fetchPODetails(poUUID);
 });
 

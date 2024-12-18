@@ -170,20 +170,21 @@ class Quotes extends Api_controller
         $data = json_decode($input, true);
 
         // Validate input and check if `requestUUID` is provided
-        if (!$data || !isset($data['quoteUUID'])) {
+        if (!$data || !isset($data['searchkey']) || !isset($data['searchvalue'])) {
             return $this->output
                 ->set_status_header(400)
                 ->set_content_type('application/json')
                 ->set_output(json_encode([
                     'status' => 'error',
                     'code' => 400,
-                    'message' => 'Invalid JSON input or missing quoteUUID'
+                    'message' => 'Invalid JSON input or missing quotes search value or search key'
                 ]));
         }
 
         // Retrieve Request details using the provided quoteUUID
-        $quoteUUID = $data['quoteUUID'];
-        $requestData = $this->Quotes_model->get_quote_by_uuid($quoteUUID);
+        $searchkey = $data['searchkey'];
+        $searchvalue = $data['searchvalue'];
+        $requestData = $this->Quotes_model->get_quote_by_searchkey($searchkey, $searchvalue);
 
         // Check if Request data exists
         if (empty($requestData['header'])) {
@@ -394,6 +395,42 @@ class Quotes extends Api_controller
                 'code' => 200,
                 'message' => 'Request details retrieved successfully',
                 'data' => $this->quotes_model->fetchClientRequests($ClientID)
+            ]));
+    }
+
+    function clientsQuotes($ClientID)
+    {
+        // Check if the authentication is valid
+        $isAuthorized = $this->isAuthorized();
+        if (!$isAuthorized['status']) {
+            $this->output
+                ->set_status_header(401) // Set HTTP response status to 400 Bad Request
+                ->set_content_type('application/json')
+                ->set_output(json_encode(['error' => 'Unauthorized access. You do not have permission to perform this action.']))
+                ->_display();
+            exit;
+        };
+
+        // Validate input and check if `requestUUID` is provided
+        if (!$ClientID) {
+            return $this->output
+                ->set_status_header(400)
+                ->set_content_type('application/json')
+                ->set_output(json_encode([
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'Invalid Client ID'
+                ]));
+        }
+        // Successful response with Request data
+        return $this->output
+            ->set_status_header(200)
+            ->set_content_type('application/json')
+            ->set_output(json_encode([
+                'status' => 'success',
+                'code' => 200,
+                'message' => 'Request details retrieved successfully',
+                'data' => $this->quotes_model->fetchClientQuotes($ClientID)
             ]));
     }
 }

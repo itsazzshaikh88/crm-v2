@@ -5,22 +5,24 @@
         <div class="card">
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-row-bordered gy-7">
+                    <table class="table table-row-bordered gy-7" id="purchase-list">
                         <thead>
                             <tr class="fw-bold fs-6 text-gray-800">
                                 <th>#</th>
-                                <th>Order No</th>
-                                <th>Date</th>
                                 <th>Company</th>
-                                <th>Address</th>
+                                <th>Email</th>
+                                <th>Company Address</th>
+                                <th>Contact Number</th>
+                                <th>Payment</th>
+                                <th>Amount</th>
                                 <th>Status</th>
-                                <th>Total</th>
+                                <th>Qty</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="purchase-list-tbody">
                             <tr>
-                                <td colspan="8" class="text-center text-danger">
+                                <td colspan="12" class="text-center text-danger">
                                     <div class="d-flex justify-content-center align-items-center flex-column">
                                         <img src="assets/images/no-data.png" class="no-data-img-table" alt="">
                                         <h4 class="text-danger">No data available</h4>
@@ -30,7 +32,7 @@
                         </tbody>
                     </table>
                 </div>
-                <?php include_once 'application/views/common/paginate.php' ?>
+                <?= renderPaginate('current-page', 'total-pages', 'page-of-pages', 'range-of-records') ?>
             </div>
         </div>
         <!--end::PAGE CONTENT GOES FROM HERE-->

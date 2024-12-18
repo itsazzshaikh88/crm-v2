@@ -199,6 +199,58 @@ function getSkeletonStructure(list) {
                 </tr>
                 `;
 
+    if (list === 'purchase')
+        return `<tr class="skeleton-loader">
+                                <td class="text-center">
+                                    <div class="skeleton-box" style="width: 20px; height: 20px;"></div>
+                                </td>
+                                <td>
+                                    <div class="d-flex">
+                                        <div>
+                                            <!-- Placeholder for Title -->
+                                            <div class="skeleton-box" style="width: 100px; height: 20px; margin-bottom: 5px;"></div>
+                                            <!-- Placeholder for Description -->
+                                            <div class="skeleton-box" style="width: 150px; height: 16px; margin-bottom: 5px;"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex">
+                                        <div>
+                                            <!-- Placeholder for Title -->
+                                            <div class="skeleton-box" style="width: 120px; height: 20px; margin-bottom: 5px;"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="skeleton-box" style="width: 80px; height: 20px;"></div>
+                                </td>
+                                <td>
+                                    <div class="skeleton-box" style="width: 80px; height: 20px;"></div>
+                                </td>
+                                <td>
+                                    <div class="skeleton-box" style="width: 80px; height: 20px;"></div>
+                                </td>
+                                <td>
+                                    <div class="skeleton-box" style="width: 80px; height: 20px;"></div>
+                                </td>
+                                <td>
+                                    <div class="skeleton-box" style="width: 150px; height: 20px;"></div>
+                                </td>
+                                <td>
+                                    <div class="skeleton-box" style="width: 120px; height: 20px;"></div>
+                                </td>
+                                <td class="text-end">
+                                    <div class="d-flex align-items-center justify-content-end gap-4">
+                                        <!-- Placeholder for Icons -->
+                                        <div class="skeleton-box" style="width: 20px; height: 20px;"></div>
+                                        <div class="skeleton-box" style="width: 20px; height: 20px;"></div>
+                                        <div class="skeleton-box" style="width: 20px; height: 20px;"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                            `;
+
     if (list === 'open-order-list-tracking')
         return ``;
     if (list === 'leads')

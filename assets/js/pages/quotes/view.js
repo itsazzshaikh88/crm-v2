@@ -70,10 +70,8 @@ async function fetchQuotation(quoteUUID) {
                 'Authorization': `Bearer ${authToken}`,
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ quoteUUID })
+            body: JSON.stringify({ searchkey: "UUID", searchvalue: quoteUUID })
         });
-
-            body: JSON.stringify({ quoteUUID })
         // Parse the JSON response
         const data = await response.json();
 
@@ -82,7 +80,6 @@ async function fetchQuotation(quoteUUID) {
             const errorMessage = data.message || `Error: ${response.status} ${response.statusText}`;
             throw new Error(errorMessage);
         }
-        console.log(data);
 
         displayRequestInfo(data.data);
 
@@ -94,9 +91,11 @@ async function fetchQuotation(quoteUUID) {
         // Set Main Label of request title as well
         if (data?.data?.header?.EMPLOYEE_NAME)
             document.getElementById("main-lbl-EMPLOYEE_NAME").innerHTML = data?.data?.header?.EMPLOYEE_NAME
-   
+
 
     } catch (error) {
+        console.error(error);
+        
         // Show error notification
         toasterNotification({ type: 'error', message: 'Error: ' + error.message });
     } finally {
@@ -127,7 +126,7 @@ function generateLines(lines) {
     if (!lines && lines?.length <= 0) return ''
     return lines.map(line => {
         console.log(line.LINE_COMMENTS);
-        
+
         let desc = stripHtmlTags(line?.DESCRIPTION || '');
         return `<tr id="${line.LINE_ID}">
                     <td>

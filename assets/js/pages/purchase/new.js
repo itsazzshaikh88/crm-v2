@@ -1,114 +1,68 @@
-// ------------- ****************** ------------------
+// Global Vars
 
+// ----- ***********************************************-----------
 const chooseClientBtn = document.getElementById("choose-client-btn");
 const clientNameBtn = document.getElementById("client-name-btn");
 const clientName = document.getElementById("client-name-element");
 const clientID = document.getElementById("CLIENT_ID");
 const companyAddress = document.getElementById("COMPANY_ADDRESS");
-const billingAddress = document.getElementById("BILLING_ADDRESS");
-const shippingAddress = document.getElementById("SHIPPING_ADDRESS");
-const contactNumber = document.getElementById("MOBILE_NUMBER");
+const companyName = document.getElementById("COMPANY_NAME");
+const contactNumber = document.getElementById("CONTACT_NUMBER");
 const emailAddress = document.getElementById("EMAIL_ADDRESS");
-const requestNumber = document.getElementById("REQUEST_NUMBER");
-
-// ------------- ****************** ------------------
-
+const requestNumber = document.getElementById("REQUEST_ID")
+// -------- ********************** --------------------------------
 
 let selectedFiles = [];
 let uploadedFiles = [];
 let selectedProductElementIndex = null
 const fullPageLoader = document.getElementById("full-page-loader")
-
-
-
 // Function to add a new row
 function addRow() {
-    const tableBody = document.querySelector('#quotes-lines-table tbody');
+    const tableBody = document.querySelector('#purchase-list-tbody');
     const rowCount = tableBody.rows.length + 1;
 
     // Create a new row
     const row = document.createElement('tr');
     row.innerHTML = `
-        <td>
-            <select name="PRODUCT_ID[]" id="PRODUCT_ID_${rowCount}" class="form-control" onclick="chooseProduct(${rowCount})">
-                <option value="">Choose</option>
-            </select>
-        </td>
-                             <td>
-                                <input type="text" class="form-control" name=" DESCRIPTION[]" id="DESCRIPTION_${rowCount}" >
-                            </td>
-                            <td>
-                                <input type="number" class="form-control" name="QTY[]" id="QTY_${rowCount}"    oninput="updateTotal(${rowCount})">
-                            </td>
-                            <td>
-                                <input type="number" class="form-control" name=UNIT_PRICE[]" id="UNIT_PRICE_${rowCount}" oninput="updateTotal(${rowCount})">
-                            </td>
-                            <td>
-                                <input type="number" class="form-control" name="TOTAL[]" id="TOTAL_${rowCount}" >
-                            </td>
-                            <td>
-                                <input type="text" class="form-control" name="COLOR[]" id="COLOR_${rowCount}" >
-                            </td>
-                            <td>
-                                <input type="text" class="form-control" name="TRANSPORTATION[]" id="TRANSPORTATION_${rowCount}" ">
-                            </td>
-                            <td>
-                                <input type="text" class="form-control" name="LINE_COMMENTS[]" id="LINE_COMMENTS_${rowCount}" >
-                            </td>
-                            <td>
-            <button class="btn btn-sm border border-danger" type="button" onclick="removeRow(this)">
+       <td>
+                                        <select name="PRODUCT_ID[]" id="PRODUCT_ID_${rowCount}" class="form-control" onclick="chooseProduct(${rowCount})">
+                                            <option value="">Select</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="text" name="PRODUCT_DESC[]" id="PRODUCT_DESC_${rowCount}" class="form-control">
+                                    </td>
+                                    <td>
+                                        <input type="text" name="QTY[]" id="QTY_${rowCount}" class="form-control" oninput="updateTotal(${rowCount})">
+                                    </td>
+                                    <td>
+                                        <input type="text" name="UNIT_PRICE[]" id="UNIT_PRICE_${rowCount}" class="form-control" oninput="updateTotal(${rowCount})">
+                                    </td>
+                                    <td>
+                                        <input type="text" name="TOTAL[]" id="TOTAL_${rowCount}" class="form-control" oninput="updateTotal(${rowCount})">
+                                    </td>
+                                    <td>
+                                        <input type="text" name="COLOR[]" id="COLOR_${rowCount}" class="form-control">
+                                    </td>
+                                    <td>
+                                        <input type="text" name="TRANSPORT[]" id="TRANSPORT_${rowCount}" class="form-control">
+                                    </td>
+                                    <td>
+                                        <input type="text" name="SOC[]" id="SOC_${rowCount}" class="form-control">
+                                    </td>
+                                    <td>
+                                        <input type="text" name="REC_QTY[]" id="REC_QTY_${rowCount}" class="form-control">
+                                    </td>
+                                    <td>
+                                        <input type="text" name="BAL_QTY[]" id="BAL_QTY_${rowCount}" class="form-control">
+                                    </td>    
+                                    <td>  <button class="btn btn-sm border border-danger" type="button" onclick="removeRow(this)">
                 <i class="las la-times fs-4 cursor-pointer text-danger m-0 p-0"></i>
             </button>
         </td>
     `;
 
     tableBody.appendChild(row);
-
-}
-
-
-function calculateBillingTotals() {
-    // Get the number of rows in the table
-    let total_lines = document.querySelectorAll("#quotes-lines-table tbody tr").length;
-
-    const subtotal_input = document.getElementById("SUB_TOTAL");
-    const discount_input = document.getElementById("DISCOUNT_PERCENTAGE");
-    const tax_input = document.getElementById("TAX_PERCENTAGE");
-    const total_input = document.getElementById("TOTAL_AMOUNT");
-
-    // Initialize variables
-    let subtotal = 0;
-    let total_with_discount = 0;
-    let total_with_tax = 0;
-
-    discount_input.value = discount_input.value || 0;
-    tax_input.value = tax_input.value || 0;
-    // Loop through each row to calculate the subtotal
-    for (let i = 1; i <= total_lines; i++) {
-        let line_total =
-            parseFloat(document.getElementById(`TOTAL_${i}`).value) || 0;
-        subtotal += line_total;
-    }
-    subtotal_input.value = subtotal.toFixed(2); // Format to two decimal places
-
-    // Calculate Discount
-    let discount = parseFloat(discount_input.value) || 0;
-    let discounted_price = 0;
-    if (discount > 0) {
-        discounted_price = (subtotal * discount) / 100;
-    }
-    total_with_discount = subtotal - discounted_price;
-
-    // Calculate Tax
-    let tax_amount = 0;
-    let tax = parseFloat(tax_input.value) || 0;
-    if (tax > 0) {
-        tax_amount = (total_with_discount * tax) / 100;
-    }
-    total_with_tax = total_with_discount + tax_amount;
-
-    // Calculate Total
-    total_input.value = total_with_tax.toFixed(2);
 }
 
 // Function to remove a specific row
@@ -176,8 +130,8 @@ function removeFile(index) {
 async function submitForm(e) {
     e.preventDefault();
     const form = e.target;
+
     const formData = new FormData(form);
-    // Attach selected files
     selectedFiles.forEach(file => {
         formData.append('files[]', file);
     });
@@ -197,12 +151,10 @@ async function submitForm(e) {
             toasterNotification({ type: 'error', message: "Authorization token is missing. Please Login again to make API request." });
             return;
         }
-        const quoteID = document.getElementById("QUOTE_ID").value;
-
-
-        let url = `${APIUrl}/quotes/new`;
-        if (quoteID)
-            url += `/${quoteID}`
+        const requestID = document.getElementById("PO_ID").value;
+        let url = `${APIUrl}/purchase/new`;
+        if (requestID)
+            url += `/${requestID}`
         // Fetch API with Bearer token in Authorization header
         const response = await fetch(url, {
             method: 'POST', // or POST, depending on the API endpoint
@@ -214,14 +166,13 @@ async function submitForm(e) {
         // Check if the response is OK (status 200-299)
         if (response.ok) {
             const data = await response.json();
-            toasterNotification({ type: 'success', message: "Quotation Saved Successfully!" });
-            if (data?.type == 'insert') {
-                setTimeout(() => window.location = 'quotes/new', 1500);
-                removeClientName();
+            toasterNotification({ type: 'success', message: "PO Details Saved Successfully!" });
+            if (data?.type === 'insert') {
+                setTimeout(() => window.location = 'purchase/new', 1500);
+                removeClientName()
             }
 
             selectedFiles = [];
-            document.getElementById('file-list').innerHTML = ''
         } else {
             const errorData = await response.json();
             if (errorData.status === 422) {
@@ -258,7 +209,7 @@ function handlePagination(action) {
 function chooseProduct(index) {
     selectedProductElementIndex = index
     const element = document.getElementById(`PRODUCT_ID_${index}`)
-    const descElement = document.getElementById(`DESCRIPTION_${index}`)
+    const descElement = document.getElementById(`PRODUCT_DESC_${index}`)
     if (typeof element != undefined) {
         // remove other elements from select
         element.innerHTML = '';
@@ -319,7 +270,7 @@ async function fetchProductsForModalListing(query = null) {
 function setProductToRequestLine(productID, productName, productDesc) {
 
     const productCodeElement = document.getElementById(`PRODUCT_ID_${selectedProductElementIndex}`)
-    const productDescElement = document.getElementById(`DESCRIPTION_${selectedProductElementIndex}`)
+    const productDescElement = document.getElementById(`PRODUCT_DESC_${selectedProductElementIndex}`)
 
     let option = `<option value="${productID}">${productName}</option>`
     productCodeElement.innerHTML = option;
@@ -378,23 +329,185 @@ function filterProducts() {
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    // fetchCategories()
-
     const url = new URL(window.location.href);
     // Get all search parameters
     const searchParams = new URLSearchParams(url.search);
     // Get all URL segments
     const urlSegments = url.pathname.split('/').filter(segment => segment);
-    const quoteUUID = urlSegments[urlSegments.length - 1];
+    const poUUID = urlSegments[urlSegments.length - 1];
     // Fetch product details if action is edit and id is available
     if (searchParams.get('action') === 'edit') {
         // Your code to fetch product details
-        fetchQuotation(quoteUUID);
-
+        fetchPODetails(poUUID);
     }
 });
 
-async function fetchQuotation(quoteUUID) {
+async function fetchPODetails(poUUID) {
+    const apiUrl = `${APIUrl}/purchase/detail`;
+    const authToken = getCookie('auth_token');
+    if (!authToken) {
+        toasterNotification({
+            type: 'error',
+            message: "Authorization token is missing. Please login again to make an API request."
+        });
+        return;
+    }
+    try {
+
+        fullPageLoader.classList.toggle("d-none");
+        // Fetch product data from the API
+        const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${authToken}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ poUUID })
+        });
+
+        // Parse the JSON response
+        const data = await response.json();
+
+        // Check if the API response contains an error
+        if (!response.ok || data.status === 'error') {
+            const errorMessage = data.message || `Error: ${response.status} ${response.statusText}`;
+            throw new Error(errorMessage);
+        }
+
+        // Display the product information on the page if response is successful
+        displayPOInfo(data.data);
+
+        showClientDetails(data?.data?.header);
+
+        // Show request Number
+        document.getElementById("PO_NUMBER").innerHTML = data?.data?.header?.PO_NUMBER || "PO-00000000"
+
+        // Show uploaded files
+        // Show Product Files attached
+        if (data?.data?.header?.ATTACHMENTS) {
+            uploadedFiles = JSON.parse(data?.data?.header?.ATTACHMENTS) || []
+            displayUploadedFiles(data?.data?.header?.ID || 0);
+        }
+
+    } catch (error) {
+        // Show error notification
+        toasterNotification({ type: 'error', message: 'Error: ' + error.message });
+        console.error(error);
+
+    } finally {
+        fullPageLoader.classList.toggle("d-none");
+    }
+}
+
+function displayPOInfo(data) {
+    if (!data) return;
+    const { header, lines, quotes } = data;
+
+
+    if (Object.keys(header).length > 0) {
+        populateFormFields(header);
+    }
+
+    if (lines && Object.keys(lines).length > 0) {
+        showRequestLines(lines);
+    }
+    if (quotes && quotes.length > 0) {
+        showSelectedClientQuotes(quotes, header?.QUOTE_ID || 0);
+    }
+}
+
+function showSelectedClientQuotes(quotes, selectedRequestID) {
+
+    const quoteSelect = document.getElementById("QUOTATION_NUMBER");
+    quotes.forEach(quote => {
+        let option = `<option value="${quote.QUOTE_ID}" data-column="QUOTE_ID">${quote.QUOTE_NUMBER}</option>`
+        quoteSelect.innerHTML += option;
+    });
+    quoteSelect.value = selectedRequestID
+}
+
+
+function showRequestLines(lines) {
+    const tableBody = document.querySelector('#purchase-list-tbody');
+    tableBody.innerHTML = ''
+    let rowCount = 0;
+    lines.forEach((line) => {
+        let desc = stripHtmlTags(line?.PRODUCT_DESC || '');
+        // Create a new row
+        const row = document.createElement('tr');
+        row.innerHTML = `<td>
+                                <select name="PRODUCT_ID[]" id="PRODUCT_ID_${++rowCount}" class="form-control" onclick="chooseProduct(${rowCount})">
+                                    <option selected value="${line.PRODUCT_ID}">${line.PRODUCT_NAME}</option>
+                                </select>
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" name="PRODUCT_DESC[]" id="PRODUCT_DESC_${rowCount}" value="${escapeSpecialCharacters(desc)}">
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" name="QTY[]" id="QTY_${rowCount}" value="${line.QTY}" oninput="updateTotal(${rowCount})">
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" name="UNIT_PRICE[]" id="UNIT_PRICE_${rowCount}" value="${line.UNIT_PRICE}" oninput="updateTotal(${rowCount})">
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" name="TOTAL[]" id="TOTAL_${rowCount}" value="${line.TOTAL}" oninput="updateTotal(${rowCount})">
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" name="COLOR[]" id="COLOR_${rowCount}" value="${line.COLOR}">
+                            </td>
+                             <td>
+                                <input type="text" class="form-control" name="TRANSPORT[]" id="TRANSPORT_${rowCount}" value="${line.TRANSPORT || ''}">
+                            </td> <td>
+                                <input type="text" class="form-control" name="SOC[]" id="SOC_${rowCount}" value="${line.SOC}">
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" name="REC_QTY[]" id="REC_QTY_${rowCount}" value="${line.REC_QTY}">
+                            </td>
+                             </td> <td>
+                                <input type="text" class="form-control" name="BAL_QTY[]" id="BAL_QTY_${rowCount}" value="${line.BAL_QTY}">
+                            </td>
+                            <td>
+                                <button class="btn btn-sm border border-danger" type="button" onclick="removeRow(this)">
+                                    <i class="las la-times fs-4 cursor-pointer text-danger m-0 p-0"></i>
+                                </button>
+                            </td>
+                        `;
+
+        tableBody.appendChild(row);
+    })
+
+}
+
+function showClientDetails(header) {
+    clientID.value = header?.CLIENT_ID || 0
+    clientName.innerHTML = `${header?.FIRST_NAME || ''} ${header?.LAST_NAME || ''}`
+    chooseClientBtn.classList.toggle("d-none")
+    clientNameBtn.classList.toggle("d-none")
+}
+
+
+
+function searchProductFromModalList(event) {
+    const query = event.target.value.trim(); // Get the input value
+    prodListPaginate.currentPage = 1;
+    fetchProductsForModalListing(query);
+}
+const debouncedInput = debounce(searchProductFromModalList, 300);
+
+function clearModalFilterInputs() {
+    document.getElementById("searchInput").value = ''
+    document.getElementById("CATEGORY_ID").value = ''
+}
+
+async function fetchQuotesDetailForPurchase(quotesElement) {
+
+    const searchvalue = quotesElement.value;
+    const selectedOption = quotesElement.options[quotesElement.selectedIndex];
+    let searchkey;
+    if (selectedOption)
+        searchkey = selectedOption.getAttribute('data-column');
+
+
     const apiUrl = `${APIUrl}/quotes/detail`;
     const authToken = getCookie('auth_token');
     if (!authToken) {
@@ -415,7 +528,7 @@ async function fetchQuotation(quoteUUID) {
                 'Authorization': `Bearer ${authToken}`,
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ searchkey: "UUID", searchvalue: quoteUUID })
+            body: JSON.stringify({ searchkey, searchvalue })
         });
 
         // Parse the JSON response
@@ -425,140 +538,38 @@ async function fetchQuotation(quoteUUID) {
         if (!response.ok || data.status === 'error') {
             const errorMessage = data.message || `Error: ${response.status} ${response.statusText}`;
             throw new Error(errorMessage);
-            console.log(errorMessage);
         }
 
-        // Display the product information on the page if response is successful
         displayQuotesInfo(data.data);
 
-        showClientDetails(data?.data?.header);
-
-
-        // Show request Number
-        document.getElementById("QUOTE_NUMBER").innerHTML = data?.data?.header?.QUOTE_NUMBER || "QUO-00000000"
-
-        // Show uploaded files
-        // Show Product Files attached
-        if (data?.data?.header?.ATTACHMENTS) {
-            uploadedFiles = JSON.parse(data?.data?.header?.ATTACHMENTS) || []
-            displayUploadedFiles(data?.data?.header?.ID || 0);
-        }
-
     } catch (error) {
-        // Show error notification
-        toasterNotification({ type: 'error', message: 'Error: ' + error.message });
-        console.log(error);
+        console.error(error);
 
-    } finally {
-        fullPageLoader.classList.toggle("d-none");
-    }
-}
-
-async function fetchRequestsDetailForQuote(requestElement) {
-
-    const requestUUID = requestElement.value;
-    const selectedOption = requestElement.options[requestElement.selectedIndex];
-    let searchkey;
-    if (selectedOption)
-        searchkey = selectedOption.getAttribute('data-column');
-
-
-    const apiUrl = `${APIUrl}/requests/detail`;
-    const authToken = getCookie('auth_token');
-    if (!authToken) {
-        toasterNotification({
-            type: 'error',
-            message: "Authorization token is missing. Please login again to make an API request."
-        });
-        return;
-    }
-
-    try {
-
-        fullPageLoader.classList.toggle("d-none");
-        // Fetch product data from the API
-        const response = await fetch(apiUrl, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${authToken}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ searchkey, searchvalue: requestUUID })
-        });
-
-        // Parse the JSON response
-        const data = await response.json();
-
-        // Check if the API response contains an error
-        if (!response.ok || data.status === 'error') {
-            const errorMessage = data.message || `Error: ${response.status} ${response.statusText}`;
-            throw new Error(errorMessage);
-        }
-
-
-
-        // // Display the product information on the page if response is successful
-        displayRequestInfo(data.data);
-
-    } catch (error) {
         // Show error notification
         toasterNotification({ type: 'error', message: 'Error: ' + error.message });
     } finally {
         fullPageLoader.classList.toggle("d-none");
     }
 }
-
-
 
 function displayQuotesInfo(data) {
     if (!data) return;
-    const { header, lines, requests } = data;
+    const { header, lines } = data;
 
-    if (Object.keys(header).length > 0) {
-        populateFormFields(header);
-    }
+    if (header?.REQUEST_NUMBER)
+        requestNumber.value = header.REQUEST_NUMBER;
 
     if (lines && Object.keys(lines).length > 0) {
         showQuoteLines(lines);
     }
-
-    if (requests && requests.length > 0) {
-        showSelectedClientRequests(requests, header?.REQUEST_ID || 0);
-    }
 }
-function showSelectedClientRequests(requests, selectedRequestID) {
-
-    const requestSelect = document.getElementById("REQUEST_NUMBER");
-    requests.forEach(request => {
-        let option = `<option value="${request.ID}" data-column="ID">${request.REQUEST_NUMBER}</option>`
-        requestSelect.innerHTML += option;
-    });
-    requestSelect.value = selectedRequestID
-}
-
-
-function displayRequestInfo(data) {
-    if (!data) return;
-    const { header, lines } = data;
-
-    /// manually show information
-    document.getElementById("COMPANY_ADDRESS").value = header?.COMPANY_ADDRESS;
-
-    if (lines && Object.keys(lines).length > 0) {
-        showRequestLines(lines);
-    }
-}
-
-
-// WHEN WE FETCH REQUSET IN QUOTATION
-function showRequestLines(lines) {
-    const tableBody = document.querySelector('#quotes-lines-table tbody');
+function showQuoteLines(lines) {
+    const tableBody = document.querySelector('#purchase-line-table tbody');
     tableBody.innerHTML = ''
     let rowCount = 0;
     lines.forEach((line) => {
         let desc = stripHtmlTags(line?.DESCRIPTION || '');
         // Create a new row
-
         const row = document.createElement('tr');
         row.innerHTML = `<td>
                                 <select name="PRODUCT_ID[]" id="PRODUCT_ID_${++rowCount}" class="form-control" onclick="chooseProduct(${rowCount})">
@@ -569,22 +580,28 @@ function showRequestLines(lines) {
                                 <input type="text" class="form-control" name="PRODUCT_DESC[]" id="PRODUCT_DESC_${rowCount}" value="${escapeSpecialCharacters(desc)}">
                             </td>
                             <td>
-                                <input type="number" class="form-control" name="QTY[]" id="QTY_${rowCount}" value="${line.QUANTITY}"   oninput="updateTotal(${rowCount})">
+                                <input type="number" class="form-control" name="QTY[]" id="QTY_${rowCount}" value="${line.QTY}" oninput="updateTotal(${rowCount})">
                             </td>
                             <td>
-                                <input type="number" class="form-control" name="UNIT_PRICE[]" id="UNIT_PRICE_${rowCount}" value="${line.BASE_PRICE}"  oninput="updateTotal(${rowCount})">
+                                <input type="number" class="form-control" name="UNIT_PRICE[]" id="UNIT_PRICE_${rowCount}" value="${line.UNIT_PRICE}" oninput="updateTotal(${rowCount})">
                             </td>
                             <td>
-                                <input type="number" class="form-control" name="TOTAL[]" id="TOTAL_${rowCount}" value="">
+                                <input type="number" class="form-control" name="TOTAL[]" id="TOTAL_${rowCount}" value="${line.TOTAL}" oninput="updateTotal(${rowCount})">
                             </td>
                             <td>
                                 <input type="text" class="form-control" name="COLOR[]" id="COLOR_${rowCount}" value="${line.COLOR}">
                             </td>
                             <td>
-                                <input type="text" class="form-control" name="TRANSPORTATION[]" id="TRANSPORTATION_${rowCount}" value="${line.TRANSPORTATION}">
+                                <input type="text" class="form-control" name="TRANSPORTATION[]" id="TRANSPORTATION_${rowCount}" value="${line.TRANSPORTATION != 'null' && line.TRANSPORTATION != null ? line.TRANSPORTATION : ''}">
                             </td>
                             <td>
-                                <input type="text" class="form-control" name="LINE_COMMENTS[]" id="LINE_COMMENTS_${rowCount}" value="${line.COMMENTS}">
+                                <input type="text" class="form-control" name="SOC[]" id="SOC_${rowCount}" value="">
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" name="REC_QTY[]" id="REC_QTY_${rowCount}" value="">
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" name="BAL_QTY[]" id="BAL_QTY_${rowCount}" value="">
                             </td>
                             <td>
                                 <button class="btn btn-sm border border-danger" type="button" onclick="removeRow(this)">
@@ -594,72 +611,105 @@ function showRequestLines(lines) {
                         `;
 
         tableBody.appendChild(row);
-        updateTotal(rowCount)
-    })
+    });
+
+    // Calculate Total
+    calculateTotals()
 
 }
 
-function showQuoteLines(lines) {
-    const tableBody = document.querySelector('#quotes-lines-table tbody');
-    tableBody.innerHTML = ''
-    let rowCount = 0;
-    lines.forEach((line) => {
-        let desc = stripHtmlTags(line?.DESCRIPTION || '');
-        // Create a new row
-        const row = document.createElement('tr');
-        row.innerHTML = `<td>
-                                <select name="PRODUCT_ID[]" id="PRODUCT_ID_${++rowCount}" class="form-control" onclick="chooseProduct(${rowCount})">
-                                    <option selected value="${line.PRODUCT_ID}">${line.PRODUCT_NAME}</option>
-                                </select>
-                            </td>
-                            <td>
-                                <input type="text" class="form-control" name="DESCRIPTION[]" id="DESCRIPTION_${rowCount}" value="${escapeSpecialCharacters(desc)}">
-                            </td>
-                            <td>
-                                <input type="number" class="form-control" name="QTY[]" id="QTY_${rowCount}" value="${line.QTY}"   oninput="updateTotal(${rowCount})">
-                            </td>
-                            <td>
-                                <input type="number" class="form-control" name="UNIT_PRICE[]" id="UNIT_PRICE_${rowCount}" value="${line.UNIT_PRICE}"  oninput="updateTotal(${rowCount})">
-                            </td>
-                            <td>
-                                <input type="number" class="form-control" name="TOTAL[]" id="TOTAL_${rowCount}" value="${line.TOTAL}">
-                            </td>
-                            <td>
-                                <input type="text" class="form-control" name="COLOR[]" id="COLOR_${rowCount}" value="${line.COLOR}">
-                            </td>
-                            <td>
-                                <input type="text" class="form-control" name="TRANSPORTATION[]" id="TRANSPORTATION_${rowCount}" value="${line.TRANSPORTATION}">
-                            </td>
-                            <td>
-                                <input type="text" class="form-control" name="LINE_COMMENTS[]" id="LINE_COMMENTS_${rowCount}" value="${line.LINE_COMMENTS}">
-                            </td>
-                            <td>
-                                <button class="btn btn-sm border border-danger" type="button" onclick="removeRow(this)">
-                                    <i class="las la-times fs-4 cursor-pointer text-danger m-0 p-0"></i>
-                                </button>
-                            </td>
-                        `;
+// Set and Toggle clients
+function setClient(clientid) {
+    const client = fetchedClients[clientid];
+    clientID.value = ''
+    clientName.innerHTML = 'Client Name Here ...'
+    companyAddress.value = ''
+    companyName.value = ''
+    contactNumber.value = ''
+    emailAddress.value = ''
+    if (client) {
+        clientID.value = client?.ID || 0
+        clientName.innerHTML = `${client?.FIRST_NAME || ''} ${client?.LAST_NAME || ''}`
+        companyAddress.value = `${client?.ADDRESS_LINE_1 || ''}`
+        companyName.value = `${client?.COMPANY_NAME || ''}`
+        contactNumber.value = `${client?.PHONE_NUMBER || ''}`
+        emailAddress.value = `${client?.EMAIL || ''}`
+    }
+    myModal.hide();
+    // Toggle Buttons
+    chooseClientBtn.classList.toggle("d-none")
+    clientNameBtn.classList.toggle("d-none")
 
-        tableBody.appendChild(row);
+    fetchClientQuotes(client?.ID);
+}
 
-
-    })
+function calculateTotals() {
+    // Select all elements with the name attribute 'TOTAL[]'
+    const totalElements = document.querySelectorAll('[name="TOTAL[]"]');
+    let subtotal = 0;
+    // Log or perform actions on the selected elements
+    totalElements && totalElements.forEach((element, index) => {
+        subtotal += parseFloat(element.value || 0);
+    });
+    document.getElementById("SUBTOTAL").value = subtotal;
+    calculateBillingTotals()
 
 }
 
-function numberInput(input) {
-    // Get the value of the input
-    input.value = input.value.replace(/[^0-9]/g, "");
+// Fetch clients request
+async function fetchClientQuotes(ClientID) {
+    if (!clientID) {
+        toasterNotification({ type: 'error', message: `Invalid Client ID` });
+        return;
+    }
+
+    try {
+        // Retrieve the auth_token from cookies
+        const authToken = getCookie('auth_token');
+        if (!authToken) {
+            toasterNotification({ type: 'error', message: errorData.message ?? 'Internal Server Error' });
+            return;
+        }
+        const url = `${APIUrl}/quotes/clientsQuotes/${ClientID}`;
+
+        // Await the response from fetch
+        const response = await fetch(url, {
+            method: 'GET', // or POST, depending on the API endpoint
+            headers: {
+                'Authorization': `Bearer ${authToken}`
+            },
+        });
+        // Check if the response is OK
+        if (!response.ok) {
+            throw new Error("Network response was not ok " + response.statusText);
+        }
+        // Await the parsing of the JSON data
+        const data = await response.json();
+        const quotes = data?.data || [];
+        let str = "<option>Select Quote Number</option>";
+        if (quotes.length > 0) {
+            quotes.forEach((req) => {
+                str += `<option value="${req.QUOTE_ID}" data-column="QUOTE_ID">${req.QUOTE_NUMBER}</option>`;
+            });
+        }
+        document.getElementById("QUOTATION_NUMBER").innerHTML = str;
+    } catch (error) {
+        console.error(error);
+
+        toasterNotification({ type: 'error', message: `There was a problem with the fetch operation: ${error}` });
+
+    }
 }
-
-
 function updateTotal(rowCount) {
+
+    console.log('this is rowcount', rowCount);
+
+
     const quantityField = document.getElementById(`QTY_${rowCount}`);
     const unitPriceField = document.getElementById(`UNIT_PRICE_${rowCount}`);
     const totalField = document.getElementById(`TOTAL_${rowCount}`);
 
     if (!quantityField || !unitPriceField || !totalField) {
-        console.error("One or more fields are missing for row:", rowCount);
         return;
     }
 
@@ -678,175 +728,76 @@ function updateTotal(rowCount) {
 }
 
 
+function calculateBillingTotals() {
+    // Get the number of rows in the table
+    let total_lines = document.querySelectorAll("#purchase-line-table tbody tr").length;
 
-function showClientDetails(header) {
-    clientID.value = header?.CLIENT_ID || 0
-    clientName.innerHTML = `${header?.FIRST_NAME || ''} ${header?.LAST_NAME || ''}`
-    chooseClientBtn.classList.toggle("d-none")
-    clientNameBtn.classList.toggle("d-none")
-}
+    const subtotal_input = document.getElementById("SUBTOTAL");
+    const discount_input = document.getElementById("DISCOUNT_PERCENTAGE");
+    const tax_input = document.getElementById("TAX_PERCENTAGE");
+    const total_input = document.getElementById("TOTAL_AMOUNT");
 
+    // Initialize variables
+    let subtotal = 0;
+    let total_with_discount = 0;
+    let total_with_tax = 0;
 
-async function fetchCategories() {
-    const categoryList = document.getElementById("CATEGORY_ID");
-
-    // Disable the select dropdown and show the loading label with animation
-    categoryList.disabled = true;
-
-    // Retrieve the auth_token from cookies
-    const authToken = getCookie('auth_token');
-    if (!authToken) {
-        toasterNotification({ type: 'error', message: errorData.message ?? 'Internal Server Error' });
-        return;
+    discount_input.value = discount_input.value || 0;
+    tax_input.value = tax_input.value || 0;
+    // Loop through each row to calculate the subtotal
+    for (let i = 1; i <= total_lines; i++) {
+        let line_total =
+            parseFloat(document.getElementById(`TOTAL_${i}`).value) || 0;
+        subtotal += line_total;
     }
+    subtotal_input.value = subtotal.toFixed(2); // Format to two decimal places
 
-    try {
-        // Fetch categories from the API (replace 'your-api-endpoint' with the actual API URL)
-        const response = await fetch(`${APIUrl}/categories/list`, {
-            method: 'GET', // or POST, depending on the API endpoint
-            headers: {
-                'Authorization': `Bearer ${authToken}`,
-            },
-        });
-
-        // Check if the response is okay (status code 200-299)
-        if (!response.ok) {
-            throw new Error('Failed to fetch categories');
-        }
-
-        // Parse the JSON response
-        const categories = await response.json();
-
-        // Clear existing options
-        categoryList.innerHTML = '<option value="">Choose Category</option>';
-
-        // Populate the <select> with category options
-        categories.forEach(category => {
-            const option = document.createElement("option");
-            option.value = category.ID; // Adjust to match the category ID key
-            option.textContent = category.CATEGORY_CODE; // Adjust to match the category name key
-            categoryList.appendChild(option);
-        });
-    } catch (error) {
-        toasterNotification({ type: 'error', message: error });
-    } finally {
-        // Re-enable the select dropdown and hide the loading label
-        categoryList.disabled = false;
+    // Calculate Discount
+    let discount = parseFloat(discount_input.value) || 0;
+    let discounted_price = 0;
+    if (discount > 0) {
+        discounted_price = (subtotal * discount) / 100;
     }
-}
+    total_with_discount = subtotal - discounted_price;
 
-function searchProductFromModalList(event) {
-    const query = event.target.value.trim(); // Get the input value
-    prodListPaginate.currentPage = 1;
-    fetchProductsForModalListing(query);
-}
-const debouncedInput = debounce(searchProductFromModalList, 300);
-
-function clearModalFilterInputs() {
-    document.getElementById("searchInput").value = ''
-    document.getElementById("CATEGORY_ID").value = ''
-}
-
-// Set client detail after selecting from the modals
-
-// Set and Toggle clients
-function setClient(clientid) {
-    const client = fetchedClients[clientid];
-    clientID && (clientID.value = '');
-    clientName && (clientName.innerHTML = 'Client Name Here ...');
-    companyAddress && (companyAddress.value = '');
-    contactNumber && (contactNumber.value = '');
-    emailAddress && (emailAddress.value = '');
-
-    if (client) {
-        clientID && (clientID.value = client?.ID || 0)
-        clientName && (clientName.innerHTML = `${client?.FIRST_NAME || ''} ${client?.LAST_NAME || ''}`)
-        companyAddress && (companyAddress.value = `${client?.COMPANY_NAME || ''}`)
-        contactNumber && (contactNumber.value = `${client?.PHONE_NUMBER || ''}`)
-        emailAddress && (emailAddress.value = `${client?.EMAIL || ''}`)
+    // Calculate Tax
+    let tax_amount = 0;
+    let tax = parseFloat(tax_input.value) || 0;
+    if (tax > 0) {
+        tax_amount = (total_with_discount * tax) / 100;
     }
-    myModal.hide();
-    // Toggle Buttons
-    chooseClientBtn.classList.toggle("d-none")
-    clientNameBtn.classList.toggle("d-none")
+    total_with_tax = total_with_discount + tax_amount;
 
-    fetchClientRequests(client?.ID);
+    // Calculate Total
+    total_input.value = total_with_tax.toFixed(2);
 }
-
 
 function removeClientName() {
     clientID && (clientID.value = '');
     requestNumber && (requestNumber.value = '');
     clientName && (clientName.innerHTML = 'Client Name Here ...');
     companyAddress && (companyAddress.value = '');
-    billingAddress && (billingAddress.value = '');
-    shippingAddress && (shippingAddress.value = '');
     contactNumber && (contactNumber.value = '');
     emailAddress && (emailAddress.value = '');
     chooseClientBtn.classList.toggle("d-none")
     clientNameBtn.classList.toggle("d-none")
 
-    document.getElementById("REQUEST_NUMBER").innerHTML = '<option>Select Request Number</option>';
+    document.getElementById("QUOTATION_NUMBER").innerHTML = '<option>Select Request Number</option>';
 
     // Clear product details
-    const productTableBody = document.querySelector("#quotes-lines-table tbody"); // Assuming a table structure
+    const productTableBody = document.querySelector("#purchase-lines-table tbody"); // Assuming a table structure
     if (productTableBody) {
         productTableBody.innerHTML = ''; // Remove all rows from the product table
     }
 
-    const subtotalInput = document.getElementById("SUB_TOTAL");
+    const subtotalInput = document.getElementById("SUBTOTAL");
     const discountInput = document.getElementById("DISCOUNT_PERCENTAGE");
     const taxInput = document.getElementById("TAX_PERCENTAGE");
     const totalInput = document.getElementById("TOTAL_AMOUNT");
 
     // Reset billing totals
-    subtotalInput && (subtotalInput.value = '');
-    discountInput && (discountInput.value = '');
-    taxInput && (taxInput.value = '');
-    totalInput && (totalInput.value = '');
-}
-
-// Fetch clients request
-async function fetchClientRequests(ClientID) {
-    if (!clientID) {
-        toasterNotification({ type: 'error', message: `Invalid Client ID` });
-        return;
-    }
-
-    try {
-        // Retrieve the auth_token from cookies
-        const authToken = getCookie('auth_token');
-        if (!authToken) {
-            toasterNotification({ type: 'error', message: errorData.message ?? 'Internal Server Error' });
-            return;
-        }
-        const url = `${APIUrl}/quotes/fetchClientRequests/${ClientID}`;
-
-        // Await the response from fetch
-        const response = await fetch(url, {
-            method: 'GET', // or POST, depending on the API endpoint
-            headers: {
-                'Authorization': `Bearer ${authToken}`
-            },
-        });
-        // Check if the response is OK
-        if (!response.ok) {
-            throw new Error("Network response was not ok " + response.statusText);
-        }
-        // Await the parsing of the JSON data
-        const data = await response.json();
-        const requests = data?.data || [];
-        let str = "<option>Select Request</option>";
-        if (requests.length > 0) {
-            requests.forEach((req) => {
-                str += `<option value="${req.ID}" data-column="ID">${req.REQUEST_NUMBER}</option>`;
-            });
-        }
-        document.getElementById("REQUEST_NUMBER").innerHTML = str;
-    } catch (error) {
-        console.error(error);
-
-        toasterNotification({ type: 'error', message: `There was a problem with the fetch operation: ${error}` });
-
-    }
+    subtotalInput && (subtotalInput.value = '0');
+    discountInput && (discountInput.value = '0');
+    taxInput && (taxInput.value = '0');
+    totalInput && (totalInput.value = '0');
 }

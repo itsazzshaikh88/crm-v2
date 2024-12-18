@@ -200,6 +200,52 @@ class Quotes_model extends App_Model
         return $data;
     }
 
+    public function get_quote_by_searchkey($searchkey, $searchvalue)
+    {
+        $data = ['header' => [], 'lines' => [], 'requests' => []];
+
+        if ($searchkey) {
+            // Fetch product details
+            $data['header'] = $this->db->select("qu.QUOTE_ID,qu.REQUEST_ID,qu.QUOTE_NUMBER, qu.UUID, qu.CLIENT_ID, qu.QUOTE_STATUS, qu.JOB_TITLE, qu.SALES_PERSON, qu.EMPLOYEE_NAME, qu.COMPANY_ADDRESS, qu.EMAIL_ADDRESS,  
+            qu.MOBILE_NUMBER, qu.CURRENCY, qu.PAYMENT_TERM, qu.SUB_TOTAL, qu.DISCOUNT_PERCENTAGE, qu.TAX_PERCENTAGE, qu.TOTAL_AMOUNT, qu.COMMENTS, qu.INTERNAL_NOTES, qu.ATTACHMENTS, 
+            cl.COMPANY_NAME, u.FIRST_NAME, u.LAST_NAME, u.EMAIL, CONCAT(u.FIRST_NAME, ' ', u.LAST_NAME) as FULLNAME, rh.REQUEST_NUMBER")
+                ->from('xx_crm_quotations qu')
+                ->join('xx_crm_client_detail cl', 'cl.USER_ID = qu.CLIENT_ID', 'inner')
+                ->join('xx_crm_users u', 'u.ID = qu.CLIENT_ID', 'inner')
+                ->join('xx_crm_req_header rh', 'rh.CLIENT_ID = qu.CLIENT_ID', 'inner') // Join with xx_crm_req_header
+                ->where('qu.' . $searchkey, $searchvalue)
+                ->get()
+                ->row_array();
+
+            // Fetch inventory details if product exists and has a PRODUCT_ID
+            if (isset($data['header']['QUOTE_ID'])) {
+                // if (isset($data['header']['UUID'])) { 
+
+                $data['lines'] = $this->db
+                    ->select('ql.LINE_ID, ql.QUOTE_ID, ql.PRODUCT_ID, ql.DESCRIPTION, ql.QTY, ql.UNIT_PRICE, ql.TOTAL,
+                          ql.COLOR, ql.TRANSPORTATION, ql.LINE_COMMENTS, pr.PRODUCT_CODE,pr.PRODUCT_NAME, pr.DESCRIPTION')
+                    ->from('xx_crm_quotation_lines ql')
+                    ->join('xx_crm_products pr', 'pr.PRODUCT_ID = ql.PRODUCT_ID', 'left')
+                    ->where('ql.QUOTE_ID', $data['header']['QUOTE_ID'])
+                    ->order_by('ql.LINE_ID')
+                    ->get()
+                    ->result_array(); // Fetch the result as an array of associative arrays
+
+                // Fetch requests details
+                $data['requests'] = $this->db
+                    ->select('rh.ID, rh.REQUEST_NUMBER, rh.REQUEST_TITLE, rh.COMPANY_ADDRESS, rh.BILLING_ADDRESS, rh.SHIPPING_ADDRESS, rh.CONTACT_NUMBER, 
+                    rh.EMAIL_ADDRESS, rh.REQUEST_DETAILS, rh.INTERNAL_NOTES, rh.ATTACHMENTS')
+                    ->from('xx_crm_req_header rh')
+                    ->where('rh.CLIENT_ID', $data['header']['CLIENT_ID'])
+                    ->order_by('rh.ID')
+                    ->get()
+                    ->result_array();
+            }
+        }
+
+        return $data;
+    }
+
     public function delete_quote_by_id($requestID)
     {
         $this->db->trans_start();
@@ -312,6 +358,11 @@ class Quotes_model extends App_Model
     function fetchClientRequests($ClientID)
     {
         return $this->db->query("select ID, UUID , REQUEST_NUMBER from xx_crm_req_header where CLIENT_ID = $ClientID")->result_array();
+    }
+
+    function fetchClientQuotes($ClientID)
+    {
+        return $this->db->query("select QUOTE_ID, UUID , QUOTE_NUMBER from xx_crm_quotations where CLIENT_ID = $ClientID")->result_array();
     }
 
 

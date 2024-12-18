@@ -119,8 +119,9 @@ function showFieldContent(data) {
                 if (element) {
                     if (['null', '', ' ', "", "\"\""].includes(data[key]))
                         element.innerHTML = '';
-                    else
-                        element.innerHTML = capitalizeWords(data[key], true);
+                    else {
+                        element.innerHTML = data[key] != '' && data[key] != 'null' ? capitalizeWords(data[key], true) : '';
+                    }
                 }
             }
         }
@@ -128,7 +129,8 @@ function showFieldContent(data) {
 }
 
 function capitalizeWords(str, capitalizeAll = false) {
-    str = str.toLowerCase();
+    if (str != null && str != 'null' && str != '')
+        str = str.toLowerCase();
     // Validate input
     if (typeof str !== 'string' || str.trim() === '') {
         return ''; // Return an empty string if input is not a valid string
