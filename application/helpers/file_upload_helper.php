@@ -56,3 +56,39 @@ function upload_multiple_files($files, $uploadPath, $allowedTypes = [], $maxSize
     // Return the array of filenames or null if none were uploaded
     return !empty($uploadedFiles) ? $uploadedFiles : null;
 }
+
+function upload_single_file($file, $uploadPath, $allowedTypes = [], $maxSize = 1024)
+{
+    // Load the CodeIgniter instance
+    $CI = &get_instance();
+    $CI->load->library('upload');
+
+    // Create the upload directory if it doesn't exist
+    if (!is_dir($uploadPath)) {
+        mkdir($uploadPath, 0755, true);
+    }
+
+    // Check if a file is uploaded
+    if (!empty($file['name'])) {
+        // Set upload config
+        $config['upload_path'] = $uploadPath;
+        $config['allowed_types'] = implode('|', $allowedTypes); // Allowed file types
+        $config['max_size'] = $maxSize; // Maximum file size in KB
+        $config['file_name'] = time() . '_' . $file['name']; // Optional: Set a custom filename
+
+        $CI->upload->initialize($config);
+
+        // Attempt to upload the file
+        if ($CI->upload->do_upload('file')) {
+            // Get uploaded data
+            $uploadData = $CI->upload->data();
+            return $uploadData['file_name']; // Return the uploaded filename
+        } else {
+            // Handle error (e.g., return the error message)
+            return null;
+        }
+    }
+
+    // If no file is uploaded, return null or an appropriate response
+    return null;
+}

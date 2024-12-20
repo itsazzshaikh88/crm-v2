@@ -3,6 +3,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Financial extends App_Controller
 {
+    public function __construct()
+    {
+        parent::__construct();
+    }
     public function index()
     {
         $data['view_path'] = 'pages/financial/financial-report';
@@ -43,12 +47,51 @@ class Financial extends App_Controller
         $data['navlink'] = 'financial';
         $this->load->view('layout', $data);
     }
-    public function credit_application()
+    public function credit_application($uuid = null)
     {
-        $data['view_path'] = 'pages/financial/credit-application';
-        $data['page_title'] = 'Customer Credit Application - CRM Application';
-        $data['page_heading'] = 'Customer Credit Application';
+
+        $this->validateUUID();
+        $data['uuid'] = $uuid;
+        $data['view_path'] = 'pages/financial/credit_application/new';
+        $data['page_title'] = 'Customer Credit - CRM Application';
+        $data['page_heading'] = 'Application For the Credit Facility';
+        $data['css_files'] = ['assets/css/pages/financial/credit_application.css'];
+        $data['scripts'] = [
+            'assets/js/pages/financial/credit_application.js',
+            'assets/js/pages/print/application.js'
+        ];
+        $data['toolbar'] = ['name' => 'list-credit', 'action' => 'form'];
         $data['navlink'] = 'financial';
+        $this->load->view('layout', $data);
+    }
+
+
+
+    public function list()
+    {
+        $data['view_path'] = 'pages/financial/credit_application/list';
+        $data['page_title'] = 'Credit - List';
+        $data['page_heading'] = 'All Credit';
+        $data['navlink'] = 'financial';
+        $data['toolbar'] = ['name' => 'list-credit', 'action' => 'list'];
+        $data['scripts'] = [
+            'assets/js/pages/financial/list.js',
+            'assets/js/pages/print/application.js'
+        ];
+        $this->load->view('layout', $data);
+    }
+
+
+    public function view($uuid = null)
+    {
+        $data['uuid'] = $uuid;
+        $data['view_path'] = 'pages/financial/credit_application/view';
+        $data['page_title'] = 'Credit Details - CRM Application';
+        $data['page_heading'] = 'Credit Details';
+        $data['navlink'] = 'financial';
+        $data['css_files'] = [];
+        $data['scripts'] = ['assets/js/pages/financial/view.js'];
+        $data['toolbar'] = ['name' => 'list-credit', 'action' => 'view'];
         $this->load->view('layout', $data);
     }
 }

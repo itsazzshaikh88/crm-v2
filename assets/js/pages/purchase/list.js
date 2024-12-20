@@ -8,7 +8,6 @@ function renderNoResponseCode(option, isAdmin = false) {
                                     </div>
                                 </td>
                             </tr>`;
-
     return noCotent;
 }
 

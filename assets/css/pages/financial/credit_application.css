@@ -1,0 +1,12 @@
+h3, h4, h5{
+    font-weight: normal;
+}
+
+
+.arabic-text-size{
+font-size: 18px;
+}
+
+#FINANCE_NO, #APPROVED_NO{
+    margin-left: 10px;
+}

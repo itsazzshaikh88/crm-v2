@@ -497,6 +497,55 @@ function getSkeletonStructure(list) {
                                     </div>
                                 </td>
                 </tr>`
+
+    if (list === 'credit')
+        return `<tr class="skeleton-loader">
+    <td class="text-center">
+        <!-- Placeholder for Serial Number -->
+        <div class="skeleton-box" style="width: 20px; height: 20px;"></div>
+    </td>
+    <td>
+        <!-- Placeholder for Comment -->
+        <div class="d-flex">
+            <div>
+                <div class="skeleton-box" style="width: 150px; height: 20px; margin-bottom: 5px;"></div>
+                <br />
+                <div class="skeleton-box" style="width: 120px; height: 14px;"></div>
+            </div>
+        </div>
+    </td>
+    <td>
+        <!-- Placeholder for Company Details -->
+        <div class="d-flex">
+            <div>
+                <div class="skeleton-box" style="width: 150px; height: 20px; margin-bottom: 5px;"></div>
+                <div class="skeleton-box" style="width: 120px; height: 14px; margin-bottom: 5px;"></div>
+            </div>
+        </div>
+    </td>
+    <td>
+        <!-- Placeholder for Contact Number -->
+        <div class="skeleton-box" style="width: 100px; height: 20px;"></div>
+    </td>
+    <td>
+        <!-- Placeholder for Email -->
+        <div class="skeleton-box" style="width: 150px; height: 20px;"></div>
+    </td>
+    <td>
+        <!-- Placeholder for Date -->
+        <div class="skeleton-box" style="width: 120px; height: 20px;"></div>
+    </td>
+    <td class="text-end">
+        <!-- Placeholder for Action Icons -->
+        <div class="d-flex align-items-center justify-content-end gap-4">
+            <div class="skeleton-box" style="width: 20px; height: 20px;"></div>
+            <div class="skeleton-box" style="width: 20px; height: 20px;"></div>
+            <div class="skeleton-box" style="width: 20px; height: 20px;"></div>
+            <div class="skeleton-box" style="width: 20px; height: 20px;"></div>
+        </div>
+    </td>
+</tr>
+`
 }
 
 function clientListModalSkeleton(container, rows) {

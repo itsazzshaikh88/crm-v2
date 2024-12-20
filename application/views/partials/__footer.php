@@ -75,6 +75,7 @@ $cpyright_years = ($start_year == $current_year) ? $current_year : "$start_year-
     const REQUEST_DOCS_URL = `${baseUrl}uploads/requests/`;
 
     const loginUserType = "<?= $loggedInUser['usertype'] ?? 'Guest' ?>";
+    const loginUserID = "<?= $loggedInUser['userid'] ?? '0' ?>";
     if (loginUserType) {
         localStorage.setItem("usertype", btoa(loginUserType))
     }
