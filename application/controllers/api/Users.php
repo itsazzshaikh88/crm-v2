@@ -464,4 +464,57 @@ class Users extends Api_controller
             ]);
         }
     }
+
+    // Get User profile from token
+    public function user()
+    {
+        // Check if the authentication is valid
+        $isAuthorized = $this->isAuthorized();
+        if (!$isAuthorized['status']) {
+            $this->output
+                ->set_status_header(401) // Set HTTP response status to 400 Bad Request
+                ->set_content_type('application/json')
+                ->set_output(json_encode(['error' => 'Unauthorized access. You do not have permission to perform this action.']))
+                ->_display();
+            exit;
+        };
+
+
+        // Validate input and check if `productUUID` is provided
+        if (!$isAuthorized['userid']) {
+            return $this->output
+                ->set_status_header(400)
+                ->set_content_type('application/json')
+                ->set_output(json_encode([
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'Invalid User ID'
+                ]));
+        }
+
+        $user = $this->User_model->get_user_by_id($isAuthorized['userid']);
+
+        // Check if product data exists
+        if (empty($user)) {
+            return $this->output
+                ->set_status_header(404)
+                ->set_content_type('application/json')
+                ->set_output(json_encode([
+                    'status' => 'error',
+                    'code' => 404,
+                    'message' => 'User Not Found with the provided token'
+                ]));
+        }
+
+        // Successful response with product data
+        return $this->output
+            ->set_status_header(200)
+            ->set_content_type('application/json')
+            ->set_output(json_encode([
+                'status' => 'success',
+                'code' => 200,
+                'message' => 'User details retrieved successfully',
+                'user' => $user
+            ]));
+    }
 }
