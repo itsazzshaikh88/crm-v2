@@ -498,6 +498,49 @@ function getSkeletonStructure(list) {
                                 </td>
                 </tr>`
 
+    if (list === 'users')
+        return `<tr class="skeleton-loader">
+                    <td class="text-center">
+                        <!-- Placeholder for Serial Number -->
+                        <div class="skeleton-box" style="width: 20px; height: 20px;"></div>
+                    </td>
+                    <td class="pe-0">
+                        <!-- Placeholder for User Name and ID -->
+                        <div>
+                            <div class="skeleton-box" style="width: 150px; height: 20px; margin-bottom: 5px;"></div>
+                            <div class="skeleton-box" style="width: 100px; height: 14px;"></div>
+                        </div>
+                    </td>
+                    <td class="pe-0">
+                        <!-- Placeholder for Role -->
+                        <div class="skeleton-box" style="width: 80px; height: 20px;"></div>
+                    </td>
+                    <td class="pe-0">
+                        <!-- Placeholder for Email -->
+                        <div class="skeleton-box" style="width: 150px; height: 20px;"></div>
+                    </td>
+                    <td class="pe-0">
+                        <!-- Placeholder for Phone Number -->
+                        <div class="skeleton-box" style="width: 100px; height: 20px;"></div>
+                    </td>
+                    <td class="pe-0">
+                        <!-- Placeholder for Status -->
+                        <div class="skeleton-box" style="width: 80px; height: 20px;"></div>
+                    </td>
+                    <td class="pe-0 text-center">
+                        <!-- Placeholder for Verification Status -->
+                        <div class="skeleton-box" style="width: 60px; height: 20px;"></div>
+                    </td>
+                    <td class="text-end">
+                        <!-- Placeholder for Action Icons -->
+                        <div class="d-flex align-items-center justify-content-end gap-4">
+                            <div class="skeleton-box" style="width: 20px; height: 20px;"></div>
+                            <div class="skeleton-box" style="width: 20px; height: 20px;"></div>
+                        </div>
+                    </td>
+                </tr>
+                `
+
     if (list === 'credit')
         return `<tr class="skeleton-loader">
     <td class="text-center">
@@ -632,6 +675,20 @@ function appendSkeletonContent({
             element.insertAdjacentHTML("beforeend", skeletonHTML);
             break;
     }
+}
+
+function generateSkeletonHTML({
+    elementId,
+    skeletonType = "default"
+}) {
+    const element = document.getElementById(elementId);
+
+    if (!element) {
+        console.error(`Element with ID "${elementId}" not found.`);
+        return;
+    }
+    const skeletonHTML = generateSkeletonHTML(skeletonType);
+    element.innerHTML(skeletonHTML);
 }
 
 // Helper function to generate skeleton HTML dynamically

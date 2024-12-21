@@ -3,6 +3,16 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Account extends App_Controller
 {
+	public function index()
+	{
+		$data['view_path'] = 'pages/account/layout';
+		$data['sub_view_path'] = 'pages/account/overview';
+		$data['page_title'] = 'Profile Details - Fixed Assets Application';
+		$data['page_heading'] = 'Profile Details';
+		$data['navlink'] = ['main-link' => 'account', 'sub-link' => 'overview'];
+		$data['scripts'] = ['assets/js/pages/accounts/overview.js'];
+		$this->load->view('layout', $data);
+	}
 	public function settings()
 	{
 		$data['view_path'] = 'pages/account/layout';

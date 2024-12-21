@@ -27,27 +27,19 @@ function setActiveLink($selected, $current)
                 <div class="fs-6 fw-semibold text-gray-500 mb-2">
                     <?= $loggedInUser['email'] ?? 'guest@email.live' ?> </div>
                 <!--end::Position-->
-
-                <!--begin::Actions-->
-                <?php
-                $usertype = $loggedInUser['usertype'] ?? 'guest';
-                ?>
-                <div class="d-flex flex-center">
-                    <a href="javascript:void(0)" class="btn btn-sm btn-light-<?= $usertype === 'admin' ? "primary" : "info" ?> py-2 px-4 fw-bold me-2" data-kt-drawer-show="true" data-kt-drawer-target="#kt_drawer_chat"><?= ucfirst($usertype) ?></a>
-                </div>
-                <!--end::Actions-->
             </div>
             <!--end::Summary-->
 
             <!--begin::Menu-->
             <ul class="menu menu-column menu-pill menu-title-gray-700 menu-bullet-gray-300 menu-state-bg menu-state-bullet-primary fw-bold fs-5 mb-10">
+
                 <!--begin::Menu item-->
                 <li class="menu-item mb-1">
                     <!--begin::Menu link-->
-                    <a class="menu-link px-6 py-4 <?= setActiveLink($navlink['sub-link'] ?? '', "overview"); ?>" href="account">
+                    <a class="menu-link px-6 py-4 <?= setActiveLink($navlink['sub-link'] ?? '', "users"); ?>" href="users">
                         <span class="menu-bullet"><span class="bullet"></span></span>
                         <span class="menu-title">
-                            Overview </span>
+                            Users </span>
                     </a>
                     <!--end::Menu link-->
                 </li>
@@ -55,10 +47,10 @@ function setActiveLink($selected, $current)
                 <!--begin::Menu item-->
                 <li class="menu-item mb-1">
                     <!--begin::Menu link-->
-                    <a class="menu-link px-6 py-4 <?= setActiveLink($navlink['sub-link'] ?? '', "settings"); ?>" href="account/settings">
+                    <a class="menu-link px-6 py-4 <?= setActiveLink($navlink['sub-link'] ?? '', "reset-password"); ?>" href="users/reset_password">
                         <span class="menu-bullet"><span class="bullet"></span></span>
                         <span class="menu-title">
-                            Settings </span>
+                            Reset User Password </span>
                     </a>
                     <!--end::Menu link-->
                 </li>
@@ -66,10 +58,43 @@ function setActiveLink($selected, $current)
                 <!--begin::Menu item-->
                 <li class="menu-item mb-1">
                     <!--begin::Menu link-->
-                    <a class="menu-link px-6 py-4 <?= setActiveLink($navlink['sub-link'] ?? '', "security"); ?>" href="account/security">
+                    <a class="menu-link px-6 py-4 <?= setActiveLink($navlink['sub-link'] ?? '', "security"); ?>" href="users/manage_2fa">
                         <span class="menu-bullet"><span class="bullet"></span></span>
                         <span class="menu-title">
-                            Security </span>
+                            Manage 2 FA </span>
+                    </a>
+                    <!--end::Menu link-->
+                </li>
+                <!--end::Menu item-->
+                <!--begin::Menu item-->
+                <li class="menu-item mb-1">
+                    <!--begin::Menu link-->
+                    <a class="menu-link px-6 py-4 <?= setActiveLink($navlink['sub-link'] ?? '', "resources"); ?>" href="access/resources">
+                        <span class="menu-bullet"><span class="bullet"></span></span>
+                        <span class="menu-title">
+                            Resources </span>
+                    </a>
+                    <!--end::Menu link-->
+                </li>
+                <!--end::Menu item-->
+                <!--begin::Menu item-->
+                <li class="menu-item mb-1">
+                    <!--begin::Menu link-->
+                    <a class="menu-link px-6 py-4 <?= setActiveLink($navlink['sub-link'] ?? '', "roles"); ?>" href="access/roles">
+                        <span class="menu-bullet"><span class="bullet"></span></span>
+                        <span class="menu-title">
+                            Roles </span>
+                    </a>
+                    <!--end::Menu link-->
+                </li>
+                <!--end::Menu item-->
+                <!--begin::Menu item-->
+                <li class="menu-item mb-1">
+                    <!--begin::Menu link-->
+                    <a class="menu-link px-6 py-4 <?= setActiveLink($navlink['sub-link'] ?? '', "permission"); ?>" href="access/permissions">
+                        <span class="menu-bullet"><span class="bullet"></span></span>
+                        <span class="menu-title">
+                            Permissions </span>
                     </a>
                     <!--end::Menu link-->
                 </li>

@@ -1,4 +1,14 @@
 <!--begin::PAGE CONTAINER -->
+<?php
+$firstCard = 'Total';
+$secondCard = 'Active';
+$thirdCard = 'Closed/Resolved';
+$fourthCard = 'Draft';
+$usertype = $loggedInUser['usertype'] ?? 'Guest';
+$user_id = $loggedInUser['userid'];
+?>
+<input type="hidden" id="USER_TYPE" value="<?= $usertype ?>">
+<input type="hidden" id="USER_ID" value="<?= $user_id ?>">
 <div id="kt_content_container" class="d-flex flex-column-fluid align-items-start container-xxl">
 	<div class="content flex-row-fluid" id="kt_content">
 		<!--begin::PAGE CONTENT GOES FROM HERE-->
@@ -66,25 +76,28 @@
 						</a>
 					</div>
 				</div>
-				<!--end::Col-->
-				<?php $usertype = $loggedInUser['usertype'] ?? 'Guest';
-				$user_id = $loggedInUser['userid'];
-				?>
-				<input type="hidden" id="USER_TYPE" value="<?= $usertype ?>">
-				<input type="hidden" id="USER_ID" value="<?= $user_id ?>">
-				<div class="row">
-					<div class="col-md-7 text-center d-flex align-items-center justify-content-center flex-column">
-						<h1 class="fs-5x fw-bolder">Customer <span class="text-primary">Complaints</span> Portal</h1>
-
-						<h6 class="fw-normal my-10 fs-5 text-muted lh-lg">
-							The only place where your <span class="badge bg-info">complaints</span> are precious to us! Share your concerns effortlessly, and we’ll address them promptly with exceptional service and support.
-
-						</h6>
-					</div>
-					<div class="col-md-5">
-						<img src="assets/images/complaints.png" class="img-fluid" alt="">
-					</div>
+				<input type="hidden" id="STATUS" name="" value="<?= $type ?>">
+				<div class="table-responsive">
+					<table class="table table-row-dashed gy-7" id="complaint-list">
+						<thead>
+							<tr class="fw-bold fs-6 text-gray-800">
+								<th>#</th>
+								<th class="w-350">Complaint No.</th>
+								<th class="w-250">Date</th>
+								<th class="w-350">Company Name</th>
+								<th class="w-350">Customer Name</th>
+								<th class="w-350">Raised By</th>
+								<th class="w-350">Email</th>
+								<th class="w-150">Mobile</th>
+								<th class="w-150">Status</th>
+								<th class="w-250 text-center">Action</th>
+							</tr>
+						</thead>
+						<tbody id="complaint-list-tbody">
+						</tbody>
+					</table>
 				</div>
+				<?= renderPaginate('current-page', 'total-pages', 'page-of-pages', 'range-of-records') ?>
 			</div>
 		</div>
 		<!--end::PAGE CONTENT GOES FROM HERE-->

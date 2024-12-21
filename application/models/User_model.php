@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
-
-class User_model extends CI_Model
+require_once APPPATH . 'models/App_model.php';
+class User_model extends App_Model
 {
     protected $user_table; // Holds the name of the user table
     protected $user_2fa_table; // Holds the name of the user table
@@ -153,6 +153,40 @@ class User_model extends CI_Model
         }
     }
 
+    // Functions to create clients
+    function get_users($type = 'list', $limit = 10, $currentPage = 1, $filters = [])
+    {
+        $offset = get_limit_offset($currentPage, $limit);
+
+        $this->db->select("u.ID, u.USER_ID, u.UUID, u.USER_TYPE, u.FIRST_NAME, u.LAST_NAME, u.EMAIL, u.PASSWORD, u.PHONE_NUMBER, u.STATUS, u.CREATED_AT, u.UPDATED_AT, u.IS_2FA_ENABLED");
+        $this->db->from($this->user_table . " u");
+        $this->db->order_by("u.ID", "DESC");
+
+
+        // Apply filters dynamically from the $filters array
+        if (!empty($filters) && is_array($filters)) {
+            foreach ($filters as $key => $value) {
+                $this->db->where($key, $value);
+            }
+        }
+
+        // Apply limit and offset only if 'list' type and offset is greater than zero
+        if ($type == 'list') {
+            if ($limit > 0) {
+                $this->db->limit($limit, ($offset > 0 ? $offset : 0));
+            }
+        }
+
+        // Execute query
+        $query = $this->db->get();
+
+        if ($type == 'list') {
+            return $query->result_array();
+        } else {
+            return $query->num_rows();
+        }
+    }
+
     // Function to add or update client
     public function add_client($client_id, $data, $userid)
     {
@@ -271,6 +305,26 @@ class User_model extends CI_Model
         }
     }
 
+    public function delete_user_by_id($userID)
+    {
+        $user = $this->get_user_by_id($userID);
+        $userType = $user['USER_TYPE'] ?? ' guest';
+        $this->db->trans_start();
+        if ($userType === 'client') {
+            $this->db->delete($this->client_address_table, array('CLIENT_ID' => $userID));
+            $this->db->delete($this->client_table, array('USER_ID' => $userID));
+        }
+
+        $this->db->delete($this->user_table, array('ID' => $userID));
+
+        $this->db->trans_complete();
+
+        if ($this->db->trans_status() === FALSE) {
+        } else {
+            return true;
+        }
+    }
+
     // Function to update user password
     function update_password($password, $userid)
     {
@@ -295,5 +349,76 @@ class User_model extends CI_Model
     public function add_2fa_details($data)
     {
         return $this->db->insert($this->user_2fa_table, $data);
+    }
+
+    public function getUserDetail($user_id, $email)
+    {
+        // Query to fetch user details from the 'users' table
+        $this->db->select('ID,FIRST_NAME, LAST_NAME, PHONE_NUMBER, USER_ID');
+        $this->db->where('ID', $user_id);
+        $this->db->where('EMAIL', $email);
+        $query = $this->db->get('xx_crm_users');
+
+
+        // Check if user exists and return result
+        if ($query->num_rows() > 0) {
+            return $query->row();  // Return the first matching record
+        } else {
+            return null;  // No user found
+        }
+    }
+
+    public function add_user($data, $userid)
+    {
+        $user_data = [
+            'UUID' => uuid_v4(),
+            'FIRST_NAME' => $data['FIRST_NAME'],
+            'LAST_NAME' => $data['LAST_NAME'],
+            'EMAIL' => $data['EMAIL'],
+            'PHONE_NUMBER' => $data['PHONE_NUMBER'],
+            'USER_TYPE' => $data['USER_TYPE'],
+            'STATUS' => $data['STATUS'],
+            'IS_2FA_ENABLED' => 0,
+            'PASSWORD' => password_hash($data['NEW_PASSWORD'], PASSWORD_ARGON2ID)
+        ];
+
+        // Insert new lead
+        $inserted = $this->db->insert($this->user_table, $user_data);
+        if ($inserted) {
+            $inserted_id = $this->get_column_value($this->user_table, 'ID', ['UUID' => $user_data['UUID']]);
+            // Create product_code in the required format
+            $user_gen_id = "U-" . str_pad($inserted_id, 6, '0', STR_PAD_LEFT);
+            // Update the user_gen_id field for the newly inserted product
+            $this->db->where('ID', $inserted_id);
+            $this->db->update($this->user_table, ['USER_ID' => $user_gen_id]);
+            return $this->get_user_by_id($inserted_id);
+        } else
+            return false;
+    }
+
+    public function update_user_details($userID, $data, $created_by)
+    {
+        $user_data = [
+            'UUID' => uuid_v4(),
+            'FIRST_NAME' => $data['FIRST_NAME'],
+            'LAST_NAME' => $data['LAST_NAME'],
+            'PHONE_NUMBER' => $data['PHONE_NUMBER'],
+            'USER_TYPE' => $data['USER_TYPE'],
+            'STATUS' => $data['STATUS']
+        ];
+
+        // Insert new lead
+        $updated = $this->db->where('ID', $userID)->update($this->user_table, $user_data);
+        if ($updated) {
+            return $this->get_user_by_id($userID);
+        } else
+            return false;
+    }
+
+    public function update_user_password($userID, $data, $created_by)
+    {
+
+        // Insert new lead
+        return $this->db->where('ID', $userID)->update($this->user_table, ['PASSWORD' => password_hash($data['RESET_NEW_PASSWORD'], PASSWORD_ARGON2ID)]);
     }
 }

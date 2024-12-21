@@ -3,6 +3,3 @@
     <?= date('l d, M Y') ?>
 </a>
 <!--end::Action-->
-<!--begin::Button-->
-<a href="javascript:void(0)" class="btn btn-success my-2">Default CTA</a>
-<!--end::Button-->
