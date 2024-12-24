@@ -732,6 +732,33 @@ function generateSkeletonHTML(type) {
                             </div>
                         </div>
                     </div>`
+        case "choose-survey":
+            return `<div class="col-md-3 mb-4">
+                        <div class="card">
+                            <div class="card-body">
+                            <!-- Skeleton for Title -->
+                            <div class="skeleton-box" style="width: 100%; height: 24px;"></div> <!-- Title -->
+                            <br>
+                            
+                            <!-- Skeleton for Duration -->
+                            <div class="skeleton-box" style="width: 60%; height: 16px;"></div> <!-- Duration -->
+                            <br>
+                            
+                            <!-- Separator -->
+                            <div class="skeleton-box" style="width: 100%; height: 2px; margin: 20px 0;"></div> <!-- Separator -->
+                            
+                            <!-- Skeleton for Description -->
+                            <div class="skeleton-box" style="width: 100%; height: 12px;"></div>
+                            <div class="skeleton-box" style="width: 90%; height: 12px;"></div>
+                            <div class="skeleton-box" style="width: 80%; height: 12px;"></div> <!-- Description -->
+                            <br>
+                            
+                            <!-- Skeleton for Button -->
+                            <div class="skeleton-box" style="width: 120px; height: 36px;"></div> <!-- Button -->
+                            </div>
+                        </div>
+                        </div>
+                        `;
         default:
             return `<div class="skeleton-box" style="width: 100%; height: 20px;"></div>`;
     }

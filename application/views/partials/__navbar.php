@@ -1,3 +1,7 @@
+<?php
+$usertype = $loggedInUser['usertype'] ?? 'guest';
+$userid = $loggedInUser['userid'] ?? '0';
+?>
 <!--begin::Header-->
 <div id="kt_header" class="header align-items-stretch" data-kt-sticky="true" data-kt-sticky-name="header" data-kt-sticky-offset="{default: '200px', lg: '300px'}">
     <!--begin::Container-->
@@ -193,33 +197,41 @@
                                         <span class="menu-title">Customer Complaints</span>
                                     </span>
                                 </a>
-                                <div data-kt-menu-trigger="{default:'click', lg: 'hover'}" data-kt-menu-placement="right-start" class="menu-item menu-lg-down-accordion">
+                                <!-- <div data-kt-menu-trigger="{default:'click', lg: 'hover'}" data-kt-menu-placement="right-start" class="menu-item menu-lg-down-accordion">
+                                        <span class="menu-link py-3">
+                                            <span class="menu-icon">
+                                                <i class="las la-star-half-alt fs-3"></i>
+                                            </span>
+                                            <span class="menu-title">Customer Survey</span>
+                                            <span class="menu-arrow"></span>
+                                        </span>
+                                        <div class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown menu-active-bg py-lg-4 w-lg-225px">
+                                            <div class="menu-item">
+                                                <a class="menu-link py-3" href="survey" data-kt-page="pro">
+                                                    <span class="menu-bullet">
+                                                        <span class="bullet bullet-dot"></span>
+                                                    </span>
+                                                    <span class="menu-title">Survey</span>
+                                                </a>
+                                            </div>
+                                            <div class="menu-item">
+                                                <a class="menu-link py-3" href="survey/response" data-kt-page="pro">
+                                                    <span class="menu-bullet">
+                                                        <span class="bullet bullet-dot"></span>
+                                                    </span>
+                                                    <span class="menu-title">Survey Response</span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div> -->
+                                <a href="survey" class="menu-item menu-lg-down-accordion">
                                     <span class="menu-link py-3">
                                         <span class="menu-icon">
-                                            <i class="las la-star-half-alt fs-3"></i>
+                                            <i class="las la-chalkboard-teacher fs-3"></i>
                                         </span>
-                                        <span class="menu-title">Customer Survey</span>
-                                        <span class="menu-arrow"></span>
+                                        <span class="menu-title">Surveys</span>
                                     </span>
-                                    <div class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown menu-active-bg py-lg-4 w-lg-225px">
-                                        <div class="menu-item">
-                                            <a class="menu-link py-3" href="survey" data-kt-page="pro">
-                                                <span class="menu-bullet">
-                                                    <span class="bullet bullet-dot"></span>
-                                                </span>
-                                                <span class="menu-title">Create Survey</span>
-                                            </a>
-                                        </div>
-                                        <div class="menu-item">
-                                            <a class="menu-link py-3" href="survey/response" data-kt-page="pro">
-                                                <span class="menu-bullet">
-                                                    <span class="bullet bullet-dot"></span>
-                                                </span>
-                                                <span class="menu-title">Survey Response</span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
+                                </a>
                             </div>
                         </div>
                         <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="bottom-start" class="menu-item menu-lg-down-accordion me-lg-1">

@@ -5,21 +5,19 @@
         <div class="card">
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-row-bordered gy-7" id="asn-list">
+                    <table class="table table-row-bordered gy-7" id="fill-survey-list">
                         <thead>
                             <tr class="fw-bold fs-6 text-gray-800">
                                 <th>#</th>
-                                <th>ASN ID #</th>
-                                <th>ASN Date</th>
-                                <th>ASN Seq #</th>
-                                <th>ASN Status</th>
-                                <th>Delivery #</th>
-                                <th>Ship Address</th>
-                                <th>Carrier</th>
+                                <th>Survey #</th>
+                                <th>Survey Name</th>
+                                <th>Filled On</th>
+                                <th>Filled By</th>
+                                <th>Survey Year</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
-                        <tbody id="asn-list-tbody">
-                           
+                        <tbody id="fill-survey-list-tbody" class="text-gray-700">
                         </tbody>
                     </table>
                 </div>

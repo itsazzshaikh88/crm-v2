@@ -18,6 +18,7 @@ class Delivery extends App_Controller
         $data['page_title'] = 'Delivery Reports - CRM Application';
         $data['page_heading'] = 'Delivery Report';
         $data['navlink'] = 'delivery';
+        $data['scripts'] = ['assets/js/pages/delivery/list.js'];
         $this->load->view('layout', $data);
     }
     public function asn_report()

@@ -5,28 +5,27 @@
         <div class="card">
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-row-bordered gy-7" id="survey-list">
+                    <table class="table table-row-bordered gy-7">
                         <thead>
                             <tr class="fw-bold fs-6 text-gray-800">
                                 <th>#</th>
-                                <th>Survey Name</th>
-                                <th>Survey Desc</th>
-                                <th>Survey Duration</th>
-                                <th>Survey Conducted</th>
-                                <th>Status</th>
+                                <th>Survey #</th>
+                                <th>Survey Title</th>
+                                <th>Feedback On</th>
+                                <th>Company</th>
+                                <th>Year</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
-                        <tbody id="survey-list-tbody">
-                            <!-- <tr>
-                                <td colspan="6" class="text-center text-danger">
+                        <tbody>
+                            <tr>
+                                <td colspan="7" class="text-center text-danger">
                                     <div class="d-flex justify-content-center align-items-center flex-column">
                                         <img src="assets/images/survey-img.png" class="w-200px mb-2" alt="">
-                                        <h4 class="text-danger fw-normal">survey not created yet, <a
-                                                href="survey/new">Click here to create new survey</a></h4>
+                                        <h4 class="text-danger fw-normal">Survey Feedback not provided by clients.</h4>
                                     </div>
                                 </td>
-                            </tr> -->
+                            </tr>
                         </tbody>
                     </table>
                 </div>

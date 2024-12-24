@@ -10,9 +10,10 @@ class Financial extends App_Controller
     public function index()
     {
         $data['view_path'] = 'pages/financial/financial-report';
-        $data['page_title'] = 'Financials - CRM Application';
-        $data['page_heading'] = 'Financials';
+        $data['page_title'] = 'Financial - CRM Application';
+        $data['page_heading'] = 'Financial';
         $data['navlink'] = 'financial';
+        $data['scripts'] = ['assets/js/pages/financial/financial-list.js'];
         $this->load->view('layout', $data);
     }
     public function outstandings()
@@ -21,6 +22,7 @@ class Financial extends App_Controller
         $data['page_title'] = 'Customer Outstandings - CRM Application';
         $data['page_heading'] = 'Customer Outstandings';
         $data['navlink'] = 'financial';
+        $data['scripts'] = ['assets/js/pages/financial/customer-outstandings-list.js'];
         $this->load->view('layout', $data);
     }
     public function statements()
@@ -29,6 +31,7 @@ class Financial extends App_Controller
         $data['page_title'] = 'Customer Statements - CRM Application';
         $data['page_heading'] = 'Customer Statements';
         $data['navlink'] = 'financial';
+        $data['scripts'] = ['assets/js/pages/financial/customer-statements-list.js'];
         $this->load->view('layout', $data);
     }
     public function credit_report()
@@ -37,6 +40,7 @@ class Financial extends App_Controller
         $data['page_title'] = 'Credit Report - CRM Application';
         $data['page_heading'] = 'Credit Report';
         $data['navlink'] = 'financial';
+        $data['scripts'] = ['assets/js/pages/financial/credit_report.js'];
         $this->load->view('layout', $data);
     }
     public function balance_cofirmation()

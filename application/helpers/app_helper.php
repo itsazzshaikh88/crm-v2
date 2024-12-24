@@ -81,3 +81,154 @@ function setNavigationLinkActive($current, $target, $class)
         return $class;
     return '';
 }
+function survey_questions()
+{
+    // create survey questions
+    $questions = array(
+        array(
+            'title' => "A - Products & Technology",
+            'questions' => array(
+                array(
+                    'title' => "Product Quality",
+                    'questions' => "How would you rate the quality of our products?"
+                ),
+                array(
+                    'title' => "Packaging And Labelling Quality",
+                    'questions' => "How would you rate the suitability of our outer packaging, palletization and labelling?"
+                ),
+                array(
+                    'title' => "Innovation & Development",
+                    'questions' => "How would you rate our ability to innovate and develop products?"
+                ),
+                array(
+                    'title' => "Technological Capacity",
+                    'questions' => "How would you rate our company's use of high-technology in production?"
+                )
+            )
+        ),
+        array(
+            'title' => "B - Delivery And Logistics",
+            'questions' => array(
+                array(
+                    'title' => "On-Time Delivery Performance",
+                    'questions' => "How would you rate our on-time delivery performance?"
+                ),
+                array(
+                    'title' => "Order Confirmation Time",
+                    'questions' => ""
+                ),
+                array(
+                    'title' => "Approach To Urgent Orders",
+                    'questions' => "How would you rate our ability to innovate and develop products?"
+                ),
+                array(
+                    'title' => "Accuracy",
+                    'questions' => "How would you rate our compliance with your specified delivery quantities?"
+                ),
+                array(
+                    'title' => "Means Of Transport",
+                    'questions' => "How would you rate our network and the transport alternatives we offer?"
+                ),
+                array(
+                    'title' => "Logistics Follow Up Services",
+                    'questions' => "How would you rate the information flow for transport information and services of our logistics department?"
+                )
+            )
+        ),
+        array(
+            'title' => "C - Customer Service",
+            'questions' => array(
+                array(
+                    'title' => "Communication Quality",
+                    'questions' => "How would you rate the quality of communication with our sales representative?"
+                ),
+                array(
+                    'title' => "Easy Access To Sales Team",
+                    'questions' => "How would you rate your access to our sales team? (exp. By phone, mail etc.)"
+                ),
+                array(
+                    'title' => "Professionalism",
+                    'questions' => "How would you rate our Professionalism in dealing with you?"
+                ),
+                array(
+                    'title' => "After Sales Service",
+                    'questions' => "How supportive do you find our customer service following the purchase of a product?"
+                ),
+                array(
+                    'title' => "Responsiveness To Documentation Requirements",
+                    'questions' => "How would you rate our responses to documentation requirements?"
+                )
+            )
+        ),
+        array(
+            'title' => "D - Technical Service And Development",
+            'questions' => array(
+                array(
+                    'title' => "Technical Support",
+                    'questions' => "how would you rate the technical competence of our engineers and their response time?"
+                ),
+                array(
+                    'title' => "Trial Performance",
+                    'questions' => "How do you find our lead times and performance quality for trials?"
+                ),
+                array(
+                    'title' => "Complaint Handling",
+                    'questions' => "How do you rate the response time and content of our replies to your complaints?"
+                )
+            )
+        ),
+        array(
+            'title' => "E - Company Reputation",
+            'questions' => array(
+                array(
+                    'title' => "Our Position Within The Industry",
+                    'questions' => "How would you rate Zamil Plastic amongst the major Packaging companies?"
+                ),
+                array(
+                    'title' => "Competitiveness",
+                    'questions' => "How do you rate the competititveness of our products?"
+                ),
+                array(
+                    'title' => "Approach",
+                    'questions' => "How would we rank in terms of building trust as a business partner?"
+                ),
+                array(
+                    'title' => "Website",
+                    'questions' => "How would you rate our website? (in terms of informative, user-friendly, easy-to-access etc.)"
+                )
+            )
+        )
+    );
+    return $questions;
+}
+function survey_ratings()
+{
+    return array(
+        array(
+            "icon" => "<i class='bi bi-emoji-angry text-danger' style= 'font-size:xx-large'></i>",
+            "title" => "Strongly Disagree",
+            "color" => "danger"
+        ),
+        array(
+            "icon" => "<i class='bi bi-emoji-frown text-warning' style= 'font-size:xx-large'></i>",
+            "title" => "Disagree",
+            "color" => "warning"
+        ),
+        array(
+            "icon" => "<i class='bi bi-emoji-neutral text-secondary' style= 'font-size:xx-large'></i>",
+            "title" => "Neutral",
+            "color" => "secondary",
+
+        ),
+        array(
+            "icon" => "<i class='bi bi-emoji-smile text-info' style= 'font-size:xx-large'></i>",
+            "title" => "Agree",
+            "color" => "info"
+        ),
+        array(
+            "icon" => "<i class='bi bi-emoji-heart-eyes text-success' style= 'font-size:xx-large'></i>",
+            "title" => "Strongly Agree",
+            "color" => "success"
+        )
+    );
+}

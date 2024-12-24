@@ -332,70 +332,149 @@ class Finance_model extends App_Model
 
 
 
+    function get_financials($type = 'list', $limit = 10, $currentPage = 1, $filters = [])
+    {
+        $offset = get_limit_offset($currentPage, $limit);
+
+        $this->db->select();
+        $this->db->from();
+        $this->db->join();
+        $this->db->join();
+        $this->db->join(); // Join with xx_crm_req_header
+
+        $this->db->order_by();
+
+        // Apply filters dynamically from the $filters array
+        if (!empty($filters) && is_array($filters)) {
+            foreach ($filters as $key => $value) {
+                $this->db->where($key, $value);
+            }
+        }
+
+        // Apply limit and offset only if 'list' type and offset is greater than zero
+        if ($type == 'list') {
+            if ($limit > 0) {
+                $this->db->limit($limit, ($offset > 0 ? $offset : 0));
+            }
+        }
+
+        // Execute query
+        $query = $this->db->get();
+
+        if ($type == 'list') {
+            return $query->result_array();
+        } else {
+            return $query->num_rows();
+        }
+    }
 
 
-    // function get_products($type = 'list', $limit = 10, $currentPage = 1, $filters = [], $search = [])
-    // {
-    //     $offset = get_limit_offset($currentPage, $limit);
 
-    //     $this->db->select("p.PRODUCT_ID, p.UUID, p.PRODUCT_CODE, p.CATEGORY_ID, p.STATUS, p.PRODUCT_NAME, 
-    //                p.DESCRIPTION, p.BASE_PRICE, p.CURRENCY, p.PRODUCT_IMAGES, p.WEIGHT, 
-    //                p.HEIGHT, p.LENGTH, p.WIDTH, i.AVL_QTY, ct.CATEGORY_CODE");
-    //     $this->db->from("xx_crm_products p");
-    //     $this->db->join("xx_crm_product_inventory i", "i.PRODUCT_ID = p.PRODUCT_ID", "left");
-    //     $this->db->join("xx_crm_product_categories ct", "ct.ID = p.CATEGORY_ID", "left");
-    //     $this->db->order_by("p.PRODUCT_ID", "DESC");
+    function get_outstanding($type = 'list', $limit = 10, $currentPage = 1, $filters = [])
+    {
+        $offset = get_limit_offset($currentPage, $limit);
 
-    //     // Apply filters dynamically from the $filters array
-    //     if (!empty($filters) && is_array($filters)) {
-    //         foreach ($filters as $key => $value) {
-    //             $this->db->where($key, $value);
-    //         }
-    //     }
+        $this->db->select();
+        $this->db->from();
+        $this->db->join();
+        $this->db->join();
+        $this->db->join(); // Join with xx_crm_req_header
 
-    //     if (!empty($search) && is_array($search)) {
-    //         if (isset($search['product'])) {
-    //             $this->db->group_start(); // Begin group for OR conditions
-    //             $this->db->like('p.PRODUCT_NAME', $search['product'], 'both', false);
-    //             $this->db->or_like('p.PRODUCT_CODE', $search['product'], 'both', false);
-    //             $this->db->group_end(); // End group for OR conditions
-    //         }
-    //     }
+        $this->db->order_by();
 
+        // Apply filters dynamically from the $filters array
+        if (!empty($filters) && is_array($filters)) {
+            foreach ($filters as $key => $value) {
+                $this->db->where($key, $value);
+            }
+        }
 
-    //     // Apply limit and offset only if 'list' type and offset is greater than zero
-    //     if ($type == 'list') {
-    //         if ($limit > 0) {
-    //             $this->db->limit($limit, ($offset > 0 ? $offset : 0));
-    //         }
-    //     }
+        // Apply limit and offset only if 'list' type and offset is greater than zero
+        if ($type == 'list') {
+            if ($limit > 0) {
+                $this->db->limit($limit, ($offset > 0 ? $offset : 0));
+            }
+        }
 
-    //     // Execute query
-    //     $query = $this->db->get();
+        // Execute query
+        $query = $this->db->get();
 
-    //     if ($type == 'list') {
-    //         return $query->result_array();
-    //     } else {
-    //         return $query->num_rows();
-    //     }
-    // }
+        if ($type == 'list') {
+            return $query->result_array();
+        } else {
+            return $query->num_rows();
+        }
+    }
 
+    function get_statements($type = 'list', $limit = 10, $currentPage = 1, $filters = [])
+    {
+        $offset = get_limit_offset($currentPage, $limit);
 
-    // public function delete_product_by_id($productID)
-    // {
-    //     $this->db->trans_start();
+        $this->db->select();
+        $this->db->from();
+        $this->db->join();
+        $this->db->join();
+        $this->db->join(); // Join with xx_crm_req_header
 
-    //     $this->db->delete('xx_crm_product_inventory', array('PRODUCT_ID' => $productID));
+        $this->db->order_by();
 
-    //     $this->db->delete('xx_crm_product_variants', array('PRODUCT_ID' => $productID));
+        // Apply filters dynamically from the $filters array
+        if (!empty($filters) && is_array($filters)) {
+            foreach ($filters as $key => $value) {
+                $this->db->where($key, $value);
+            }
+        }
 
-    //     $this->db->delete('xx_crm_products', array('PRODUCT_ID' => $productID));
+        // Apply limit and offset only if 'list' type and offset is greater than zero
+        if ($type == 'list') {
+            if ($limit > 0) {
+                $this->db->limit($limit, ($offset > 0 ? $offset : 0));
+            }
+        }
 
-    //     $this->db->trans_complete();
+        // Execute query
+        $query = $this->db->get();
 
-    //     if ($this->db->trans_status() === FALSE) {
-    //     } else {
-    //         return true;
-    //     }
-    // }
+        if ($type == 'list') {
+            return $query->result_array();
+        } else {
+            return $query->num_rows();
+        }
+    }
+
+    function get_credit($type = 'list', $limit = 10, $currentPage = 1, $filters = [])
+    {
+        $offset = get_limit_offset($currentPage, $limit);
+
+        $this->db->select();
+        $this->db->from();
+        $this->db->join();
+        $this->db->join();
+        $this->db->join(); // Join with xx_crm_req_header
+
+        $this->db->order_by();
+
+        // Apply filters dynamically from the $filters array
+        if (!empty($filters) && is_array($filters)) {
+            foreach ($filters as $key => $value) {
+                $this->db->where($key, $value);
+            }
+        }
+
+        // Apply limit and offset only if 'list' type and offset is greater than zero
+        if ($type == 'list') {
+            if ($limit > 0) {
+                $this->db->limit($limit, ($offset > 0 ? $offset : 0));
+            }
+        }
+
+        // Execute query
+        $query = $this->db->get();
+
+        if ($type == 'list') {
+            return $query->result_array();
+        } else {
+            return $query->num_rows();
+        }
+    }
 }

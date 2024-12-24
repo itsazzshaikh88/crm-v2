@@ -218,3 +218,20 @@ function toggleMFADetails(action = 'show', data = {}) {
         return ``
     }
 }
+
+function getSegment(segmentNumber) {
+    // Get the current URL path (excluding the query string)
+    const path = window.location.pathname;
+
+    // Split the path into segments, removing any leading/trailing slashes
+    const segments = path.split('/').filter(segment => segment.trim() !== '');
+
+    // If no segment number is provided, return all segments as an array
+    if (!segmentNumber) {
+        return segments;
+    }
+
+    // If segment number is provided, return the specific segment (1-based index)
+    const index = segmentNumber - 1;
+    return segments[index] || null; // Return null if the segment doesn't exist
+}

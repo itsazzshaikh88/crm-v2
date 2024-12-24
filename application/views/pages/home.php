@@ -58,7 +58,7 @@ include_once 'application/views/data/data-home.php';
 										<th>Track</th>
 									</tr>
 								</thead>
-								<tbody id="open-borders-tbody"></tbody>
+								<tbody id="open-orders-list-tbody"></tbody>
 							</table>
 						</div>
 						<?= renderPaginate('oo-current-page', 'oo-total-pages', 'oo-page-of-pages', 'oo-range-of-records') ?>

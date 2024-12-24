@@ -6,7 +6,7 @@ class Financial extends Api_controller
     public function __construct()
     {
         parent::__construct();
-        $this->load->model('Finance_model');
+        
     }
 
     function credit_application($credit_id = null)
@@ -395,5 +395,236 @@ class Financial extends Api_controller
             // File not found
             echo json_encode(['success' => false, 'message' => 'File not found.']);
         }
+    }
+
+
+    function list()
+    {
+        // Check if the authentication is valid
+        $isAuthorized = $this->isAuthorized();
+        if (!$isAuthorized['status']) {
+            $this->output
+                ->set_status_header(401) // Set HTTP response status to 400 Bad Request
+                ->set_content_type('application/json')
+                ->set_output(json_encode(['error' => 'Unauthorized access. You do not have permission to perform this action.']))
+                ->_display();
+            exit;
+        };
+
+        // Get the raw input data from the request
+        $input = $this->input->raw_input_stream;
+
+        // Decode the JSON data
+        $data = json_decode($input, true); // Decode as associative array
+
+        // Check if data is received
+        if (!$data) {
+            // Handle the error if no data is received
+            $this->output
+                ->set_status_header(400) // Set HTTP response status to 400 Bad Request
+                ->set_content_type('application/json')
+                ->set_output(json_encode(['error' => 'Invalid JSON input']))
+                ->_display();
+            exit;
+        }
+
+        // Access the parameters
+        $limit = isset($data['limit']) ? $data['limit'] : null;
+        $currentPage = isset($data['currentPage']) ? $data['currentPage'] : null;
+        $filters = isset($data['filters']) ? $data['filters'] : [];
+
+        // $total_financials = $this->Finance_model->get_financials('total', $limit, $currentPage, $filters);
+        // $financials = $this->Finance_model->get_financials('list', $limit, $currentPage, $filters);
+
+
+        $total_financials = '';
+        $financials = [];
+
+        $response = [
+            'pagination' => [
+                'total_records' => $total_financials,
+                'total_pages' => generatePages($total_financials, $limit),
+                'current_page' => $currentPage,
+                'limit' => $limit
+            ],
+            'financial' => $financials,
+        ];
+        return $this->output
+            ->set_content_type('application/json')
+            ->set_status_header(200)
+            ->set_output(json_encode($response));
+    }
+
+
+    function outstanding_list()
+    {
+        // Check if the authentication is valid
+        $isAuthorized = $this->isAuthorized();
+        if (!$isAuthorized['status']) {
+            $this->output
+                ->set_status_header(401) // Set HTTP response status to 400 Bad Request
+                ->set_content_type('application/json')
+                ->set_output(json_encode(['error' => 'Unauthorized access. You do not have permission to perform this action.']))
+                ->_display();
+            exit;
+        };
+
+        // Get the raw input data from the request
+        $input = $this->input->raw_input_stream;
+
+        // Decode the JSON data
+        $data = json_decode($input, true); // Decode as associative array
+
+        // Check if data is received
+        if (!$data) {
+            // Handle the error if no data is received
+            $this->output
+                ->set_status_header(400) // Set HTTP response status to 400 Bad Request
+                ->set_content_type('application/json')
+                ->set_output(json_encode(['error' => 'Invalid JSON input']))
+                ->_display();
+            exit;
+        }
+
+        // Access the parameters
+        $limit = isset($data['limit']) ? $data['limit'] : null;
+        $currentPage = isset($data['currentPage']) ? $data['currentPage'] : null;
+        $filters = isset($data['filters']) ? $data['filters'] : [];
+
+        // $total_outstanding = $this->Finance_model->get_outstanding('total', $limit, $currentPage, $filters);
+        // $outstanding = $this->Finance_model->get_outstanding('list', $limit, $currentPage, $filters);
+
+
+        $total_outstanding = '';
+        $outstanding = [];
+
+        $response = [
+            'pagination' => [
+                'total_records' => $total_outstanding,
+                'total_pages' => generatePages($total_outstanding, $limit),
+                'current_page' => $currentPage,
+                'limit' => $limit
+            ],
+            'outstanding' => $outstanding,
+        ];
+        return $this->output
+            ->set_content_type('application/json')
+            ->set_status_header(200)
+            ->set_output(json_encode($response));
+    }
+
+    function statements_list()
+    {
+        // Check if the authentication is valid
+        $isAuthorized = $this->isAuthorized();
+        if (!$isAuthorized['status']) {
+            $this->output
+                ->set_status_header(401) // Set HTTP response status to 400 Bad Request
+                ->set_content_type('application/json')
+                ->set_output(json_encode(['error' => 'Unauthorized access. You do not have permission to perform this action.']))
+                ->_display();
+            exit;
+        };
+
+        // Get the raw input data from the request
+        $input = $this->input->raw_input_stream;
+
+        // Decode the JSON data
+        $data = json_decode($input, true); // Decode as associative array
+
+        // Check if data is received
+        if (!$data) {
+            // Handle the error if no data is received
+            $this->output
+                ->set_status_header(400) // Set HTTP response status to 400 Bad Request
+                ->set_content_type('application/json')
+                ->set_output(json_encode(['error' => 'Invalid JSON input']))
+                ->_display();
+            exit;
+        }
+
+        // Access the parameters
+        $limit = isset($data['limit']) ? $data['limit'] : null;
+        $currentPage = isset($data['currentPage']) ? $data['currentPage'] : null;
+        $filters = isset($data['filters']) ? $data['filters'] : [];
+
+        // $total_statements = $this->Finance_model->get_statements('total', $limit, $currentPage, $filters);
+        // $statements = $this->Finance_model->get_statements('list', $limit, $currentPage, $filters);
+
+
+        $total_statements = '';
+        $statements = [];
+
+        $response = [
+            'pagination' => [
+                'total_records' => $total_statements,
+                'total_pages' => generatePages($total_statements, $limit),
+                'current_page' => $currentPage,
+                'limit' => $limit
+            ],
+            'statements' => $statements,
+        ];
+        return $this->output
+            ->set_content_type('application/json')
+            ->set_status_header(200)
+            ->set_output(json_encode($response));
+    }
+
+
+    function credit_report()
+    {
+        // Check if the authentication is valid
+        $isAuthorized = $this->isAuthorized();
+        if (!$isAuthorized['status']) {
+            $this->output
+                ->set_status_header(401) // Set HTTP response status to 400 Bad Request
+                ->set_content_type('application/json')
+                ->set_output(json_encode(['error' => 'Unauthorized access. You do not have permission to perform this action.']))
+                ->_display();
+            exit;
+        };
+
+        // Get the raw input data from the request
+        $input = $this->input->raw_input_stream;
+
+        // Decode the JSON data
+        $data = json_decode($input, true); // Decode as associative array
+
+        // Check if data is received
+        if (!$data) {
+            // Handle the error if no data is received
+            $this->output
+                ->set_status_header(400) // Set HTTP response status to 400 Bad Request
+                ->set_content_type('application/json')
+                ->set_output(json_encode(['error' => 'Invalid JSON input']))
+                ->_display();
+            exit;
+        }
+
+        // Access the parameters
+        $limit = isset($data['limit']) ? $data['limit'] : null;
+        $currentPage = isset($data['currentPage']) ? $data['currentPage'] : null;
+        $filters = isset($data['filters']) ? $data['filters'] : [];
+
+        // $total_statements = $this->Finance_model->get_credit('total', $limit, $currentPage, $filters);
+        // $statements = $this->Finance_model->get_credit('list', $limit, $currentPage, $filters);
+
+
+        $total_credit = '';
+        $credit = [];
+
+        $response = [
+            'pagination' => [
+                'total_records' => $total_credit,
+                'total_pages' => generatePages($total_credit, $limit),
+                'current_page' => $currentPage,
+                'limit' => $limit
+            ],
+            'credit' => $credit,
+        ];
+        return $this->output
+            ->set_content_type('application/json')
+            ->set_status_header(200)
+            ->set_output(json_encode($response));
     }
 }
