@@ -714,6 +714,53 @@ progress {
     max-width: 1320px;
   }
 }
+/* Breakpoint for devices larger than 1366px (e.g., 1440px) */
+@media (min-width: 1440px) {
+  .container-xxl,
+  .container-xl,
+  .container-lg,
+  .container-md,
+  .container-sm,
+  .container {
+    max-width: 1400px;
+  }
+}
+
+/* Breakpoint for devices larger than 1440px (e.g., 1600px) */
+@media (min-width: 1600px) {
+  .container-xxl,
+  .container-xl,
+  .container-lg,
+  .container-md,
+  .container-sm,
+  .container {
+    max-width: 1540px;
+  }
+}
+
+/* Breakpoint for devices larger than 1600px (e.g., 1920px) */
+@media (min-width: 1920px) {
+  .container-xxl,
+  .container-xl,
+  .container-lg,
+  .container-md,
+  .container-sm,
+  .container {
+    max-width: 1880px;
+  }
+}
+
+/* Breakpoint for devices larger than 1920px (e.g., 2560px) */
+@media (min-width: 2560px) {
+  .container-xxl,
+  .container-xl,
+  .container-lg,
+  .container-md,
+  .container-sm,
+  .container {
+    max-width: 2400px;
+  }
+}
 
 .row {
   --bs-gutter-x: 1.5rem;
