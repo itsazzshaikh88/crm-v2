@@ -1,9 +1,9 @@
 <!--begin::Toolbar-->
-<div class="toolbar py-5" id="kt_toolbar">
+<div class="toolbar py-0" id="kt_toolbar">
     <!--begin::Container-->
     <div id="kt_toolbar_container" class="container-xxl d-flex flex-stack flex-wrap">
         <!--begin::Title-->
-        <h3 class="text-white fw-bolder fs-2qx me-5"><?= $page_heading ?? 'Page Heading' ?></h3>
+        <h3 class="text-white fw-bolder fs-2 me-5"><?= $page_heading ?? 'Page Heading' ?></h3>
         <!--begin::Title-->
         <!--begin::Actions-->
         <div class="d-flex align-items-center flex-wrap py-2">

@@ -1,11 +1,11 @@
 <div id="kt_content_container" class="d-flex flex-column-fluid align-items-start  container-xxl ">
     <div class="content flex-row-fluid" id="kt_content">
         <input type="hidden" name="UUID" id="UUID" value="<?= $uuid ?? uuid_v4() ?>">
-        <div class="form d-flex flex-column flex-lg-row fv-plugins-bootstrap5 fv-plugins-framework">
+        <div class="form row">
             <!--begin::Aside column-->
-            <div class="d-flex flex-column gap-7 gap-lg-10 w-100 w-lg-300px mb-7 me-lg-10">
+            <div class="col-md-3">
                 <!--begin::Thumbnail settings-->
-                <div class="card card-flush py-4">
+                <div class="card card-flush py-4 mb-4">
                     <!--begin::Card header-->
                     <div class="card-header">
                         <!--begin::Card title-->
@@ -77,8 +77,8 @@
             <!--end::Aside column-->
 
             <!--begin::Main column-->
-            <div class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10">
-                <div class="card" id="kt_profile_details_view">
+            <div class="col-md-9">
+                <div class="card mb-4" id="kt_profile_details_view">
                     <!--begin::Card header-->
                     <div class="card-header cursor-pointer">
                         <!--begin::Card title-->
@@ -177,7 +177,7 @@
                     <!--end::Card body-->
                 </div>
 
-                <div class="card" id="kt_profile_details_view">
+                <div class="card mb-4" id="kt_profile_details_view">
                     <!--begin::Card header-->
                     <div class="card-header cursor-pointer">
                         <!--begin::Card title-->
@@ -256,7 +256,7 @@
                     <!--end::Card body-->
                 </div>
 
-                <div class="card" id="kt_profile_details_view">
+                <div class="card mb-4" id="kt_profile_details_view">
                     <!--begin::Card header-->
                     <div class="card-header cursor-pointer">
                         <!--begin::Card title-->

@@ -38,3 +38,6 @@
     </div>
 </div>
 <!--end::PAGE CONTAINER-->
+<?php
+$this->load->view('pages/products/new-v' . $version)
+?>

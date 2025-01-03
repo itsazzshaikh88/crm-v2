@@ -91,7 +91,7 @@ function showProducts(products, tbody) {
                                         <input class="form-check-input" type="checkbox" value="${product.PRODUCT_ID}" />
                                     </div>
                                 </td>
-                                <td class="w-400">
+                                <td class="w-500">
                                     <div class="d-flex align-items-center">
                                         <!--begin::Thumbnail-->
                                         <a href="edit-product.html" class="symbol symbol-50px">
@@ -116,7 +116,7 @@ function showProducts(products, tbody) {
                                     </div>
                                 </td>
                                 <td class=" pe-0 dt-type-numeric">
-                                    <span class="">${product.UOM || 'PCS'}</span>
+                                    <span class=""><span class="badge bg-light text-primary">${product.UOM || 'PCS'}</span></span>
                                 </td>
                                 <td class=" pe-0 dt-type-numeric" data-order="18">
                                     <span class="fw-bold ms-3">${product.BASE_PRICE || ''}</span>
@@ -124,7 +124,7 @@ function showProducts(products, tbody) {
                                 <td class="pe-0 dt-type-numeric">${product.AVL_QTY || ''}</td>
                                 <td class="pe-0 dt-type-numeric">${product.WEIGHT || ''}</td>
                                 <td class="pe-0 dt-type-numeric">${product.COLOR || ''}</td>
-                                <td class="pe-0 dt-type-numeric">${product.CATEGORY_CODE || ''}</td>
+                                <td class="pe-0 dt-type-numeric"><span class="badge bg-light text-gray-800">${product.CATEGORY_CODE || ''}</span></td>
                                 <td class="text-end">
                                     <div class="d-flex align-items-center justify-content-end gap-4">
                                         <a href="products/view/${product.UUID}">

@@ -7,7 +7,10 @@ class Purchase extends App_Controller
     {
         $this->validateUUID();
         $data['uuid'] = $uuid;
-        $data['view_path'] = 'pages/purchase/new';
+        if ($this->input->get('version'))
+            $data['view_path'] = 'pages/purchase/new-v1';
+        else
+            $data['view_path'] = 'pages/purchase/new';
         $data['page_title'] = 'Create New Purchase Order - CRM Application';
         $data['page_heading'] = 'Create New Purchase Order';
         $data['navlink'] = 'purchase';

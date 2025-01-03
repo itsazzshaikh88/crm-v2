@@ -1289,3 +1289,42 @@
 }
 
 /* Repeat up to app-pl-64 */
+.border-red-50 {
+    border-color: #fef2f2 !important;
+}
+
+.border-red-100 {
+    border-color: #fee2e2 !important;
+}
+
+.border-red-200 {
+    border-color: #fecaca !important;
+}
+
+.border-red-300 {
+    border-color: #fca5a5 !important;
+}
+
+.border-red-400 {
+    border-color: #f87171 !important;
+}
+
+.border-red-500 {
+    border-color: #ef4444 !important;
+}
+
+.border-red-600 {
+    border-color: #dc2626 !important;
+}
+
+.border-red-700 {
+    border-color: #b91c1c !important;
+}
+
+.border-red-800 {
+    border-color: #991b1b !important;
+}
+
+.border-red-900 {
+    border-color: #7f1d1d !important;
+}

@@ -5,7 +5,7 @@
         <!--begin::Content-->
         <div id="kt_account_settings_signin_method" class="collapse show">
             <!--begin::Card body-->
-            <div class="card-body border-top p-9">
+            <div class="card-body p-9">
                 <div class="d-flex align-items-center justify-content-between">
                     <h3 class="fw-bold m-0"><?= $page_heading ?? 'Users' ?></h3>
                     <div class="d-flex align-items-center gap-4 <?= isset($navlink['sub-link']) && $navlink['sub-link'] === 'users' ? '' : 'd-none' ?> ">
