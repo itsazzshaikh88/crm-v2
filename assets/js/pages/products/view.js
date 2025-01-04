@@ -62,7 +62,7 @@ async function fetctProduct(productUUID) {
                 'Authorization': `Bearer ${authToken}`,
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ productUUID })
+            body: JSON.stringify({ searchKey: "UUID", searchValue: productUUID })
         });
 
         // Parse the JSON response

@@ -20,7 +20,7 @@ class Product_model extends App_model
     public function add_product($product_id, $data, $userid)
     {
         $product_data = [
-            'UUID' => $data['UUID'],
+            'UUID' => uuid_v4(),
             'DIVISION' => $data['DIVISION'],
             'CATEGORY_ID' => $data['CATEGORY_ID'],
             'STATUS' => $data['STATUS'],
@@ -28,8 +28,7 @@ class Product_model extends App_model
             'DESCRIPTION' => $data['DESCRIPTION'],
             'BASE_PRICE' => $data['BASE_PRICE'],
             'CURRENCY' => $data['CURRENCY'],
-            'DISCOUNT_TYPE' => setDiscountType($data['DISCOUNT_TYPE']),
-            'DISCOUNT_PERCENTAGE' => $data['DISCOUNT_TYPE'] == '2' ? $data['DISCOUNT_PERCENTAGE'] : null,
+            'DISCOUNT_PERCENTAGE' => $data['DISCOUNT_PERCENTAGE'] == '2',
             'TAXABLE' => $data['TAXABLE'],
             'TAX_PERCENTAGE' => $data['TAX_PERCENTAGE'],
             'WEIGHT' => $data['WEIGHT'],
@@ -161,6 +160,29 @@ class Product_model extends App_model
                     ->get($this->inventory_table)
                     ->row_array();
             }
+        }
+
+        return $data;
+    }
+
+    public function get_product_by_searchkey($searchKey, $searchValue)
+    {
+        $data = ['product' => []];
+
+        // Fetch product details
+        $data['product'] = $this->db->select('p.*, c.CATEGORY_NAME AS CATEGORY_NAME')
+            ->from($this->product_table . ' p') // Alias for the product table
+            ->join($this->category_table . ' c', 'p.CATEGORY_ID = c.ID', 'left') // Join with category table
+            ->where('p.' . $searchKey, $searchValue)
+            ->get()
+            ->row_array();
+
+
+        // Fetch inventory details if product exists and has a PRODUCT_ID
+        if (isset($data['product']['PRODUCT_ID'])) {
+            $data['product']['inventory'] = $this->db->where('PRODUCT_ID', $data['product']['PRODUCT_ID'])
+                ->get($this->inventory_table)
+                ->row_array();
         }
 
         return $data;

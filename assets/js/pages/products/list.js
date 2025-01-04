@@ -41,7 +41,7 @@ async function fetctProducts() {
         // Set loader to the screen 
         listingSkeleton(tableId, paginate.pageLimit || 0, 'products');
         const url = `${APIUrl}/products/list`;
-        const filters = filterCriterias(['CATEGORY_ID']);
+        const filters = filterCriterias(['FILTER_CATEGORY_ID']);
 
         const response = await fetch(url, {
             method: 'POST',
@@ -52,7 +52,7 @@ async function fetctProducts() {
             body: JSON.stringify({
                 limit: paginate.pageLimit,
                 currentPage: paginate.currentPage,
-                filters: filters
+                filters: { CATEGORY_ID: filters?.FILTER_CATEGORY_ID }
             })
         });
 
@@ -91,10 +91,10 @@ function showProducts(products, tbody) {
                                         <input class="form-check-input" type="checkbox" value="${product.PRODUCT_ID}" />
                                     </div>
                                 </td>
-                                <td class="w-500">
+                                <td class="w-300">
                                     <div class="d-flex align-items-center">
                                         <!--begin::Thumbnail-->
-                                        <a href="edit-product.html" class="symbol symbol-50px">
+                                        <a href="javascript:void(0)" class="symbol symbol-50px d-none">
                                             <span
                                                 class="symbol-label"
                                                 style="background-image: url(${img ?? default_img});">
@@ -105,15 +105,18 @@ function showProducts(products, tbody) {
                                         <div class="ms-5">
                                             <!--begin::Title-->
                                             <a
-                                                href="edit-product.html"
-                                                class="text-gray-800 text-hover-primary fs-5 fw-bold line-clamp-1"
+                                                href="javascript:void(0)"
+                                                class="text-gray-800 text-hover-primary fs-6 fw-bold line-clamp-1"
                                                 data-kt-ecommerce-product-filter="product_name">${product.PRODUCT_NAME}</a>
                                             <!--end::Title-->
-                                            <p class="mb-0 line-clamp-1">
-                                                <small>${(desc == 'null' ? '' : desc)}</small>
-                                            </p>
+                                            
                                         </div>
                                     </div>
+                                </td>
+                                <td class="w-300">
+                                    <p class="mb-0 line-clamp-1">
+                                        <small>${(desc == 'null' ? '' : desc)}</small>
+                                    </p>
                                 </td>
                                 <td class=" pe-0 dt-type-numeric">
                                     <span class=""><span class="badge bg-light text-primary">${product.UOM || 'PCS'}</span></span>
@@ -129,12 +132,12 @@ function showProducts(products, tbody) {
                                     <div class="d-flex align-items-center justify-content-end gap-4">
                                         <a href="products/view/${product.UUID}">
                                             <small>
-                                                <i class="fs-5 fa-solid fa-file-lines text-success"></i>
+                                                <i class="fs-5 fa-solid fa-file-lines text-gray-800"></i>
                                             </small>
                                         </a>
-                                        <a href="products/new/${product.UUID}?action=edit">
+                                        <a href="javascript:void(0)" onclick="openNewProductModal('edit', ${product.PRODUCT_ID})">
                                             <small>
-                                                <i class="fs-5 fa-regular fa-pen-to-square text-gray-700"></i>
+                                                <i class="fs-5 fa-regular fa-pen-to-square text-gray-800"></i>
                                             </small>
                                         </a>`;
             if (isAdmin) {
@@ -169,7 +172,7 @@ function handlePagination(action) {
 document.addEventListener('DOMContentLoaded', () => {
     // Fetch initial product data
     fetctProducts();
-    fetchCategories()
+    fetchCategoriesForFilter()
 
 });
 
@@ -178,8 +181,8 @@ function filterProducts() {
     fetctProducts();
 }
 
-async function fetchCategories() {
-    const categoryList = document.getElementById("CATEGORY_ID");
+async function fetchCategoriesForFilter() {
+    const categoryList = document.getElementById("FILTER_CATEGORY_ID");
 
     // Disable the select dropdown and show the loading label with animation
     categoryList.disabled = true;
@@ -226,15 +229,51 @@ async function fetchCategories() {
     }
 }
 
+
 async function deleteProduct(productID) {
     if (!productID) {
         throw new Error("Invalid Product ID, Please try Again");
     }
+
     try {
+
+        // Show a confirmation alert
+        const confirmation = await Swal.fire({
+            title: "Are you sure?",
+            text: "Do you really want to delete product? This action cannot be undone.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, delete it",
+            cancelButtonText: "Cancel",
+            customClass: {
+                popup: 'small-swal',
+                confirmButton: 'swal-confirm-btn',
+                cancelButton: 'swal-cancel-btn',
+            },
+        });
+
+        if (!confirmation.isConfirmed) return;
+
         const authToken = getCookie('auth_token');
         if (!authToken) {
-            throw new Error("Authorization token is missing. Please Login again to make API request.");
+            toasterNotification({
+                type: 'error',
+                message: "Authorization token is missing. Please login again to make an API request."
+            });
+            return;
         }
+
+        // Show a non-closable alert box while the activity is being deleted
+        Swal.fire({
+            title: "Deleting Product...",
+            text: "Please wait while the Product is being deleted.",
+            icon: "info",
+            showConfirmButton: false,
+            allowOutsideClick: false,
+            customClass: {
+                popup: 'small-swal',
+            },
+        });
 
         const url = `${APIUrl}/products/delete/${productID}`;
 
@@ -247,24 +286,25 @@ async function deleteProduct(productID) {
 
         const data = await response.json(); // Parse the JSON response
 
+        // Close the loading alert box
+        Swal.close();
+
         if (!response.ok) {
             // If the response is not ok, throw an error with the message from the response
-            throw new Error(data.error || 'Failed to delete product details');
+            throw new Error(data.error || 'Failed to delete Product details');
         }
 
         if (data.status) {
             // Here, we directly handle the deletion without checking data.status
             toasterNotification({ type: 'success', message: 'Product Deleted Successfully' });
             // Logic to remove the current row from the table
-            const row = document.querySelector(`#product-list-tbody tr[data-product-id="${productID}"]`);
-            if (row) {
-                row.remove(); // Remove the row from the table
-            }
+            fetctProducts();
         } else {
-            throw new Error(data.message || 'Failed to delete product details');
+            throw new Error(data.message || 'Failed to delete Product details');
         }
 
     } catch (error) {
         toasterNotification({ type: 'error', message: 'Request failed: ' + error.message });
+        Swal.close();
     }
 }

@@ -5,7 +5,7 @@
         <div class="card">
             <div class="card-body pt-8">
                 <div class="d-flex align-items-center justify-content-end gap-2 mb-4">
-                    <select name="CATEGORY_ID" id="CATEGORY_ID" class="bg-light border border-light p-4 rounded w-200 filter-input">
+                    <select name="FILTER_CATEGORY_ID" id="FILTER_CATEGORY_ID" class="bg-light border border-light p-4 rounded w-200 filter-input">
                         <option value="">Category</option>
 
                     </select>
@@ -17,6 +17,7 @@
                             <tr class="fw-bold fs-6 text-gray-800">
                                 <th>#</th>
                                 <th>Product</th>
+                                <th>Description</th>
                                 <th>UOM</th>
                                 <th>Unit Price</th>
                                 <th>Avl Stock</th>
@@ -39,5 +40,6 @@
 </div>
 <!--end::PAGE CONTAINER-->
 <?php
-$this->load->view('pages/products/new-v' . $version)
+$this->load->view('pages/products/new-v2');
+$this->load->view('loaders/full-page-loader');
 ?>

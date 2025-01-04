@@ -7,22 +7,13 @@
 <?php if (isset($options) && is_array($options)):
 ?>
     <?php if ($options['action'] === 'list'):
-        if (isset($options['version'])):
     ?>
-            <a href="javascript:void(0)" onclick="openNewProductModal('new')" class="btn btn-success my-2">Create New Product</a>
-        <?php else: ?>
-            <a href="products/new" class="btn btn-success my-2">Create New Product</a>
-        <?php endif; ?>
+        <button type="button" onclick="openNewProductModal()" class="btn btn-success my-2">Create New Product</button>
     <?php elseif ($options['action'] === 'form'): ?>
         <a href="products/list" class="btn btn-success my-2">Product List</a>
     <?php else: ?>
         <a href="products/list" class="btn border text-white my-2 mx-2">Product List</a>
-        <?php if (isset($options['version'])): ?>
-            <a href="products/new" class="btn btn-success my-2 mx-2">Create New Product</a>
-            <a href="javascript:void(0)" onclick="openNewProductModal('new')" class="btn btn-success my-2">Create New Product</a>
-        <?php else: ?>
-            <a href="products/new" class="btn btn-success my-2">Create New Product</a>
-        <?php endif; ?>
+        <button type="button" onclick="openNewProductModal()" class="btn btn-success my-2">Create New Product</button>
     <?php endif; ?>
 <?php endif; ?>
 <!--end::Button-->

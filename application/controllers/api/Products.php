@@ -37,10 +37,8 @@ class Products extends Api_controller
             $this->form_validation->set_rules('CATEGORY_ID', 'Category ID', 'required|integer');
             $this->form_validation->set_rules('STATUS', 'Status', 'required');
             $this->form_validation->set_rules('PRODUCT_NAME', 'Product Name', 'required|min_length[3]');
-            $this->form_validation->set_rules('DESCRIPTION', 'Description', 'required');
             $this->form_validation->set_rules('BASE_PRICE', 'Base Price', 'required|numeric');
             $this->form_validation->set_rules('CURRENCY', 'Currency', 'required');
-            $this->form_validation->set_rules('DISCOUNT_TYPE', 'Discount Type', 'required');
             $this->form_validation->set_rules('TAXABLE', 'Taxable', 'required|in_list[yes,no]');
             $this->form_validation->set_rules('TAX_PERCENTAGE', 'Tax Percentage', 'required|greater_than_equal_to[0]|less_than_equal_to[100]');
 
@@ -82,7 +80,8 @@ class Products extends Api_controller
                 $this->sendHTTPResponse(201, [
                     'status' => 201,
                     'message' => 'Product created successfully.',
-                    'data' => $data
+                    'data' => $data,
+                    'type' => $product_id != null ? 'update' : 'insert'
                 ]);
             } else {
                 throw new Exception('Failed to create new product.');
@@ -171,21 +170,23 @@ class Products extends Api_controller
         // Decode the JSON data as an associative array
         $data = json_decode($input, true);
 
-        // Validate input and check if `productUUID` is provided
-        if (!$data || !isset($data['productUUID'])) {
+        // Validate input and check if `requestUUID` is provided
+        if (!$data || !isset($data['searchKey']) || !isset($data['searchValue'])) {
             return $this->output
                 ->set_status_header(400)
                 ->set_content_type('application/json')
                 ->set_output(json_encode([
                     'status' => 'error',
                     'code' => 400,
-                    'message' => 'Invalid JSON input or missing productUUID'
+                    'message' => 'Invalid JSON input or missing product search value or search key'
                 ]));
         }
 
         // Retrieve product details using the provided productUUID
-        $productUUID = $data['productUUID'];
-        $productData = $this->Product_model->get_product_by_uuid($productUUID);
+        // Retrieve Request details using the provided quoteUUID
+        $searchKey = $data['searchKey'];
+        $searchValue = $data['searchValue'];
+        $productData = $this->Product_model->get_product_by_searchkey($searchKey, $searchValue);
 
         // Check if product data exists
         if (empty($productData['product'])) {

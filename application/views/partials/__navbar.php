@@ -42,30 +42,16 @@ $userid = $loggedInUser['userid'] ?? '0';
                             </span>
                         </a>
                         <!-- Custom Navlinks  -->
-                        <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="bottom-start" class="menu-item menu-lg-down-accordion me-lg-1 <?= setNavigationLinkActive($navlink, PRODUCT_ACTIVE_LINK, 'here show') ?>">
+                        <a href="products/list" class="menu-item me-lg-1 <?= setNavigationLinkActive($navlink, PRODUCT_ACTIVE_LINK, 'here show') ?>">
                             <span class="menu-link py-3">
                                 <span class="menu-title">Products</span>
-                                <span class="menu-arrow d-lg-none"></span>
                             </span>
-                            <div class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown menu-rounded-0 py-lg-4 w-lg-225px">
-                                <div class="menu-item">
-                                    <a class="menu-link py-3" href="products/new" title="" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right">
-                                        <span class="menu-icon">
-                                            <i class="las la-folder-plus fs-3"></i>
-                                        </span>
-                                        <span class="menu-title">Add New Product</span>
-                                    </a>
-                                </div>
-                                <div class="menu-item">
-                                    <a class="menu-link py-3" href="products/list" title="" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right">
-                                        <span class="menu-icon">
-                                            <i class="las la-stream fs-3"></i>
-                                        </span>
-                                        <span class="menu-title">Product Listing</span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
+                        </a>
+                        <a href="requests/list" class="menu-item me-lg-1">
+                            <span class="menu-link py-3">
+                                <span class="menu-title">Requests</span>
+                            </span>
+                        </a>
                         <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="bottom-start" class="menu-item menu-lg-down-accordion me-lg-1">
                             <span class="menu-link py-3">
                                 <span class="menu-title">Requests</span>

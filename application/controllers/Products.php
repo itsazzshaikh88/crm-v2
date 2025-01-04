@@ -7,11 +7,7 @@ class Products extends App_Controller
     {
         $this->validateUUID();
         $data['uuid'] = $uuid;
-
-        if ($this->input->get('version') == '2')
-            $data['view_path'] = 'pages/products/new-v2';
-        else
-            $data['view_path'] = 'pages/products/new';
+        $data['view_path'] = 'pages/products/new';
         $data['page_title'] = 'Add New Product - CRM Application';
         $data['page_heading'] = 'Add New Product';
         $data['navlink'] = 'product';
@@ -22,14 +18,13 @@ class Products extends App_Controller
     }
     public function list()
     {
-        $data['version'] = $this->input->get('version');
         $data['view_path'] = 'pages/products/list';
         $data['page_title'] = 'Product Listing - CRM Application';
         $data['page_heading'] = 'All Products';
-        $data['navlink'] = 'products';
+        $data['navlink'] = 'product';
         $data['css_files'] = [];
         $data['scripts'] = ['assets/js/pages/products/list.js', 'assets/js/pages/products/new-v3.js'];
-        $data['toolbar'] = ['name' => 'new-product', 'action' => 'list', 'version' => $data['version']];
+        $data['toolbar'] = ['name' => 'new-product', 'action' => 'list'];
         $this->load->view('layout', $data);
     }
 

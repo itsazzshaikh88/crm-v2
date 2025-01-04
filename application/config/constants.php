@@ -93,7 +93,7 @@ defined('APP_SECRET_KEY')       or define('APP_SECRET_KEY', 'secretkeyforanappli
 // NAVIGATION LINK ACTIVE ITEMS
 
 define('HOME_ACTIVE_LINK', 'home');
-define('PRODUCT_ACTIVE_LINK', 'product');
+define('PRODUCT_ACTIVE_LINK', 'products');
 define('ADMIN_ACTIVE_LINK', 'admin');
 $activities = [
     [
