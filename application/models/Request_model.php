@@ -24,7 +24,7 @@ class Request_model extends App_model
     public function add_request($request_id, $data, $userid, $role)
     {
         $header_data = [
-            'UUID' => $data['UUID'],
+            'UUID' => uuid_v4(),
             'CLIENT_ID' => $data['CLIENT_ID'],
             'REQUEST_TITLE' => $data['REQUEST_TITLE'],
             'COMPANY_ADDRESS' => $data['COMPANY_ADDRESS'],
@@ -205,7 +205,7 @@ class Request_model extends App_model
             // Fetch product details
             $data['header'] = $this->db->select("rh.ID, rh.REQUEST_NUMBER, rh.UUID, rh.CLIENT_ID, rh.REQUEST_TITLE, rh.COMPANY_ADDRESS, rh.BILLING_ADDRESS, rh.SHIPPING_ADDRESS, rh.CONTACT_NUMBER, 
             rh.EMAIL_ADDRESS, rh.REQUEST_DETAILS, rh.INTERNAL_NOTES, rh.ATTACHMENTS, 
-            cl.COMPANY_NAME, u.FIRST_NAME, u.LAST_NAME, u.EMAIL, CONCAT(u.FIRST_NAME, ' ', u.LAST_NAME) as FULLNAME")
+            cl.COMPANY_NAME, u.FIRST_NAME, u.LAST_NAME, u.EMAIL, CONCAT(u.FIRST_NAME, ' ', u.LAST_NAME) as CLIENT_NAME")
                 ->from('xx_crm_req_header rh')
                 ->join('xx_crm_client_detail cl', 'cl.USER_ID = rh.CLIENT_ID', 'inner')
                 ->join('xx_crm_users u', 'u.ID = rh.CLIENT_ID', 'inner')

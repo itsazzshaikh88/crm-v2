@@ -13,10 +13,10 @@ class Requests extends App_Controller
         $data['navlink'] = 'requests';
         $data['css_files'] = ['assets/css/pages/requests/new.css'];
         $data['scripts'] = [
-                            'assets/js/pages/clients/modals/modal-list.js', 
-                            'assets/js/pages/clients/modals/create-new-client.js', 
-                            'assets/js/pages/requests/new.js'
-                            ];
+            'assets/js/pages/clients/modals/modal-list.js',
+            'assets/js/pages/clients/modals/create-new-client.js',
+            'assets/js/pages/requests/new.js'
+        ];
         $data['toolbar'] = ['name' => 'new-request', 'action' => 'form'];
         $this->load->view('layout', $data);
     }
@@ -27,7 +27,12 @@ class Requests extends App_Controller
         $data['page_heading'] = 'All Requests';
         $data['navlink'] = 'requests';
         $data['toolbar'] = ['name' => 'new-request', 'action' => 'list'];
-        $data['scripts'] = ['assets/js/pages/requests/list.js'];
+        $data['scripts'] = [
+            'assets/js/pages/requests/list.js',
+            'assets/js/pages/requests/new-v1.js',
+            'assets/js/pages/clients/modals/modal-list.js',
+            'assets/js/pages/clients/modals/create-new-client.js',
+        ];
         $this->load->view('layout', $data);
     }
 

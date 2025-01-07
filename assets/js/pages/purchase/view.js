@@ -70,7 +70,7 @@ async function fetchPODetails(poUUID) {
                 'Authorization': `Bearer ${authToken}`,
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ poUUID })
+            body: JSON.stringify({ searchkey: 'UUID', searchvalue: poUUID })
         });
 
         // Parse the JSON response

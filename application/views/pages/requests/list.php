@@ -5,12 +5,15 @@
         <div class="card">
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-row-dashed gy-7" id="request-list">
+                    <table class="table table-row-dashed gy-7" id="request-list" style="white-space: nowrap;">
                         <thead>
                             <tr class="fw-bold fs-6 text-gray-800">
                                 <th>#</th>
-                                <th class="w-350">Request Details</th>
-                                <th class="w-250">Company Details</th>
+                                <th>Request #</th>
+                                <th class="w-350">Title</th>
+                                <th class="w-350">Description</th>
+                                <th class="w-200">Client Name</th>
+                                <th class="w-200">Company</th>
                                 <th>Contact #</th>
                                 <th>Email</th>
                                 <th>Request Date</th>
@@ -18,10 +21,10 @@
                             </tr>
                         </thead>
                         <tbody id="request-list-tbody">
-                            
                         </tbody>
                     </table>
                 </div>
+
                 <?= renderPaginate('current-page', 'total-pages', 'page-of-pages', 'range-of-records') ?>
             </div>
         </div>
@@ -29,3 +32,11 @@
     </div>
 </div>
 <!--end::PAGE CONTAINER-->
+
+<?php
+$this->load->view('loaders/full-page-loader');
+$this->load->view('pages/requests/new-v1');
+$this->load->view('modals/clients/client-list');
+$this->load->view('modals/clients/new-client');
+$this->load->view('modals/products/product-list');
+?>

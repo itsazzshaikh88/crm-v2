@@ -40,8 +40,8 @@
                                     <!--end::Col-->
                                 </div>
                                 <!--end::Row-->
-                                   <!--begin::Row-->
-                                   <div class="row mb-7">
+                                <!--begin::Row-->
+                                <div class="row mb-7">
                                     <!--begin::Label-->
                                     <label class="col-lg-4 fw-semibold text-muted">Sales Person
                                     </label>
@@ -54,8 +54,8 @@
                                     <!--end::Col-->
                                 </div>
                                 <!--end::Row-->
-                                   <!--begin::Row-->
-                                   <div class="row mb-7">
+                                <!--begin::Row-->
+                                <div class="row mb-7">
                                     <!--begin::Label-->
                                     <label class="col-lg-4 fw-semibold text-muted">Employee Name
                                     </label>
@@ -95,7 +95,7 @@
                                 </div>
                                 <!--end::Row-->
                                 <!--begin::Row-->
-                                
+
                                 <!--begin::Row-->
                                 <div class="row mb-7">
                                     <!--begin::Label-->
@@ -107,10 +107,10 @@
                                         <span class="fs-6" id="lbl-MOBILE_NUMBER"></span>
                                     </div>
                                     <!--end::Col-->
-                                  
+
                                 </div>
                                 <!--end::Row-->
-                               
+
                                 <!--begin::Row-->
                                 <div class="row mb-7">
                                     <!--begin::Label-->
@@ -184,7 +184,7 @@
                                     </tr>
                                 </thead>
                                 <tbody class="fs-6 fw-semibold text-gray-600" id="quote-lines">
-                                    
+
                                 </tbody>
                             </table>
                         </div>

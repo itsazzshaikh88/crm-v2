@@ -386,6 +386,8 @@ class Quotes extends Api_controller
                     'message' => 'Invalid Client ID'
                 ]));
         }
+        $data = $this->quotes_model->fetchClientRequests($ClientID);
+
         // Successful response with Request data
         return $this->output
             ->set_status_header(200)
@@ -394,7 +396,8 @@ class Quotes extends Api_controller
                 'status' => 'success',
                 'code' => 200,
                 'message' => 'Request details retrieved successfully',
-                'data' => $this->quotes_model->fetchClientRequests($ClientID)
+                'data' => $data
+
             ]));
     }
 

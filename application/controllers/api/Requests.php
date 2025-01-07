@@ -78,7 +78,8 @@ class Requests extends Api_controller
                 $this->sendHTTPResponse(201, [
                     'status' => 201,
                     'message' => 'Request Saved Successfully',
-                    'data' => $data
+                    'data' => $data,
+                    'type' => $request_id != null ? 'update' : 'insert'
                 ]);
             } else {
                 throw new Exception('Failed to create new request.');
@@ -229,22 +230,22 @@ class Requests extends Api_controller
         $data = json_decode($input, true);
 
         // Validate input and check if `requestUUID` is provided
-        if (!$data || !isset($data['searchkey']) || !isset($data['searchvalue'])) {
+        if (!$data || !isset($data['searchKey']) || !isset($data['searchValue'])) {
             return $this->output
                 ->set_status_header(400)
                 ->set_content_type('application/json')
                 ->set_output(json_encode([
                     'status' => 'error',
                     'code' => 400,
-                    'message' => 'Invalid JSON input or missing request credentials'
+                    'message' => 'Invalid JSON input or missing product search value or search key'
                 ]));
         }
 
         // Retrieve Request details using the provided requestUUID
-        $searchkey = $data['searchkey'];
-        $searchvalue = $data['searchvalue'];
+        $searchKey = $data['searchKey'];
+        $searchValue = $data['searchValue'];
         // Check if Request data exists
-        if ($searchkey == '' || $searchvalue == '') {
+        if ($searchKey == '' || $searchValue == '') {
             return $this->output
                 ->set_status_header(404)
                 ->set_content_type('application/json')
@@ -255,7 +256,7 @@ class Requests extends Api_controller
                 ]));
         }
 
-        $requestData = $this->Request_model->get_request_by_search_term($searchkey, $searchvalue);
+        $requestData = $this->Request_model->get_request_by_search_term($searchKey, $searchValue);
 
         // Check if Request data exists
         if (empty($requestData['header'])) {

@@ -17,8 +17,9 @@ class Purchase_model extends CI_Model
     function purchase_det($po_id, $data, $user_id)
     {
         $header_data = [
-            'UUID' => $data['UUID'] ?? null,
+            'UUID' => uuid_v4(),
             'QUOTE_ID' => $data['QUOTATION_NUMBER'] ?? null,
+            'CLIENT_ID' => $data['CLIENT_ID'] ?? null,
             'REQUEST_ID' => $data['REQUEST_ID'] ?? null,
             'COMPANY_NAME' => $data['COMPANY_NAME'] ?? null,
             'COMPANY_ADDRESS' => $data['COMPANY_ADDRESS'] ?? null,
@@ -74,7 +75,7 @@ class Purchase_model extends CI_Model
             if ($inserted) {
                 $inserted_id = $this->db->insert_id();
                 // Create request_number in the required format
-                $request_number = "REQ-" . date('dmy') . str_pad($inserted_id, 6, '0', STR_PAD_LEFT);
+                $request_number = "PO-" . date('dmy') . str_pad($inserted_id, 6, '0', STR_PAD_LEFT);
                 // Update the request_number field for the newly inserted product
                 $this->db->where('PO_ID', $inserted_id);
                 $this->db->update($this->xx_crm_po_header, ['PO_NUMBER' => $request_number]);
@@ -118,9 +119,8 @@ class Purchase_model extends CI_Model
 
         $this->db->select("PO.PO_ID, PO.PO_STATUS, PO.PO_NUMBER, PO.REQUEST_ID,  PO.UUID, PO.COMPANY_NAME, PO.EMAIL_ADDRESS, 
             PO.COMPANY_ADDRESS, PO.CONTACT_NUMBER, PO.PAYMENT_TERM, PO.TOTAL_AMOUNT, 
-            PO.COMMENTS, POL.QTY");
+            PO.COMMENTS, 0 as QTY");
         $this->db->from("xx_crm_po_header PO");
-        $this->db->join("xx_crm_po_lines POL", "POL.PO_ID = PO.PO_ID", "left");
         $this->db->order_by("PO.PO_ID", "DESC");
 
         // Apply filters dynamically from the $filters array
@@ -154,8 +154,8 @@ class Purchase_model extends CI_Model
 
             $data['header'] = $this->db->select("PO.PO_ID, PO.PO_NUMBER, PO.UUID, PO.CLIENT_ID, PO.QUOTE_ID, PO.REQUEST_ID, PO.COMPANY_NAME, PO.EMAIL_ADDRESS, PO.COMPANY_ADDRESS, PO.CONTACT_NUMBER, PO.CURRENCY, PO.PAYMENT_TERM, PO.PO_STATUS, PO.SUBTOTAL, PO.DISCOUNT_PERCENTAGE, PO.TAX_PERCENTAGE, PO.TOTAL_AMOUNT, PO.COMMENTS, PO.ATTACHMENTS, PO.ACTION_BY, PO.VERSION, PO.IS_CONVERTED, PO.CONVERTED_FROM, PO.CREATED_AT, PO.CREATED_BY, PO.UPDATED_AT, PO.UPDATED_BY, u.FIRST_NAME, u.LAST_NAME, u.EMAIL AS USER_EMAIL")
                 ->from("xx_crm_po_header PO")
-                ->join("xx_crm_users u", "u.ID = PO.CLIENT_ID")
-                ->where("PO.UUID", $requestUUID)
+                ->join("xx_crm_users u", "u.ID = PO.CLIENT_ID", "left")
+                ->where("PO.PO_ID", $requestUUID)
                 ->get()
                 ->row_array();
 
@@ -175,6 +175,51 @@ class Purchase_model extends CI_Model
 
         return $data;
     }
+
+
+    public function get_request_by_searchkey($searchkey, $searchvalue)
+    {
+        $data = ['header' => [], 'lines' => [], 'quotes' => []];
+
+        if ($searchkey) {
+            // Fetch request header details
+            $data['header'] = $this->db->select("PO.PO_ID, PO.PO_NUMBER, PO.UUID, PO.CLIENT_ID, PO.QUOTE_ID, PO.REQUEST_ID, PO.COMPANY_NAME, PO.EMAIL_ADDRESS, 
+                PO.COMPANY_ADDRESS, PO.CONTACT_NUMBER, PO.CURRENCY, PO.PAYMENT_TERM, PO.PO_STATUS, PO.SUBTOTAL, PO.DISCOUNT_PERCENTAGE, PO.TAX_PERCENTAGE, 
+                PO.TOTAL_AMOUNT, PO.COMMENTS, PO.ATTACHMENTS, PO.ACTION_BY, PO.VERSION, PO.IS_CONVERTED, PO.CONVERTED_FROM, PO.CREATED_AT, 
+                PO.CREATED_BY, PO.UPDATED_AT, PO.UPDATED_BY, u.FIRST_NAME, u.LAST_NAME, u.EMAIL AS USER_EMAIL")
+                ->from("xx_crm_po_header PO")
+                ->join("xx_crm_users u", "u.ID = PO.CLIENT_ID", "left")
+                ->where("PO." . $searchkey, $searchvalue)
+                ->get()
+                ->row_array();
+
+            // Fetch line items if header exists
+            if (isset($data['header']['PO_ID'])) {
+                $data['lines'] = $this->db->select("POL.LINE_ID, POL.PO_ID, POL.PRODUCT_ID, POL.PRODUCT_DESC, POL.QTY, POL.UNIT_PRICE, POL.TOTAL, 
+                    POL.COLOR, POL.TRANSPORT, POL.SOC, POL.REC_QTY, POL.BAL_QTY, P.PRODUCT_NAME")
+                    ->from("xx_crm_po_lines POL")
+                    ->join("xx_crm_products P", "POL.PRODUCT_ID = P.PRODUCT_ID", "left")
+                    ->where("POL.PO_ID", $data['header']['PO_ID'])
+                    ->order_by("POL.LINE_ID")
+                    ->get()
+                    ->result_array();
+
+                // Fetch related quotes
+                $clientID = $data['header']['CLIENT_ID'] ?? 0;
+                $data['quotes'] = $this->db->select("QUOTE_ID, UUID, QUOTE_NUMBER")
+                    ->from("xx_crm_quotations")
+                    ->where("CLIENT_ID", $clientID)
+                    ->order_by("QUOTE_ID")
+                    ->get()
+                    ->result_array();
+            }
+        }
+
+        return $data;
+    }
+
+
+
     function fetchClientRequests($ClientID)
     {
         echo json_encode($this->Purchase_model->fetchClientRequests($ClientID));

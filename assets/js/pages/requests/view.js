@@ -70,7 +70,7 @@ async function fetchRequest(requestUUID) {
                 'Authorization': `Bearer ${authToken}`,
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ searchkey: 'UUID', searchvalue: requestUUID })
+            body: JSON.stringify({ searchKey: 'UUID', searchValue: requestUUID })
         });
 
         // Parse the JSON response

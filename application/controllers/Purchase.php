@@ -14,11 +14,11 @@ class Purchase extends App_Controller
         $data['page_title'] = 'Create New Purchase Order - CRM Application';
         $data['page_heading'] = 'Create New Purchase Order';
         $data['navlink'] = 'purchase';
-        $data['scripts'] = [
-            'assets/js/pages/clients/modals/modal-list.js',
-            'assets/js/pages/clients/modals/create-new-client.js',
-            'assets/js/pages/purchase/new.js'
-        ];
+        // $data['scripts'] = [
+        //     'assets/js/pages/clients/modals/modal-list.js',
+        //     'assets/js/pages/clients/modals/create-new-client.js',
+        //     'assets/js/pages/purchase/new.js'
+        // ];
         $data['toolbar'] = ['name' => 'new-purchase', 'action' => 'form'];
         $this->load->view('layout', $data);
     }
@@ -28,7 +28,12 @@ class Purchase extends App_Controller
         $data['page_title'] = 'PO List - CRM Application';
         $data['page_heading'] = 'Purchase Order List';
         $data['navlink'] = 'purchase';
-        $data['scripts'] = ['assets/js/pages/purchase/list.js'];
+        $data['scripts'] = [
+            'assets/js/pages/purchase/new.js',
+            'assets/js/pages/clients/modals/modal-list.js',
+            'assets/js/pages/purchase/list.js',
+            'assets/js/pages/clients/modals/create-new-client.js',
+        ];
         $data['toolbar'] = ['name' => 'new-purchase', 'action' => 'list'];
 
 

@@ -20,44 +20,44 @@ const tbody = document.querySelector(`#${tableId} tbody`);
 const numberOfHeaders = document.querySelectorAll(`#${tableId} thead th`).length || 0;
 
 async function fetcPOList() {
-    // try {
-    const authToken = getCookie('auth_token');
-    if (!authToken) {
-        toasterNotification({ type: 'error', message: "Authorization token is missing. Please Login again to make API request." });
-        return;
+    try {
+        const authToken = getCookie('auth_token');
+        if (!authToken) {
+            toasterNotification({ type: 'error', message: "Authorization token is missing. Please Login again to make API request." });
+            return;
+        }
+        // Set loader to the screen 
+        listingSkeleton(tableId, paginateList.pageLimit || 0, 'purchase');
+        const url = `${APIUrl}/purchase/list`;
+        const filters = filterCriterias([]);
+
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${authToken}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                limit: paginateList.pageLimit,
+                currentPage: paginateList.currentPage,
+                filters: filters
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch request data');
+        }
+
+        const data = await response.json();
+        paginateList.totalPages = parseFloat(data?.pagination?.total_pages) || 0;
+        paginateList.totalRecords = parseFloat(data?.pagination?.total_records) || 0;
+
+        showPODetails(data.po || [], tbody);
+
+    } catch (error) {
+        toasterNotification({ type: 'error', message: 'Request failed: ' + error.message });
+        tbody.innerHTML = renderNoResponseCode({ colspan: numberOfHeaders });
     }
-    // Set loader to the screen 
-    listingSkeleton(tableId, paginate.pageLimit || 0, 'purchase');
-    const url = `${APIUrl}/purchase/list`;
-    const filters = filterCriterias([]);
-
-    const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-            'Authorization': `Bearer ${authToken}`,
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            limit: paginate.pageLimit,
-            currentPage: paginate.currentPage,
-            filters: filters
-        })
-    });
-
-    if (!response.ok) {
-        throw new Error('Failed to fetch request data');
-    }
-
-    const data = await response.json();
-    paginate.totalPages = parseFloat(data?.pagination?.total_pages) || 0;
-    paginate.totalRecords = parseFloat(data?.pagination?.total_records) || 0;
-
-    showPODetails(data.po || [], tbody);
-
-    // }  (error) {
-    //     toasterNotification({ type: 'error', message: 'Request failed: ' + error.message });
-    //     tbody.innerHTML = renderNoResponseCode({ colspan: numberOfHeaders });
-    // }
 }
 
 const statusColors = {
@@ -74,16 +74,16 @@ function showPODetails(po, tbody) {
 
             content += `<tr data-request-id="${request.PO_ID}">
                                 <td class="text-center">${++counter}</td> <!-- # -->
+                                 <td>${request?.PO_NUMBER || ''}</td>
                                 <td>
                                     <div class="d-flex">
                                         <div class="">
                                             <a href="purchase/view/${request.UUID}" class="text-gray-800 text-hover-primary fs-5 fw-bold mb-1 line-clamp-1" data-kt-ecommerce-category-filter="category_name">${request?.COMPANY_NAME || ''}</a>
-                                            <div class="text-muted fs-7 fw-normal line-clamp-1">${request?.PO_NUMBER || ''}</div>
                                         </div>
                                     </div>
                                 </td> <!-- Company -->
                                 <td>${request?.EMAIL_ADDRESS || ''}</td> <!-- Email -->
-                                <td class="line-clamp-1">${request?.COMPANY_ADDRESS || ''}</td> <!-- Company_address -->
+                                <td ><span class="line-clamp-1">${request?.COMPANY_ADDRESS || ''}</span></td> <!-- Company_address -->
                                 <td>${request?.CONTACT_NUMBER || ''}</td> <!-- number -->
                                 <td>${request?.PAYMENT_TERM || ''}</td> <!-- Payment -->
                                 <td>${request?.TOTAL_AMOUNT || ''}</td> <!-- amount -->
@@ -100,7 +100,8 @@ function showPODetails(po, tbody) {
                                                 <i class="fs-5 fa-solid fa-file-lines text-success"></i>
                                             </small>
                                         </a>
-                                        <a href="purchase/new/${request.UUID}?action=edit">
+                                      <a href="javascript:void(0)" onclick="openNewPurchaseModal('edit',${request.PO_ID})" title="Edit Purchase">
+
                                             <small>
                                                 <i class="fs-5 fa-regular fa-pen-to-square text-gray-700"></i>
                                             </small>
@@ -123,12 +124,12 @@ function showPODetails(po, tbody) {
 
 // Global scope
 // Declare the pagination instance globally
-const paginate = new Pagination('current-page', 'total-pages', 'page-of-pages', 'range-of-records');
-paginate.pageLimit = 10; // Set your page limit here
+const paginateList = new Pagination('current-page', 'total-pages', 'page-of-pages', 'range-of-records');
+paginateList.pageLimit = 10; // Set your page limit here
 
 // Function to handle pagination button clicks
 function handlePagination(action) {
-    paginate.paginate(action); // Update current page based on the action
+    paginateList.paginate(action); // Update current page based on the action
     fetcPOList(); // Fetch Request for the updated current page
 }
 document.addEventListener('DOMContentLoaded', () => {
@@ -137,7 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function filterRequest() {
-    paginate.currentPage = 1;
+    paginateList.currentPage = 1;
     fetcPOList();
 }
 
@@ -267,3 +268,4 @@ async function deletePO(poUUID) {
         Swal.close();
     }
 }
+

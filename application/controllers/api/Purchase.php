@@ -37,7 +37,7 @@ class Purchase extends Api_controller
 
             // Set validation rules
             // $this->form_validation->set_rules('quotation_number', 'Quotation Number', 'required');
-            $this->form_validation->set_rules('REQUEST_ID', 'Request Number', 'required');
+            // $this->form_validation->set_rules('REQUEST_ID', 'Request Number', 'required');
             $this->form_validation->set_rules('COMPANY_NAME', 'Company Name', 'required');
             $this->form_validation->set_rules('COMPANY_ADDRESS', 'Company Address', 'required');
             $this->form_validation->set_rules('EMAIL_ADDRESS', 'Email Address', 'required|valid_email');
@@ -170,20 +170,21 @@ class Purchase extends Api_controller
         $data = json_decode($input, true);
 
         // Validate input and check if `poUUID` is provided
-        if (!$data || !isset($data['poUUID'])) {
+        if (!$data || !isset($data['searchkey']) || !isset($data['searchvalue'])) {
             return $this->output
                 ->set_status_header(400)
                 ->set_content_type('application/json')
                 ->set_output(json_encode([
                     'status' => 'error',
                     'code' => 400,
-                    'message' => 'Invalid JSON input or missing poUUID'
+                    'message' => 'Invalid Search key and Search value'
                 ]));
         }
 
         // Retrieve Request details using the provided poUUID
-        $poUUID = $data['poUUID'];
-        $requestData = $this->Purchase_model->get_request_by_uuid($poUUID);
+        $searchkey = $data['searchkey'];
+        $searchvalue = $data['searchvalue'];
+        $requestData = $this->Purchase_model->get_request_by_searchkey($searchkey, $searchvalue);
 
         // Check if Request data exists
         if (empty($requestData['header'])) {

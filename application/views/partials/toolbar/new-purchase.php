@@ -6,12 +6,12 @@
 <!--begin::Button-->
 <?php if (isset($options) && is_array($options)): ?>
     <?php if ($options['action'] === 'list'): ?>
-        <a href="purchase/new" class="btn btn-success my-2">Create New PO</a>
+        <button type="button" onclick="openNewPurchaseModal('new')" class="btn btn-success my-2">Create New PO</button>
     <?php elseif ($options['action'] === 'form'): ?>
         <a href="purchase/list" class="btn btn-success my-2">PO List</a>
     <?php else: ?>
         <a href="purchase/list" class="btn border text-white my-2 mx-2">PO List</a>
-        <a href="purchase/new" class="btn btn-success my-2 mx-2">Create New PO</a>
+        <button type="button" onclick="openNewPurchaseModal('new')" class="btn btn-success my-2">Create New PO</button>
     <?php endif; ?>
 <?php endif; ?>
 <!--end::Button-->

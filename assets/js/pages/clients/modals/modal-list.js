@@ -23,7 +23,7 @@ async function fetchClients() {
         }
 
         // Set loader to the screen 
-        clientListModalSkeleton(listContainer, paginate.pageLimit || 0);
+        clientListModalSkeleton(listContainer, clientListPaginate.pageLimit || 0);
         const url = `${APIUrl}/clients/list`;
         const response = await fetch(url, {
             method: 'POST',
@@ -32,8 +32,8 @@ async function fetchClients() {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                limit: paginate.pageLimit,
-                currentPage: paginate.currentPage,
+                limit: clientListPaginate.pageLimit,
+                currentPage: clientListPaginate.currentPage,
                 filters: { STATUS: 'active' }
             })
         });
@@ -43,8 +43,8 @@ async function fetchClients() {
         }
 
         const data = await response.json();
-        paginate.totalPages = parseFloat(data?.pagination?.total_pages) || 0;
-        paginate.totalRecords = parseFloat(data?.pagination?.total_records) || 0;
+        clientListPaginate.totalPages = parseFloat(data?.pagination?.total_pages) || 0;
+        clientListPaginate.totalRecords = parseFloat(data?.pagination?.total_records) || 0;
 
         showClients(data.clients || [], listContainer);
 
@@ -90,12 +90,12 @@ function showClients(clients, listContainer) {
 
 // Global scope
 // Declare the pagination instance globally
-const paginate = new Pagination('current-page', 'total-pages', 'page-of-pages', 'range-of-records');
-paginate.pageLimit = 10; // Set your page limit here
+const clientListPaginate = new Pagination('current-page', 'total-pages', 'page-of-pages', 'range-of-records');
+clientListPaginate.pageLimit = 10; // Set your page limit here
 
 // Function to handle pagination button clicks
 function handlePagination(action) {
-    paginate.paginate(action); // Update current page based on the action
+    clientListPaginate.paginate(action); // Update current page based on the action
     fetchClients(); // Fetch products for the updated current page
 }
 
@@ -126,7 +126,7 @@ function openNewClientModal() {
 }
 
 function filterProducts() {
-    paginate.currentPage = 1;
+    clientListPaginate.currentPage = 1;
     fetchClients();
 }
 

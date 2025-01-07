@@ -10,11 +10,11 @@ class Quotes extends App_Controller
         $data['page_title'] = 'Create New Quote - CRM Application';
         $data['page_heading'] = 'Create New Quote';
         $data['navlink'] = 'quotes';
-        $data['scripts'] = [
-            'assets/js/pages/clients/modals/modal-list.js',
-            'assets/js/pages/clients/modals/create-new-client.js',
-            'assets/js/pages/quotes/new.js'
-        ];
+        // $data['scripts'] = [
+        //     'assets/js/pages/clients/modals/modal-list.js',
+        //     'assets/js/pages/clients/modals/create-new-client.js',
+        //     'assets/js/pages/quotes/new.js'
+        // ];
 
         $data['toolbar'] = ['name' => 'new-quote', 'action' => 'form'];
         $this->load->view('layout', $data);
@@ -26,7 +26,12 @@ class Quotes extends App_Controller
         $data['page_heading'] = 'All Quotations';
         $data['navlink'] = 'quotes';
         $data['toolbar'] = ['name' => 'new-quote', 'action' => 'list'];
-        $data['scripts'] = ['assets/js/pages/quotes/list.js'];
+        $data['scripts'] = [
+            'assets/js/pages/quotes/new-v1.js',
+            'assets/js/pages/clients/modals/modal-list.js',
+            'assets/js/pages/quotes/list.js',
+            'assets/js/pages/clients/modals/create-new-client.js',
+        ];
 
         $this->load->view('layout', $data);
     }

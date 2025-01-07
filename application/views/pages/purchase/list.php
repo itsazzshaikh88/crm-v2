@@ -9,26 +9,20 @@
                         <thead>
                             <tr class="fw-bold fs-6 text-gray-800">
                                 <th>#</th>
+                                <th>PO #</th>
                                 <th>Company</th>
                                 <th>Email</th>
                                 <th>Company Address</th>
-                                <th>Contact Number</th>
+                                <th>Contact #</th>
                                 <th>Payment</th>
                                 <th>Amount</th>
                                 <th>Status</th>
                                 <th>Qty</th>
-                                <th>Action</th>
+                                <th class="text-end">Action</th>
                             </tr>
                         </thead>
                         <tbody id="purchase-list-tbody">
-                            <tr>
-                                <td colspan="12" class="text-center text-danger">
-                                    <div class="d-flex justify-content-center align-items-center flex-column">
-                                        <img src="assets/images/no-data.png" class="no-data-img-table" alt="">
-                                        <h4 class="text-danger">No data available</h4>
-                                    </div>
-                                </td>
-                            </tr>
+                           
                         </tbody>
                     </table>
                 </div>
@@ -39,3 +33,11 @@
     </div>
 </div>
 <!--end::PAGE CONTAINER-->
+<?php
+$this->load->view('pages/purchase/purchase-modal');
+$this->load->view('loaders/full-page-loader');
+$this->load->view('modals/clients/client-list');
+$this->load->view('modals/clients/new-client');
+$this->load->view('modals/products/product-list');
+
+?>

@@ -1,4 +1,4 @@
-// productListSkeleton("product-list", 10, 11);
+// RequestListSkeleton("Request-list", 10, 11);
 function renderNoResponseCode(option, isAdmin = false) {
     let noCotent = `<tr>
                                 <td colspan="${option?.colspan}" class="text-center text-danger">
@@ -69,17 +69,20 @@ function showRequests(requests, tbody) {
         requests.forEach(request => {
             content += `<tr data-request-id="${request.ID}">
                                 <td class="text-center">${++counter}</td>
+                                <td class="">
+                                    <p class="mb-0 text-primary"><small>${request?.REQUEST_NUMBER || ''}</small></p>
+                                </td>
                                 <td>
                                     <div class="d-flex">
                                         <div class="">
                                             <!--begin::Title-->
-                                            <a href="requests/view/${request.UUID}" class="text-gray-800 text-hover-primary fs-5 fw-bold mb-1 line-clamp-1" data-kt-ecommerce-category-filter="category_name">${request?.REQUEST_TITLE || ''}</a>
+                                            <a href="requests/view/${request.UUID}" class="text-gray-800 text-hover-primary fs-5 fw-bold line-clamp-1s" data-kt-ecommerce-category-filter="category_name">${request?.REQUEST_TITLE || ''}</a>
                                             <!--end::Title-->
-                                            <!--begin::Description-->
-                                            <div class="text-muted fs-7 fw-normal line-clamp-1">${request?.REQUEST_DETAILS || ''}</div>
-                                            <p class="mb-0 text-primary"><small>${request?.REQUEST_NUMBER || ''}</small></p>
                                         </div>
                                     </div>
+                                </td>
+                                <td>
+                                    <div class="text-muted fs-7 fw-normal line-clamp-1">${request?.REQUEST_DETAILS || ''}</div>
                                 </td>
                                 <td>
                                     <div class="d-flex">
@@ -87,16 +90,14 @@ function showRequests(requests, tbody) {
                                             <!--begin::Title-->
                                             <a href="" class="text-gray-800 text-hover-primary fs-5 fw-bold mb-1" data-kt-ecommerce-category-filter="category_name">${request?.COMPANY_NAME || ''}</a>
                                             <!--end::Title-->
-
-                                            <!--begin::Description-->
-                                            <div class="text-muted fs-7 fw-normal line-clamp-1">${request?.FIRST_NAME || ''} ${request?.LAST_NAME || ''}</div>
-                                            <!--end::Description-->
-                                            <div class="text-muted fs-7 fw-normal d-flex align-items-center mt-2">
-                                                <small class="text-black">${request?.EMAIL || ''}</small>
-                                            </div>
                                         </div>
                                     </div>
                                 </td>
+                                <td>
+                                    <!--begin::Description-->
+                                        <div class="text-muted fs-7 fw-normal line-clamp-1">${request?.FIRST_NAME || ''} ${request?.LAST_NAME || ''}
+                                        </div>
+                                    <!--end::Description--></td>
                                 <td>${request?.CONTACT_NUMBER || ''}</td>
                                 <td>
                                     ${request?.EMAIL_ADDRESS || ''}
@@ -109,7 +110,7 @@ function showRequests(requests, tbody) {
                                                 <i class="fs-5 fa-solid fa-file-lines text-success"></i>
                                             </small>
                                         </a>
-                                        <a href="requests/new/${request.UUID}?action=edit">
+                                        <a onclick="openNewRequestModal('edit', ${request.ID})" href="javascript:void(0)">
                                             <small>
                                                 <i class="fs-5 fa-regular fa-pen-to-square text-gray-700"></i>
                                             </small>
@@ -142,7 +143,7 @@ function handlePagination(action) {
     fetchRequests(); // Fetch Request for the updated current page
 }
 document.addEventListener('DOMContentLoaded', () => {
-    // Fetch initial product data
+    // Fetch initial Request data
     fetchRequests();
 });
 
@@ -203,11 +204,46 @@ async function deleteRequest(requestID) {
     if (!requestID) {
         throw new Error("Invalid Request ID, Please try Again");
     }
+
     try {
+
+        // Show a confirmation alert
+        const confirmation = await Swal.fire({
+            title: "Are you sure?",
+            text: "Do you really want to delete Request? This action cannot be undone.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, delete it",
+            cancelButtonText: "Cancel",
+            customClass: {
+                popup: 'small-swal',
+                confirmButton: 'swal-confirm-btn',
+                cancelButton: 'swal-cancel-btn',
+            },
+        });
+
+        if (!confirmation.isConfirmed) return;
+
         const authToken = getCookie('auth_token');
         if (!authToken) {
-            throw new Error("Authorization token is missing. Please Login again to make API request.");
+            toasterNotification({
+                type: 'error',
+                message: "Authorization token is missing. Please login again to make an API request."
+            });
+            return;
         }
+
+        // Show a non-closable alert box while the activity is being deleted
+        Swal.fire({
+            title: "Deleting Request...",
+            text: "Please wait while the Request is being deleted.",
+            icon: "info",
+            showConfirmButton: false,
+            allowOutsideClick: false,
+            customClass: {
+                popup: 'small-swal',
+            },
+        });
 
         const url = `${APIUrl}/requests/delete/${requestID}`;
 
@@ -220,24 +256,25 @@ async function deleteRequest(requestID) {
 
         const data = await response.json(); // Parse the JSON response
 
+        // Close the loading alert box
+        Swal.close();
+
         if (!response.ok) {
             // If the response is not ok, throw an error with the message from the response
-            throw new Error(data.error || 'Failed to delete request details');
+            throw new Error(data.error || 'Failed to delete Request details');
         }
 
         if (data.status) {
             // Here, we directly handle the deletion without checking data.status
             toasterNotification({ type: 'success', message: 'Request Deleted Successfully' });
             // Logic to remove the current row from the table
-            const row = document.querySelector(`#request-list-tbody tr[data-request-id="${requestID}"]`);
-            if (row) {
-                row.remove(); // Remove the row from the table
-            }
+            fetchRequests();
         } else {
-            throw new Error(data.message || 'Failed to delete request details');
+            throw new Error(data.message || 'Failed to delete Request details');
         }
 
     } catch (error) {
         toasterNotification({ type: 'error', message: 'Request failed: ' + error.message });
+        Swal.close();
     }
 }

@@ -28,7 +28,7 @@ async function fetchRequests() {
             return;
         }
         // Set loader to the screen 
-        listingSkeleton(tableId, paginate.pageLimit || 0, 'requests');
+        listingSkeleton(tableId, paginateList.pageLimit || 0, 'requests');
         const url = `${APIUrl}/quotes/list`;
         const filters = filterCriterias([]);
 
@@ -39,8 +39,8 @@ async function fetchRequests() {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                limit: paginate.pageLimit,
-                currentPage: paginate.currentPage,
+                limit: paginateList.pageLimit,
+                currentPage: paginateList.currentPage,
                 filters: filters
             })
         });
@@ -50,8 +50,8 @@ async function fetchRequests() {
         }
 
         const data = await response.json();
-        paginate.totalPages = parseFloat(data?.pagination?.total_pages) || 0;
-        paginate.totalRecords = parseFloat(data?.pagination?.total_records) || 0;
+        paginateList.totalPages = parseFloat(data?.pagination?.total_pages) || 0;
+        paginateList.totalRecords = parseFloat(data?.pagination?.total_records) || 0;
 
         showQuotes(data.quotes || [], tbody);
 
@@ -63,9 +63,10 @@ async function fetchRequests() {
 
 
 const quoteStatusColors = {
-    Pending: "#F59E0B", // Warm Amber - Reflects anticipation or action required
-    Approved: "#10B981", // Refreshing Green - Denotes positivity and success
-    Rejected: "#EF4444", // Bold Red - Indicates rejection clearly and decisively
+    draft: "#1F509A",
+    Pending: "#F59E0B",
+    Approved: "#10B981",
+    Rejected: "#EF4444",
 };
 
 
@@ -82,50 +83,26 @@ function showQuotes(Quotes, tbody) {
         Quotes.forEach(quote => {
 
             content += `<tr data-quote-id="${quote.QUOTE_ID}" class="text-gray-800">
-                                <td class="text-center">${++counter}</td>
-                                <td>
-                                    <div class="d-flex">
-                                        <div class="">
-                                            <!--begin::Title-->
-                                            <a href="Quotes/view/${quote.UUID}" class="text-gray-800 text-hover-primary fs-5 fw-bold mb-1" data-kt-ecommerce-category-filter="category_name">${quote?.EMPLOYEE_NAME || ''}</a>
-                                            <!--end::Title-->
-                                            <!--begin::Description-->
-                                            <div class="fs-7 fw-normal text-primary">${quote?.QUOTE_NUMBER || ''}</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="d-flex">
-                                        <div class="">
-                                            <!--begin::Title-->
-                                            <a href="" class="text-gray-800 text-hover-primary fs-5 mb-1" data-kt-ecommerce-category-filter="category_name">${quote?.COMPANY_NAME || ''}</a>
-                                            <!--end::Title-->
-
-                                          
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>${quote?.EMPLOYEE_NAME || ''}</td>
-                                <td>${quote?.JOB_TITLE || ''}</td>
-                                <td>${quote?.EMAIL_ADDRESS || ''}</td>
-                                <td>${quote?.SALES_PERSON || ''}</td>
-
-
-
-                                <td class="text-primary">${quote?.REQUEST_NUMBER || ''}</td>
-                                <td>
-                                    <span class="badge text-white" style="background-color: ${quoteStatusColors[quote?.QUOTE_STATUS || '']}">${quote?.QUOTE_STATUS || ''}</span>
-                                </td>
-                                <td>${quote?.TOTAL_AMOUNT || ''}</td>
-
-                                <td class="text-end">
+                            <td>${++counter}</td>        
+                            <td>${quote?.QUOTE_NUMBER || ''}</td>        
+                            <td>${quote?.COMPANY_NAME || ''}</td>        
+                            <td>${quote?.EMPLOYEE_NAME || ''}</td>
+                            <td>${quote?.JOB_TITLE || ''}</td>
+                            <td>${quote?.EMAIL_ADDRESS || ''}</td>
+                            <td>${quote?.SALES_PERSON || ''}</td>       
+                            <td class="text-primary">${quote?.REQUEST_NUMBER || ''}</td>        
+                            <td>
+                                <span class="badge text-white" style="background-color: ${quoteStatusColors[quote?.QUOTE_STATUS || '']}">${quote?.QUOTE_STATUS || ''}</span>
+                            </td>
+                            <td>${quote?.TOTAL_AMOUNT || ''}</td>       
+                            <td class="text-end">
                                     <div class="d-flex align-items-center justify-content-end gap-4">
                                         <a href="quotes/view/${quote.UUID}" title="View Quote"> 
                                             <small>
                                                 <i class="fs-5 fa-solid fa-file-lines text-success"></i>
                                             </small>
                                         </a>
-                                        <a href="quotes/new/${quote.UUID}?action=edit" title="Edit Quote">
+                                        <a onclick="openNewQuoteModal('edit',${quote.QUOTE_ID})" title="Edit Quote">
                                             <small>
                                                 <i class="fs-5 fa-regular fa-pen-to-square text-gray-700"></i>
                                             </small>
@@ -143,7 +120,7 @@ function showQuotes(Quotes, tbody) {
                                        
                                     </div>
                                 </td>
-                            </tr>`;
+                        </tr>`;
         });
         tbody.innerHTML = content;
     } else {
@@ -155,13 +132,14 @@ function showQuotes(Quotes, tbody) {
 
 // Global scope
 // Declare the pagination instance globally
-const paginate = new Pagination('current-page', 'total-pages', 'page-of-pages', 'range-of-records');
-paginate.pageLimit = 10; // Set your page limit here
+const paginateList = new Pagination('current-page', 'total-pages', 'page-of-pages', 'range-of-records');
+paginateList.pageLimit = 10; // Set your page limit here
 
 // Function to handle pagination button clicks
 function handlePagination(action) {
-    paginate.paginate(action); // Update current page based on the action
+    paginateList.paginate(action); // Update current page based on the action
     fetchRequests(); // Fetch Request for the updated current page
+    fetchProductsForModalListing();
 }
 document.addEventListener('DOMContentLoaded', () => {
     // Fetch initial product data
@@ -169,7 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function filterRequest() {
-    paginate.currentPage = 1;
+    paginateList.currentPage = 1;
     fetchRequests();
 }
 
@@ -271,12 +249,8 @@ async function deleteQuote(requestID) {
                 title: 'Deleted!',
                 text: 'Quote Deleted Successfully'
             });
+            fetchRequests();
 
-            // Logic to remove the current row from the table
-            const row = document.querySelector(`#quote-list-tbody tr[data-quote-id="${requestID}"]`);
-            if (row) {
-                row.remove(); // Remove the row from the table
-            }
         } else {
             throw new Error(data.message || 'Failed to delete quote details');
         }
@@ -331,3 +305,47 @@ async function convertToQuotation(requestID) {
         toasterNotification({ type: 'error', message: 'quote failed: ' + error.message });
     }
 }
+
+// async function fetchProductsForModalListing(query = null) {
+//     try {
+//         const authToken = getCookie('auth_token');
+//         if (!authToken) {
+//             toasterNotification({ type: 'error', message: "Authorization token is missing. Please Login again to make API request." });
+//             return;
+//         }
+//         const prodListContainer = document.getElementById("modal-product-list");
+//         // Set loader to the screen 
+//         productModalListingSkeleton(prodListContainer, prodListPaginate.pageLimit || 0);
+
+//         const url = `${APIUrl}/products/list`;
+//         const filters = filterCriterias(['CATEGORY_ID']);
+//         const inputSearchParams = query ?? document.getElementById("searchInput").value.trim()
+//         const response = await fetch(url, {
+//             method: 'POST',
+//             headers: {
+//                 'Authorization': `Bearer ${authToken}`,
+//                 'Content-Type': 'application/json'
+//             },
+//             body: JSON.stringify({
+//                 limit: prodListPaginate.pageLimit,
+//                 currentPage: prodListPaginate.currentPage,
+//                 filters: filters,
+//                 search: { "product": inputSearchParams }
+//             })
+//         });
+
+//         if (!response.ok) {
+//             throw new Error('Failed to fetch product data');
+//         }
+
+//         const data = await response.json();
+//         prodListPaginate.totalPages = parseFloat(data?.pagination?.total_pages) || 0;
+//         prodListPaginate.totalRecords = parseFloat(data?.pagination?.total_records) || 0;
+
+//         showProducts(data.products || [], prodListContainer);
+
+//     } catch (error) {
+//         toasterNotification({ type: 'error', message: 'Request failed: ' + error.message });
+//         prodListContainer.innerHTML = renderNoResponseCode({ colspan: numberOfHeaders });
+//     }
+// }

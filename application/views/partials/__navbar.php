@@ -52,86 +52,16 @@ $userid = $loggedInUser['userid'] ?? '0';
                                 <span class="menu-title">Requests</span>
                             </span>
                         </a>
-                        <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="bottom-start" class="menu-item menu-lg-down-accordion me-lg-1">
-                            <span class="menu-link py-3">
-                                <span class="menu-title">Requests</span>
-                                <span class="menu-arrow d-lg-none"></span>
-                            </span>
-                            <div class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown menu-rounded-0 py-lg-4 w-lg-225px">
-                                <div class="menu-item">
-                                    <a class="menu-link py-3" href="requests/new" title="" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right">
-                                        <span class="menu-icon">
-                                            <i class="las la-folder-plus fs-3"></i>
-                                        </span>
-                                        <span class="menu-title">Create New Request</span>
-                                    </a>
-                                </div>
-                                <div class="menu-item">
-                                    <a class="menu-link py-3" href="requests/list" title="" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right">
-                                        <span class="menu-icon">
-                                            <i class="las la-stream fs-3"></i>
-                                        </span>
-                                        <span class="menu-title">All Requests</span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="bottom-start" class="menu-item menu-lg-down-accordion me-lg-1">
+                        <a href="quotes/list" class="menu-item me-lg-1">
                             <span class="menu-link py-3">
                                 <span class="menu-title">Quotations</span>
-                                <span class="menu-arrow d-lg-none"></span>
                             </span>
-                            <div class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown menu-rounded-0 py-lg-4 w-lg-225px">
-                                <div class="menu-item">
-                                    <a class="menu-link py-3" href="quotes/new" title="" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right">
-                                        <span class="menu-icon">
-                                            <i class="las la-folder-plus fs-3"></i>
-                                        </span>
-                                        <span class="menu-title">Create New Quotation</span>
-                                    </a>
-                                </div>
-                                <div class="menu-item">
-                                    <a class="menu-link py-3" href="quotes/list" title="" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right">
-                                        <span class="menu-icon">
-                                            <i class="las la-stream fs-3"></i>
-                                        </span>
-                                        <span class="menu-title">Quotation List</span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="bottom-start" class="menu-item menu-lg-down-accordion me-lg-1">
+                        </a>
+                        <a href="purchase/list" class="menu-item me-lg-1">
                             <span class="menu-link py-3">
                                 <span class="menu-title">Purchase</span>
-                                <span class="menu-arrow d-lg-none"></span>
                             </span>
-                            <div class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown menu-rounded-0 py-lg-4 w-lg-225px">
-                                <div class="menu-item">
-                                    <a class="menu-link py-3" href="purchase/new" title="" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right">
-                                        <span class="menu-icon">
-                                            <i class="las la-cart-plus fs-3"></i>
-                                        </span>
-                                        <span class="menu-title">Place New Order</span>
-                                    </a>
-                                </div>
-                                <div class="menu-item">
-                                    <a class="menu-link py-3" href="purchase/list" title="" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right">
-                                        <span class="menu-icon">
-                                            <i class="las la-stream fs-3"></i>
-                                        </span>
-                                        <span class="menu-title">PO List</span>
-                                    </a>
-                                </div>
-                                <div class="menu-item">
-                                    <a class="menu-link py-3" href="purchase/convert/old-po" title="" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right">
-                                        <span class="menu-icon">
-                                            <i class="las la-exchange-alt fs-3"></i>
-                                        </span>
-                                        <span class="menu-title">Convert Old PO</span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
+                        </a>
                         <a href="invoices/list" class="menu-item me-lg-1">
                             <span class="menu-link py-3">
                                 <span class="menu-title">Invoices</span>

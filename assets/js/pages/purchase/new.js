@@ -1,24 +1,93 @@
 // Global Vars
 
 // ----- ***********************************************-----------
-const chooseClientBtn = document.getElementById("choose-client-btn");
-const clientNameBtn = document.getElementById("client-name-btn");
-const clientName = document.getElementById("client-name-element");
+const clientName = document.getElementById("CLIENT_NAME");
 const clientID = document.getElementById("CLIENT_ID");
 const companyAddress = document.getElementById("COMPANY_ADDRESS");
 const companyName = document.getElementById("COMPANY_NAME");
 const contactNumber = document.getElementById("CONTACT_NUMBER");
 const emailAddress = document.getElementById("EMAIL_ADDRESS");
-const requestNumber = document.getElementById("REQUEST_ID")
+const requestNumber = document.getElementById("REQUEST_ID");
 // -------- ********************** --------------------------------
+
+let quillInstance;
+let quillOptions = {
+    theme: 'snow',
+    placeholder: 'Write your product description here...',
+};
+function initializeQuill(editorId = 'productDescription', options = quillOptions, predefinedContent = '') {
+    const editorElement = document.getElementById(editorId);
+    if (quillInstance) {
+        // Destroy the toolbar if it exists
+        const toolbar = editorElement.parentElement.querySelector('.ql-toolbar');
+        if (toolbar) {
+            toolbar.remove();
+        }
+        // Clear the editor's container and destroy the instance
+        quillInstance = null; // Dereference the current instance
+        editorElement.innerHTML = ''; // Reset the container's content
+    }
+
+    // Set predefined content before initializing
+    if (predefinedContent)
+        editorElement.innerHTML = predefinedContent;
+
+    // Create a new Quill instance
+    quillInstance = new Quill(`#${editorId}`, options);
+}
+
+
 
 let selectedFiles = [];
 let uploadedFiles = [];
 let selectedProductElementIndex = null
 const fullPageLoader = document.getElementById("full-page-loader")
+
+
+
+
+// Version 3 - Add New Product
+const purchaseForm = document.getElementById("purchaseForm");
+var newPurchaseModal = new bootstrap.Modal(document.getElementById("newPurchaseModal"), {
+    keyboard: false,        // Disable closing on escape key
+    backdrop: 'static'      // Disable closing when clicking outside the modal
+});
+function openNewPurchaseModal(action = 'new', purchaseID = null) {
+    if (action === 'new') {
+        // reset form and then open 
+        purchaseForm.reset()
+    } else {
+        // Fetch product Details
+        fetchPODetails(purchaseID);
+    }
+    // Show NEw product modal 
+    initializeQuill();
+    newPurchaseModal.show()
+}
+function closePurchaseModal() {
+    removeClientName();
+    purchaseForm.reset()
+    selectedFiles = [];
+    uploadedFiles = [];
+    displayFiles();
+    displayUploadedFiles();
+    // document.getElementById("PO_ID").value = ''
+}
+
+// Quill Editor
+
+
+
+
+
+
+
+
+
+
 // Function to add a new row
 function addRow() {
-    const tableBody = document.querySelector('#purchase-list-tbody');
+    const tableBody = document.querySelector('#purchase-line-table tbody');
     const rowCount = tableBody.rows.length + 1;
 
     // Create a new row
@@ -136,6 +205,12 @@ async function submitForm(e) {
         formData.append('files[]', file);
     });
 
+
+    const productDescription = (document.querySelector(".ql-editor").innerHTML == '<p><br></p>' ? null : document.querySelector(".ql-editor").innerHTML) || null;
+    formData.append('COMMENTS', productDescription);
+    // Attach selected files
+
+
     // Set Loading Animation on button
     const submitBtn = document.getElementById("submit-btn");
     let buttonText = submitBtn.innerHTML;
@@ -168,8 +243,15 @@ async function submitForm(e) {
             const data = await response.json();
             toasterNotification({ type: 'success', message: "PO Details Saved Successfully!" });
             if (data?.type === 'insert') {
-                setTimeout(() => window.location = 'purchase/new', 1500);
-                removeClientName()
+                newPurchaseModal.hide();
+                removeClientName();
+                fetcPOList();
+
+            } else if (data?.type == 'update') {
+                // setTimeout(() => window.location = 'quotes/list', 1500)
+                fetcPOList();
+                newPurchaseModal.hide()
+                removeClientName();
             }
 
             selectedFiles = [];
@@ -327,20 +409,20 @@ function filterProducts() {
 
 
 
-document.addEventListener('DOMContentLoaded', () => {
+// document.addEventListener('DOMContentLoaded', () => {
 
-    const url = new URL(window.location.href);
-    // Get all search parameters
-    const searchParams = new URLSearchParams(url.search);
-    // Get all URL segments
-    const urlSegments = url.pathname.split('/').filter(segment => segment);
-    const poUUID = urlSegments[urlSegments.length - 1];
-    // Fetch product details if action is edit and id is available
-    if (searchParams.get('action') === 'edit') {
-        // Your code to fetch product details
-        fetchPODetails(poUUID);
-    }
-});
+//     const url = new URL(window.location.href);
+//     // Get all search parameters
+//     const searchParams = new URLSearchParams(url.search);
+//     // Get all URL segments
+//     const urlSegments = url.pathname.split('/').filter(segment => segment);
+//     const poUUID = urlSegments[urlSegments.length - 1];
+//     // Fetch product details if action is edit and id is available
+//     if (searchParams.get('action') === 'edit') {
+//         // Your code to fetch product details
+//         fetchPODetails(poUUID);
+//     }
+// });
 
 async function fetchPODetails(poUUID) {
     const apiUrl = `${APIUrl}/purchase/detail`;
@@ -362,7 +444,7 @@ async function fetchPODetails(poUUID) {
                 'Authorization': `Bearer ${authToken}`,
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ poUUID })
+            body: JSON.stringify({ searchkey: "PO_ID", searchvalue: poUUID })
         });
 
         // Parse the JSON response
@@ -428,7 +510,7 @@ function showSelectedClientQuotes(quotes, selectedRequestID) {
 
 
 function showRequestLines(lines) {
-    const tableBody = document.querySelector('#purchase-list-tbody');
+    const tableBody = document.querySelector('#purchase-line-table tbody');
     tableBody.innerHTML = ''
     let rowCount = 0;
     lines.forEach((line) => {
@@ -480,9 +562,7 @@ function showRequestLines(lines) {
 
 function showClientDetails(header) {
     clientID.value = header?.CLIENT_ID || 0
-    clientName.innerHTML = `${header?.FIRST_NAME || ''} ${header?.LAST_NAME || ''}`
-    chooseClientBtn.classList.toggle("d-none")
-    clientNameBtn.classList.toggle("d-none")
+    clientName.value = `${header?.FIRST_NAME || ''} ${header?.LAST_NAME || ''}`
 }
 
 
@@ -553,11 +633,13 @@ async function fetchQuotesDetailForPurchase(quotesElement) {
 }
 
 function displayQuotesInfo(data) {
+    
     if (!data) return;
     const { header, lines } = data;
 
-    if (header?.REQUEST_NUMBER)
-        requestNumber.value = header.REQUEST_NUMBER;
+    if (Object.keys(header).length > 0) {
+        populateFormFields(header);
+    }
 
     if (lines && Object.keys(lines).length > 0) {
         showQuoteLines(lines);
@@ -565,6 +647,8 @@ function displayQuotesInfo(data) {
 }
 function showQuoteLines(lines) {
     const tableBody = document.querySelector('#purchase-line-table tbody');
+    console.log('from here');
+    
     tableBody.innerHTML = ''
     let rowCount = 0;
     lines.forEach((line) => {
@@ -622,23 +706,20 @@ function showQuoteLines(lines) {
 function setClient(clientid) {
     const client = fetchedClients[clientid];
     clientID.value = ''
-    clientName.innerHTML = 'Client Name Here ...'
+    clientName.value = ''
     companyAddress.value = ''
     companyName.value = ''
     contactNumber.value = ''
     emailAddress.value = ''
     if (client) {
         clientID.value = client?.ID || 0
-        clientName.innerHTML = `${client?.FIRST_NAME || ''} ${client?.LAST_NAME || ''}`
+        clientName.value = `${client?.FIRST_NAME || ''} ${client?.LAST_NAME || ''}`
         companyAddress.value = `${client?.ADDRESS_LINE_1 || ''}`
         companyName.value = `${client?.COMPANY_NAME || ''}`
         contactNumber.value = `${client?.PHONE_NUMBER || ''}`
         emailAddress.value = `${client?.EMAIL || ''}`
     }
     myModal.hide();
-    // Toggle Buttons
-    chooseClientBtn.classList.toggle("d-none")
-    clientNameBtn.classList.toggle("d-none")
 
     fetchClientQuotes(client?.ID);
 }
@@ -775,12 +856,10 @@ function calculateBillingTotals() {
 function removeClientName() {
     clientID && (clientID.value = '');
     requestNumber && (requestNumber.value = '');
-    clientName && (clientName.innerHTML = 'Client Name Here ...');
+    clientName && (clientName.value = '');
     companyAddress && (companyAddress.value = '');
     contactNumber && (contactNumber.value = '');
     emailAddress && (emailAddress.value = '');
-    chooseClientBtn.classList.toggle("d-none")
-    clientNameBtn.classList.toggle("d-none")
 
     document.getElementById("QUOTATION_NUMBER").innerHTML = '<option>Select Request Number</option>';
 
@@ -800,4 +879,17 @@ function removeClientName() {
     discountInput && (discountInput.value = '0');
     taxInput && (taxInput.value = '0');
     totalInput && (totalInput.value = '0');
+}
+
+function openClientListModalFromPurchase() {
+    clearClientDetails();
+    openClientListModal();
+}
+function clearClientDetails() {
+    clientID.value = ''
+    clientName.value = ''
+    companyAddress.value = ''
+    contactNumber.value = ''
+    emailAddress.value = ''
+    document.getElementById("REQUEST_NUMBER").innerHTML = '<option value="">Select Requests</option>';
 }

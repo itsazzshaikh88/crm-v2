@@ -41,7 +41,7 @@ class Quotes_model extends App_Model
             'TAX_PERCENTAGE' => $data['TAX_PERCENTAGE'],
             'TOTAL_AMOUNT' => $data['TOTAL_AMOUNT'],
             'COMMENTS' => $data['COMMENTS'],
-            'INTERNAL_NOTES' => $data['INTERNAL_NOTES'],
+            // 'INTERNAL_NOTES' => $data['INTERNAL_NOTES'],
             'QUOTE_STATUS' => $data['QUOTE_STATUS'],
             'ACTION_BY' => $role,
             'VERSION' => '1'
@@ -124,7 +124,7 @@ class Quotes_model extends App_Model
         $this->db->from("xx_crm_quotations qu");
         $this->db->join("xx_crm_client_detail cl", "cl.USER_ID = qu.CLIENT_ID", "left");
         $this->db->join("xx_crm_users u", "u.ID = qu.CLIENT_ID", "left");
-        $this->db->join('xx_crm_req_header rh', 'rh.CLIENT_ID = qu.CLIENT_ID', 'inner'); // Join with xx_crm_req_header
+        $this->db->join('xx_crm_req_header rh', 'rh.CLIENT_ID = qu.CLIENT_ID', 'left'); // Join with xx_crm_req_header
 
         $this->db->order_by("qu.QUOTE_ID", "DESC");
 
@@ -202,6 +202,7 @@ class Quotes_model extends App_Model
 
     public function get_quote_by_searchkey($searchkey, $searchvalue)
     {
+
         $data = ['header' => [], 'lines' => [], 'requests' => []];
 
         if ($searchkey) {
@@ -210,12 +211,14 @@ class Quotes_model extends App_Model
             qu.MOBILE_NUMBER, qu.CURRENCY, qu.PAYMENT_TERM, qu.SUB_TOTAL, qu.DISCOUNT_PERCENTAGE, qu.TAX_PERCENTAGE, qu.TOTAL_AMOUNT, qu.COMMENTS, qu.INTERNAL_NOTES, qu.ATTACHMENTS, 
             cl.COMPANY_NAME, u.FIRST_NAME, u.LAST_NAME, u.EMAIL, CONCAT(u.FIRST_NAME, ' ', u.LAST_NAME) as FULLNAME, rh.REQUEST_NUMBER")
                 ->from('xx_crm_quotations qu')
-                ->join('xx_crm_client_detail cl', 'cl.USER_ID = qu.CLIENT_ID', 'inner')
-                ->join('xx_crm_users u', 'u.ID = qu.CLIENT_ID', 'inner')
-                ->join('xx_crm_req_header rh', 'rh.CLIENT_ID = qu.CLIENT_ID', 'inner') // Join with xx_crm_req_header
+                ->join('xx_crm_client_detail cl', 'cl.USER_ID = qu.CLIENT_ID', 'left')
+                ->join('xx_crm_users u', 'u.ID = qu.CLIENT_ID', 'left')
+                ->join('xx_crm_req_header rh', 'rh.CLIENT_ID = qu.CLIENT_ID', 'left') // Join with xx_crm_req_header
                 ->where('qu.' . $searchkey, $searchvalue)
                 ->get()
                 ->row_array();
+
+            
 
             // Fetch inventory details if product exists and has a PRODUCT_ID
             if (isset($data['header']['QUOTE_ID'])) {
@@ -356,9 +359,14 @@ class Quotes_model extends App_Model
 
 
     function fetchClientRequests($ClientID)
-    {
-        return $this->db->query("select ID, UUID , REQUEST_NUMBER from xx_crm_req_header where CLIENT_ID = $ClientID")->result_array();
-    }
+{
+    return $this->db->select('ID, UUID, REQUEST_NUMBER')
+                    ->from('xx_crm_req_header')
+                    ->where('CLIENT_ID', $ClientID)
+                    ->get()
+                    ->result_array();
+}
+
 
     function fetchClientQuotes($ClientID)
     {
