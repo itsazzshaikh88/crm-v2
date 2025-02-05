@@ -30,6 +30,12 @@ var newDealModal = new bootstrap.Modal(document.getElementById("newDealModal"), 
     backdrop: 'static'      // Disable closing when clicking outside the modal
 });
 
+// Modal Related Code
+var newAssociatedContactModal = new bootstrap.Modal(document.getElementById("newAssociatedContactModal"), {
+    keyboard: false,        // Disable closing on escape key
+    backdrop: 'static'      // Disable closing when clicking outside the modal
+});
+
 function openDealModal(action = 'new', dealID = null) {
     if (action === 'new') {
         // reset form and then open 
@@ -47,6 +53,109 @@ function openDealModal(action = 'new', dealID = null) {
     // Show NEw Deal modal 
     newDealModal.show()
 }
+function openAssociatedContactModal() {
+    newAssociatedContactModal.show();
+
+    document.getElementById("ASSOCIATED_CONTACT").value = '';
+    document.getElementById("DEAL_NAME").value = '';
+    document.getElementById("ASSOCIATED_CONTACT_ID").value = '';
+    document.getElementById("EMAIL").value = '';
+    document.getElementById("CONTACT_NUMBER").value = '';
+
+    // Fetch contact lists
+    fetchAssociatedContactList();
+}
+
+const assocContactListPaginate = new Pagination('assoc-contact-current-page', 'assoc-contact-total-pages', 'assoc-contact-page-of-pages', 'assoc-contact-range-of-records');
+assocContactListPaginate.pageLimit = 10; // Set your page limit here
+
+let assocContactList = []
+async function fetchAssociatedContactList() {
+    try {
+        const authToken = getCookie('auth_token');
+        if (!authToken) {
+            toasterNotification({ type: 'error', message: "Authorization token is missing. Please Login again to make API request." });
+            return;
+        }
+        // Set loader to the screen 
+        // listingSkeleton(tableId, assocContactListPaginate.pageLimit || 0, 'contacts-modal');
+
+        const url = `${APIUrl}/contacts/list`;
+        const filters = filterCriterias([]);
+
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${authToken}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                limit: assocContactListPaginate.pageLimit,
+                currentPage: assocContactListPaginate.currentPage,
+                filters: filters
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch contact data');
+        }
+
+        const data = await response.json();
+        assocContactListPaginate.totalPages = parseFloat(data?.pagination?.total_pages) || 0;
+        assocContactListPaginate.totalRecords = parseFloat(data?.pagination?.total_records) || 0;
+
+        assocContactList = data.contacts || [];
+        showAssocContactList(data.contacts || [], tbody);
+
+    } catch (error) {
+        toasterNotification({ type: 'error', message: 'Request failed: ' + error.message });
+        tbody.innerHTML = renderNoResponseCode();
+    }
+}
+function setAssocContactStatus(status) {
+    const statusBackgroundColors = {
+        new: "#4CAF50", // fresh green for new
+        qualified: "#2196F3", // soft blue for qualified
+        unqualified: "#FFC107", // amber for unqualified
+        engaged: "#FF5722", // warm orange for engaged
+        'follow-up-required': "#FF9800", // bright orange for follow-up required
+        'no-response': "#9E9E9E", // grey for no response
+        'in-active': "#607D8B", // slate blue-gray for inactive
+    };
+    return `<span class="badge text-white" style="background-color: ${statusBackgroundColors[status]}">${capitalizeWords(status)}</span>`
+}
+function showAssocContactList(contacts) {
+    if (!contacts) return '';
+    let content = '';
+    let contactListContainer = document.getElementById("assoc-contact-modal-list");
+    if (contacts && contacts.length > 0) {
+        contacts.forEach((contact, index) => {
+            content += `<div class="w-100 d-flex align-items-start justify-content-center flex-column cursor-pointer border-bottom my-2 pb-2" onclick="setAssocContact(${index})">
+                            <div class="w-100 d-flex align-items-center justify-content-between">
+                                <p class="mb-0 line-clamp-2 fw-normal text-primary">${contact?.FIRST_NAME} ${contact?.LAST_NAME}</p>
+                                <p class="mb-0"><small class="">${setAssocContactStatus(contact?.STATUS)}</small></p>
+                            </div>
+                            <p class="text-gray-700 mb-0">${contact?.COMPANY_NAME}</p>
+                            <p class="text-gray-700 mb-0"><small>${contact?.PHONE}</small></p>
+                        </div>`;
+        });
+    }
+    contactListContainer.innerHTML = content;
+}
+
+function setAssocContact(index) {
+    const contact = assocContactList[index];
+    if (contact) {
+        document.getElementById("ASSOCIATED_CONTACT").value = `${contact?.FIRST_NAME} ${contact?.LAST_NAME}`
+        document.getElementById("DEAL_NAME").value = `${contact?.FIRST_NAME} ${contact?.LAST_NAME}`
+        document.getElementById("ASSOCIATED_CONTACT_ID").value = `${contact?.CONTACT_ID}`
+        document.getElementById("EMAIL").value = `${contact?.EMAIL}`
+        document.getElementById("CONTACT_NUMBER").value = `${contact?.PHONE}`
+        newAssociatedContactModal.hide();
+    }
+}
+
+
 function closeDealModal() {
     document.getElementById("UUID").value = '';
     document.getElementById("DEAL_ID").value = '';

@@ -50,6 +50,11 @@ $activities = DEAL_ACTIVITY_OPTIONS;
                                         </div>
                                         <span class="text-danger err-lbl" id="lbl-DEAL_STATUS"></span>
                                     </div>
+                                    <div class="form-floating mb-2">
+                                        <input type="text" placeholder="Enter Value" class="form-control border border-blue-100 text-gray-700 " name="ASSOCIATED_CONTACT" id="ASSOCIATED_CONTACT" readonly onclick="openAssociatedContactModal()">
+                                        <input type="hidden" name="ASSOCIATED_CONTACT_ID" id="ASSOCIATED_CONTACT_ID">
+                                        <label for="ASSOCIATED_CONTACT" class="text-gray-600">Associated Contact </label>
+                                    </div>
                                     <div class="form-floating w-100 mb-2">
                                         <input type="text" placeholder="Enter Value" class="form-control border border-blue-100 text-gray-700 " name="DEAL_NAME" id="DEAL_NAME">
                                         <label for="DEAL_NAME" class="text-gray-600">Deal Full Name <span class="text-danger">*</span> </label>
@@ -66,10 +71,6 @@ $activities = DEAL_ACTIVITY_OPTIONS;
                                             <label for="CONTACT_NUMBER">Contact Number <span class="text-danger">*</span></label>
                                         </div>
                                         <span class="text-danger err-lbl" id="lbl-CONTACT_NUMBER"></span>
-                                    </div>
-                                    <div class="form-floating mb-2">
-                                        <input type="text" placeholder="Enter Value" class="form-control border border-blue-100 text-gray-700 " name="ASSOCIATED_CONTACT_ID" id="ASSOCIATED_CONTACT_ID">
-                                        <label for="ASSOCIATED_CONTACT_ID" class="text-gray-600">Associated Contact </label>
                                     </div>
                                     <div class="d-flex flex-row align-items-center justify-content-between mb-2">
                                         <div class="d-inline-flex form-floating w-50">

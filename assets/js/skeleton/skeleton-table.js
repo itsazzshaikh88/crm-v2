@@ -52,6 +52,22 @@ function listingSkeleton(tableId, rows, list_name) {
 
 
 function getSkeletonStructure(list) {
+
+    if (list === 'contacts-modal')
+        return `<div class="w-100 d-flex align-items-start justify-content-center flex-column">
+                            <div class="w-100 d-flex align-items-center justify-content-between">
+                                <p class="mb-0 line-clamp-2 fw-normal text-primary">
+                                    <span class="skeleton-box" style="width: 260px; height: 20px;"></span>
+                                </p>
+                                <p class="mb-0">
+                                    <small class="skeleton-box" style="width: 50px; height: 30px;"></small>
+                                </p>
+                            </div>
+                            <p class="text-gray-700 mb-0">
+                                <span class="skeleton-box" style="width: 150px; height: 10px;"></span>
+                            </p>
+                        </div>`;
+
     if (list === 'clients')
         return `<tr class="skeleton-loader">
                     <td>
