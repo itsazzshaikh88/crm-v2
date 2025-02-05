@@ -64,7 +64,7 @@
                             <div class="d-flex align-items-center justify-content-between">
                                 <h4 class="text-label-heading fw-normal">Product Details</h4>
                                 <div>
-                                    <button type="button" class="rounded-1 btn btn-sm btn-secondary" onclick="startOver()"><i class="fa-solid fa-rotate"></i> Start Over New Product</button>
+                                    <!-- <button type="button" class="rounded-1 btn btn-sm btn-secondary" onclick="startOver()"><i class="fa-solid fa-rotate"></i> Start Over New Product</button> -->
                                     <button type="submit" class="rounded-1 btn btn-sm btn-success" id="submit-btn"><i class="fa-solid fa-plus"></i> Save Product Details</button>
                                 </div>
                             </div>

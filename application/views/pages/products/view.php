@@ -88,7 +88,7 @@
                         <!--end::Card title-->
 
                         <!--begin::Action-->
-                        <a href="" id="edit-product-link" class="btn btn-primary align-self-center d-none">Edit Product</a>
+                        <!-- <a href="" id="edit-product-link" class="btn btn-primary align-self-center d-none">Edit Product</a> -->
                         <!--end::Action-->
                     </div>
                     <!--begin::Card header-->

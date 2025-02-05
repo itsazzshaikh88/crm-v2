@@ -89,15 +89,15 @@ async function fetctProduct(productUUID) {
         updateBackOrders(data?.data?.inventory?.ALLOW_BACKORDERS || 0)
 
         // Generate Edit link and assign it to button
-        let editURL = `products/new/${data?.data?.product?.UUID}?action=edit`
-        let editLinkElement = document.getElementById("edit-product-link")
-        if (isAdmin) {
-            editLinkElement.classList.remove("d-none")
-            editLinkElement.setAttribute("href", editURL)
-        } else {
-            editLinkElement.classList.add("d-none")
-            editLinkElement.setAttribute("href", "javascript:void(0)")
-        }
+        // let editURL = `products/new/${data?.data?.product?.UUID}?action=edit`
+        // let editLinkElement = document.getElementById("edit-product-link")
+        // if (isAdmin) {
+        //     editLinkElement.classList.remove("d-none")
+        //     editLinkElement.setAttribute("href", editURL)
+        // } else {
+        //     editLinkElement.classList.add("d-none")
+        //     editLinkElement.setAttribute("href", "javascript:void(0)")
+        // }
 
     } catch (error) {
         // Show error notification
