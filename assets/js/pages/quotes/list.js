@@ -96,30 +96,41 @@ function showQuotes(Quotes, tbody) {
                             </td>
                             <td>${quote?.TOTAL_AMOUNT || ''}</td>       
                             <td class="text-end">
-                                    <div class="d-flex align-items-center justify-content-end gap-4">
-                                        <a href="quotes/view/${quote.UUID}" title="View Quote"> 
-                                            <small>
-                                                <i class="fs-5 fa-solid fa-file-lines text-success"></i>
-                                            </small>
-                                        </a>
-                                        <a onclick="openNewQuoteModal('edit',${quote.QUOTE_ID})" title="Edit Quote">
-                                            <small>
-                                                <i class="fs-5 fa-regular fa-pen-to-square text-gray-700"></i>
-                                            </small>
-                                        </a>
-                                        <a href="javascript:void(0)" title="Delete Quote" onclick="deleteQuote(${quote.QUOTE_ID})">
-                                            <small>
-                                                <i class="fs-5 fa-solid fa-trash-can text-danger"></i>
-                                            </small>
-                                        </a>
-                                   <a href="javascript:void(0)" title="Convert to New Quote" onclick="convertToQuotation(${quote.QUOTE_ID})">
-                                        <small>
-                                            <i class="fa-solid fa-up-right-from-square text-info"></i>
-                                        </small>
-                                    </a>
-                                       
-                                    </div>
-                                </td>
+    <div class="dropdown">
+        <!-- Button to toggle the dropdown, without the caret (down arrow) -->
+        <button class="btn btn-link p-0" type="button" id="optionsMenu" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fs-8 me-2 fa-solid fa-ellipsis-vertical"></i> <!-- Three vertical dots -->
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end px-0 py-2 shadow-lg border" aria-labelledby="optionsMenu">
+            <li class="mb-1 fs-8">
+                <a class="dropdown-item" href="quotes/view/${quote.UUID}" title="View Quote">
+                    <i class="fs-8 me-2 fa-solid fa-file-lines text-success"></i> View Quote
+                </a>
+            </li>
+            <li class="mb-1 fs-8">
+                <a class="dropdown-item" href="javascript:void(0)" onclick="openNewQuoteModal('edit', ${quote.QUOTE_ID})" title="Edit Quote">
+                    <i class="fs-8 me-2 fa-regular fa-pen-to-square text-gray-700"></i> Edit Quote
+                </a>
+            </li>
+            <li class="mb-1 fs-8">
+                <a class="dropdown-item" href="javascript:void(0)" onclick="deleteQuote(${quote.QUOTE_ID})" title="Delete Quote">
+                    <i class="fs-8 me-2 fa-solid fa-trash-can text-danger"></i> Delete Quote
+                </a>
+            </li>
+            <li class="mb-1 fs-8">
+                <a class="dropdown-item" href="javascript:void(0)" onclick="convertToQuotation(${quote.QUOTE_ID})" title="Convert to New Quote">
+                    <i class="fs-8 me-2 fa-solid fa-up-right-from-square text-info"></i> Convert to New Quote
+                </a>
+            </li>
+            <li class="mb-1 fs-8">
+                <a class="dropdown-item" href="javascript:void(0)" onclick="convertToPO(${quote.QUOTE_ID})" title="Convert to New PO">
+                    <i class="fs-8 me-2 fa-solid fa-up-right-from-square text-warning"></i> Convert to New PO
+                </a>
+            </li>
+        </ul>
+    </div>
+</td>
+
                         </tr>`;
         });
         tbody.innerHTML = content;
@@ -244,11 +255,7 @@ async function deleteQuote(requestID) {
 
         if (data.status) {
             // Show success message
-            Swal.fire({
-                icon: 'success',
-                title: 'Deleted!',
-                text: 'Quote Deleted Successfully'
-            });
+            toasterNotification({ type: 'success', message: 'Quotation Deleted Successfully' });
             fetchRequests();
 
         } else {
@@ -271,6 +278,23 @@ async function convertToQuotation(requestID) {
         throw new Error("Invalid Request ID, Please try Again");
     }
     try {
+
+        // SweetAlert2 confirmation dialog
+        const confirmResult = await Swal.fire({
+            title: 'Create New Quotation',
+            text: "Do you really want to make new quotation from the same?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, Create New'
+        });
+
+        if (!confirmResult.isConfirmed) {
+            // User canceled the action
+            return;
+        }
+
         const authToken = getCookie('auth_token');
         if (!authToken) {
             throw new Error("Authorization token is missing. Please Login again to make API request.");
@@ -294,11 +318,128 @@ async function convertToQuotation(requestID) {
 
         if (data.status) {
             // Here, we directly handle the deletion without checking data.status
-            toasterNotification({ type: 'success', message: 'Converted to new quote' });
-            setTimeout(() => window.location.reload(), 1500);
+            toasterNotification({ type: 'success', message: 'New quotation created successfully.' });
+            fetchRequests();
+
+            // Now confirm if they want to view the newly created quotation
+            const confirmResult = await Swal.fire({
+                title: 'Quotation Created!',
+                text: "Do you want to view newly created quotation",
+                icon: 'success',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, Open New',
+                cancelButtonText: 'No, Close it'
+            });
+
+            if (!confirmResult.isConfirmed) {
+                // User canceled the action
+                return;
+            } else {
+                // quotes/view/67fd16db-b5af-4284-937f-bdc62dcc4534
+                let urlToOpen = '';
+                if (data?.quote?.header?.UUID)
+                    urlToOpen = `quotes/view/${data?.quote?.header?.UUID}`;
+
+                // If open url if created
+                if (urlToOpen) {
+                    window.location = urlToOpen;
+                } else {
+                    toasterNotification({ type: 'error', message: "Cannot open created Quote" });
+                }
+
+            }
 
         } else {
             throw new Error(data.message || 'Failed to delete quote details');
+        }
+
+    } catch (error) {
+        toasterNotification({ type: 'error', message: 'quote failed: ' + error.message });
+    }
+}
+
+async function convertToPO(quoteID) {
+    if (!quoteID) {
+        throw new Error("Invalid Quotation ID, Please try Again");
+    }
+    try {
+
+        // SweetAlert2 confirmation dialog
+        const confirmResult = await Swal.fire({
+            title: 'Create New PO',
+            text: "Do you really want to make new Purchase Order from the quotation?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, Create New PO'
+        });
+
+        if (!confirmResult.isConfirmed) {
+            // User canceled the action
+            return;
+        }
+
+        const authToken = getCookie('auth_token');
+        if (!authToken) {
+            throw new Error("Authorization token is missing. Please Login again to make API request.");
+        }
+
+        const url = `${APIUrl}/purchase/createFromQuote/${quoteID}`;
+
+        const response = await fetch(url, {
+            method: 'GET', // Change to DELETE for a delete request
+            headers: {
+                'Authorization': `Bearer ${authToken}`
+            }
+        });
+
+        const data = await response.json(); // Parse the JSON response
+
+        if (!response.ok) {
+            // If the response is not ok, throw an error with the message from the response
+            throw new Error(data.error || 'Failed to create new po');
+        }
+
+        if (data.status) {
+            // Here, we directly handle the deletion without checking data.status
+            toasterNotification({ type: 'success', message: 'New Purchase Order created successfully.' });
+            fetchRequests();
+
+            // Now confirm if they want to view the newly created Purchase Order
+            const confirmResult = await Swal.fire({
+                title: 'Purchase Order Created!',
+                text: "Do you want to view newly created Purchase Order",
+                icon: 'success',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, Open New',
+                cancelButtonText: 'No, Close it'
+            });
+
+            if (!confirmResult.isConfirmed) {
+                // User canceled the action
+                return;
+            } else {
+                // quotes/view/67fd16db-b5af-4284-937f-bdc62dcc4534
+                let urlToOpen = '';
+                if (data?.po?.header?.UUID)
+                    urlToOpen = `purchase/view/${data?.po?.header?.UUID}`;
+
+                // If open url if created
+                if (urlToOpen) {
+                    window.location = urlToOpen;
+                } else {
+                    toasterNotification({ type: 'error', message: "Cannot open created PO" });
+                }
+
+            }
+
+        } else {
+            throw new Error(data.message || 'Failed to create new PO');
         }
 
     } catch (error) {

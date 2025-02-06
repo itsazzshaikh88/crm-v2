@@ -1,5 +1,7 @@
 <?php
 include_once 'application/views/data/data-home.php';
+$usertype = $loggedInUser['usertype'] ?? 'guest';
+$stats_cards = $usertype === 'admin' ? $admin_stats_cards : $client_stats_cards;
 ?>
 <!--begin::PAGE CONTAINER -->
 <div id="kt_content_container" class="d-flex flex-column-fluid align-items-start container-xxl">

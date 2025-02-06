@@ -218,7 +218,7 @@ class Quotes_model extends App_Model
                 ->get()
                 ->row_array();
 
-            
+
 
             // Fetch inventory details if product exists and has a PRODUCT_ID
             if (isset($data['header']['QUOTE_ID'])) {
@@ -351,7 +351,9 @@ class Quotes_model extends App_Model
 
             // Commit transaction
             $this->db->trans_commit();
-            return true;
+            // if new quotations is created then retuen new 
+            $createdQuoatation = $this->get_quote_by_searchkey("QUOTE_ID", $new_quote_id);
+            return $createdQuoatation;
         }
 
         return false;
@@ -359,13 +361,13 @@ class Quotes_model extends App_Model
 
 
     function fetchClientRequests($ClientID)
-{
-    return $this->db->select('ID, UUID, REQUEST_NUMBER')
-                    ->from('xx_crm_req_header')
-                    ->where('CLIENT_ID', $ClientID)
-                    ->get()
-                    ->result_array();
-}
+    {
+        return $this->db->select('ID, UUID, REQUEST_NUMBER')
+            ->from('xx_crm_req_header')
+            ->where('CLIENT_ID', $ClientID)
+            ->get()
+            ->result_array();
+    }
 
 
     function fetchClientQuotes($ClientID)

@@ -240,4 +240,103 @@ class Purchase_model extends CI_Model
             return true;
         }
     }
+
+    public function create_new_po_from_quote($quoteID, $user_id, $user_type)
+    {
+        if ($quoteID) {
+            // Fetch the original quote
+            $quote = $this->db->where('QUOTE_ID', $quoteID)->get('xx_crm_quotations')->row_array();
+            if (empty($quote)) {
+                return false;
+            }
+
+            $client_details = $this->db->where('USER_ID', $quote['CLIENT_ID'])->get('xx_crm_client_detail')->row_array();
+            $client_address_details = $this->db->where('CLIENT_ID', $quote['CLIENT_ID'])->get('xx_crm_client_address')->row_array();
+
+            // Prepare new quote data
+            $new_po = [
+                'UUID' => uuid_v4(),
+                'CLIENT_ID' => $quote['CLIENT_ID'],
+                'REQUEST_ID' => $quote['REQUEST_ID'],
+                'QUOTE_ID' => $quote['QUOTE_ID'],
+                'COMPANY_NAME' => $client_details['COMPANY_NAME'] ?? '',
+                'EMAIL_ADDRESS' => $quote['EMAIL_ADDRESS'],
+                'COMPANY_ADDRESS' => $client_address_details['EMAIL_ADDRESS'] ?? '',
+                'CONTACT_NUMBER' => $quote['MOBILE_NUMBER'],
+                'CURRENCY' => $quote['CURRENCY'],
+                'PAYMENT_TERM' => $quote['PAYMENT_TERM'],
+                'PO_STATUS' => 'Draft',
+                'SUBTOTAL' => $quote['SUB_TOTAL'],
+                'DISCOUNT_PERCENTAGE' => $quote['DISCOUNT_PERCENTAGE'],
+                'TAX_PERCENTAGE' => $quote['TAX_PERCENTAGE'],
+                'TOTAL_AMOUNT' => $quote['TOTAL_AMOUNT'],
+                'COMMENTS' => $quote['COMMENTS'],
+                'ATTACHMENTS' => $quote['ATTACHMENTS'],
+                'ACTION_BY' => $user_type,
+                'VERSION' => '1', // Use a constant for statuses
+                'CREATED_BY' => $user_id,
+                'CREATED_AT' => date('Y-m-d h:i:s')
+            ];
+
+            // Start transaction
+            $this->db->trans_begin();
+
+            // Insert new quote
+            $this->db->insert('xx_crm_po_header', $new_po);
+            if ($this->db->affected_rows() === 0) {
+                $this->db->trans_rollback();
+                return false;
+            }
+
+            // Get the new quote ID
+            $new_po_id = $this->db->insert_id();
+
+            // Generate quote number
+            $po_number = "PO-" . date('dmy') . str_pad($new_po_id, 6, '0', STR_PAD_LEFT);
+
+            // Update the quote number
+            $this->db->where('PO_ID', $new_po_id);
+            $this->db->update('xx_crm_po_header', ['PO_NUMBER' => $po_number]);
+
+            if ($this->db->affected_rows() === 0) {
+                $this->db->trans_rollback();
+                return false;
+            }
+
+            // Fetch the original quote lines
+            $lines = $this->db->where('QUOTE_ID', $quoteID)->get('xx_crm_quotation_lines')->result_array();
+            if (!empty($lines)) {
+                foreach ($lines as $line) {
+                    $new_line = [
+                        'PO_ID' => $new_po_id, // Associate with new quote ID
+                        'PRODUCT_ID' => $line['PRODUCT_ID'],
+                        'PRODUCT_DESC' => $line['DESCRIPTION'],
+                        'QTY' => $line['QTY'],
+                        'UNIT_PRICE' => $line['UNIT_PRICE'],
+                        'TOTAL' => $line['TOTAL'],
+                        'COLOR' => $line['COLOR'],
+                        'TRANSPORT' => $line['TRANSPORTATION'],
+                        'SOC' => '',
+                        'REC_QTY' => 0,
+                        'BAL_QTY' => 0
+                    ];
+
+                    // Insert new line
+                    $this->db->insert('xx_crm_po_lines', $new_line);
+                    if ($this->db->affected_rows() === 0) {
+                        $this->db->trans_rollback();
+                        return false;
+                    }
+                }
+            }
+
+            // Commit transaction
+            $this->db->trans_commit();
+            // if new quotations is created then retuen new 
+            $createdQuoatation = $this->get_request_by_searchkey("PO_ID", $new_po_id);
+            return $createdQuoatation;
+        }
+
+        return false;
+    }
 }

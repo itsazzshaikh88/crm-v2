@@ -20,8 +20,7 @@ class Stats extends Api_controller
                 ->_display();
             exit;
         };
-
-        $stats = $this->Stats_model->dashboardCardStats();
+        $stats = $this->Stats_model->dashboardCardStats($isAuthorized['role'] ?? 'guest', $isAuthorized['userid'] ?? 0);
 
         $response = [
             'stats' => $stats,

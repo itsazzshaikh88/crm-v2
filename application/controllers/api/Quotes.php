@@ -305,12 +305,12 @@ class Quotes extends Api_controller
             $this->output
                 ->set_content_type('application/json')
                 ->set_status_header(200) // 200 OK status code
-                ->set_output(json_encode(['status' => true, 'message' => 'Convert to new Quote successfully.']));
+                ->set_output(json_encode(['status' => true, 'message' => 'Convert to new Quote successfully.', 'quote' => $result]));
         } else {
             $this->output
                 ->set_content_type('application/json')
                 ->set_status_header(500) // 500 Internal Server Error status code
-                ->set_output(json_encode(['status' => false, 'message' => 'Convert to new Quote failed.']));
+                ->set_output(json_encode(['status' => false, 'message' => 'Failed to convert to new quotation']));
         }
 
         // $quote = $this->Quotes_model->get_quote_by_id($requestId );

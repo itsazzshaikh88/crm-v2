@@ -258,4 +258,60 @@ class Purchase extends Api_controller
                 ->set_output(json_encode(['status' => false, 'message' => 'Failed to delete the Request.']));
         }
     }
+
+    // Create new po based in the quotation
+    function createFromQuote($quoteID)
+    {
+        // Check if the authentication is valid
+        $isAuthorized = $this->isAuthorized();
+        if (!$isAuthorized['status']) {
+            $this->output
+                ->set_status_header(401) // Set HTTP response status to 400 Bad Request
+                ->set_content_type('application/json')
+                ->set_output(json_encode(['error' => 'Unauthorized access. You do not have permission to perform this action.']))
+                ->_display();
+            exit;
+        };
+
+        // Check if the user is admin or not
+        // if (isset($isAuthorized['role']) && $isAuthorized['role'] !== 'admin') {
+        //     $this->output
+        //         ->set_content_type('application/json')
+        //         ->set_status_header(403) // 403 Forbidden status code
+        //         ->set_output(json_encode(['error' => 'You do not have permission to perform this action.']));
+        //     return;
+        // }
+
+        // Validate the Request ID
+        if (empty($quoteID) || !is_numeric($quoteID)) {
+            $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(400) // 400 Bad Request status code
+                ->set_output(json_encode(['error' => 'Invalid Quotation ID.']));
+            return;
+        }
+
+        $quote = $this->Quotes_model->get_quote_by_searchkey("QUOTE_ID", $quoteID);
+        if (empty($quote ?? []) || empty($quote['header'] ?? [])) {
+            $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(404) //
+                ->set_output(json_encode(['status' => false, 'message' => 'Quotation details not found to create new PO']));
+            return;
+        }
+
+        // Attempt to delete the Request
+        $result = $this->Purchase_model->create_new_po_from_quote($quoteID, $isAuthorized['userid'] ?? 0, $isAuthorized['role'] ?? '');
+        if ($result) {
+            $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(200) // 200 OK status code
+                ->set_output(json_encode(['status' => true, 'message' => 'PO Created from Quotation with ID' . $quoteID, 'po' => $result]));
+        } else {
+            $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(500) // 500 Internal Server Error status code
+                ->set_output(json_encode(['status' => false, 'message' => 'Failed to create po from quotation']));
+        }
+    }
 }

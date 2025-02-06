@@ -4,8 +4,8 @@
         <!--begin::PAGE CONTENT GOES FROM HERE-->
         <div class="card">
             <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-row-bordered gy-7" id="quote-list" style="white-space: nowrap;">
+                <!-- <div class="table-responsive"> -->
+                    <table class="table table-row-bordered gy-3" id="quote-list" style="white-space: nowrap;">
                         <thead>
                             <tr class="fw-bold fs-6 text-gray-800">
                                 <th>#</th>
@@ -25,7 +25,7 @@
                     
                         </tbody>
                     </table>
-                </div>
+                <!-- </div> -->
                 <?= renderPaginate('current-page', 'total-pages', 'page-of-pages', 'range-of-records') ?>
             </div>
         </div>
