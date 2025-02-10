@@ -8,12 +8,11 @@
 ?>
     <?php if ($options['action'] === 'list'):
     ?>
-        <!-- <button type="button" onclick="openNewProductModal()" class="btn btn-sm btn-success my-2">Create New Product</button> -->
+        <button type="button" onclick="openNewProductModal()" class="btn btn-sm btn-success my-2">Create New Product</button>
     <?php elseif ($options['action'] === 'form'): ?>
-        <a href="products/list" class="btn btn-sm btn-success my-2">Product List</a>
+        <a href="products/list" class="btn btn-sm border text-white border-white me-2 my-2">Product List</a>
     <?php else: ?>
-        <a href="products/list" class="btn btn-sm btn-success ">Product List</a>
-        <!-- <button type="button" onclick="openNewProductModal()" class="btn btn-sm btn-success my-2">Create New Product</button> -->
+        <a href="products/list" class="btn btn-sm border text-white border-white me-2 ">Product List</a>
     <?php endif; ?>
 <?php endif; ?>
 <!--end::Button-->

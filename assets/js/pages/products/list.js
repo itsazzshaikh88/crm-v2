@@ -14,9 +14,9 @@ function renderNoResponseCode(option, isAdmin = false) {
         noCotent += `<a href="products/new" class="btn btn-primary">Add Product</a>`;
     noCotent += `                           </div >
                                         </div >
-                                    </div >
-                                </div >
-                            </td >
+                                        </div >
+                                        </div >
+                                        </td >
                         </tr > `;
 
     return noCotent;
@@ -28,7 +28,19 @@ const tableId = "product-list";
 const table = document.getElementById(tableId);
 const tbody = document.querySelector(`#${tableId} tbody`);
 
+const gridContainer = document.getElementById("grid-style-listing");
+const listContainer = document.getElementById("list-style-listing");
+let fetchedProdcuts = [];
+
 const numberOfHeaders = document.querySelectorAll(`#${tableId} thead th`).length || 0;
+
+// For toggle
+const gridViewBtn = document.getElementById("gridViewBtn");
+const listViewBtn = document.getElementById("listViewBtn");
+
+// Load the saved view from localStorage
+const savedView = localStorage.getItem("viewMode") || "grid";
+
 
 async function fetctProducts() {
     try {
@@ -63,8 +75,9 @@ async function fetctProducts() {
         const data = await response.json();
         paginate.totalPages = parseFloat(data?.pagination?.total_pages) || 0;
         paginate.totalRecords = parseFloat(data?.pagination?.total_records) || 0;
-
+        fetchedProdcuts = data.products || [];
         showProducts(data.products || [], tbody);
+        showGridProducts(data.products || [], gridContainer);
 
     } catch (error) {
         toasterNotification({ type: 'error', message: 'Request failed: ' + error.message });
@@ -158,6 +171,71 @@ function showProducts(products, tbody) {
     }
 }
 
+function showGridProducts(products, container) {
+    let content = '';
+    let default_img = "assets/images/default-image.png";
+    if (products?.length > 0) {
+        // show products
+        products.forEach(product => {
+            let desc = stripHtmlTags(product?.DESCRIPTION || '');
+            let img = parseJsonString(product.PRODUCT_IMAGES || '', 0);
+            if (img != null)
+                img = `${PRODUCT_IMAGES_URL}${img}`;
+
+
+            content += `<div class="col-md-3">
+                            <a class="card border border-secondary rounded">
+                                <div class="card-body p-0 rounded">
+                                    <div class="px-4 py-4 bg-header text-center">
+                                        <h5 class="card-title mb-0 text-white">${product?.PRODUCT_NAME}</h5>
+                                    </div>
+                                    <div class="image">
+                                        <img src="${img ?? default_img}" class="img-fluid" alt="">
+                                    </div>
+                                    <div class="pb-0">
+                                        <table class="table table-sm table-borderless table-striped pb-0 mb-0">
+                                            <tr>
+                                                <th class="px-3 fw-bold text-dark">Dimensions</th>
+                                                <td class="px-3">${product?.HEIGHT} X ${product?.WIDTH} X ${product?.LENGTH}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="px-3 fw-bold text-dark">Volume</th>
+                                                <td class="px-3"></td>
+                                            </tr>
+                                            <tr>
+                                                <th class="px-3 fw-bold text-dark">Weight</th>
+                                                <td class="px-3">${product?.WEIGHT}</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>`;
+        });
+        container.innerHTML = content;
+    } else {
+        // no data available
+        container.innerHTML = renderNoResponseCodeForGrid({ colspan: numberOfHeaders })
+    }
+}
+
+function renderNoResponseCodeForGrid() {
+    return `
+        <div class="col-12 d-flex justify-content-center align-items-center" style="height: 300px;">
+            <div class="text-center">
+                <img src="assets/images/not-avail.png" alt="No Products" 
+                     class="img-fluid" style="max-width: 150px; opacity: 0.7;">
+                <h4 class="mt-3 text-secondary fw-bold">No Products Available</h4>
+                <p class="text-muted">Please check back later or try a different category.</p>
+                <button type="button" onclick="fetctProducts()" class="btn btn-primary">
+                    <i class="fas fa-redo"></i> Refresh
+                </button>
+            </div>
+        </div>
+    `;
+}
+
+
 
 // Global scope
 // Declare the pagination instance globally
@@ -170,9 +248,23 @@ function handlePagination(action) {
     fetctProducts(); // Fetch products for the updated current page
 }
 document.addEventListener('DOMContentLoaded', () => {
+    // Show grid or list
+    if (savedView === 'grid') {
+        listContainer.classList.add("d-none");
+        gridContainer.classList.remove("d-none");
+        listViewBtn.classList.remove("btn-primary");
+        gridViewBtn.classList.add("btn-primary");
+    } else {
+        listContainer.classList.remove("d-none");
+        gridContainer.classList.add("d-none");
+        listViewBtn.classList.add("btn-primary");
+        gridViewBtn.classList.remove("btn-primary");
+    }
     // Fetch initial product data
     fetctProducts();
     fetchCategoriesForFilter()
+
+
 
 });
 
@@ -307,4 +399,21 @@ async function deleteProduct(productID) {
         toasterNotification({ type: 'error', message: 'Request failed: ' + error.message });
         Swal.close();
     }
+}
+
+
+// Toggle between grid and list layout
+function toggleListLayout() {
+
+}
+function toggleGridLayout() {
+
+}
+
+function toggleReportLayout(action) {
+    listContainer.classList.toggle("d-none");
+    gridContainer.classList.toggle("d-none");
+    listViewBtn.classList.toggle("btn-primary");
+    gridViewBtn.classList.toggle("btn-primary");
+
 }
