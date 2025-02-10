@@ -11,7 +11,7 @@ $stats_cards = $usertype === 'admin' ? $admin_stats_cards : $client_stats_cards;
 			<?php
 			foreach ($stats_cards as $card):
 			?>
-				<div class="col-sm-6 col-md-3">
+				<div class="col-sm-6 col-md-3 <?= count($stats_cards) > 4 ? "mb-2" : "" ?>">
 					<!--begin::Card widget 2-->
 					<div class="card h-lg-100">
 						<!--begin::Body-->

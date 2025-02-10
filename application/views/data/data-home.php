@@ -23,6 +23,18 @@ $admin_stats_cards = [
         "link" => "",
         "image" => "assets/media/images/bill.png",
         "color" => ""
+    ],
+    [
+        'label' => "Leads",
+        "link" => "",
+        "image" => "assets/media/images/email-marketing.png",
+        "color" => ""
+    ],
+    [
+        'label' => "Deals",
+        "link" => "",
+        "image" => "assets/media/images/relationship.png",
+        "color" => ""
     ]
 ];
 $client_stats_cards = [

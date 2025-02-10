@@ -81,7 +81,7 @@ $userid = $loggedInUser['userid'] ?? '0';
                                         <span class="menu-title">Delivery Report</span>
                                     </a>
                                 </div>
-                                <div class="menu-item">
+                                <!-- <div class="menu-item">
                                     <a class="menu-link py-3" href="delivery/asn" title="" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right">
                                         <span class="menu-icon">
                                             <i class="las la-file-alt fs-3"></i>
@@ -96,7 +96,7 @@ $userid = $loggedInUser['userid'] ?? '0';
                                         </span>
                                         <span class="menu-title">ASN Report</span>
                                     </a>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                         <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="bottom-start" class="menu-item menu-lg-down-accordion me-lg-1">
@@ -206,164 +206,158 @@ $userid = $loggedInUser['userid'] ?? '0';
                                 </a>
                             </div>
                         </div>
-                        <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}"
-                            data-kt-menu-placement="bottom-start"
-                            class="menu-item menu-lg-down-accordion me-lg-1 <?= setNavigationLinkActive($navlink['main-link'] ?? '', ADMIN_ACTIVE_LINK, 'here show') ?>"><!--begin:Menu link-->
-                            <span class="menu-link py-3">
-                                <span class="menu-title text-warning">Admin Suite</span>
-                                <span class="menu-arrow d-lg-none"></span>
-                            </span>
-                            <div
-                                class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown p-0 w-lg-600px">
-                                <!--begin:Pages menu-->
-                                <div class="menu-state-bg p-4 p-lg-8">
-                                    <!--begin:Row-->
-                                    <div class="row">
-                                        <!--begin:Col-->
-                                        <div class="col-lg-4 mb-6 mb-lg-0">
-                                            <!--begin:Menu section-->
-                                            <div class="mb-0">
-                                                <!--begin:Menu heading-->
-                                                <h4 class="fs-6 fs-lg-4 fw-bold mb-3 ms-4">CRM Core</h4>
-                                                <!--end:Menu heading-->
 
-                                                <!--begin:Menu item-->
-                                                <div class="menu-item p-0 m-0">
-                                                    <!--begin:Menu link-->
-                                                    <a href="clients"
-                                                        class="menu-link ">
-                                                        <span class="menu-title">Clients</span>
-                                                    </a>
-                                                    <!--end:Menu link-->
+                        <?php
+                        if ($usertype == 'admin'):
+                        ?>
+                            <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}"
+                                data-kt-menu-placement="bottom-start"
+                                class="menu-item menu-lg-down-accordion me-lg-1 <?= setNavigationLinkActive($navlink['main-link'] ?? '', ADMIN_ACTIVE_LINK, 'here show') ?>"><!--begin:Menu link-->
+                                <span class="menu-link py-3">
+                                    <span class="menu-title text-warning">Admin Suite</span>
+                                    <span class="menu-arrow d-lg-none"></span>
+                                </span>
+                                <div
+                                    class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown p-0 w-lg-600px">
+                                    <!--begin:Pages menu-->
+                                    <div class="menu-state-bg p-4 p-lg-8">
+                                        <!--begin:Row-->
+                                        <div class="row">
+                                            <!--begin:Col-->
+                                            <div class="col-lg-4 mb-6 mb-lg-0">
+                                                <!--begin:Menu section-->
+                                                <div class="mb-0">
+                                                    <!--begin:Menu heading-->
+                                                    <h4 class="fs-6 fs-lg-4 fw-bold mb-3 ms-4">CRM Core</h4>
+                                                    <!--end:Menu heading-->
+
+                                                    <!--begin:Menu item-->
+                                                    <div class="menu-item p-0 m-0">
+                                                        <!--begin:Menu link-->
+                                                        <a href="clients"
+                                                            class="menu-link ">
+                                                            <span class="menu-title">Clients</span>
+                                                        </a>
+                                                        <!--end:Menu link-->
+                                                    </div>
+                                                    <!--end:Menu item-->
+                                                    <!--begin:Menu item-->
+                                                    <div class="menu-item p-0 m-0 <?= setNavigationLinkActive($navlink['sub-link'] ?? '', 'leads', 'here show') ?>">
+                                                        <!--begin:Menu link-->
+                                                        <a href="leads"
+                                                            class="menu-link ">
+                                                            <span class="menu-title">Leads</span>
+                                                        </a>
+                                                        <!--end:Menu link-->
+                                                    </div>
+                                                    <!--end:Menu item-->
+                                                    <!--begin:Menu item-->
+                                                    <div class="menu-item p-0 m-0">
+                                                        <!--begin:Menu link-->
+                                                        <a href="contacts"
+                                                            class="menu-link ">
+                                                            <span class="menu-title">Contacts</span>
+                                                        </a>
+                                                        <!--end:Menu link-->
+                                                    </div>
+                                                    <!--end:Menu item-->
+                                                    <!--begin:Menu item-->
+                                                    <div class="menu-item p-0 m-0">
+                                                        <!--begin:Menu link-->
+                                                        <a href="deals"
+                                                            class="menu-link ">
+                                                            <span class="menu-title">Deals</span>
+                                                        </a>
+                                                        <!--end:Menu link-->
+                                                    </div>
+                                                    <!--end:Menu item-->
+                                                    <!--begin:Menu item-->
+                                                    <div class="menu-item p-0 m-0">
+                                                        <!--begin:Menu link-->
+                                                        <a href="mom"
+                                                            class="menu-link ">
+                                                            <span class="menu-title">Minutes of Meetings</span>
+                                                        </a>
+                                                        <!--end:Menu link-->
+                                                    </div>
+                                                    <!--end:Menu item-->
                                                 </div>
-                                                <!--end:Menu item-->
-                                                <!--begin:Menu item-->
-                                                <div class="menu-item p-0 m-0 <?= setNavigationLinkActive($navlink['sub-link'] ?? '', 'leads', 'here show') ?>">
-                                                    <!--begin:Menu link-->
-                                                    <a href="leads"
-                                                        class="menu-link ">
-                                                        <span class="menu-title">Leads</span>
-                                                    </a>
-                                                    <!--end:Menu link-->
-                                                </div>
-                                                <!--end:Menu item-->
-                                                <!--begin:Menu item-->
-                                                <div class="menu-item p-0 m-0">
-                                                    <!--begin:Menu link-->
-                                                    <a href="contacts"
-                                                        class="menu-link ">
-                                                        <span class="menu-title">Contacts</span>
-                                                    </a>
-                                                    <!--end:Menu link-->
-                                                </div>
-                                                <!--end:Menu item-->
-                                                <!--begin:Menu item-->
-                                                <div class="menu-item p-0 m-0">
-                                                    <!--begin:Menu link-->
-                                                    <a href="deals"
-                                                        class="menu-link ">
-                                                        <span class="menu-title">Deals</span>
-                                                    </a>
-                                                    <!--end:Menu link-->
-                                                </div>
-                                                <!--end:Menu item-->
-                                                <!--begin:Menu item-->
-                                                <div class="menu-item p-0 m-0">
-                                                    <!--begin:Menu link-->
-                                                    <a href="mom"
-                                                        class="menu-link ">
-                                                        <span class="menu-title">Minutes of Meetings</span>
-                                                    </a>
-                                                    <!--end:Menu link-->
-                                                </div>
-                                                <!--end:Menu item-->
-                                                <!--begin:Menu item-->
-                                                <div class="menu-item p-0 m-0">
-                                                    <!--begin:Menu link-->
-                                                    <a href="projects"
-                                                        class="menu-link ">
-                                                        <span class="menu-title">Projects</span>
-                                                    </a>
-                                                    <!--end:Menu link-->
-                                                </div>
-                                                <!--end:Menu item-->
+                                                <!--end:Menu section-->
                                             </div>
-                                            <!--end:Menu section-->
-                                        </div>
-                                        <!--end:Col-->
+                                            <!--end:Col-->
 
-                                        <!--begin:Col-->
-                                        <div class="col-lg-4 mb-6 mb-lg-0">
-                                            <!--begin:Menu section-->
-                                            <div class="mb-0">
-                                                <!--begin:Menu heading-->
-                                                <h4 class="fs-6 fs-lg-4 fw-bold mb-3 ms-4">Master Vault</h4>
-                                                <!--end:Menu heading-->
+                                            <!--begin:Col-->
+                                            <div class="col-lg-4 mb-6 mb-lg-0">
+                                                <!--begin:Menu section-->
+                                                <div class="mb-0">
+                                                    <!--begin:Menu heading-->
+                                                    <h4 class="fs-6 fs-lg-4 fw-bold mb-3 ms-4">Master Vault</h4>
+                                                    <!--end:Menu heading-->
 
-                                                <!--begin:Menu item-->
-                                                <div class="menu-item p-0 m-0">
-                                                    <!--begin:Menu link-->
-                                                    <a href="users"
-                                                        class="menu-link ">
-                                                        <span class="menu-title">Users & Accounts</span>
-                                                    </a>
-                                                    <!--end:Menu link-->
+                                                    <!--begin:Menu item-->
+                                                    <div class="menu-item p-0 m-0">
+                                                        <!--begin:Menu link-->
+                                                        <a href="users"
+                                                            class="menu-link ">
+                                                            <span class="menu-title">Users & Accounts</span>
+                                                        </a>
+                                                        <!--end:Menu link-->
+                                                    </div>
+                                                    <!--end:Menu item-->
+                                                    <!--begin:Menu item-->
+                                                    <div class="menu-item p-0 m-0">
+                                                        <!--begin:Menu link-->
+                                                        <a href="master/categories"
+                                                            class="menu-link ">
+                                                            <span class="menu-title">Categories</span>
+                                                        </a>
+                                                        <!--end:Menu link-->
+                                                    </div>
+                                                    <!--end:Menu item-->
+                                                    <!--begin:Menu item-->
+                                                    <div class="menu-item p-0 m-0">
+                                                        <!--begin:Menu link-->
+                                                        <a href="master/uom"
+                                                            class="menu-link ">
+                                                            <span class="menu-title">UOM</span>
+                                                        </a>
+                                                        <!--end:Menu link-->
+                                                    </div>
+                                                    <!--end:Menu item-->
                                                 </div>
-                                                <!--end:Menu item-->
-                                                <!--begin:Menu item-->
-                                                <div class="menu-item p-0 m-0">
-                                                    <!--begin:Menu link-->
-                                                    <a href="master/categories"
-                                                        class="menu-link ">
-                                                        <span class="menu-title">Categories</span>
-                                                    </a>
-                                                    <!--end:Menu link-->
-                                                </div>
-                                                <!--end:Menu item-->
-                                                <!--begin:Menu item-->
-                                                <div class="menu-item p-0 m-0">
-                                                    <!--begin:Menu link-->
-                                                    <a href="master/uom"
-                                                        class="menu-link ">
-                                                        <span class="menu-title">UOM</span>
-                                                    </a>
-                                                    <!--end:Menu link-->
-                                                </div>
-                                                <!--end:Menu item-->
+                                                <!--end:Menu section-->
                                             </div>
-                                            <!--end:Menu section-->
-                                        </div>
-                                        <!--end:Col-->
+                                            <!--end:Col-->
 
-                                        <!--begin:Col-->
-                                        <div class="col-lg-4 mb-6 mb-lg-0">
-                                            <!--begin:Menu section-->
-                                            <div class="mb-0">
-                                                <!--begin:Menu heading-->
-                                                <h4 class="fs-6 fs-lg-4 fw-bold mb-3 ms-4">Updates Hub</h4>
-                                                <!--end:Menu heading-->
+                                            <!--begin:Col-->
+                                            <div class="col-lg-4 mb-6 mb-lg-0">
+                                                <!--begin:Menu section-->
+                                                <div class="mb-0">
+                                                    <!--begin:Menu heading-->
+                                                    <h4 class="fs-6 fs-lg-4 fw-bold mb-3 ms-4">Updates Hub</h4>
+                                                    <!--end:Menu heading-->
 
-                                                <!--begin:Menu item-->
-                                                <div class="menu-item p-0 m-0">
-                                                    <!--begin:Menu link-->
-                                                    <a href="news"
-                                                        class="menu-link ">
-                                                        <span class="menu-title">News</span>
-                                                    </a>
-                                                    <!--end:Menu link-->
+                                                    <!--begin:Menu item-->
+                                                    <div class="menu-item p-0 m-0">
+                                                        <!--begin:Menu link-->
+                                                        <a href="news"
+                                                            class="menu-link ">
+                                                            <span class="menu-title">News</span>
+                                                        </a>
+                                                        <!--end:Menu link-->
+                                                    </div>
+                                                    <!--end:Menu item-->
                                                 </div>
-                                                <!--end:Menu item-->
+                                                <!--end:Menu section-->
                                             </div>
-                                            <!--end:Menu section-->
+                                            <!--end:Col-->
                                         </div>
-                                        <!--end:Col-->
+                                        <!--end:Row-->
                                     </div>
-                                    <!--end:Row-->
-                                </div>
-                                <!--end:Pages menu-->
-                            </div><!--end:Menu sub-->
-                        </div>
-
+                                    <!--end:Pages menu-->
+                                </div><!--end:Menu sub-->
+                            </div>
+                        <?php endif; ?>
                     </div>
                     <!--end::Menu-->
                 </div>
