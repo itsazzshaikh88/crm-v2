@@ -61,7 +61,7 @@ async function fetcOpenOrders() {
         }
         // Set loader to the screen 
         listingSkeleton(tableId, openOrderTrackingPaginate.pageLimit || 0, 'open-order-list-tracking');
-        return;
+
         const url = `${APIUrl}/requests/list`;
         const filters = filterCriterias([]);
 
