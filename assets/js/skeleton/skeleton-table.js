@@ -710,6 +710,21 @@ function generateSkeletonHTML({
 // Helper function to generate skeleton HTML dynamically
 function generateSkeletonHTML(type) {
     switch (type) {
+        case "product-list-grid":
+            return ` <div class="col-md-3">
+                            <a class="card border rounded">
+                                <div class="card-body px-2 py-2 rounded">
+                                    <div class="image text-center p-2">
+                                        <div class="skeleton-shimmer" style="width: 100%; height: 150px;"></div>
+                                    </div>
+                                    <div class="px-4 my-4">
+                                        <div class="skeleton-shimmer" style="width: 100%; height: 20px;"></div> <br>
+                                        <div class="skeleton-shimmer" style="width: 50%; height: 20px;"></div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    `;
         case "lead-activities":
             return `
                 <div class="position-relative ps-6 pe-3 py-4 bg-gray-50 mb-2">
@@ -779,3 +794,19 @@ function generateSkeletonHTML(type) {
             return `<div class="skeleton-box" style="width: 100%; height: 20px;"></div>`;
     }
 }
+
+function appendHTMLContentToElement(elementId, content, iterations) {
+    const parentElement = document.getElementById(elementId);
+    if (!parentElement) {
+        console.error(`Element with ID "${elementId}" not found.`);
+        return;
+    }
+
+    if (typeof content !== "string" || iterations <= 0 || !Number.isInteger(iterations)) {
+        console.error("Invalid content or iteration count.");
+        return;
+    }
+
+    parentElement.innerHTML += content.repeat(iterations);
+}
+

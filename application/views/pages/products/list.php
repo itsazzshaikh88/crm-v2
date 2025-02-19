@@ -13,6 +13,66 @@
     .bg-header {
         background-color: #4c9c2e;
     }
+
+    .text-filter {
+        color: #565656 !important;
+    }
+
+    /* Sliders  */
+    .slider-container {
+        width: 100%;
+        margin: 20px 0;
+        position: relative;
+    }
+
+    .noUi-tooltip {
+        display: block;
+        color: rgb(74, 90, 104);
+        padding: 0px;
+        border-radius: 4px;
+        font-size: 8px;
+        text-align: center;
+        position: absolute;
+        bottom: 150%;
+        transform: translateX(-50%);
+        white-space: nowrap;
+    }
+
+    /* Styling the Slider Track */
+    .noUi-target {
+        background: #fff;
+        /* Default track color */
+        border-radius: px;
+        border: 1px solid #e7e7e7;
+        height: 10px !important;
+    }
+
+    .noUi-connects {
+        background-color: #fff;
+        border: 1px solid #e7e7e7;
+        height: 10px !important;
+    }
+
+    /* Coloring the selected range between handles */
+    .noUi-connect {
+        background: #5C7285 !important;
+        height: 10px;
+        /* Change this to any color */
+    }
+
+    /* Handle styling */
+    .noUi-handle {
+        background: #fff !important;
+        border: 1px solid #5C7285 !important;
+        border-radius: 50%;
+        cursor: pointer;
+        height: 18px !important;
+        width: 18px !important;
+    }
+
+    .slider-margin-bottom {
+        margin-bottom: 20px !important;
+    }
 </style>
 <!--begin::PAGE CONTAINER -->
 <div id="kt_content_container" class="d-flex flex-column-fluid align-items-start container-xxl">
@@ -20,29 +80,18 @@
         <!--begin::PAGE CONTENT GOES FROM HERE-->
         <div class="card">
             <div class="card-body pt-8">
-                <div class="d-flex align-items-center justify-content-end gap-2 mb-4">
-                    <select name="FILTER_CATEGORY_ID" id="FILTER_CATEGORY_ID" class="bg-light border border-light p-4 rounded w-200 filter-input">
-                        <option value="">Category</option>
-
-                    </select>
-                    <button class="bg-primary text-white border-0 p-4 rounded" onclick="filterProducts()">Apply</button>
-                </div>
-                <div class="row my-4">
-                    <div class="col-md-12">
+                <div class="row mb-4">
+                    <div class="col-md-12 text-end">
                         <button class="btn btn-sm border" onclick="toggleReportLayout('grid')" id="gridViewBtn">
                             <i class="fas fa-th"></i> Grid View
                         </button>
                         <button class="btn btn-sm border" onclick="toggleReportLayout('list')" id="listViewBtn">
                             <i class="fas fa-list"></i> List View
                         </button>
+                        <div class="border-bottom border-light my-2"> </div>
                     </div>
                 </div>
                 <div>
-                    <div class="row">
-                        <div class="col-md-12">
-
-                        </div>
-                    </div>
                     <div class="row d-none" id="list-style-listing">
                         <div class="col-md-12">
                             <div class="table-responsive">
@@ -69,7 +118,7 @@
                         </div>
                     </div>
                     <div class="row d-none grid-product-listing" id="grid-style-listing">
-
+                        
                     </div>
 
                 </div>

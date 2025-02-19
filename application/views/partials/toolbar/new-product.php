@@ -4,11 +4,16 @@
 </a>
 <!--end::Action-->
 <!--begin::Button-->
-<?php if (isset($options) && is_array($options)):
+<?php
+$currentUser = $loggedInUser['username'] ?? 'Guest';
+$currentUserType = $loggedInUser['usertype'] ?? 'guest';
+if (isset($options) && is_array($options)):
 ?>
     <?php if ($options['action'] === 'list'):
     ?>
-        <button type="button" onclick="openNewProductModal()" class="btn btn-sm btn-success my-2">Create New Product</button>
+        <?php if ($currentUserType === 'admin'): ?>
+            <button type="button" onclick="openNewProductModal()" class="btn btn-sm btn-success my-2">Create New Product</button>
+        <?php endif; ?>
     <?php elseif ($options['action'] === 'form'): ?>
         <a href="products/list" class="btn btn-sm border text-white border-white me-2 my-2">Product List</a>
     <?php else: ?>

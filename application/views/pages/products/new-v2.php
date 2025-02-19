@@ -115,7 +115,7 @@
                                 </div>
                             </div>
                             <div class="row g-1 mb-1">
-                                <h4 class="text-label-heading fw-normal my-2">Product Pricing & Technical Specifications</h4>
+                                <h4 class="text-label-heading fw-normal my-2">Product Pricing</h4>
                                 <div class="col-md-4">
                                     <div class="d-flex flex-column gap-1">
                                         <label for="BASE_PRICE" class="text-gray-800 fw-bold">Base Price <span class="text-danger">*</span></label>
@@ -137,7 +137,6 @@
                                             <option value="">Select </option>
                                             <option selected value="yes">Yes</option>
                                             <option value="no">No</option>
-
                                         </select>
                                     </div>
                                     <p class="text-danger err-lbl mb-0 fs-8" id="lbl-TAXABLE"></p>
@@ -160,33 +159,50 @@
                                 </div>
                             </div>
                             <div class="row g-1 mb-1">
-                                <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-3">
+                                <div class="col-md-12">
+                                    <h4 class="text-label-heading fw-normal my-2">Technical Specifications</h4>
+                                </div>
+                                <div class="col-md-6 col-lg-4 col-xl-4 col-xxl-3">
                                     <div class="d-flex flex-column gap-1">
                                         <label for="WEIGHT" class="text-gray-800 fw-bold">Product Weight</label>
                                         <input type="text" value="" class="form-control form-control-sm border border-blue-100 text-gray-700 " name="WEIGHT" id="WEIGHT">
                                     </div>
                                     <p class="text-danger err-lbl mb-0 fs-8" id="lbl-WEIGHT"></p>
                                 </div>
-                                <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-3">
+                                <div class="col-md-6 col-lg-4 col-xl-4 col-xxl-3">
                                     <div class="d-flex flex-column gap-1">
-                                        <label for="WIDTH" class="text-gray-800 fw-bold">Product Width </label>
+                                        <label for="WIDTH" class="text-gray-800 fw-bold">Product Width<span class="text-danger">*</span> </label>
                                         <input type="text" value="" class="form-control form-control-sm border border-blue-100 text-gray-700 " name="WIDTH" id="WIDTH">
                                     </div>
                                     <p class="text-danger err-lbl mb-0 fs-8" id="lbl-WIDTH"></p>
                                 </div>
-                                <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-3">
+                                <div class="col-md-6 col-lg-4 col-xl-4 col-xxl-3">
                                     <div class="d-flex flex-column gap-1">
-                                        <label for="LENGTH" class="text-gray-800 fw-bold">Product Length </label>
+                                        <label for="LENGTH" class="text-gray-800 fw-bold">Product Length<span class="text-danger">*</span> </label>
                                         <input type="text" value="" class="form-control form-control-sm border border-blue-100 text-gray-700 " name="LENGTH" id="LENGTH">
                                     </div>
                                     <p class="text-danger err-lbl mb-0 fs-8" id="lbl-LENGTH"></p>
                                 </div>
-                                <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-3">
+                                <div class="col-md-6 col-lg-4 col-xl-4 col-xxl-3">
                                     <div class="d-flex flex-column gap-1">
-                                        <label for="HEIGHT" class="text-gray-800 fw-bold">Product Height </label>
+                                        <label for="HEIGHT" class="text-gray-800 fw-bold">Product Height<span class="text-danger">*</span> </label>
                                         <input type="text" value="" class="form-control form-control-sm border border-blue-100 text-gray-700 " name="HEIGHT" id="HEIGHT">
                                     </div>
                                     <p class="text-danger err-lbl mb-0 fs-8" id="lbl-HEIGHT"></p>
+                                </div>
+                                <div class="col-md-6 col-lg-4 col-xl-4 col-xxl-3">
+                                    <div class="d-flex flex-column gap-1">
+                                        <label for="VOLUME" class="text-gray-800 fw-bold">Volume<span class="text-danger">*</span> </label>
+                                        <input type="text" value="" class="form-control form-control-sm border border-blue-100 text-gray-700 " name="VOLUME" id="VOLUME">
+                                    </div>
+                                    <p class="text-danger err-lbl mb-0 fs-8" id="lbl-VOLUME"></p>
+                                </div>
+                                <div class="col-md-6 col-lg-4 col-xl-4 col-xxl-3">
+                                    <div class="d-flex flex-column gap-1">
+                                        <label for="SHAPE" class="text-gray-800 fw-bold">Shape<span class="text-danger">*</span> </label>
+                                        <input type="text" value="" class="form-control form-control-sm border border-blue-100 text-gray-700 " name="SHAPE" id="SHAPE">
+                                    </div>
+                                    <p class="text-danger err-lbl mb-0 fs-8" id="lbl-SHAPE"></p>
                                 </div>
                             </div>
                             <div class="row g-1 mb-1">

@@ -1,3 +1,6 @@
 ALTER TABLE `xx_crm_products` CHANGE `PRODUCT_ID` `PRODUCT_ID` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'Auto incremenet id for products', CHANGE `WEIGHT` `WEIGHT` VARCHAR(20) NULL DEFAULT NULL COMMENT 'Weight of the product', CHANGE `HEIGHT` `HEIGHT` VARCHAR(30) NULL DEFAULT NULL COMMENT 'Height of the product', CHANGE `LENGTH` `LENGTH` VARCHAR(30) NULL DEFAULT NULL COMMENT 'Length of the product', CHANGE `CREATED_AT` `CREATED_AT` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Timestamp for when the product was created', CHANGE `UPDATED_AT` `UPDATED_AT` TIMESTAMP on update CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Timestamp for when the product was last updated';
 
 ---- =============== ----------------- ===================== --------------- =====================
+ALTER TABLE `xx_crm_products` ADD `volume` VARCHAR(200) NULL AFTER `WIDTH`;
+
+---- =============== ----------------- ===================== --------------- =====================

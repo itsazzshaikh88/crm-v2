@@ -30,7 +30,7 @@ const tbody = document.querySelector(`#${tableId} tbody`);
 
 const gridContainer = document.getElementById("grid-style-listing");
 const listContainer = document.getElementById("list-style-listing");
-let fetchedProdcuts = [];
+let fetchedProducts = [];
 
 const numberOfHeaders = document.querySelectorAll(`#${tableId} thead th`).length || 0;
 
@@ -50,9 +50,15 @@ async function fetctProducts() {
             return;
         }
 
-        // Set loader to the screen 
-        listingSkeleton(tableId, paginate.pageLimit || 0, 'products');
-        const url = `${APIUrl}/products/list`;
+        if (savedView == 'list') {
+            // Set loader to the screen 
+            listingSkeleton(tableId, paginate.pageLimit || 0, 'products');
+        } else {
+            gridContainer.innerHTML = '';
+            appendHTMLContentToElement("grid-style-listing", generateSkeletonHTML("product-list-grid"), 4);
+        }
+
+        const url = `${APIUrl}/products/filterList`;
         const filters = filterCriterias(['FILTER_CATEGORY_ID']);
 
         const response = await fetch(url, {
@@ -75,7 +81,7 @@ async function fetctProducts() {
         const data = await response.json();
         paginate.totalPages = parseFloat(data?.pagination?.total_pages) || 0;
         paginate.totalRecords = parseFloat(data?.pagination?.total_records) || 0;
-        fetchedProdcuts = data.products || [];
+        fetchedProducts = data.products || [];
         showProducts(data.products || [], tbody);
         showGridProducts(data.products || [], gridContainer);
 
@@ -145,16 +151,18 @@ function showProducts(products, tbody) {
                                     <div class="d-flex align-items-center justify-content-end gap-4">
                                         <a href="products/view/${product.UUID}">
                                             <small>
-                                                <i class="fs-5 fa-solid fa-file-lines text-gray-800"></i>
+                                                <i class="fs-5 fa-solid fa-up-right-from-square text-gray-800"></i>
                                             </small>
                                         </a>
-                                        <a href="javascript:void(0)" onclick="openNewProductModal('edit', ${product.PRODUCT_ID})">
-                                            <small>
-                                                <i class="fs-5 fa-regular fa-pen-to-square text-gray-800"></i>
-                                            </small>
-                                        </a>`;
+                                        `;
             if (isAdmin) {
-                content += `<a href="javascript:void(0)" onclick="deleteProduct(${product.PRODUCT_ID})">
+                content += `
+                <a href="javascript:void(0)" onclick="openNewProductModal('edit', ${product.PRODUCT_ID})">
+                                            <small>
+                                                <i class="fs-5 fa-solid fa-pen text-gray-800"></i>
+                                            </small>
+                                        </a>
+                <a href="javascript:void(0)" onclick="deleteProduct(${product.PRODUCT_ID})">
                 <small>
                     <i class="fs-5 fa-solid fa-trash-can text-danger"></i>
                 </small>
@@ -171,27 +179,143 @@ function showProducts(products, tbody) {
     }
 }
 
+function renderFilterOptions() {
+    return `<div class="row">
+                                <div class="col-md-12 mb-0">
+                                    <div class="">
+                                        <h6 class="fw-bold mb-0">Type</h6>
+                                    </div>
+                                    <div class="my-4">
+                                        <div class="d-flex align-items-center justify-content-start gap-2">
+                                            <input type="checkbox" value="food" name="type" class="type">
+                                            <label class="mb-0 text-filter">Food</label>
+                                        </div>
+                                        <div class="d-flex align-items-center justify-content-start gap-2">
+                                            <input type="checkbox" value="industrial" name="type" class="type">
+                                            <label class="mb-0 text-filter">Industrial</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12 mb-0">
+                                    <div class="">
+                                        <h6 class="fw-bold mb-0">Volume / Capacity</h6>
+                                    </div>
+                                    <div class="my-4">
+                                        <div class="d-flex align-items-center justify-content-start gap-2">
+                                            <input type="checkbox" value="gm" name="volume" class="type">
+                                            <label class="mb-0 text-filter">GM</label>
+                                        </div>
+                                        <div class="d-flex align-items-center justify-content-start gap-2">
+                                            <input type="checkbox" value="kg" name="volume" class="type">
+                                            <label class="mb-0 text-filter">KG</label>
+                                        </div>
+                                        <div class="d-flex align-items-center justify-content-start gap-2">
+                                            <input type="checkbox" value="ml" name="volume" class="type">
+                                            <label class="mb-0 text-filter">ML</label>
+                                        </div>
+                                        <div class="d-flex align-items-center justify-content-start gap-2">
+                                            <input type="checkbox" value="ltr" name="volume" class="type">
+                                            <label class="mb-0 text-filter">LTR</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12 mb-0">
+                                    <div class="">
+                                        <h6 class="fw-bold mb-0">Shape</h6>
+                                    </div>
+                                    <div class="my-4">
+                                        <div class="d-flex align-items-center justify-content-start gap-2">
+                                            <input type="checkbox" value="crate" name="shapes" class="type">
+                                            <label class="mb-0 text-filter">Crate</label>
+                                        </div>
+                                        <div class="d-flex align-items-center justify-content-start gap-2">
+                                            <input type="checkbox" value="cup" name="shapes" class="type">
+                                            <label class="mb-0 text-filter">Cup</label>
+                                        </div>
+                                        <div class="d-flex align-items-center justify-content-start gap-2">
+                                            <input type="checkbox" value="oval" name="shapes" class="type">
+                                            <label class="mb-0 text-filter">Oval</label>
+                                        </div>
+                                        <div class="d-flex align-items-center justify-content-start gap-2">
+                                            <input type="checkbox" value="rectangular" name="shapes" class="type">
+                                            <label class="mb-0 text-filter">Rectangular</label>
+                                        </div>
+                                        <div class="d-flex align-items-center justify-content-start gap-2">
+                                            <input type="checkbox" value="round" name="shapes" class="type">
+                                            <label class="mb-0 text-filter">Round</label>
+                                        </div>
+                                        <div class="d-flex align-items-center justify-content-start gap-2">
+                                            <input type="checkbox" value="square" name="shapes" class="type">
+                                            <label class="mb-0 text-filter">Square</label>
+                                        </div>
+                                        <div class="d-flex align-items-center justify-content-start gap-2">
+                                            <input type="checkbox" value="tub" name="shapes" class="type">
+                                            <label class="mb-0 text-filter">Tub</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Height Range Slider -->
+                                <div class="col-md-12 mb-3">
+                                    <h6 class="fw-bold slider-margin-bottom">External Max Height</h6>
+                                    <div class="slider-container">
+                                        <div id="heightSlider" class="filter-elements"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Width Range Slider -->
+                                <div class="col-md-12 mb-3">
+                                    <h6 class="fw-bold slider-margin-bottom">External Max Width</h6>
+                                    <div class="slider-container">
+                                        <div id="widthSlider" class="filter-elements"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Length Range Slider -->
+                                <div class="col-md-12 mb-3">
+                                    <h6 class="fw-bold slider-margin-bottom">External Max Length</h6>
+                                    <div class="slider-container">
+                                        <div id="lengthSlider" class="filter-elements"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row my-4">
+                                <div class="col-md-12 text-center">
+                                    <button class="btn btn-sm btn-secondary border-danger" type="button" onclick="resetFilterOptions()">Reset</button>
+                                </div>
+                            </div>`;
+}
+
 function showGridProducts(products, container) {
     let content = '';
     let default_img = "assets/images/default-image.png";
     if (products?.length > 0) {
         // show products
+        content += `<div class="col-md-3 col-lg-2 py-4">${renderFilterOptions()}</div>
+                    <div class="col-md-9 col-lg-10">
+                        <div class="row">`;
         products.forEach(product => {
             let desc = stripHtmlTags(product?.DESCRIPTION || '');
             let img = parseJsonString(product.PRODUCT_IMAGES || '', 0);
             if (img != null)
                 img = `${PRODUCT_IMAGES_URL}${img}`;
-
-
-            content += `<div class="col-md-3">
-                            <a class="card border border-secondary rounded">
+            content += `<div class="col-md-4 col-xxl-3 ${products?.length > 3 ? 'mb-5' : ''}">
+                            <div class="card border border-secondary rounded product-card">
                                 <div class="card-body p-0 rounded">
-                                    <div class="px-4 py-4 bg-header text-center">
-                                        <h5 class="card-title mb-0 text-white">${product?.PRODUCT_NAME}</h5>
+                                    <!-- Header -->
+                                    <div class="px-4 py-4 bg-header text-center rounded-top">
+                                        <a href="products/view/${product.UUID}">
+                                            <h5 class="card-title mb-0 text-white fw-normal">${product?.PRODUCT_NAME}</h5>
+                                        </a>
                                     </div>
-                                    <div class="image">
+                                    <!-- Image -->
+                                    <div class="image text-center">
                                         <img src="${img ?? default_img}" class="img-fluid" alt="">
                                     </div>
+                                    <!-- Details -->
                                     <div class="pb-0">
                                         <table class="table table-sm table-borderless table-striped pb-0 mb-0">
                                             <tr>
@@ -200,7 +324,7 @@ function showGridProducts(products, container) {
                                             </tr>
                                             <tr>
                                                 <th class="px-3 fw-bold text-dark">Volume</th>
-                                                <td class="px-3"></td>
+                                                <td class="px-3">${product?.VOLUME}</td>
                                             </tr>
                                             <tr>
                                                 <th class="px-3 fw-bold text-dark">Weight</th>
@@ -209,10 +333,32 @@ function showGridProducts(products, container) {
                                         </table>
                                     </div>
                                 </div>
-                            </a>
+                                <!-- Footer Actions -->
+                                <div class="card-footer py-4 d-flex align-items-center justify-content-center gap-10">
+                                    <a title="View Product" href="products/view/${product.UUID}" class="text-decoration-none">
+                                        <small><i class="fs-5 fa-solid fa-up-right-from-square text-gray-800"></i></small>
+                                    </a>
+                                    ${isAdmin ? `
+                                    <a title="Edit Product"  href="javascript:void(0)" onclick="openNewProductModal('edit', ${product.PRODUCT_ID})" class="text-decoration-none">
+                                        <small><i class="fs-5 fa-solid fa-pen text-gray-800"></i></small>
+                                    </a>
+                                    <a title="Delete Product"  href="javascript:void(0)" onclick="deleteProduct(${product.PRODUCT_ID})" class="text-decoration-none">
+                                        <small><i class="fs-5 fa-solid fa-trash-can text-danger"></i></small>
+                                    </a>` : ''}
+                                </div>
+                            </div>
                         </div>`;
+
         });
+        content += `</div>
+                        </div>`;
         container.innerHTML = content;
+
+        // enable sliders
+        // Initialize Sliders
+        createRangeSlider('heightSlider', 100, 300, 0, 1000);
+        createRangeSlider('widthSlider', 50, 200, 30, 300);
+        createRangeSlider('lengthSlider', 150, 500, 100, 600);
     } else {
         // no data available
         container.innerHTML = renderNoResponseCodeForGrid({ colspan: numberOfHeaders })
@@ -240,7 +386,7 @@ function renderNoResponseCodeForGrid() {
 // Global scope
 // Declare the pagination instance globally
 const paginate = new Pagination('current-page', 'total-pages', 'page-of-pages', 'range-of-records');
-paginate.pageLimit = 10; // Set your page limit here
+paginate.pageLimit = savedView == 'grid' ? 15 : 10;
 
 // Function to handle pagination button clicks
 function handlePagination(action) {
@@ -262,7 +408,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     // Fetch initial product data
     fetctProducts();
-    fetchCategoriesForFilter()
+    // fetchFilters();
 
 
 
@@ -274,6 +420,54 @@ function filterProducts() {
 }
 
 async function fetchCategoriesForFilter() {
+    const categoryList = document.getElementById("FILTER_CATEGORY_ID");
+
+    // Disable the select dropdown and show the loading label with animation
+    categoryList.disabled = true;
+
+    // Retrieve the auth_token from cookies
+    const authToken = getCookie('auth_token');
+    if (!authToken) {
+        toasterNotification({ type: 'error', message: errorData.message ?? 'Internal Server Error' });
+        return;
+    }
+
+    try {
+        // Fetch categories from the API (replace 'your-api-endpoint' with the actual API URL)
+        const response = await fetch(`${APIUrl}/categories/list`, {
+            method: 'GET', // or POST, depending on the API endpoint
+            headers: {
+                'Authorization': `Bearer ${authToken}`,
+            },
+        });
+
+        // Check if the response is okay (status code 200-299)
+        if (!response.ok) {
+            throw new Error('Failed to fetch categories');
+        }
+
+        // Parse the JSON response
+        const categories = await response.json();
+
+        // Clear existing options
+        categoryList.innerHTML = '<option value="">Choose Category</option>';
+
+        // Populate the <select> with category options
+        categories.forEach(category => {
+            const option = document.createElement("option");
+            option.value = category.ID; // Adjust to match the category ID key
+            option.textContent = category.CATEGORY_CODE; // Adjust to match the category name key
+            categoryList.appendChild(option);
+        });
+    } catch (error) {
+        toasterNotification({ type: 'error', message: error });
+    } finally {
+        // Re-enable the select dropdown and hide the loading label
+        categoryList.disabled = false;
+    }
+}
+
+async function fetchFilters() {
     const categoryList = document.getElementById("FILTER_CATEGORY_ID");
 
     // Disable the select dropdown and show the loading label with animation
@@ -339,7 +533,7 @@ async function deleteProduct(productID) {
             cancelButtonText: "Cancel",
             customClass: {
                 popup: 'small-swal',
-                confirmButton: 'swal-confirm-btn',
+                confirmButton: 'swal-confirm-btn bg-danger',
                 cancelButton: 'swal-cancel-btn',
             },
         });
@@ -411,9 +605,50 @@ function toggleGridLayout() {
 }
 
 function toggleReportLayout(action) {
+    // set method of listing
+    localStorage.setItem("viewMode", action)
+
     listContainer.classList.toggle("d-none");
     gridContainer.classList.toggle("d-none");
     listViewBtn.classList.toggle("btn-primary");
     gridViewBtn.classList.toggle("btn-primary");
 
 }
+
+// Filter Range Slider options
+function createRangeSlider(sliderId, startMin, startMax, min, max) {
+    var slider = document.getElementById(sliderId);
+
+    noUiSlider.create(slider, {
+        start: [startMin, startMax], // Initial values
+        connect: true,  // Show connection between handles
+        range: {
+            'min': min,
+            'max': max
+        },
+        tooltips: [true, true], // Show tooltips above handles
+        format: {
+            to: function (value) { return Math.round(value) + ' mm'; },
+            from: function (value) { return value.replace(' mm', ''); }
+        }
+    });
+
+    // Trigger change event dynamically
+    slider.noUiSlider.on('update', function (values) {
+        slider.setAttribute('data-value', values.join('-')); // Store values in data attribute
+        triggerOnChange(slider); // Call onchange function
+    });
+}
+
+// Function to trigger onchange event for class filter-elements
+function triggerOnChange(element) {
+    var event = new Event('change', { bubbles: true });
+    element.dispatchEvent(event);
+}
+
+// Listen for changes on all sliders with class filter-elements
+document.querySelectorAll('.filter-elements').forEach(slider => {
+    slider.addEventListener('change', function () {
+        console.log(`${this.id} changed:`, this.getAttribute('data-value'));
+    });
+});

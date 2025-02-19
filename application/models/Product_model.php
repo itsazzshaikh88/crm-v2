@@ -34,7 +34,9 @@ class Product_model extends App_model
             'WEIGHT' => $data['WEIGHT'],
             'WIDTH' => $data['WIDTH'],
             'HEIGHT' => $data['HEIGHT'],
-            'LENGTH' => $data['LENGTH']
+            'LENGTH' => $data['LENGTH'],
+            'SHAPE' => $data['SHAPE'],
+            'VOLUME' => $data['VOLUME'],
         ];
         $inventory_data = [
             'SKU' => $data['SKU'],
@@ -100,7 +102,7 @@ class Product_model extends App_model
 
         $this->db->select("p.PRODUCT_ID, p.UUID, p.PRODUCT_CODE, p.CATEGORY_ID, p.STATUS, p.PRODUCT_NAME, 
                    p.DESCRIPTION, p.BASE_PRICE, p.CURRENCY, p.PRODUCT_IMAGES, p.WEIGHT, 
-                   p.HEIGHT, p.LENGTH, p.WIDTH, i.AVL_QTY, ct.CATEGORY_CODE");
+                   p.HEIGHT, p.LENGTH, p.WIDTH, p.VOLUME, p.SHAPE, i.AVL_QTY, ct.CATEGORY_CODE");
         $this->db->from("xx_crm_products p");
         $this->db->join("xx_crm_product_inventory i", "i.PRODUCT_ID = p.PRODUCT_ID", "left");
         $this->db->join("xx_crm_product_categories ct", "ct.ID = p.CATEGORY_ID", "left");

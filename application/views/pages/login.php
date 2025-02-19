@@ -46,7 +46,7 @@
 
 
 
-    <div class="container d-none">
+    <!-- <div class="container d-none">
         <div class="row mt-4 justify-content-center">
             <div class="col-md-9 border-end"></div>
             <div class="col-md-3 ">
@@ -75,10 +75,6 @@
                                 <div class="form-group ">
                                     <button class="w-100 btn btn-success" id="submit-btn">Sign In</button>
                                 </div>
-                                <div class="d-flex align-items-center justify-content-center gap-2">
-                                    <!-- <a href="login?account=admin-central" class="py-2 text-white badge bg-primary text-decoration-none fw-normal w-50">Admin</a>
-                                <a href="login?account=client-connect" class="py-2 text-white badge bg-info text-decoration-none fw-normal w-50">Client</a> -->
-                                </div>
                             </form>
                         </div>
                         <div id="otp-container" class="d-none">
@@ -105,7 +101,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
     <style>
         .heading {
             font-size: 66px !important;
