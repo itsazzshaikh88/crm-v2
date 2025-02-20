@@ -13,16 +13,16 @@ $stats_cards = $usertype === 'admin' ? $admin_stats_cards : $client_stats_cards;
 			?>
 				<div class="col-sm-6 col-md-3 <?= count($stats_cards) > 4 ? "mb-2" : "" ?>">
 					<!--begin::Card widget 2-->
-					<div class="card h-lg-100">
+					<div class="card">
 						<!--begin::Body-->
 						<a href="" class="card-body d-flex justify-content-between align-items-center flex-row p-4">
 							<!--begin::Icon-->
 							<div class="m-0 ps-4">
-								<img src="<?= $card['image'] ?>" class="w-80px scale-1-1" alt="">
+								<img src="<?= $card['image'] ?>" class="w-60px scale-1-1" alt="">
 							</div>
 							<!--end::Icon-->
 							<!--begin::Section-->
-							<div class="d-flex flex-column my-7">
+							<div class="d-flex flex-column my-4 text-end">
 								<!--begin::Number-->
 								<span class="fw-bolder fs-3x text-gray-800 lh-1 ls-n2 card-stats-label-preview" id="<?= strtolower(str_replace(" ", "_", $card['label'])) ?>">
 									0
@@ -30,7 +30,7 @@ $stats_cards = $usertype === 'admin' ? $admin_stats_cards : $client_stats_cards;
 								<!--end::Number-->
 								<!--begin::Follower-->
 								<div class="m-0">
-									<span class="fw-semibold fs-4 text-gray-500"><?= $card['label'] ?></span>
+									<span class="fw-bold fs-4 text-gray-500"><?= $card['label'] ?></span>
 								</div>
 								<!--end::Follower-->
 							</div>
@@ -60,7 +60,9 @@ $stats_cards = $usertype === 'admin' ? $admin_stats_cards : $client_stats_cards;
 										<th>Track</th>
 									</tr>
 								</thead>
-								<tbody id="open-orders-list-tbody"></tbody>
+								<tbody id="open-orders-list-tbody">
+									
+								</tbody>
 							</table>
 						</div>
 						<?= renderPaginate('oo-current-page', 'oo-total-pages', 'oo-page-of-pages', 'oo-range-of-records') ?>

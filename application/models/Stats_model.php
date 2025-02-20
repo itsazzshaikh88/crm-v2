@@ -13,6 +13,8 @@ class Stats_model extends CI_Model
             'invoices' => 0,
             'leads' => $this->db->count_all_results('xx_crm_leads'),
             'deals' => $this->db->count_all_results('xx_crm_deals'),
+            'requests' => $this->db->count_all_results('xx_crm_req_header'),
+            'quotations' => $this->db->count_all_results('xx_crm_quotations'),
         ];
 
         // If the user is not an admin, filter by CLIENT_ID, else get all counts

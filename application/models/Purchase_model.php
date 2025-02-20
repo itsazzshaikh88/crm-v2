@@ -339,4 +339,42 @@ class Purchase_model extends CI_Model
 
         return false;
     }
+
+    public function get_open_po_list($type = 'list', $limit = 10, $currentPage = 1, $filters = [], $userid = '', $role = '')
+    {
+        $offset = get_limit_offset($currentPage, $limit);
+
+        $this->db->select("PO.PO_ID, PO.PO_STATUS, PO.PO_NUMBER, PO.REQUEST_ID,  PO.UUID, PO.COMPANY_NAME, PO.EMAIL_ADDRESS, 
+            PO.COMPANY_ADDRESS, PO.CONTACT_NUMBER, PO.PAYMENT_TERM, PO.TOTAL_AMOUNT, 
+            PO.COMMENTS, 0 as QTY, PO.CREATED_AT");
+        $this->db->from("xx_crm_po_header PO");
+        $this->db->order_by("PO.PO_ID", "DESC");
+
+        if ($role != 'admin') {
+            $this->db->where("PO.CLIENT_ID", $userid);
+        }
+
+        // Apply filters dynamically from the $filters array
+        if (!empty($filters) && is_array($filters)) {
+            foreach ($filters as $key => $value) {
+                $this->db->where($key, $value);
+            }
+        }
+
+        // Apply limit and offset only if 'list' type
+        if ($type == 'list') {
+            if ($limit > 0) {
+                $this->db->limit($limit, ($offset > 0 ? $offset : 0));
+            }
+        }
+
+        // Execute query
+        $query = $this->db->get();
+
+        if ($type == 'list') {
+            return $query->result_array();
+        } else {
+            return $query->num_rows();
+        }
+    }
 }

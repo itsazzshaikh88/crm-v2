@@ -35,7 +35,20 @@ $admin_stats_cards = [
         "link" => "",
         "image" => "assets/media/images/relationship.png",
         "color" => ""
-    ]
+    ],
+    [
+        'label' => "Requests",
+        "link" => "",
+        "image" => "assets/images/document.png",
+        "color" => ""
+    ],
+    [
+        'label' => "Quotations",
+        "link" => "",
+        "image" => "assets/images/quotes.png",
+        "color" => ""
+    ],
+
 ];
 $client_stats_cards = [
     [

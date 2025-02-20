@@ -43,6 +43,16 @@ function showDashboardStats(stats = {}) {
     });
 }
 
+function renderNoResponseCode(option, isAdmin = false) {
+    let noCotent = `<tr>
+                                <td colspan="${option?.colspan}" class="text-center">
+                                    <p class="mt-4 mb-0">No Open Purchase Orders Found</p>
+                                </td>
+                            </tr>`;
+
+    return noCotent;
+}
+
 // get table id to store
 const tableId = "open-orders-list";
 const table = document.getElementById(tableId);
@@ -52,7 +62,7 @@ const numberOfHeaders = document.querySelectorAll(`#${tableId} thead tr th`).len
 const openOrderTrackingPaginate = new Pagination('oo-current-page', 'oo-total-pages', 'oo-page-of-pages', 'oo-range-of-records');
 openOrderTrackingPaginate.pageLimit = 10; // Set your page limit here
 
-async function fetcOpenOrders() {
+async function fetchOpenOrders() {
     try {
         const authToken = getCookie('auth_token');
         if (!authToken) {
@@ -62,7 +72,7 @@ async function fetcOpenOrders() {
         // Set loader to the screen 
         listingSkeleton(tableId, openOrderTrackingPaginate.pageLimit || 0, 'open-order-list-tracking');
 
-        const url = `${APIUrl}/requests/list`;
+        const url = `${APIUrl}/purchase/open_orders`;
         const filters = filterCriterias([]);
 
         const response = await fetch(url, {
@@ -86,7 +96,7 @@ async function fetcOpenOrders() {
         openOrderTrackingPaginate.totalPages = parseFloat(data?.pagination?.total_pages) || 0;
         openOrderTrackingPaginate.totalRecords = parseFloat(data?.pagination?.total_records) || 0;
 
-        showRequests(data.requests || [], tbody);
+        renderOpenOrders(data.open_pos || [], tbody);
 
     } catch (error) {
         toasterNotification({ type: 'error', message: 'Request failed: ' + error.message });
@@ -94,8 +104,35 @@ async function fetcOpenOrders() {
     }
 }
 
+function renderOpenOrders(pos, tbody) {
+    if (!pos) {
+        tbody.innerHTML = renderNoResponseCode({ colspan: numberOfHeaders });
+        return;
+    } else {
+        let content = '';
+        if (pos.length > 0) {
+            pos.forEach((po) => {
+                content += `<tr>
+								<td>${po?.PO_NUMBER}</td>
+								<td>${po?.COMPANY_ADDRESS}</td>
+								<td>${po?.TOTAL_AMOUNT}</td>
+								<td>${po?.PO_STATUS}</td>
+								<td>${formatAppDate(po?.CREATED_AT)}</td>
+                                <td>
+                                    <button class="btn btn-sm btn-secondary p-0 px-4 py-1"> <i class="fa-solid fa-location-arrow"></i> Track</button>
+                                </td>
+							</tr>`;
+            });
+            tbody.innerHTML = content;
+        } else {
+            tbody.innerHTML = renderNoResponseCode({ colspan: numberOfHeaders });
+            return;
+        }
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     // Fetch initial product data
     fetchCardStats();
-    // fetcOpenOrders();
+    fetchOpenOrders();
 });
