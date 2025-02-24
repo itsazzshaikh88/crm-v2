@@ -302,8 +302,8 @@ class Products extends Api_controller
         $filters = isset($data['filters']) ? $data['filters'] : [];
         $search = isset($data['search']) ? $data['search'] : [];
 
-        $total_products = $this->Product_model->get_products('total', $limit, $currentPage, $filters, $search);
-        $products = $this->Product_model->get_products('list', $limit, $currentPage, $filters, $search);
+        $total_products = $this->Product_model->get_products_filters('total', $limit, $currentPage, $filters, $search);
+        $products = $this->Product_model->get_products_filters('list', $limit, $currentPage, $filters, $search);
 
         $response = [
             'pagination' => [
@@ -313,6 +313,30 @@ class Products extends Api_controller
                 'limit' => $limit
             ],
             'products' => $products,
+        ];
+        return $this->output
+            ->set_content_type('application/json')
+            ->set_status_header(200)
+            ->set_output(json_encode($response));
+    }
+
+    function filters()
+    {
+        // Check if the authentication is valid
+        $isAuthorized = $this->isAuthorized();
+        if (!$isAuthorized['status']) {
+            $this->output
+                ->set_status_header(401) // Set HTTP response status to 400 Bad Request
+                ->set_content_type('application/json')
+                ->set_output(json_encode(['error' => 'Unauthorized access. You do not have permission to perform this action.']))
+                ->_display();
+            exit;
+        };
+
+        $filters = $this->Product_model->fetchProductFilters();
+
+        $response = [
+            'filters' => $filters,
         ];
         return $this->output
             ->set_content_type('application/json')

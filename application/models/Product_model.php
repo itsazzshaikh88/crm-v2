@@ -142,6 +142,122 @@ class Product_model extends App_model
         }
     }
 
+    function get_products_filters($type = 'list', $limit = 10, $currentPage = 1, $filters = [], $search = [])
+    {
+        $offset = get_limit_offset($currentPage, $limit);
+
+        $this->db->select("p.PRODUCT_ID, p.UUID, p.PRODUCT_CODE, p.CATEGORY_ID, p.STATUS, p.PRODUCT_NAME, 
+                   p.DESCRIPTION, p.BASE_PRICE, p.CURRENCY, p.PRODUCT_IMAGES, p.WEIGHT, 
+                   p.HEIGHT, p.LENGTH, p.WIDTH, p.VOLUME, p.SHAPE, i.AVL_QTY, ct.CATEGORY_CODE");
+        $this->db->from("xx_crm_products p");
+        $this->db->join("xx_crm_product_inventory i", "i.PRODUCT_ID = p.PRODUCT_ID", "left");
+        $this->db->join("xx_crm_product_categories ct", "ct.ID = p.CATEGORY_ID", "left");
+        $this->db->order_by("p.PRODUCT_ID", "DESC");
+
+
+        // apply filters
+        if (!empty($filters) && is_array($filters)) {
+            $fields = ['DIVISION' => 'p.DIVISION', 'VOLUME' => 'LOWER(p.VOLUME)', 'SHAPE' => 'LOWER(p.SHAPE)'];
+
+            foreach ($fields as $key => $column) {
+                if (!empty($filters[$key])) {
+                    $values = is_string($filters[$key]) ? array_map('trim', explode(',', $filters[$key])) : $filters[$key];
+
+                    // Remove empty values
+                    $values = array_filter($values);
+
+                    if (!empty($values)) {
+                        $this->db->group_start();
+                        foreach ($values as $value) {
+                            $this->db->or_like($column, strtolower($value), 'both');
+                        }
+                        $this->db->group_end();
+                    }
+                }
+            }
+        }
+
+        // if (!empty($filters) && is_array($filters)) {
+        //     // Division Filters
+        //     if (isset($filters['DIVISION'])) {
+        //         $divisionFilter = $filters['DIVISION'];
+
+        //         // Convert to an array if it's a comma-separated string
+        //         if (is_string($divisionFilter)) {
+        //             $divisions = array_map('trim', explode(',', $divisionFilter));
+        //         } elseif (is_array($divisionFilter)) {
+        //             $divisions = $divisionFilter;
+        //         } else {
+        //             $divisions = [];
+        //         }
+
+        //         // Remove empty values
+        //         $divisions = array_filter($divisions);
+
+        //         // Apply division filter using LIKE with OR conditions
+        //         if (!empty($divisions)) {
+        //             $this->db->group_start(); // Open grouping for OR conditions
+        //             foreach ($divisions as $division) {
+        //                 $this->db->or_like('p.DIVISION', $division, "both"); // Apply LIKE filter
+        //             }
+        //             $this->db->group_end(); // Close grouping
+        //         }
+        //     }
+
+        //     if (isset($filters['VOLUME'])) {
+        //         $volumeFilters = $filters['VOLUME'];
+
+        //         // Convert to an array if it's a comma-separated string
+        //         if (is_string($volumeFilters)) {
+        //             $volumes = array_map('trim', explode(',', $volumeFilters));
+        //         } elseif (is_array($volumeFilters)) {
+        //             $volumes = $volumeFilters;
+        //         } else {
+        //             $volumes = [];
+        //         }
+
+        //         // Remove empty values
+        //         $volumes = array_filter($volumes);
+
+        //         // Apply volumes filter using LIKE with OR conditions
+        //         if (!empty($volumes)) {
+        //             $this->db->group_start(); // Open grouping for OR conditions
+        //             foreach ($volumes as $volume) {
+        //                 $this->db->or_like('LOWER(p.VOLUME)', strtolower($volume), 'both');
+        //             }
+        //             $this->db->group_end(); // Close grouping
+        //         }
+        //     }
+        // }
+
+
+        if (!empty($search) && is_array($search)) {
+            if (isset($search['product'])) {
+                $this->db->group_start(); // Begin group for OR conditions
+                $this->db->like('p.PRODUCT_NAME', $search['product'], 'both', false);
+                $this->db->or_like('p.PRODUCT_CODE', $search['product'], 'both', false);
+                $this->db->group_end(); // End group for OR conditions
+            }
+        }
+
+
+        // Apply limit and offset only if 'list' type and offset is greater than zero
+        if ($type == 'list') {
+            if ($limit > 0) {
+                $this->db->limit($limit, ($offset > 0 ? $offset : 0));
+            }
+        }
+
+        // Execute query
+        $query = $this->db->get();
+
+        if ($type == 'list') {
+            return $query->result_array();
+        } else {
+            return $query->num_rows();
+        }
+    }
+
     public function get_product_by_uuid($productUUID)
     {
         $data = ['product' => []];
@@ -206,5 +322,16 @@ class Product_model extends App_model
         } else {
             return true;
         }
+    }
+
+
+    function fetchProductFilters()
+    {
+        return $filters = [
+            'shapes' => $this->db->query("")->result_array(),
+            'heights' => $this->db->query("")->result_array(),
+            'widths' => $this->db->query("")->result_array(),
+            'lengths' => $this->db->query("")->result_array(),
+        ];
     }
 }

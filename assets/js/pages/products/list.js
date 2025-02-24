@@ -1,3 +1,4 @@
+let productFilters = {};
 // productListSkeleton("product-list", 10, 11);
 function renderNoResponseCode(option, isAdmin = false) {
     let noCotent = `<tr>
@@ -29,6 +30,7 @@ const table = document.getElementById(tableId);
 const tbody = document.querySelector(`#${tableId} tbody`);
 
 const gridContainer = document.getElementById("grid-style-listing");
+const gridListContainer = document.getElementById("grid-style-listing-container");
 const listContainer = document.getElementById("list-style-listing");
 let fetchedProducts = [];
 
@@ -42,7 +44,7 @@ const listViewBtn = document.getElementById("listViewBtn");
 const savedView = localStorage.getItem("viewMode") || "grid";
 
 
-async function fetctProducts() {
+async function fetchProducts() {
     try {
         const authToken = getCookie('auth_token');
         if (!authToken) {
@@ -54,12 +56,11 @@ async function fetctProducts() {
             // Set loader to the screen 
             listingSkeleton(tableId, paginate.pageLimit || 0, 'products');
         } else {
-            gridContainer.innerHTML = '';
-            appendHTMLContentToElement("grid-style-listing", generateSkeletonHTML("product-list-grid"), 4);
+            gridListContainer.innerHTML = '';
+            appendHTMLContentToElement("grid-style-listing-container", generateSkeletonHTML("product-list-grid"), 4);
         }
 
         const url = `${APIUrl}/products/filterList`;
-        const filters = filterCriterias(['FILTER_CATEGORY_ID']);
 
         const response = await fetch(url, {
             method: 'POST',
@@ -70,7 +71,7 @@ async function fetctProducts() {
             body: JSON.stringify({
                 limit: paginate.pageLimit,
                 currentPage: paginate.currentPage,
-                filters: { CATEGORY_ID: filters?.FILTER_CATEGORY_ID }
+                filters: productFilters
             })
         });
 
@@ -83,7 +84,7 @@ async function fetctProducts() {
         paginate.totalRecords = parseFloat(data?.pagination?.total_records) || 0;
         fetchedProducts = data.products || [];
         showProducts(data.products || [], tbody);
-        showGridProducts(data.products || [], gridContainer);
+        showGridProducts(data.products || [], gridListContainer);
 
     } catch (error) {
         toasterNotification({ type: 'error', message: 'Request failed: ' + error.message });
@@ -187,11 +188,11 @@ function renderFilterOptions() {
                                     </div>
                                     <div class="my-4">
                                         <div class="d-flex align-items-center justify-content-start gap-2">
-                                            <input type="checkbox" value="food" name="type" class="type">
+                                            <input type="checkbox" value="444" name="type" data-column-name="DIVISION" class="getFilters">
                                             <label class="mb-0 text-filter">Food</label>
                                         </div>
                                         <div class="d-flex align-items-center justify-content-start gap-2">
-                                            <input type="checkbox" value="industrial" name="type" class="type">
+                                            <input type="checkbox" value="242" name="type" data-column-name="DIVISION" class="getFilters">
                                             <label class="mb-0 text-filter">Industrial</label>
                                         </div>
                                     </div>
@@ -203,19 +204,19 @@ function renderFilterOptions() {
                                     </div>
                                     <div class="my-4">
                                         <div class="d-flex align-items-center justify-content-start gap-2">
-                                            <input type="checkbox" value="gm" name="volume" class="type">
+                                            <input type="checkbox" data-column-name="VOLUME" value="gm" name="volume" class="getFilters">
                                             <label class="mb-0 text-filter">GM</label>
                                         </div>
                                         <div class="d-flex align-items-center justify-content-start gap-2">
-                                            <input type="checkbox" value="kg" name="volume" class="type">
+                                            <input type="checkbox" data-column-name="VOLUME" value="kg" name="volume" class="getFilters">
                                             <label class="mb-0 text-filter">KG</label>
                                         </div>
                                         <div class="d-flex align-items-center justify-content-start gap-2">
-                                            <input type="checkbox" value="ml" name="volume" class="type">
+                                            <input type="checkbox" data-column-name="VOLUME" value="ml" name="volume" class="getFilters">
                                             <label class="mb-0 text-filter">ML</label>
                                         </div>
                                         <div class="d-flex align-items-center justify-content-start gap-2">
-                                            <input type="checkbox" value="ltr" name="volume" class="type">
+                                            <input type="checkbox" data-column-name="VOLUME" value="ltr" name="volume" class="getFilters">
                                             <label class="mb-0 text-filter">LTR</label>
                                         </div>
                                     </div>
@@ -227,31 +228,31 @@ function renderFilterOptions() {
                                     </div>
                                     <div class="my-4">
                                         <div class="d-flex align-items-center justify-content-start gap-2">
-                                            <input type="checkbox" value="crate" name="shapes" class="type">
+                                            <input type="checkbox" data-column-name="SHAPE" value="crate" name="shapes" class="getFilters">
                                             <label class="mb-0 text-filter">Crate</label>
                                         </div>
                                         <div class="d-flex align-items-center justify-content-start gap-2">
-                                            <input type="checkbox" value="cup" name="shapes" class="type">
+                                            <input type="checkbox" data-column-name="SHAPE" value="cup" name="shapes" class="getFilters">
                                             <label class="mb-0 text-filter">Cup</label>
                                         </div>
                                         <div class="d-flex align-items-center justify-content-start gap-2">
-                                            <input type="checkbox" value="oval" name="shapes" class="type">
+                                            <input type="checkbox" data-column-name="SHAPE" value="oval" name="shapes" class="getFilters">
                                             <label class="mb-0 text-filter">Oval</label>
                                         </div>
                                         <div class="d-flex align-items-center justify-content-start gap-2">
-                                            <input type="checkbox" value="rectangular" name="shapes" class="type">
+                                            <input type="checkbox" data-column-name="SHAPE" value="rectangular" name="shapes" class="getFilters">
                                             <label class="mb-0 text-filter">Rectangular</label>
                                         </div>
                                         <div class="d-flex align-items-center justify-content-start gap-2">
-                                            <input type="checkbox" value="round" name="shapes" class="type">
+                                            <input type="checkbox" data-column-name="SHAPE" value="round" name="shapes" class="getFilters">
                                             <label class="mb-0 text-filter">Round</label>
                                         </div>
                                         <div class="d-flex align-items-center justify-content-start gap-2">
-                                            <input type="checkbox" value="square" name="shapes" class="type">
+                                            <input type="checkbox" data-column-name="SHAPE" value="square" name="shapes" class="getFilters">
                                             <label class="mb-0 text-filter">Square</label>
                                         </div>
                                         <div class="d-flex align-items-center justify-content-start gap-2">
-                                            <input type="checkbox" value="tub" name="shapes" class="type">
+                                            <input type="checkbox" data-column-name="SHAPE" value="tub" name="shapes" class="getFilters">
                                             <label class="mb-0 text-filter">Tub</label>
                                         </div>
                                     </div>
@@ -262,6 +263,7 @@ function renderFilterOptions() {
                                     <h6 class="fw-bold slider-margin-bottom">External Max Height</h6>
                                     <div class="slider-container">
                                         <div id="heightSlider" class="filter-elements"></div>
+                                        <input name="heightSliderInput" type="hidden" id="heightSliderInput" value=""/> 
                                     </div>
                                 </div>
 
@@ -270,6 +272,7 @@ function renderFilterOptions() {
                                     <h6 class="fw-bold slider-margin-bottom">External Max Width</h6>
                                     <div class="slider-container">
                                         <div id="widthSlider" class="filter-elements"></div>
+                                        <input name="widthSliderInput" type="hidden" id="widthSliderInput" value=""/>
                                     </div>
                                 </div>
 
@@ -278,6 +281,7 @@ function renderFilterOptions() {
                                     <h6 class="fw-bold slider-margin-bottom">External Max Length</h6>
                                     <div class="slider-container">
                                         <div id="lengthSlider" class="filter-elements"></div>
+                                        <input name="lengthSliderInput" type="hidden" id="lengthSliderInput" value=""/>
                                     </div>
                                 </div>
                             </div>
@@ -294,15 +298,13 @@ function showGridProducts(products, container) {
     let default_img = "assets/images/default-image.png";
     if (products?.length > 0) {
         // show products
-        content += `<div class="col-md-3 col-lg-2 py-4">${renderFilterOptions()}</div>
-                    <div class="col-md-9 col-lg-10">
-                        <div class="row">`;
+
         products.forEach(product => {
             let desc = stripHtmlTags(product?.DESCRIPTION || '');
             let img = parseJsonString(product.PRODUCT_IMAGES || '', 0);
             if (img != null)
                 img = `${PRODUCT_IMAGES_URL}${img}`;
-            content += `<div class="col-md-4 col-xxl-3 ${products?.length > 3 ? 'mb-5' : ''}">
+            content += `<div class="col-md-4 col-lg-3 col-xxl-3 ${products?.length > 3 ? 'mb-5' : ''}">
                             <div class="card border border-secondary rounded product-card">
                                 <div class="card-body p-0 rounded">
                                     <!-- Header -->
@@ -350,20 +352,69 @@ function showGridProducts(products, container) {
                         </div>`;
 
         });
-        content += `</div>
-                        </div>`;
         container.innerHTML = content;
 
-        // enable sliders
-        // Initialize Sliders
-        createRangeSlider('heightSlider', 100, 300, 0, 1000);
-        createRangeSlider('widthSlider', 50, 200, 30, 300);
-        createRangeSlider('lengthSlider', 150, 500, 100, 600);
+
+
     } else {
         // no data available
         container.innerHTML = renderNoResponseCodeForGrid({ colspan: numberOfHeaders })
     }
 }
+
+function filterProductList() {
+    productFilters = {}; // Initialize an empty filter object
+
+    // Select all checkboxes with class "getFilters"
+    document.querySelectorAll(".getFilters").forEach(checkbox => {
+        let column = checkbox.getAttribute("data-column-name");
+        let value = checkbox.value;
+
+        // If checkbox is checked, add the value
+        if (checkbox.checked) {
+            if (productFilters[column]) {
+                let valuesArray = productFilters[column].split(",");
+                if (!valuesArray.includes(value)) {
+                    valuesArray.push(value);
+                }
+                productFilters[column] = valuesArray.join(",");
+            } else {
+                productFilters[column] = value;
+            }
+        } else {
+            // If checkbox is unchecked, remove its value
+            if (productFilters[column]) {
+                let valuesArray = productFilters[column].split(",").filter(v => v !== value);
+                productFilters[column] = valuesArray.length > 0 ? valuesArray.join(",") : undefined;
+            }
+        }
+    });
+
+    // Function to get slider values and add to productFilters if not empty
+    function addSliderValue(sliderId, columnName) {
+        let sliderInput = document.getElementById(sliderId);
+
+        if (sliderInput && sliderInput.value.trim() !== "") {
+            productFilters[columnName] = sliderInput.value;
+        }
+    }
+
+    // Add slider values to filters if available
+    addSliderValue("heightSliderInput", "HEIGHT");
+    addSliderValue("widthSliderInput", "WIDTH");
+    addSliderValue("lengthSliderInput", "LENGTH");
+
+    // Remove empty filters
+    Object.keys(productFilters).forEach(key => {
+        if (!productFilters[key]) {
+            delete productFilters[key];
+        }
+    });
+
+    fetchProducts(); // Call the function to apply filters
+}
+
+
 
 function renderNoResponseCodeForGrid() {
     return `
@@ -372,14 +423,15 @@ function renderNoResponseCodeForGrid() {
                 <img src="assets/images/not-avail.png" alt="No Products" 
                      class="img-fluid" style="max-width: 150px; opacity: 0.7;">
                 <h4 class="mt-3 text-secondary fw-bold">No Products Available</h4>
-                <p class="text-muted">Please check back later or try a different category.</p>
-                <button type="button" onclick="fetctProducts()" class="btn btn-primary">
+                <p class="text-muted">Please check back later or try a different filters.</p>
+                <button type="button" onclick="fetchProducts()" class="btn btn-primary">
                     <i class="fas fa-redo"></i> Refresh
                 </button>
             </div>
         </div>
     `;
 }
+
 
 
 
@@ -391,7 +443,7 @@ paginate.pageLimit = savedView == 'grid' ? 15 : 10;
 // Function to handle pagination button clicks
 function handlePagination(action) {
     paginate.paginate(action); // Update current page based on the action
-    fetctProducts(); // Fetch products for the updated current page
+    fetchProducts(); // Fetch products for the updated current page
 }
 document.addEventListener('DOMContentLoaded', () => {
     // Show grid or list
@@ -400,6 +452,20 @@ document.addEventListener('DOMContentLoaded', () => {
         gridContainer.classList.remove("d-none");
         listViewBtn.classList.remove("btn-primary");
         gridViewBtn.classList.add("btn-primary");
+
+        // enable sliders
+        // Initialize Sliders
+        createRangeSlider('heightSlider', 100, 300, 0, 1000);
+        createRangeSlider('widthSlider', 50, 200, 30, 300);
+        createRangeSlider('lengthSlider', 150, 500, 100, 600);
+
+        // apply on change events
+        let filtersCheckBoxes = document.querySelectorAll(".getFilters");
+        if (filtersCheckBoxes && filtersCheckBoxes?.length > 0) {
+            filtersCheckBoxes.forEach((filterCheckBox) => {
+                filterCheckBox.addEventListener("change", filterProductList);
+            })
+        }
     } else {
         listContainer.classList.remove("d-none");
         gridContainer.classList.add("d-none");
@@ -407,8 +473,8 @@ document.addEventListener('DOMContentLoaded', () => {
         gridViewBtn.classList.remove("btn-primary");
     }
     // Fetch initial product data
-    fetctProducts();
-    // fetchFilters();
+    fetchProducts();
+    fetchFilters();
 
 
 
@@ -416,62 +482,62 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function filterProducts() {
     paginate.currentPage = 1;
-    fetctProducts();
+    fetchProducts();
 }
 
-async function fetchCategoriesForFilter() {
-    const categoryList = document.getElementById("FILTER_CATEGORY_ID");
+// async function fetchCategoriesForFilter() {
+//     const categoryList = document.getElementById("FILTER_CATEGORY_ID");
 
-    // Disable the select dropdown and show the loading label with animation
-    categoryList.disabled = true;
+//     // Disable the select dropdown and show the loading label with animation
+//     categoryList.disabled = true;
 
-    // Retrieve the auth_token from cookies
-    const authToken = getCookie('auth_token');
-    if (!authToken) {
-        toasterNotification({ type: 'error', message: errorData.message ?? 'Internal Server Error' });
-        return;
-    }
+//     // Retrieve the auth_token from cookies
+//     const authToken = getCookie('auth_token');
+//     if (!authToken) {
+//         toasterNotification({ type: 'error', message: errorData.message ?? 'Internal Server Error' });
+//         return;
+//     }
 
-    try {
-        // Fetch categories from the API (replace 'your-api-endpoint' with the actual API URL)
-        const response = await fetch(`${APIUrl}/categories/list`, {
-            method: 'GET', // or POST, depending on the API endpoint
-            headers: {
-                'Authorization': `Bearer ${authToken}`,
-            },
-        });
+//     try {
+//         // Fetch categories from the API (replace 'your-api-endpoint' with the actual API URL)
+//         const response = await fetch(`${APIUrl}/categories/list`, {
+//             method: 'GET', // or POST, depending on the API endpoint
+//             headers: {
+//                 'Authorization': `Bearer ${authToken}`,
+//             },
+//         });
 
-        // Check if the response is okay (status code 200-299)
-        if (!response.ok) {
-            throw new Error('Failed to fetch categories');
-        }
+//         // Check if the response is okay (status code 200-299)
+//         if (!response.ok) {
+//             throw new Error('Failed to fetch categories');
+//         }
 
-        // Parse the JSON response
-        const categories = await response.json();
+//         // Parse the JSON response
+//         const categories = await response.json();
 
-        // Clear existing options
-        categoryList.innerHTML = '<option value="">Choose Category</option>';
+//         // Clear existing options
+//         categoryList.innerHTML = '<option value="">Choose Category</option>';
 
-        // Populate the <select> with category options
-        categories.forEach(category => {
-            const option = document.createElement("option");
-            option.value = category.ID; // Adjust to match the category ID key
-            option.textContent = category.CATEGORY_CODE; // Adjust to match the category name key
-            categoryList.appendChild(option);
-        });
-    } catch (error) {
-        toasterNotification({ type: 'error', message: error });
-    } finally {
-        // Re-enable the select dropdown and hide the loading label
-        categoryList.disabled = false;
-    }
-}
+//         // Populate the <select> with category options
+//         categories.forEach(category => {
+//             const option = document.createElement("option");
+//             option.value = category.ID; // Adjust to match the category ID key
+//             option.textContent = category.CATEGORY_CODE; // Adjust to match the category name key
+//             categoryList.appendChild(option);
+//         });
+//     } catch (error) {
+//         toasterNotification({ type: 'error', message: error });
+//     } finally {
+//         // Re-enable the select dropdown and hide the loading label
+//         categoryList.disabled = false;
+//     }
+// }
 
 async function fetchFilters() {
-    const categoryList = document.getElementById("FILTER_CATEGORY_ID");
 
-    // Disable the select dropdown and show the loading label with animation
-    categoryList.disabled = true;
+    const fullPageLoader = document.getElementById("full-page-loader");
+
+    fullPageLoader.classList.remove("d-none");
 
     // Retrieve the auth_token from cookies
     const authToken = getCookie('auth_token');
@@ -482,7 +548,7 @@ async function fetchFilters() {
 
     try {
         // Fetch categories from the API (replace 'your-api-endpoint' with the actual API URL)
-        const response = await fetch(`${APIUrl}/categories/list`, {
+        const response = await fetch(`${APIUrl}/products/filters`, {
             method: 'GET', // or POST, depending on the API endpoint
             headers: {
                 'Authorization': `Bearer ${authToken}`,
@@ -495,23 +561,13 @@ async function fetchFilters() {
         }
 
         // Parse the JSON response
-        const categories = await response.json();
+        const filterData = await response.json();
+        console.log(filterData);
 
-        // Clear existing options
-        categoryList.innerHTML = '<option value="">Choose Category</option>';
-
-        // Populate the <select> with category options
-        categories.forEach(category => {
-            const option = document.createElement("option");
-            option.value = category.ID; // Adjust to match the category ID key
-            option.textContent = category.CATEGORY_CODE; // Adjust to match the category name key
-            categoryList.appendChild(option);
-        });
     } catch (error) {
         toasterNotification({ type: 'error', message: error });
     } finally {
-        // Re-enable the select dropdown and hide the loading label
-        categoryList.disabled = false;
+        fullPageLoader.classList.add("d-none");
     }
 }
 
@@ -584,7 +640,7 @@ async function deleteProduct(productID) {
             // Here, we directly handle the deletion without checking data.status
             toasterNotification({ type: 'success', message: 'Product Deleted Successfully' });
             // Logic to remove the current row from the table
-            fetctProducts();
+            fetchProducts();
         } else {
             throw new Error(data.message || 'Failed to delete Product details');
         }
@@ -635,20 +691,26 @@ function createRangeSlider(sliderId, startMin, startMax, min, max) {
 
     // Trigger change event dynamically
     slider.noUiSlider.on('update', function (values) {
+        let elementInput = document.getElementById(`${sliderId}Input`);
+
+        if (elementInput) {
+            elementInput.value = values.join("-");
+        }
+
         slider.setAttribute('data-value', values.join('-')); // Store values in data attribute
         triggerOnChange(slider); // Call onchange function
     });
+
+    slider.noUiSlider.on('change', function (values) {
+        // Call product filters options
+        filterProductList();
+    });
+
 }
 
 // Function to trigger onchange event for class filter-elements
 function triggerOnChange(element) {
     var event = new Event('change', { bubbles: true });
     element.dispatchEvent(event);
-}
 
-// Listen for changes on all sliders with class filter-elements
-document.querySelectorAll('.filter-elements').forEach(slider => {
-    slider.addEventListener('change', function () {
-        console.log(`${this.id} changed:`, this.getAttribute('data-value'));
-    });
-});
+}

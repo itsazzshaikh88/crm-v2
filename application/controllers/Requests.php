@@ -28,6 +28,7 @@ class Requests extends App_Controller
         $data['navlink'] = 'requests';
         $data['toolbar'] = ['name' => 'new-request', 'action' => 'list'];
         $data['scripts'] = [
+            'assets/js/pages/products/modals/product-list.js',
             'assets/js/pages/requests/list.js',
             'assets/js/pages/requests/new-v1.js',
             'assets/js/pages/clients/modals/modal-list.js',
