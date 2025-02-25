@@ -295,7 +295,7 @@ class Quotes_model extends App_Model
                 'INTERNAL_NOTES' => $quote['INTERNAL_NOTES'],
                 'ATTACHMENTS' => $quote['ATTACHMENTS'],
                 'SALES_PERSON' => $quote['SALES_PERSON'],
-                'QUOTE_STATUS' => 'draft', // Use a constant for statuses
+                'QUOTE_STATUS' => 'Draft', // Use a constant for statuses
             ];
 
             // Start transaction
@@ -374,45 +374,102 @@ class Quotes_model extends App_Model
     {
         return $this->db->query("select QUOTE_ID, UUID , QUOTE_NUMBER from xx_crm_quotations where CLIENT_ID = $ClientID")->result_array();
     }
+    public function create_new_quote_from_request($requestID, $user_id, $role, $request)
+    {
+        if ($requestID) {
+
+            if (empty($request ?? []) || empty($request['header'] ?? [])) {
+                return false;
+            }
+
+            $user_details = $this->db->where('ID', $request['header']['CLIENT_ID'] ?? 0)->get('xx_crm_users')->row_array();
+            $client_details = $this->db->where('USER_ID', $request['header']['CLIENT_ID'] ?? 0)->get('xx_crm_client_detail')->row_array();
+            $client_address_details = $this->db->where('CLIENT_ID', $request['header']['CLIENT_ID'] ?? 0)->get('xx_crm_client_address')->row_array();
+
+            $employee_name = $user_details['FIRST_NAME'] ?? '' . " " . $user_details['LAST_NAME'] ?? '';
+            // Prepare new quote data
+            $new_quote = [
+                'UUID' => uuid_v4(),
+                'CLIENT_ID' => $request['header']['CLIENT_ID'],
+                'REQUEST_ID' => $request['header']['ID'],
+                'EMPLOYEE_NAME' => $employee_name,
+                'JOB_TITLE' => '',
+                'EMAIL_ADDRESS' => $request['header']['EMAIL_ADDRESS'],
+                'MOBILE_NUMBER' => $request['header']['CONTACT_NUMBER'],
+                'CURRENCY' => '',
+                'PAYMENT_TERM' => '',
+                'SUB_TOTAL' => '',
+                'DISCOUNT_PERCENTAGE' => '',
+                'TAX_PERCENTAGE' => '',
+                'TOTAL_AMOUNT' => '',
+                'COMMENTS' => '',
+                'INTERNAL_NOTES' => '',
+                'ATTACHMENTS' => '',
+                'SALES_PERSON' => '',
+                'QUOTE_STATUS' => 'Draft',
+                'VERSION' => 1,
+                'IS_CONVERTED' => 0,
+                'CREATED_BY' => $user_id
+            ];
+
+            // Start transaction
+            $this->db->trans_begin();
+
+            // Insert new quote
+            $this->db->insert('xx_crm_quotations', $new_quote);
+            if ($this->db->affected_rows() === 0) {
+                $this->db->trans_rollback();
+                return false;
+            }
+
+            // Get the new quote ID
+            $new_quote_id = $this->db->insert_id();
+
+            // Generate quote number
+            $quotes_number = "QUO-" . date('dmy') . str_pad($new_quote_id, 6, '0', STR_PAD_LEFT);
+
+            // Update the quote number
+            $this->db->where('QUOTE_ID', $new_quote_id);
+            $this->db->update('xx_crm_quotations', ['QUOTE_NUMBER' => $quotes_number]);
+
+            if ($this->db->affected_rows() === 0) {
+                $this->db->trans_rollback();
+                return false;
+            }
 
 
-    // public function get_quote_by_quote_id($requestId)
-    // {
-    //     $data = [];
-    //     if ($requestId) {
-    //         $data = $this->db
-    //             ->where('QUOTE_ID', $requestId)
-    //             ->get($this->quotations_table)
-    //             ->row_array();
-    //     }
+            // insert quote lines
+            $lines = $request['lines'] ?? [];
+            if (!empty($lines)) {
+                foreach ($lines as $line) {
+                    $new_line = [
+                        'QUOTE_ID' => $new_quote_id, // Associate with new quote ID
+                        'PRODUCT_ID' => $line['PRODUCT_ID'],
+                        'DESCRIPTION' => $line['PRODUCT_DESC'],
+                        'QTY' => $line['QUANTITY'],
+                        'UNIT_PRICE' => $line['BASE_PRICE'],
+                        'TOTAL' => ((float)$line['QUANTITY'] * (float)$line['BASE_PRICE']),
+                        'COLOR' => '',
+                        'TRANSPORTATION' => '',
+                        'LINE_COMMENTS' => '',
+                    ];
 
-    //     return $data;
-    // }
+                    // Insert new line
+                    $this->db->insert('xx_crm_quotation_lines', $new_line);
+                    if ($this->db->affected_rows() === 0) {
+                        $this->db->trans_rollback();
+                        return false;
+                    }
+                }
+            }
 
-    //     public function get_quote_by_id($requestId)
-    // {
-    //     $data = [];
-    //     if ($requestId) {
-    //         // Fetch the main quote details
-    //         $quote = $this->db
-    //             ->where('QUOTE_ID', $requestId) // Replace with the correct column name if needed
-    //             ->get($this->quotations_table) // Ensure this is the correct table name
-    //             ->row_array();
+            // Commit transaction
+            $this->db->trans_commit();
+            // if new quotations is created then retuen new 
+            $createdQuoatation = $this->get_quote_by_searchkey("QUOTE_ID", $new_quote_id);
+            return $createdQuoatation;
+        }
 
-    //         if (!empty($quote)) {
-    //             $data['quote'] = $quote;
-
-    //             // Fetch associated lines
-    //             $lines = $this->db
-    //                 ->where('QUOTE_ID', $requestId) // Assuming lines table has a column named 'QUOTE_ID'
-    //                 ->get($this->quotation_lines_table) // Replace with your lines table name
-    //                 ->result_array();
-
-    //             $data['lines'] = $lines;
-    //         }
-    //     }
-
-    //     return $data;
-    // }
-
+        return false;
+    }
 }

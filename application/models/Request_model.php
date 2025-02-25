@@ -207,8 +207,8 @@ class Request_model extends App_model
             rh.EMAIL_ADDRESS, rh.REQUEST_DETAILS, rh.INTERNAL_NOTES, rh.ATTACHMENTS, 
             cl.COMPANY_NAME, u.FIRST_NAME, u.LAST_NAME, u.EMAIL, CONCAT(u.FIRST_NAME, ' ', u.LAST_NAME) as CLIENT_NAME")
                 ->from('xx_crm_req_header rh')
-                ->join('xx_crm_client_detail cl', 'cl.USER_ID = rh.CLIENT_ID', 'inner')
-                ->join('xx_crm_users u', 'u.ID = rh.CLIENT_ID', 'inner')
+                ->join('xx_crm_client_detail cl', 'cl.USER_ID = rh.CLIENT_ID', 'LEFT')
+                ->join('xx_crm_users u', 'u.ID = rh.CLIENT_ID', 'LEFT')
                 ->where('rh.' . $searchkey, $searchvalue)
                 ->get()
                 ->row_array();

@@ -479,3 +479,11 @@ function addRow() {
 
     tableBody.appendChild(row);
 }
+
+function removeRow(button) {
+    const row = button.closest('tr');
+    row.remove();
+}
+
+// Open Modal
+// openNewRequestModal();

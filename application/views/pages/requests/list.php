@@ -4,16 +4,15 @@
         <!--begin::PAGE CONTENT GOES FROM HERE-->
         <div class="card">
             <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-row-dashed gy-7" id="request-list" style="white-space: nowrap;">
+                    <table class="table gy-3" id="request-list" style="white-space: nowrap;">
                         <thead>
                             <tr class="fw-bold fs-6 text-gray-800">
                                 <th>#</th>
                                 <th>Request #</th>
                                 <th class="w-350">Title</th>
                                 <th class="w-350">Description</th>
-                                <th class="w-200">Client Name</th>
                                 <th class="w-200">Company</th>
+                                <th class="w-200">Client Name</th>
                                 <th>Contact #</th>
                                 <th>Email</th>
                                 <th>Request Date</th>
@@ -23,7 +22,6 @@
                         <tbody id="request-list-tbody">
                         </tbody>
                     </table>
-                </div>
 
                 <?= renderPaginate('current-page', 'total-pages', 'page-of-pages', 'range-of-records') ?>
             </div>

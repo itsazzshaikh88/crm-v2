@@ -436,4 +436,61 @@ class Quotes extends Api_controller
                 'data' => $this->quotes_model->fetchClientQuotes($ClientID)
             ]));
     }
+
+
+    // Create new po based in the quotation
+    function createFromRequest($requestID)
+    {
+        // Check if the authentication is valid
+        $isAuthorized = $this->isAuthorized();
+        if (!$isAuthorized['status']) {
+            $this->output
+                ->set_status_header(401) // Set HTTP response status to 400 Bad Request
+                ->set_content_type('application/json')
+                ->set_output(json_encode(['error' => 'Unauthorized access. You do not have permission to perform this action.']))
+                ->_display();
+            exit;
+        };
+
+        // Check if the user is admin or not
+        // if (isset($isAuthorized['role']) && $isAuthorized['role'] !== 'admin') {
+        //     $this->output
+        //         ->set_content_type('application/json')
+        //         ->set_status_header(403) // 403 Forbidden status code
+        //         ->set_output(json_encode(['error' => 'You do not have permission to perform this action.']));
+        //     return;
+        // }
+
+        // Validate the Request ID
+        if (empty($requestID) || !is_numeric($requestID)) {
+            $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(400) // 400 Bad Request status code
+                ->set_output(json_encode(['error' => 'Invalid Request ID.']));
+            return;
+        }
+
+        $request = $this->Request_model->get_request_by_search_term("ID", $requestID);
+        if (empty($request ?? []) || empty($request['header'] ?? [])) {
+            $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(404) //
+                ->set_output(json_encode(['status' => false, 'message' => 'Request details not found to create new PO']));
+            return;
+        }
+
+        // Attempt to delete the Request
+        $result = $this->Quotes_model->create_new_quote_from_request($requestID, $isAuthorized['userid'] ?? 0, $isAuthorized['role'] ?? '', $request);
+        if ($result) {
+            $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(200) // 200 OK status code
+                ->set_output(json_encode(['status' => true, 'message' => 'Quotations Created from Request with ID' . $requestID, 'quote' => $result]));
+        } else {
+            $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(500) // 500 Internal Server Error status code
+                ->set_output(json_encode(['status' => false, 'message' => 'Failed to create quote from request']));
+        }
+    }
 }

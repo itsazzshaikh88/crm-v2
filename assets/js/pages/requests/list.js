@@ -68,61 +68,73 @@ function showRequests(requests, tbody) {
         // show requests
         requests.forEach(request => {
             content += `<tr data-request-id="${request.ID}">
-                                <td class="text-center">${++counter}</td>
-                                <td class="">
-                                    <p class="mb-0 text-primary"><small>${request?.REQUEST_NUMBER || ''}</small></p>
-                                </td>
-                                <td>
-                                    <div class="d-flex">
-                                        <div class="">
-                                            <!--begin::Title-->
-                                            <a href="requests/view/${request.UUID}" class="text-gray-800 text-hover-primary fs-5 fw-bold line-clamp-1s" data-kt-ecommerce-category-filter="category_name">${request?.REQUEST_TITLE || ''}</a>
-                                            <!--end::Title-->
-                                        </div>
+                            <td class="text-center">${++counter}</td>
+                            <td class="">
+                                <p class="mb-0 text-primary"><small>${request?.REQUEST_NUMBER || ''}</small></p>
+                            </td>
+                            <td>
+                                <div class="d-flex">
+                                    <div class="">
+                                        <!--begin::Title-->
+                                        <a href="requests/view/${request.UUID}"
+                                            class="text-gray-800 text-hover-primary fs-6 fw-bold line-clamp-1s fw-normal"
+                                            data-kt-ecommerce-category-filter="category_name">${request?.REQUEST_TITLE || ''}</a>
+                                        <!--end::Title-->
                                     </div>
-                                </td>
-                                <td>
-                                    <div class="text-muted fs-7 fw-normal line-clamp-1">${request?.REQUEST_DETAILS || ''}</div>
-                                </td>
-                                <td>
-                                    <div class="d-flex">
-                                        <div class="">
-                                            <!--begin::Title-->
-                                            <a href="" class="text-gray-800 text-hover-primary fs-5 fw-bold mb-1" data-kt-ecommerce-category-filter="category_name">${request?.COMPANY_NAME || ''}</a>
-                                            <!--end::Title-->
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <!--begin::Description-->
-                                        <div class="text-muted fs-7 fw-normal line-clamp-1">${request?.FIRST_NAME || ''} ${request?.LAST_NAME || ''}
-                                        </div>
-                                    <!--end::Description--></td>
-                                <td>${request?.CONTACT_NUMBER || ''}</td>
-                                <td>
-                                    ${request?.EMAIL_ADDRESS || ''}
-                                </td>
-                                <td>${formatAppDate(request?.CREATED_AT || '') ?? ''}</td>
-                                <td class="text-end">
-                                    <div class="d-flex align-items-center justify-content-end gap-4">
-                                        <a href="requests/view/${request.UUID}">
-                                            <small>
-                                                <i class="fs-5 fa-solid fa-file-lines text-success"></i>
-                                            </small>
-                                        </a>
-                                        <a onclick="openNewRequestModal('edit', ${request.ID})" href="javascript:void(0)">
-                                            <small>
-                                                <i class="fs-5 fa-regular fa-pen-to-square text-gray-700"></i>
-                                            </small>
-                                        </a>
-                                        <a href="javascript:void(0)" onclick="deleteRequest(${request.ID})">
-                                            <small>
-                                                <i class="fs-5 fa-solid fa-trash-can text-danger"></i>
-                                            </small>
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>`;
+                                </div>
+                            </td>
+                            <td>
+                                <div class="text-muted fs-7 fw-normal line-clamp-1">${request?.REQUEST_DETAILS || ''}</div>
+                            </td>
+                            <td>
+                                <span class="line-clamp-1">${request?.COMPANY_NAME || ''}</span>
+                            </td>
+                            <td>
+                                <!--begin::Description-->
+                                <div class="text-muted fs-7 fw-normal line-clamp-1">${request?.FIRST_NAME || ''} ${request?.LAST_NAME || ''}
+                                </div>
+                                <!--end::Description-->
+                            </td>
+                            <td>${request?.CONTACT_NUMBER || ''}</td>
+                            <td>
+                                ${request?.EMAIL_ADDRESS || ''}
+                            </td>
+                            <td>${formatAppDate(request?.CREATED_AT || '') ?? ''}</td>
+                            <td class="text-end">
+                                <div class="dropdown">
+                                    <!-- Button to toggle the dropdown, without the caret (down arrow) -->
+                                    <button class="btn btn-link p-0" type="button" id="optionsMenu" data-bs-toggle="dropdown"
+                                        aria-expanded="false">
+                                        <i class="fs-8 me-2 fa-solid fa-ellipsis-vertical"></i> <!-- Three vertical dots -->
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end px-0 py-2 shadow-lg border" aria-labelledby="optionsMenu">
+                                        <li class="mb-1 fs-8">
+                                            <a class="dropdown-item" href="requests/view/${request.UUID}" title="View Quote">
+                                                <i class="fs-8 me-2 fa-solid fa-file-lines text-success"></i> View Request
+                                            </a>
+                                        </li>
+                                        <li class="mb-1 fs-8">
+                                            <a class="dropdown-item" href="javascript:void(0)"
+                                                onclick="openNewRequestModal('edit', ${request.ID})" title="Edit Quote">
+                                                <i class="fs-8 me-2 fa-regular fa-pen-to-square text-gray-700"></i> Edit Request
+                                            </a>
+                                        </li>
+                                        <li class="mb-1 fs-8">
+                                            <a class="dropdown-item" href="javascript:void(0)" onclick="deleteRequest(${request.ID})"
+                                                title="Delete Quote">
+                                                <i class="fs-8 me-2 fa-solid fa-trash-can text-danger"></i> Delete Request
+                                            </a>
+                                        </li>
+                                        <li class="mb-1 fs-8">
+                                            <a class="dropdown-item" href="javascript:void(0)" onclick="convertToQuotation(${request.ID})"
+                                                title="Convert to New Quote">
+                                                <i class="fs-8 me-2 fa-solid fa-up-right-from-square text-info"></i> Convert to Quote
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>`;
         });
         tbody.innerHTML = content;
     } else {
@@ -276,5 +288,91 @@ async function deleteRequest(requestID) {
     } catch (error) {
         toasterNotification({ type: 'error', message: 'Request failed: ' + error.message });
         Swal.close();
+    }
+}
+
+
+// Conver to Quotes
+async function convertToQuotation(requestID) {
+    if (!requestID) {
+        throw new Error("Invalid Request ID, Please try Again");
+    }
+    try {
+
+        // SweetAlert2 confirmation dialog
+        const confirmResult = await Swal.fire({
+            title: 'Create New Quote',
+            text: "Do you really want to make new quotation?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, Create New Quote'
+        });
+
+        if (!confirmResult.isConfirmed) {
+            // User canceled the action
+            return;
+        }
+
+        const authToken = getCookie('auth_token');
+        if (!authToken) {
+            throw new Error("Authorization token is missing. Please Login again to make API request.");
+        }
+
+        const url = `${APIUrl}/quotes/createFromRequest/${requestID}`;
+
+        const response = await fetch(url, {
+            method: 'GET', // Change to DELETE for a delete request
+            headers: {
+                'Authorization': `Bearer ${authToken}`
+            }
+        });
+
+        const data = await response.json(); // Parse the JSON response
+
+        if (!response.ok) {
+            // If the response is not ok, throw an error with the message from the response
+            throw new Error(data.error || 'Failed to create new po');
+        }
+
+        if (data.status) {
+            // Here, we directly handle the deletion without checking data.status
+            toasterNotification({ type: 'success', message: 'New Quotation created successfully.' });
+            // Now confirm if they want to view the newly created Quotation
+            const confirmResult = await Swal.fire({
+                title: 'Quotation Created!',
+                text: "Do you want to view newly created Quotation",
+                icon: 'success',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, Open New',
+                cancelButtonText: 'No, Close it'
+            });
+
+            if (!confirmResult.isConfirmed) {
+                // User canceled the action
+                return;
+            } else {
+                let urlToOpen = '';
+                if (data?.quote?.header?.UUID)
+                    urlToOpen = `quotes/view/${data?.quote?.header?.UUID}`;
+
+                // If open url if created
+                if (urlToOpen) {
+                    window.location = urlToOpen;
+                } else {
+                    toasterNotification({ type: 'error', message: "Cannot open created Quote" });
+                }
+
+            }
+
+        } else {
+            throw new Error(data.message || 'Failed to create new quote');
+        }
+
+    } catch (error) {
+        toasterNotification({ type: 'error', message: 'quote failed: ' + error.message });
     }
 }

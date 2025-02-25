@@ -63,7 +63,7 @@ async function fetchRequests() {
 
 
 const quoteStatusColors = {
-    draft: "#1F509A",
+    Draft: "#1F509A",
     Pending: "#F59E0B",
     Approved: "#10B981",
     Rejected: "#EF4444",
