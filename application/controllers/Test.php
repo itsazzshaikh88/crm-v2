@@ -26,6 +26,7 @@ class Test extends CI_Controller
 
             // Load the view
             $this->load->view('pages/test/password', $data);
+            
         } else {
             // Redirect or show an error message if no password is provided
             echo 'No password provided in the URL.';

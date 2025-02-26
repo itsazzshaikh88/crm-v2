@@ -474,7 +474,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     // Fetch initial product data
     fetchProducts();
-    fetchFilters();
+    // fetchFilters();
 
 
 
