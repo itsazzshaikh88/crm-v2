@@ -101,6 +101,7 @@ class Request_model extends App_model
                 'REQ_ID' => $req_id,
                 'PRODUCT_ID' => $data['PRODUCT_ID'][$row] ?? null,
                 'PRODUCT_DESC' => $data['PRODUCT_DESC'][$row] ?? null,
+                'SUPP_PROD_CODE' => $data['SUPP_PROD_CODE'][$row] ?? null,
                 'QUANTITY' => $data['QUANTITY'][$row] ?? null,
                 'REQUIRED_DATE' => $data['REQUIRED_DATE'][$row] ?? null,
                 'COLOR' => $data['COLOR'][$row] ?? null,
@@ -111,8 +112,11 @@ class Request_model extends App_model
         }
     }
 
-    function get_requests($type = 'list', $limit = 10, $currentPage = 1, $filters = [])
+    function get_requests($type = 'list', $limit = 10, $currentPage = 1, $filters = [], $user = [])
     {
+        $userid = $user['userid'] ?? 0;
+        $usertype = strtolower($user['role'] ?? 'guest');
+
         $offset = get_limit_offset($currentPage, $limit);
 
         $this->db->select("rh.ID, rh.REQUEST_NUMBER, rh.UUID, rh.REQUEST_TITLE, rh.REQUEST_DETAILS, rh.CONTACT_NUMBER, rh.EMAIL_ADDRESS, rh.STATUS, rh.ACTION_BY, rh.VERSION, rh.CREATED_AT,
@@ -127,6 +131,11 @@ class Request_model extends App_model
             foreach ($filters as $key => $value) {
                 $this->db->where($key, $value);
             }
+        }
+
+        // Check if user is not an admin then get him his requests only
+        if ($usertype != 'admin') {
+            $this->db->where('rh.CLIENT_ID', $userid);
         }
 
         // Apply limit and offset only if 'list' type and offset is greater than zero
@@ -166,7 +175,7 @@ class Request_model extends App_model
             // Fetch inventory details if product exists and has a PRODUCT_ID
             if (isset($data['header']['ID'])) {
                 $data['lines'] = $this->db
-                    ->select('rl.LINE_ID, rl.REQ_ID, rl.PRODUCT_ID, rl.PRODUCT_DESC, rl.QUANTITY, rl.REQUIRED_DATE, 
+                    ->select('rl.LINE_ID, rl.REQ_ID, rl.PRODUCT_ID, rl.PRODUCT_DESC, rl.SUPP_PROD_CODE, rl.QUANTITY, rl.REQUIRED_DATE, 
                           rl.COLOR, rl.TRANSPORTATION, rl.COMMENTS, pr.PRODUCT_CODE,pr.PRODUCT_NAME, pr.DESCRIPTION')
                     ->from('xx_crm_req_lines rl')
                     ->join('xx_crm_products pr', 'pr.PRODUCT_ID = rl.PRODUCT_ID', 'left')
@@ -217,7 +226,7 @@ class Request_model extends App_model
             // Fetch inventory details if product exists and has a PRODUCT_ID
             if (isset($data['header']['ID'])) {
                 $data['lines'] = $this->db
-                    ->select('rl.LINE_ID, rl.REQ_ID, rl.PRODUCT_ID, rl.PRODUCT_DESC, rl.QUANTITY, rl.REQUIRED_DATE, 
+                    ->select('rl.LINE_ID, rl.REQ_ID, rl.PRODUCT_ID, rl.PRODUCT_DESC, rl.SUPP_PROD_CODE, rl.QUANTITY, rl.REQUIRED_DATE, 
                           rl.COLOR, rl.TRANSPORTATION, rl.COMMENTS, pr.PRODUCT_CODE,pr.PRODUCT_NAME, pr.DESCRIPTION, pr.BASE_PRICE')
                     ->from('xx_crm_req_lines rl')
                     ->join('xx_crm_products pr', 'pr.PRODUCT_ID = rl.PRODUCT_ID', 'left')

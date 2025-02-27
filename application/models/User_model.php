@@ -421,4 +421,18 @@ class User_model extends App_Model
         // Insert new lead
         return $this->db->where('ID', $userID)->update($this->user_table, ['PASSWORD' => password_hash($data['RESET_NEW_PASSWORD'], PASSWORD_ARGON2ID)]);
     }
+
+    function get_logged_in_user($user)
+    {
+        $userid = $user['userid'] ?? 0;
+        $usertype = strtolower($user['usertype'] ?? 'guest');
+        $user_details = ['info' => [], 'details' => [], 'address' => []];
+        $user_details['info'] = $this->db->where('ID', $userid)->get('xx_crm_users')->row_array();
+        unset($user_details['info']['PASSWORD']);
+        if ($usertype != 'admin') {
+            $user_details['details'] = $this->db->where('USER_ID', $userid)->get('xx_crm_client_detail')->row_array();
+            $user_details['address'] = $this->db->where('CLIENT_ID', $userid)->get('xx_crm_client_address')->row_array();
+        }
+        return $user_details;
+    }
 }

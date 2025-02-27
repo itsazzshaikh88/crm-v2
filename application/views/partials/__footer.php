@@ -76,6 +76,8 @@ $cpyright_years = ($start_year == $current_year) ? $current_year : "$start_year-
 
     const loginUserType = "<?= $loggedInUser['usertype'] ?? 'Guest' ?>";
     const loginUserID = "<?= $loggedInUser['userid'] ?? '0' ?>";
+    const loggedInUserFullDetails = <?= json_encode($loggedInUserFullDetails, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>;
+
     if (loginUserType) {
         localStorage.setItem("usertype", btoa(loginUserType))
     }

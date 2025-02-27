@@ -130,8 +130,8 @@ class Requests extends Api_controller
         $currentPage = isset($data['currentPage']) ? $data['currentPage'] : null;
         $filters = isset($data['filters']) ? $data['filters'] : [];
 
-        $total_requests = $this->Request_model->get_requests('total', $limit, $currentPage, $filters);
-        $requests = $this->Request_model->get_requests('list', $limit, $currentPage, $filters);
+        $total_requests = $this->Request_model->get_requests('total', $limit, $currentPage, $filters, $isAuthorized);
+        $requests = $this->Request_model->get_requests('list', $limit, $currentPage, $filters, $isAuthorized);
 
         $response = [
             'pagination' => [

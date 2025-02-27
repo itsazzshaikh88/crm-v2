@@ -25,7 +25,7 @@ function hideProductListingFullScreenModal() {
 
 }
 
-function filterProductList() {
+function filterProductListForModal() {
     productFilters = {}; // Initialize an empty filter object
 
     // Select all checkboxes with class "getFilters"
@@ -127,11 +127,11 @@ async function fetchProductListForModal() {
     } catch (error) {
         toasterNotification({ type: 'error', message: 'Request failed: ' + error.message });
         // show no response code
-        gridListContainer.innerHTML = renderNoResponseCodeForGrid({ colspan: numberOfHeaders })
+        gridListContainer.innerHTML = renderNoResponseCodeForGridProdModalList({ colspan: numberOfHeaders })
     }
 }
 
-function renderFilterOptions() {
+function renderFilterOptionsForProductModalList() {
     return `<div class="row">
                                 <div class="col-md-12 mb-0">
                                     <div class="">
@@ -293,11 +293,11 @@ function showGridProductsForModalListing(products, container) {
 
     } else {
         // no data available
-        container.innerHTML = renderNoResponseCodeForGrid({ colspan: numberOfHeaders })
+        container.innerHTML = renderNoResponseCodeForGridProdModalList({ colspan: numberOfHeaders })
     }
 }
 
-function renderNoResponseCodeForGrid() {
+function renderNoResponseCodeForGridProdModalList() {
     return `
         <div class="col-12 d-flex justify-content-center align-items-center" style="height: 300px;">
             <div class="text-center">
@@ -574,7 +574,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let filtersCheckBoxes = document.querySelectorAll(".getFilters");
     if (filtersCheckBoxes && filtersCheckBoxes?.length > 0) {
         filtersCheckBoxes.forEach((filterCheckBox) => {
-            filterCheckBox.addEventListener("change", filterProductList);
+            filterCheckBox.addEventListener("change", filterProductListForModal);
         })
     }
 });

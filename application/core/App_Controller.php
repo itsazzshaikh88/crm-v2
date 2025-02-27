@@ -5,14 +5,16 @@ class App_Controller extends CI_Controller
 {
     protected $secret_key;
     protected $userDetails;
+    protected $userFullDetails;
     public function __construct()
     {
         parent::__construct();
         $this->secret_key = APP_SECRET_KEY;
         $this->isAuthenticated();
         $this->userDetails = $this->getUserDetails();
+        $this->userFullDetails = $this->User_model->get_logged_in_user($this->userDetails);;
         // Share user details with all views
-        $this->load->vars(['loggedInUser' => $this->userDetails]);
+        $this->load->vars(['loggedInUser' => $this->userDetails, 'loggedInUserFullDetails' => $this->userFullDetails]);
     }
 
     /**
@@ -64,7 +66,7 @@ class App_Controller extends CI_Controller
             // If no token is found, redirect to login
             redirect(base_url() . 'login');
         } else {
-            
+
             $tokenData = $this->Auth_model->validate_token($auth_token);
             if (empty($tokenData) || time() > $tokenData['EXPIRY']) {
                 // If token is not valid then delete cookie and redirect

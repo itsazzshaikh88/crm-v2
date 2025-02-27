@@ -1,11 +1,8 @@
 // RequestListSkeleton("Request-list", 10, 11);
-function renderNoResponseCode(option, isAdmin = false) {
+function renderNoResponseCodeForRequest(option, isAdmin = false) {
     let noCotent = `<tr>
-                                <td colspan="${option?.colspan}" class="text-center text-danger">
-                                    <div class="d-flex justify-content-center align-items-center flex-column">
-                                        <img src="assets/images/no-data.png" class="no-data-img-table w-80" alt="">
-                                        <h4 class="text-danger fw-normal">Request data not found</h4>
-                                    </div>
+                                <td colspan="${option?.colspan}" class="text-center">
+                                    No requests avaiable, at this moment
                                 </td>
                             </tr>`;
 
@@ -57,7 +54,7 @@ async function fetchRequests() {
 
     } catch (error) {
         toasterNotification({ type: 'error', message: 'Request failed: ' + error.message });
-        tbody.innerHTML = renderNoResponseCode({ colspan: numberOfHeaders });
+        tbody.innerHTML = renderNoResponseCodeForRequest({ colspan: numberOfHeaders });
     }
 }
 
@@ -139,7 +136,7 @@ function showRequests(requests, tbody) {
         tbody.innerHTML = content;
     } else {
         // no data available
-        tbody.innerHTML = renderNoResponseCode({ colspan: numberOfHeaders })
+        tbody.innerHTML = renderNoResponseCodeForRequest({ colspan: numberOfHeaders })
     }
 }
 
@@ -164,53 +161,6 @@ function filterRequest() {
     fetchRequests();
 }
 
-async function fetchCategories() {
-    const categoryList = document.getElementById("CATEGORY_ID");
-
-    // Disable the select dropdown and show the loading label with animation
-    categoryList.disabled = true;
-
-    // Retrieve the auth_token from cookies
-    const authToken = getCookie('auth_token');
-    if (!authToken) {
-        toasterNotification({ type: 'error', message: errorData.message ?? 'Internal Server Error' });
-        return;
-    }
-
-    try {
-        // Fetch categories from the API (replace 'your-api-endpoint' with the actual API URL)
-        const response = await fetch(`${APIUrl}/categories/list`, {
-            method: 'GET', // or POST, depending on the API endpoint
-            headers: {
-                'Authorization': `Bearer ${authToken}`,
-            },
-        });
-
-        // Check if the response is okay (status code 200-299)
-        if (!response.ok) {
-            throw new Error('Failed to fetch categories');
-        }
-
-        // Parse the JSON response
-        const categories = await response.json();
-
-        // Clear existing options
-        categoryList.innerHTML = '<option value="">Choose Category</option>';
-
-        // Populate the <select> with category options
-        categories.forEach(category => {
-            const option = document.createElement("option");
-            option.value = category.ID; // Adjust to match the category ID key
-            option.textContent = category.CATEGORY_CODE; // Adjust to match the category name key
-            categoryList.appendChild(option);
-        });
-    } catch (error) {
-        toasterNotification({ type: 'error', message: error });
-    } finally {
-        // Re-enable the select dropdown and hide the loading label
-        categoryList.disabled = false;
-    }
-}
 
 async function deleteRequest(requestID) {
     if (!requestID) {

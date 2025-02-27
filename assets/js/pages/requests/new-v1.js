@@ -77,7 +77,9 @@ function removeFile(index) {
 function openNewRequestModal(action = 'new', requestID = null) {
     if (action === 'new') {
         // reset form and then open 
-        requestForm.reset()
+        requestForm.reset();
+        if (loginUserType?.toLowerCase() != 'admin')
+            setClientDetails();
     } else {
         // Fetch request Details
         fetchRequestToDisplayForEdit(requestID);
@@ -97,6 +99,16 @@ function closeRequestModal() {
     initializeProductLinesTable();
 }
 
+function setClientDetails() {
+    document.getElementById("CLIENT_NAME").value = `${loggedInUserFullDetails?.info?.FIRST_NAME} ${loggedInUserFullDetails?.info?.LAST_NAME}`;
+    document.getElementById("CLIENT_ID").value = loggedInUserFullDetails?.info?.ID;
+    document.getElementById("CONTACT_NUMBER").value = loggedInUserFullDetails?.info?.PHONE_NUMBER;
+    document.getElementById("EMAIL_ADDRESS").value = loggedInUserFullDetails?.info?.EMAIL;
+    document.getElementById("COMPANY_ADDRESS").value = loggedInUserFullDetails?.address?.ADDRESS_LINE_1;
+    document.getElementById("BILLING_ADDRESS").value = loggedInUserFullDetails?.address?.BILLING_ADDRESS;
+    document.getElementById("SHIPPING_ADDRESS").value = loggedInUserFullDetails?.address?.SHIPPING_ADDRESS;
+}
+
 function initializeProductLinesTable() {
     const tbody = document.querySelector('#request-lines-table tbody');
     tbody.innerHTML = `<tr>
@@ -107,6 +119,9 @@ function initializeProductLinesTable() {
                                             </td>
                                             <td>
                                                 <input type="text" class="form-control form-control-sm border border-blue-100 text-gray-700" name="PRODUCT_DESC[]" id="PRODUCT_DESC_1">
+                                            </td>
+                                            <td>
+                                                <input type="text" class="form-control form-control-sm border border-blue-100 text-gray-700" name="SUPP_PROD_CODE[]" id="SUPP_PROD_CODE_1">
                                             </td>
                                             <td>
                                                 <input type="text" class="form-control form-control-sm border border-blue-100 text-gray-700" name="QUANTITY[]" id="QUANTITY_1">
@@ -124,8 +139,8 @@ function initializeProductLinesTable() {
                                                 <input type="text" class="form-control form-control-sm border border-blue-100 text-gray-700" name="COMMENTS[]" id="COMMENTS_1">
                                             </td>
                                             <td>
-                                                <button class="btn btn-sm border border-danger" type="button" onclick="removeRow(this)">
-                                                    <i class="las la-times fs-4 cursor-pointer text-danger m-0 p-0"></i>
+                                                <button class="btn p-0" type="button" onclick="removeRow(this)">
+                                                    <i class="las la-trash fs-2 cursor-pointer text-danger m-0 p-0"></i>
                                                 </button>
                                             </td>
                                         </tr>`;
@@ -180,7 +195,9 @@ async function submitForm(e) {
                 newRequestModal.hide();
                 fetchRequests();
             } else if (data?.type === 'update') {
-
+                closeRequestModal();
+                newRequestModal.hide();
+                fetchRequests();
             }
 
 
@@ -272,7 +289,10 @@ function showRequestLines(lines) {
                                 </select>
                             </td>
                             <td>
-                                <input type="text" class="form-control" name="PRODUCT_DESC[]" id="PRODUCT_DESC_${rowCount}" value="${escapeSpecialCharacters(desc)}">
+                                <input type="text" class="form-control" name="PRODUCT_DESC[]" id="PRODUCT_DESC_${rowCount}" value="${escapeSpecialCharacters(desc != 'null' ? desc : '')}">
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" name="SUPP_PROD_CODE[]" id="SUPP_PROD_CODE_${rowCount}" value="${escapeSpecialCharacters(line.SUPP_PROD_CODE || '')}">
                             </td>
                             <td>
                                 <input type="text" class="form-control" name="QUANTITY[]" id="QUANTITY_${rowCount}" value="${line.QUANTITY}">
@@ -290,9 +310,9 @@ function showRequestLines(lines) {
                                 <input type="text" class="form-control" name="COMMENTS[]" id="COMMENTS_${rowCount}" value="${line.COMMENTS}">
                             </td>
                             <td>
-                                <button class="btn btn-sm border border-danger" type="button" onclick="removeRow(this)">
-                                    <i class="las la-times fs-4 cursor-pointer text-danger m-0 p-0"></i>
-                                </button>
+                                <button class="btn p-0" type="button" onclick="removeRow(this)">
+                                                    <i class="las la-trash fs-2 cursor-pointer text-danger m-0 p-0"></i>
+                                                </button>
                             </td>
                         `;
 
@@ -456,6 +476,9 @@ function addRow() {
             <input type="text" class="form-control form-control-sm border border-blue-100 text-gray-700 " name="PRODUCT_DESC[]" id="PRODUCT_DESC_${rowCount}">
         </td>
         <td>
+            <input type="text" class="form-control form-control-sm border border-blue-100 text-gray-700 " name="SUPP_PROD_CODE[]" id="SUPP_PROD_CODE_${rowCount}">
+        </td>
+        <td>
             <input type="text" class="form-control form-control-sm border border-blue-100 text-gray-700 " name="QUANTITY[]" id="QUANTITY_${rowCount}">
         </td>
         <td>
@@ -471,9 +494,9 @@ function addRow() {
             <input type="text" class="form-control form-control-sm border border-blue-100 text-gray-700 " name="COMMENTS[]" id="COMMENTS_${rowCount}">
         </td>
         <td>
-            <button class="btn btn-sm border border-danger" type="button" onclick="removeRow(this)">
-                <i class="las la-times fs-4 cursor-pointer text-danger m-0 p-0"></i>
-            </button>
+            <button class="btn p-0" type="button" onclick="removeRow(this)">
+                                                    <i class="las la-trash fs-2 cursor-pointer text-danger m-0 p-0"></i>
+                                                </button>
         </td>
     `;
 

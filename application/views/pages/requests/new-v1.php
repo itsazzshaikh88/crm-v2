@@ -42,6 +42,10 @@
         background-color: #295F98 !important;
     }
 </style>
+<?php
+$loggedInUserID = $loggedInUser['userid'];
+$loggedInUserType = strtolower($loggedInUser['usertype']);
+?>
 <div class="modal bg-body fade " tabindex="-1" id="newRequestModal">
     <div class="modal-dialog bg-light modal-fullscreen">
         <div class="modal-content shadow-none bg-light ">
@@ -52,7 +56,7 @@
                     <input type="hidden" name="ID" id="ID">
                     <!-- Hidden Fields: END -->
                     <!--begin::Close-->
-                    <div class="btn btn-icon btn-sm btn-active-danger ms-2" data-bs-dismiss="modal" aria-label="Close" onclick="closeProductModal()">
+                    <div class="btn btn-icon btn-sm btn-active-danger ms-2" data-bs-dismiss="modal" aria-label="Close" onclick="closeRequestModal()">
                         <i class="fa-solid fa-xmark text-white fs-4"></i>
                     </div>
                     <!--end::Close-->
@@ -73,25 +77,34 @@
                                     <div class="form-group row align-items-center mb-1">
                                         <label for="CLIENT_NAME" class="col-md-3 text-gray-800 fw-bold">Client Name <span class="text-danger">*</span> <span class="float-end">:</span> </label>
                                         <div class="col-sm-8">
-                                            <input type="text" value="" readonly class="form-control form-control-sm border border-blue-100 text-gray-700 " name="CLIENT_NAME" id="CLIENT_NAME" onclick="openClientListModalFromRequest()">
-                                            <input type="hidden" name="CLIENT_ID" id="CLIENT_ID">
+                                            <input type="text" readonly class="form-control form-control-sm border border-blue-100 text-gray-700"
+                                                name="CLIENT_NAME" id="CLIENT_NAME"
+                                                <?= $loggedInUserType == 'admin' ? 'onclick="openClientListModalFromRequest()"' : '' ?>
+                                                value="<?= $loggedInUserType != 'admin' ? $user['info']['FIRST_NAME'] . " " . $user['info']['LAST_NAME'] : '' ?>">
+                                            <input type="hidden" name="CLIENT_ID" id="CLIENT_ID" value="<?= $loggedInUserType != 'admin' ? $user['info']['ID'] : '' ?>">
                                             <p class="text-danger err-lbl mb-0 fs-8" id="lbl-STATUS"></p>
                                         </div>
-                                        <div class="col-sm-1 d-flex-align-items-center justify-content-center cursor-pointer" onclick="clearClientDetails()">
-                                            <i class="fa-solid fa-x text-danger" title="Clear Client Details"></i>
-                                        </div>
+                                        <?php
+                                        if ($loggedInUserType == 'admin'):
+                                        ?>
+                                            <div class="col-sm-1 d-flex-align-items-center justify-content-center cursor-pointer" onclick="clearClientDetails()">
+                                                <i class="fa-solid fa-x text-danger" title="Clear Client Details"></i>
+                                            </div>
+                                        <?php endif; ?>
                                     </div>
                                     <div class="form-group row align-items-center mb-1">
                                         <label for="CONTACT_NUMBER" class="col-md-3 text-gray-800 fw-bold">Mobile Number <span class="text-danger">*</span> <span class="float-end">:</span> </label>
                                         <div class="col-sm-6">
-                                            <input type="text" value="" class="form-control form-control-sm border border-blue-100 text-gray-700 " name="CONTACT_NUMBER" id="CONTACT_NUMBER">
+                                            <input type="text" class="form-control form-control-sm border border-blue-100 text-gray-700 " name="CONTACT_NUMBER" id="CONTACT_NUMBER"
+                                                value="<?= $loggedInUserType != 'admin' ? $user['info']['PHONE_NUMBER'] : '' ?>">
                                             <p class="text-danger err-lbl mb-0 fs-8" id="lbl-CONTACT_NUMBER"></p>
                                         </div>
                                     </div>
                                     <div class="form-group row align-items-center mb-1">
                                         <label for="EMAIL_ADDRESS" class="col-md-3 text-gray-800 fw-bold">Email Address <span class="text-danger">*</span> <span class="float-end">:</span> </label>
                                         <div class="col-sm-6">
-                                            <input type="text" value="" class="form-control form-control-sm border border-blue-100 text-gray-700 " name="EMAIL_ADDRESS" id="EMAIL_ADDRESS">
+                                            <input type="text" class="form-control form-control-sm border border-blue-100 text-gray-700 " name="EMAIL_ADDRESS" id="EMAIL_ADDRESS"
+                                                value="<?= $loggedInUserType != 'admin' ? $user['info']['EMAIL'] : '' ?>">
                                             <p class="text-danger err-lbl mb-0 fs-8" id="lbl-EMAIL_ADDRESS"></p>
                                         </div>
                                     </div>
@@ -107,21 +120,24 @@
                                     <div class="form-group row align-items-center mb-1">
                                         <label for="COMPANY_ADDRESS" class="col-md-3 text-gray-800 fw-bold">Company Address <span class="text-danger">*</span> <span class="float-end">:</span> </label>
                                         <div class="col-sm-9">
-                                            <input type="text" value="" class="form-control form-control-sm border border-blue-100 text-gray-700 " name="COMPANY_ADDRESS" id="COMPANY_ADDRESS">
+                                            <input type="text" class="form-control form-control-sm border border-blue-100 text-gray-700 " name="COMPANY_ADDRESS" id="COMPANY_ADDRESS"
+                                                value="<?= $loggedInUserType != 'admin' ? $user['address']['ADDRESS_LINE_1'] : '' ?>">
                                             <p class="text-danger err-lbl mb-0 fs-8" id="lbl-COMPANY_ADDRESS"></p>
                                         </div>
                                     </div>
                                     <div class="form-group row align-items-center mb-1">
                                         <label for="BILLING_ADDRESS" class="col-md-3 text-gray-800 fw-bold">Billing Address <span class="text-danger">*</span> <span class="float-end">:</span> </label>
                                         <div class="col-sm-9">
-                                            <input type="text" value="" class="form-control form-control-sm border border-blue-100 text-gray-700 " name="BILLING_ADDRESS" id="BILLING_ADDRESS">
+                                            <input type="text" class="form-control form-control-sm border border-blue-100 text-gray-700 " name="BILLING_ADDRESS" id="BILLING_ADDRESS"
+                                                value="<?= $loggedInUserType != 'admin' ? $user['address']['BILLING_ADDRESS'] : '' ?>">
                                             <p class="text-danger err-lbl mb-0 fs-8" id="lbl-BILLING_ADDRESS"></p>
                                         </div>
                                     </div>
                                     <div class="form-group row align-items-center mb-1">
                                         <label for="SHIPPING_ADDRESS" class="col-md-3 text-gray-800 fw-bold">Shipping Address <span class="text-danger">*</span> <span class="float-end">:</span> </label>
                                         <div class="col-sm-9">
-                                            <input type="text" value="" class="form-control form-control-sm border border-blue-100 text-gray-700 " name="SHIPPING_ADDRESS" id="SHIPPING_ADDRESS">
+                                            <input type="text" class="form-control form-control-sm border border-blue-100 text-gray-700 " name="SHIPPING_ADDRESS" id="SHIPPING_ADDRESS"
+                                                value="<?= $loggedInUserType != 'admin' ? $user['address']['SHIPPING_ADDRESS'] : '' ?>">
                                             <p class="text-danger err-lbl mb-0 fs-8" id="lbl-SHIPPING_ADDRESS"></p>
                                         </div>
                                     </div>
@@ -131,7 +147,12 @@
                     </div>
                     <div class="row mb-2">
                         <div class="col-md-12">
-                            <h4 class="text-label-heading fw-normal mt-4">Product Details</h4>
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <h4 class="text-label-heading fw-normal mt-4">Product Details</h4>
+                                <button class="btn btn-sm btn-success" type="button" onclick="addRow()">
+                                    <i class="las la-plus cursor-pointer"></i> Add Row
+                                </button>
+                            </div>
                             <div class="table-responsive">
                                 <!--begin::Table-->
                                 <table class="table table-sm table-row-bordered align-middle gs-3" id="request-lines-table">
@@ -139,15 +160,14 @@
                                         <tr class="bg-white">
                                             <td class="min-w-150px">Product</td>
                                             <td class="min-w-250px">Product Desc</td>
+                                            <td class="min-w-150px">Sup Prod Code</td>
                                             <td class="min-w-150px">Qty</td>
                                             <td class="min-w-150px">Req Date</td>
                                             <td class="min-w-150px">Color</td>
                                             <td class="min-w-150px">Transportation</td>
                                             <td class="min-w-150px">Comments</td>
                                             <td>
-                                                <button class="btn btn-sm btn-success" type="button" onclick="addRow()">
-                                                    <i class="las la-plus fs-4 cursor-pointer text-white m-0 p-0"></i>
-                                                </button>
+
                                             </td>
                                         </tr>
                                     </thead>
@@ -160,6 +180,9 @@
                                             </td>
                                             <td>
                                                 <input type="text" class="form-control form-control-sm border border-blue-100 text-gray-700" name="PRODUCT_DESC[]" id="PRODUCT_DESC_1">
+                                            </td>
+                                            <td>
+                                                <input type="text" class="form-control form-control-sm border border-blue-100 text-gray-700" name="SUPP_PROD_CODE[]" id="SUPP_PROD_CODE_1">
                                             </td>
                                             <td>
                                                 <input type="text" class="form-control form-control-sm border border-blue-100 text-gray-700" name="QUANTITY[]" id="QUANTITY_1">
@@ -177,8 +200,8 @@
                                                 <input type="text" class="form-control form-control-sm border border-blue-100 text-gray-700" name="COMMENTS[]" id="COMMENTS_1">
                                             </td>
                                             <td>
-                                                <button class="btn btn-sm border border-danger" type="button" onclick="removeRow(this)">
-                                                    <i class="las la-times fs-4 cursor-pointer text-danger m-0 p-0"></i>
+                                                <button class="btn p-0" type="button" onclick="removeRow(this)">
+                                                    <i class="las la-trash fs-2 cursor-pointer text-danger m-0 p-0"></i>
                                                 </button>
                                             </td>
                                         </tr>
