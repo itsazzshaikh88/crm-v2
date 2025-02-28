@@ -32,7 +32,6 @@ class Quotes extends App_Controller
             'assets/js/pages/quotes/list.js',
             'assets/js/pages/clients/modals/create-new-client.js',
         ];
-
         $this->load->view('layout', $data);
     }
     public function view($uuid = null)

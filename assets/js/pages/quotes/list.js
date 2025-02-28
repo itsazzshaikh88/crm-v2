@@ -1,15 +1,14 @@
 // // productListSkeleton("product-list", 10, 11);
 function renderNoResponseCode(option, isAdmin = false) {
-    let l = `<tr>
-                                <td colspan="${option?.colspan}" class="text-center text-danger">
-                                    <div class="d-flex justify-content-center align-items-center flex-column">
-                                        <img src="assets/images/no-data.png" class="no-data-img-table w-80" alt="">
-                                        <h4 class="text-danger fw-normal">No Data Available, Create New Quote</h4>
-                                    </div>
-                                </td>
-                            </tr>`;
-
-    return l;
+    return `<tr>
+                <td colspan="${option?.colspan}" class="text-center text-danger">
+                    <div class="d-flex justify-content-center align-items-center flex-column my-5">
+                        <h4 class="text-danger fw-normal mt-4 text-black">No Data Available, Create New Quote</h4>
+                        <button class="btn btn-sm btn-primary mt-2" onclick="openNewQuoteModal('new')">+ Add Quote</button>
+                    </div>
+                </td>
+            </tr>
+`;
 }
 
 // Global Level Elements

@@ -5,7 +5,7 @@
         <div class="card">
             <div class="card-body">
                 <!-- <div class="table-responsive"> -->
-                    <table class="table table-row-bordered gy-3" id="quote-list" style="white-space: nowrap;">
+                    <table class="table table-row-bordered gy-3" id="quote-list">
                         <thead>
                             <tr class="fw-bold fs-6 text-gray-800">
                                 <th>#</th>

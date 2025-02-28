@@ -1,7 +1,32 @@
 // Global vars
 let selectedFiles = [];
 let uploadedFiles = [];
+// Quill Editor
+let quillInstance;
+let quillOptions = {
+    theme: 'snow',
+    placeholder: 'Write your product description here...',
+};
+function initializeQuill(editorId = 'productDescription', options = quillOptions, predefinedContent = '') {
+    const editorElement = document.getElementById(editorId);
+    if (quillInstance) {
+        // Destroy the toolbar if it exists
+        const toolbar = editorElement.parentElement.querySelector('.ql-toolbar');
+        if (toolbar) {
+            toolbar.remove();
+        }
+        // Clear the editor's container and destroy the instance
+        quillInstance = null; // Dereference the current instance
+        editorElement.innerHTML = ''; // Reset the container's content
+    }
 
+    // Set predefined content before initializing
+    if (predefinedContent)
+        editorElement.innerHTML = predefinedContent;
+
+    // Create a new Quill instance
+    quillInstance = new Quill(`#${editorId}`, options);
+}
 // --------------------- ========================= ------------------------------------
 const clientID = document.getElementById("CLIENT_ID");
 const clientName = document.getElementById("CLIENT_NAME");
@@ -31,6 +56,10 @@ var newQuoteModal = new bootstrap.Modal(document.getElementById("newQuoteModal")
     backdrop: 'static'      // Disable closing when clicking outside the modal
 });
 function openNewQuoteModal(action = 'new', quoteID = null) {
+    if (loginUserType?.toLowerCase() != 'admin') {
+        fetchClientRequests(loginUserID);
+        setLoggedInClient();
+    }
     if (action === 'new') {
         // reset form and then open 
         quotesForm.reset()
@@ -42,6 +71,16 @@ function openNewQuoteModal(action = 'new', quoteID = null) {
     initializeQuill();
     newQuoteModal.show()
 }
+
+
+function setLoggedInClient() {
+    document.getElementById("CLIENT_NAME").value = `${loggedInUserFullDetails?.info?.FIRST_NAME} ${loggedInUserFullDetails?.info?.LAST_NAME}`;
+    document.getElementById("CLIENT_ID").value = loggedInUserFullDetails?.info?.ID;
+    document.getElementById("MOBILE_NUMBER").value = loggedInUserFullDetails?.info?.PHONE_NUMBER;
+    document.getElementById("EMAIL_ADDRESS").value = loggedInUserFullDetails?.info?.EMAIL;
+    document.getElementById("COMPANY_ADDRESS").value = loggedInUserFullDetails?.address?.ADDRESS_LINE_1;
+}
+
 function closeQuoteModal() {
     removeClientName();
     quotesForm.reset()
@@ -52,32 +91,7 @@ function closeQuoteModal() {
     document.getElementById("QUOTE_ID").value = ''
 }
 
-// Quill Editor
-let quillInstance;
-let quillOptions = {
-    theme: 'snow',
-    placeholder: 'Write your product description here...',
-};
-function initializeQuill(editorId = 'productDescription', options = quillOptions, predefinedContent = '') {
-    const editorElement = document.getElementById(editorId);
-    if (quillInstance) {
-        // Destroy the toolbar if it exists
-        const toolbar = editorElement.parentElement.querySelector('.ql-toolbar');
-        if (toolbar) {
-            toolbar.remove();
-        }
-        // Clear the editor's container and destroy the instance
-        quillInstance = null; // Dereference the current instance
-        editorElement.innerHTML = ''; // Reset the container's content
-    }
 
-    // Set predefined content before initializing
-    if (predefinedContent)
-        editorElement.innerHTML = predefinedContent;
-
-    // Create a new Quill instance
-    quillInstance = new Quill(`#${editorId}`, options);
-}
 
 // Handle File Operations
 // Handle file selection
@@ -171,6 +185,8 @@ async function fetchQuotation(quoteUUID) {
         displayQuotesInfo(data.data);
 
         showClientDetails(data?.data?.header);
+
+        // show details of the comments 
 
 
         // Show request Number
@@ -393,26 +409,6 @@ function filterProducts() {
 
 
 
-// document.addEventListener('DOMContentLoaded', () => {
-
-//     // fetchCategories()
-
-//     const url = new URL(window.location.href);
-//     // Get all search parameters
-//     const searchParams = new URLSearchParams(url.search);
-//     // Get all URL segments
-//     const urlSegments = url.pathname.split('/').filter(segment => segment);
-//     const quoteUUID = urlSegments[urlSegments.length - 1];
-//     // Fetch product details if action is edit and id is available
-//     if (searchParams.get('action') === 'edit') {
-//         // Your code to fetch product details
-//         fetchQuotation(quoteUUID);
-
-//     }
-// });
-
-
-
 async function fetchRequestsDetailForQuote(requestElement) {
 
     const valueOfElement = requestElement.value;
@@ -430,7 +426,7 @@ async function fetchRequestsDetailForQuote(requestElement) {
             message: "Authorization token is missing. Please login again to make an API request."
         });
         return;
-    } 
+    }
 
     try {
 
@@ -465,7 +461,7 @@ async function fetchRequestsDetailForQuote(requestElement) {
         // Show error notification
         toasterNotification({ type: 'error', message: 'Error: ' + error.message });
         console.error(error);
-        
+
     } finally {
         fullPageLoader.classList.toggle("d-none");
     }
@@ -532,6 +528,9 @@ function showRequestLines(lines) {
                                 <input type="text" class="form-control" name="PRODUCT_DESC[]" id="PRODUCT_DESC_${rowCount}" value="${escapeSpecialCharacters(desc)}">
                             </td>
                             <td>
+                                <input type="text" class="form-control" name="SUPP_PROD_CODE[]" id="SUPP_PROD_CODE_${rowCount}" value="${line.SUPP_PROD_CODE}">
+                            </td>
+                            <td>
                                 <input type="number" class="form-control" name="QTY[]" id="QTY_${rowCount}" value="${line.QUANTITY}"   oninput="updateTotal(${rowCount})">
                             </td>
                             <td>
@@ -577,6 +576,9 @@ function showQuoteLines(lines) {
                             </td>
                             <td>
                                 <input type="text" class="form-control" name="DESCRIPTION[]" id="DESCRIPTION_${rowCount}" value="${escapeSpecialCharacters(desc)}">
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" name="SUPP_PROD_CODE[]" id="SUPP_PROD_CODE_${rowCount}" value="${line.SUPP_PROD_CODE}">
                             </td>
                             <td>
                                 <input type="number" class="form-control" name="QTY[]" id="QTY_${rowCount}" value="${line.QTY}"   oninput="updateTotal(${rowCount})">
@@ -644,8 +646,8 @@ function updateTotal(rowCount) {
 
 function showClientDetails(header) {
     clientID.value = header?.CLIENT_ID || 0
-    clientName.innerHTML = `${header?.FIRST_NAME || ''} ${header?.LAST_NAME || ''}`
-    
+    clientName.value = `${header?.FIRST_NAME || ''} ${header?.LAST_NAME || ''}`
+
 }
 
 
@@ -714,7 +716,7 @@ function clearModalFilterInputs() {
 
 function setClient(clientid) {
     const client = fetchedClients[clientid];
-    clearClientDetails();
+    clearClientDetailsFromQuotes();
     if (client) {
         clientID.value = client?.ID || 0
         clientName.value = `${client?.FIRST_NAME || ''} ${client?.LAST_NAME || ''}`
@@ -724,8 +726,6 @@ function setClient(clientid) {
     }
     myModal.hide();
     // Toggle Buttons
-    
-
     fetchClientRequests(client?.ID);
 }
 
@@ -822,37 +822,42 @@ function addRow() {
     // Create a new row
     const row = document.createElement('tr');
     row.innerHTML = `
-        <td>
-            <select name="PRODUCT_ID[]" id="PRODUCT_ID_${rowCount}" class="form-control" onclick="chooseProduct(${rowCount})">
-                <option value="">Choose</option>
-            </select>
-        </td>
-                             <td>
-                                <input type="text" class="form-control" name=" DESCRIPTION[]" id="DESCRIPTION_${rowCount}" >
-                            </td>
-                            <td>
-                                <input type="number" class="form-control" name="QTY[]" id="QTY_${rowCount}"    oninput="updateTotal(${rowCount})">
-                            </td>
-                            <td>
-                                <input type="number" class="form-control" name=UNIT_PRICE[]" id="UNIT_PRICE_${rowCount}" oninput="updateTotal(${rowCount})">
-                            </td>
-                            <td>
-                                <input type="number" class="form-control" name="TOTAL[]" id="TOTAL_${rowCount}" >
-                            </td>
-                            <td>
-                                <input type="text" class="form-control" name="COLOR[]" id="COLOR_${rowCount}" >
-                            </td>
-                            <td>
-                                <input type="text" class="form-control" name="TRANSPORTATION[]" id="TRANSPORTATION_${rowCount}" ">
-                            </td>
-                            <td>
-                                <input type="text" class="form-control" name="LINE_COMMENTS[]" id="LINE_COMMENTS_${rowCount}" >
-                            </td>
-                            <td>
-            <button class="btn btn-sm border border-danger" type="button" onclick="removeRow(this)">
-                <i class="las la-times fs-4 cursor-pointer text-danger m-0 p-0"></i>
-            </button>
-        </td>
+                <td>
+                    <select name="PRODUCT_ID[]" id="PRODUCT_ID_${rowCount}" class="form-control" onclick="chooseProduct(${rowCount})">
+                        <option value="">Choose</option>
+                    </select>
+                </td>
+                <td>
+                    <input type="text" class="form-control" name=" DESCRIPTION[]" id="DESCRIPTION_${rowCount}">
+                </td>
+                <td>
+                    <input type="text" class="form-control" name=" SUPP_PROD_CODE[]" id="SUPP_PROD_CODE_${rowCount}">
+                </td>
+                <td>
+                    <input type="number" class="form-control" name="QTY[]" id="QTY_${rowCount}" oninput="updateTotal(${rowCount})">
+                </td>
+                <td>
+                    <input type="number" class="form-control" name=UNIT_PRICE[]" id="UNIT_PRICE_${rowCount}"
+                        oninput="updateTotal(${rowCount})">
+                </td>
+                <td>
+                    <input type="number" class="form-control" name="TOTAL[]" id="TOTAL_${rowCount}">
+                </td>
+                <td>
+                    <input type="text" class="form-control" name="COLOR[]" id="COLOR_${rowCount}">
+                </td>
+                <td>
+                    <input type="text" class="form-control" name="TRANSPORTATION[]" id="TRANSPORTATION_${rowCount}" ">
+                                            </td>
+                                            <td>
+                                                <input type=" text" class="form-control" name="LINE_COMMENTS[]"
+                        id="LINE_COMMENTS_${rowCount}">
+                </td>
+                <td>
+                    <button class="btn btn-sm border border-danger" type="button" onclick="removeRow(this)">
+                        <i class="las la-times fs-4 cursor-pointer text-danger m-0 p-0"></i>
+                    </button>
+                </td>
     `;
 
     tableBody.appendChild(row);
@@ -912,11 +917,11 @@ function removeRow(button) {
 
 // Updated Code for Choose Client
 function openClientListModalFromQuote() {
-    clearClientDetails();
+    clearClientDetailsFromQuotes();
     openClientListModal();
 }
 
-function clearClientDetails() {
+function clearClientDetailsFromQuotes() {
     clientID.value = ''
     clientName.value = ''
     companyAddress.value = ''

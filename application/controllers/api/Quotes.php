@@ -132,8 +132,8 @@ class Quotes extends Api_controller
         $currentPage = isset($data['currentPage']) ? $data['currentPage'] : null;
         $filters = isset($data['filters']) ? $data['filters'] : [];
 
-        $total_quotes = $this->Quotes_model->get_quotes('total', $limit, $currentPage, $filters);
-        $quotes = $this->Quotes_model->get_quotes('list', $limit, $currentPage, $filters);
+        $total_quotes = $this->Quotes_model->get_quotes('total', $limit, $currentPage, $filters, $isAuthorized);
+        $quotes = $this->Quotes_model->get_quotes('list', $limit, $currentPage, $filters, $isAuthorized);
 
         $response = [
             'pagination' => [

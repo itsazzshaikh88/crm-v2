@@ -103,6 +103,7 @@ class Quotes_model extends App_Model
                 'QUOTE_ID' => $req_id,
                 'PRODUCT_ID' => $data['PRODUCT_ID'][$row] ?? null,
                 'PRODUCT' => $data['PRODUCT'][$row] ?? null,
+                'SUPP_PROD_CODE' => $data['SUPP_PROD_CODE'][$row] ?? null,
                 'DESCRIPTION' => $data['DESCRIPTION'][$row] ?? null,
                 'QTY' => $data['QTY'][$row] ?? null,
                 'UNIT_PRICE' => $data['UNIT_PRICE'][$row] ?? null,
@@ -115,8 +116,10 @@ class Quotes_model extends App_Model
         }
     }
 
-    function get_quotes($type = 'list', $limit = 10, $currentPage = 1, $filters = [])
+    function get_quotes($type = 'list', $limit = 10, $currentPage = 1, $filters = [], $user = [])
     {
+        $userid = $user['userid'] ?? 0;
+        $usertype = strtolower($user['role'] ?? 'guest');
         $offset = get_limit_offset($currentPage, $limit);
 
         $this->db->select("qu.UUID,qu.QUOTE_ID, qu.QUOTE_NUMBER, qu.CLIENT_ID,qu.EMPLOYEE_NAME ,qu.JOB_TITLE, qu.EMAIL_ADDRESS, qu.SALES_PERSON,rh.REQUEST_NUMBER, qu.QUOTE_STATUS,qu.TOTAL_AMOUNT, qu.ACTION_BY, qu.VERSION, qu.CREATED_AT,
@@ -124,7 +127,7 @@ class Quotes_model extends App_Model
         $this->db->from("xx_crm_quotations qu");
         $this->db->join("xx_crm_client_detail cl", "cl.USER_ID = qu.CLIENT_ID", "left");
         $this->db->join("xx_crm_users u", "u.ID = qu.CLIENT_ID", "left");
-        $this->db->join('xx_crm_req_header rh', 'rh.CLIENT_ID = qu.CLIENT_ID', 'left'); // Join with xx_crm_req_header
+        $this->db->join('xx_crm_req_header rh', 'rh.ID = qu.REQUEST_ID', 'left'); // Join with xx_crm_req_header
 
         $this->db->order_by("qu.QUOTE_ID", "DESC");
 
@@ -133,6 +136,11 @@ class Quotes_model extends App_Model
             foreach ($filters as $key => $value) {
                 $this->db->where($key, $value);
             }
+        }
+
+        // Check if user is not an admin then get him his quotes only
+        if ($usertype != 'admin') {
+            $this->db->where('qu.CLIENT_ID', $userid);
         }
 
         // Apply limit and offset only if 'list' type and offset is greater than zero
@@ -176,7 +184,7 @@ class Quotes_model extends App_Model
                 // if (isset($data['header']['UUID'])) { 
 
                 $data['lines'] = $this->db
-                    ->select('ql.LINE_ID, ql.QUOTE_ID, ql.PRODUCT_ID, ql.DESCRIPTION, ql.QTY, ql.UNIT_PRICE, ql.TOTAL,
+                    ->select('ql.LINE_ID, ql.QUOTE_ID, ql.SUPP_PROD_CODE, ql.CUST_PROD_CODE, ql.PRODUCT_ID, ql.DESCRIPTION, ql.QTY, ql.UNIT_PRICE, ql.TOTAL,
                           ql.COLOR, ql.TRANSPORTATION, ql.LINE_COMMENTS, pr.PRODUCT_CODE,pr.PRODUCT_NAME, pr.DESCRIPTION')
                     ->from('xx_crm_quotation_lines ql')
                     ->join('xx_crm_products pr', 'pr.PRODUCT_ID = ql.PRODUCT_ID', 'left')
@@ -225,7 +233,7 @@ class Quotes_model extends App_Model
                 // if (isset($data['header']['UUID'])) { 
 
                 $data['lines'] = $this->db
-                    ->select('ql.LINE_ID, ql.QUOTE_ID, ql.PRODUCT_ID, ql.DESCRIPTION, ql.QTY, ql.UNIT_PRICE, ql.TOTAL,
+                    ->select('ql.LINE_ID, ql.QUOTE_ID, ql.PRODUCT_ID, ql.DESCRIPTION, ql.QTY, ql.UNIT_PRICE, ql.TOTAL, ql.SUPP_PROD_CODE, ql.CUST_PROD_CODE,
                           ql.COLOR, ql.TRANSPORTATION, ql.LINE_COMMENTS, pr.PRODUCT_CODE,pr.PRODUCT_NAME, pr.DESCRIPTION')
                     ->from('xx_crm_quotation_lines ql')
                     ->join('xx_crm_products pr', 'pr.PRODUCT_ID = ql.PRODUCT_ID', 'left')
@@ -332,6 +340,8 @@ class Quotes_model extends App_Model
                         'QUOTE_ID' => $new_quote_id, // Associate with new quote ID
                         'PRODUCT_ID' => $line['PRODUCT_ID'],
                         'DESCRIPTION' => $line['DESCRIPTION'],
+                        'SUPP_PROD_CODE' => $line['SUPP_PROD_CODE'],
+                        'CUST_PROD_CODE' => $line['CUST_PROD_CODE'],
                         'QTY' => $line['QTY'],
                         'UNIT_PRICE' => $line['UNIT_PRICE'],
                         'TOTAL' => $line['TOTAL'],

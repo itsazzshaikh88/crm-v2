@@ -42,6 +42,10 @@
         background-color: #295F98 !important;
     }
 </style>
+<?php
+$loggedInUserID = $loggedInUser['userid'];
+$loggedInUserType = strtolower($loggedInUser['usertype']);
+?>
 <div class="modal bg-body fade " tabindex="-1" id="newQuoteModal">
     <div class="modal-dialog bg-light modal-fullscreen">
         <div class="modal-content shadow-none bg-light ">
@@ -52,7 +56,7 @@
                     <input type="hidden" name="UUID" id="UUID" value="<?= $uuid ?? uuid_v4() ?>">
                     <input type="hidden" name="QUOTE_ID" id="QUOTE_ID" value="">
 
-                    <input type="hidden" name="CLIENT_ID" id="CLIENT_ID" value="">
+                    <input type="hidden" name="CLIENT_ID" id="CLIENT_ID" value="<?= $loggedInUserType != 'admin' ? $loggedInUserFullDetails['info']['ID'] : '' ?>">
                     <!--begin::Close-->
                     <div class="btn btn-icon btn-sm btn-active-danger ms-2" data-bs-dismiss="modal" aria-label="Close" onclick="closeQuoteModal()">
                         <i class="fa-solid fa-xmark text-white fs-4"></i>
@@ -78,10 +82,25 @@
                                     <div class="row g-3 mt-4 mb-2">
                                         <!-- First Row -->
                                         <div class="col-md-6">
-                                            <div class="d-flex flex-column gap-1">
-                                                <label for="CLIENT_NAME" class="text-gray-800 fw-bold">Client Name<span class="text-danger">*</span></label>
-                                                <input type="text" value="" readonly class="form-control form-control-sm border border-blue-100 text-gray-700" name="CLIENT_NAME" id="CLIENT_NAME" onclick="openClientListModalFromQuote()">
+                                            <!-- Textbox Section -->
+                                            <div class="d-flex flex-column gap-1 flex-grow-1">
+                                                <div class="w-100 d-flex align-items-center justify-content-between">
+                                                    <label for="CLIENT_NAME" class="text-gray-800 fw-bold">
+                                                        Client Name <span class="text-danger">*</span>
+                                                    </label>
+                                                    <?php
+                                                    if ($loggedInUserType == 'admin'):
+                                                    ?>
+                                                        <label for="" class="cursor-pointer text-danger text-decoration-underline" onclick="clearClientDetailsFromQuotes()"><small>Clear Details</small></label>
+                                                    <?php endif; ?>
+                                                </div>
+                                                <input type="text" readonly class="form-control form-control-sm border border-blue-100 text-gray-700 w-100"
+                                                    placeholder="Click to choose client"
+                                                    name="CLIENT_NAME" id="CLIENT_NAME"
+                                                    value="<?= $loggedInUserType != 'admin' ? $loggedInUserFullDetails['info']['FIRST_NAME'] . " " . $loggedInUserFullDetails['info']['LAST_NAME'] : '' ?>"
+                                                    <?= $loggedInUserType == 'admin' ? 'onclick="openClientListModalFromQuote()"' : '' ?>>
                                             </div>
+
                                             <p class="text-danger err-lbl mb-0 fs-8" id="lbl-CLIENT_NAME"></p>
                                         </div>
                                         <div class="col-md-6">
@@ -95,7 +114,7 @@
                                         <!-- First Row -->
                                         <div class="col-md-6">
                                             <div class="d-flex flex-column gap-1">
-                                                <label for="REQUEST_NUMBER" class="text-gray-800 fw-bold">Request Number<span class="text-danger">*</span></label>
+                                                <label for="REQUEST_NUMBER" class="text-gray-800 fw-bold">Request Number</label>
                                                 <select name="REQUEST_NUMBER" id="REQUEST_NUMBER" class="form-control form-control-sm border border-blue-100 text-gray-700" onchange="fetchRequestsDetailForQuote(this)">
                                                     <option value="">Select Request Number</option>
                                                 </select>
@@ -146,7 +165,8 @@
                                         <div class="col-md-6">
                                             <div class="d-flex flex-column gap-1">
                                                 <label for="COMPANY_ADDRESS" class="text-gray-800 fw-bold">Company Address<span class="text-danger">*</span></label>
-                                                <input type="text" value="" class="form-control form-control-sm border border-blue-100 text-gray-700" name="COMPANY_ADDRESS" id="COMPANY_ADDRESS">
+                                                <input type="text" class="form-control form-control-sm border border-blue-100 text-gray-700" name="COMPANY_ADDRESS" id="COMPANY_ADDRESS"
+                                                    value="<?= $loggedInUserType != 'admin' ? $loggedInUserFullDetails['address']['ADDRESS_LINE_1'] : '' ?>">
                                             </div>
                                             <p class="text-danger err-lbl mb-0 fs-8" id="lbl-COMPANY_ADDRESS"></p>
                                         </div>
@@ -157,14 +177,16 @@
                                         <div class="col-md-6">
                                             <div class="d-flex flex-column gap-1">
                                                 <label for="EMAIL_ADDRESS" class="text-gray-800 fw-bold">Email Address<span class="text-danger">*</span></label>
-                                                <input type="email" value="" class="form-control form-control-sm border border-blue-100 text-gray-700" name="EMAIL_ADDRESS" id="EMAIL_ADDRESS">
+                                                <input type="email" class="form-control form-control-sm border border-blue-100 text-gray-700" name="EMAIL_ADDRESS" id="EMAIL_ADDRESS"
+                                                    value="<?= $loggedInUserType != 'admin' ? $loggedInUserFullDetails['info']['EMAIL'] : '' ?>">
                                             </div>
                                             <p class="text-danger err-lbl mb-0 fs-8" id="lbl-EMAIL_ADDRESS"></p>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="d-flex flex-column gap-1">
                                                 <label for="MOBILE_NUMBER" class="text-gray-800 fw-bold">Mobile Number<span class="text-danger">*</span></label>
-                                                <input type="text" value="" class="form-control form-control-sm border border-blue-100 text-gray-700" name="MOBILE_NUMBER" id="MOBILE_NUMBER">
+                                                <input type="text" class="form-control form-control-sm border border-blue-100 text-gray-700" name="MOBILE_NUMBER" id="MOBILE_NUMBER"
+                                                    value="<?= $loggedInUserType != 'admin' ? $loggedInUserFullDetails['info']['PHONE_NUMBER'] : '' ?>">
                                             </div>
                                             <p class="text-danger err-lbl mb-0 fs-8" id="lbl-MOBILE_NUMBER"></p>
                                         </div>
@@ -213,6 +235,7 @@
                                             <tr>
                                                 <td class="min-w-150px">Product</td>
                                                 <td class="min-w-250px">Product Desc</td>
+                                                <td class="min-w-150px">Sup Prod Code</td>
                                                 <td class="min-w-150px">Qty</td>
                                                 <td class="min-w-150px">Unit Price</td>
                                                 <td class="min-w-150px">Total</td>
@@ -236,6 +259,9 @@
                                                 </td>
                                                 <td>
                                                     <input type="text" class="form-control" name="DESCRIPTION[]" id="DESCRIPTION_1">
+                                                </td>
+                                                <td>
+                                                    <input type="text" class="form-control" name="SUPP_PROD_CODE[]" id="SUPP_PROD_CODE_1">
                                                 </td>
                                                 <td>
                                                     <input type="number" class="form-control" name="QTY[]" id="QTY_1"
