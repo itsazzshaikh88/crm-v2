@@ -84,6 +84,7 @@
                                         <tr>
                                             <td class="min-w-150px">Product</td>
                                             <td class="min-w-250px">Product Desc</td>
+                                            <td class="min-w-250px">Sup Prod Code</td>
                                             <td class="min-w-150px">Qty</td>
                                             <td class="min-w-150px">Unit Price</td>
                                             <td class="min-w-150px">Total</td>
@@ -104,6 +105,9 @@
                                             </td>
                                             <td>
                                                 <input type="text" name="PRODUCT_DESC[]" id="PRODUCT_DESC_1" class="form-control form-control-sm">
+                                            </td>
+                                            <td>
+                                                <input type="text" name="SUPP_PROD_CODE[]" id="SUPP_PROD_CODE_1" class="form-control form-control-sm">
                                             </td>
                                             <td>
                                                 <input type="text" name="QTY[]" id="QTY_1" class="form-control form-control-sm" oninput="updateTotal(1)">

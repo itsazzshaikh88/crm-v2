@@ -120,4 +120,39 @@ class App_Controller extends CI_Controller
         }
         // If the UUID is already present, do nothing
     }
+    function get_browser_name()
+    {
+        $user_agent = $_SERVER['HTTP_USER_AGENT'];
+
+        if (strpos($user_agent, 'Edge') !== false || strpos($user_agent, 'Edg') !== false) {
+            return 'Microsoft Edge';
+        } elseif (strpos($user_agent, 'Opera') !== false || strpos($user_agent, 'OPR') !== false) {
+            return 'Opera';
+        } elseif (strpos($user_agent, 'Chrome') !== false) {
+            return 'Google Chrome';
+        } elseif (strpos($user_agent, 'Firefox') !== false) {
+            return 'Mozilla Firefox';
+        } elseif (strpos($user_agent, 'Safari') !== false && strpos($user_agent, 'Chrome') === false) {
+            return 'Apple Safari';
+        } elseif (strpos($user_agent, 'MSIE') !== false || strpos($user_agent, 'Trident') !== false) {
+            return 'Internet Explorer';
+        } else {
+            return 'Unknown Browser';
+        }
+    }
+
+    function get_user_agent()
+    {
+        return $_SERVER['HTTP_USER_AGENT'] ?? '';
+    }
+
+    public function get_local_ip()
+    {
+        return gethostbyname(gethostname());
+    }
+
+    public function get_request_uri()
+    {
+        return isset($_SERVER['REQUEST_URI']) ? base_url($_SERVER['REQUEST_URI']) : '';
+    }
 }

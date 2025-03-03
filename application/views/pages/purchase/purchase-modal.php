@@ -189,6 +189,7 @@
                                             <tr>
                                                 <td class="min-w-150px">Product</td>
                                                 <td class="min-w-250px">Product Desc</td>
+                                                <td class="min-w-250px">Sup Prod Code</td>
                                                 <td class="min-w-150px">Qty</td>
                                                 <td class="min-w-150px">Unit Price</td>
                                                 <td class="min-w-150px">Total</td>
@@ -207,36 +208,39 @@
                                         <tbody>
                                             <tr>
                                                 <td>
-                                                    <select name="PRODUCT_ID[]" id="PRODUCT_ID_1" class="form-control" onclick="chooseProduct(1)">
+                                                    <select name="PRODUCT_ID[]" id="PRODUCT_ID_1" class="form-control form-control-sm" onclick="chooseProduct(1)">
                                                         <option value="">Select</option>
                                                     </select>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="PRODUCT_DESC[]" id="PRODUCT_DESC_1" class="form-control">
+                                                    <input type="text" name="PRODUCT_DESC[]" id="PRODUCT_DESC_1" class="form-control form-control-sm">
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="QTY[]" id="QTY_1" class="form-control" oninput="updateTotal(1)">
+                                                    <input type="text" name="SUPP_PROD_CODE[]" id="SUPP_PROD_CODE_1" class="form-control form-control-sm">
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="UNIT_PRICE[]" id="UNIT_PRICE_1" class="form-control" oninput="updateTotal(1)">
+                                                    <input type="text" name="QTY[]" id="QTY_1" class="form-control form-control-sm" oninput="updateTotal(1)">
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="TOTAL[]" id="TOTAL_1" class="form-control" oninput="updateTotal(1)">
+                                                    <input type="text" name="UNIT_PRICE[]" id="UNIT_PRICE_1" class="form-control form-control-sm" oninput="updateTotal(1)">
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="COLOR[]" id="COLOR_1" class="form-control">
+                                                    <input type="text" name="TOTAL[]" id="TOTAL_1" class="form-control form-control-sm" oninput="updateTotal(1)">
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="TRANSPORT[]" id="TRANSPORT_1" class="form-control">
+                                                    <input type="text" name="COLOR[]" id="COLOR_1" class="form-control form-control-sm">
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="SOC[]" id="SOC_1" class="form-control">
+                                                    <input type="text" name="TRANSPORT[]" id="TRANSPORT_1" class="form-control form-control-sm">
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="REC_QTY[]" id="REC_QTY_1" class="form-control">
+                                                    <input type="text" name="SOC[]" id="SOC_1" class="form-control form-control-sm">
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="BAL_QTY[]" id="BAL_QTY_1" class="form-control">
+                                                    <input type="text" name="REC_QTY[]" id="REC_QTY_1" class="form-control form-control-sm">
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="BAL_QTY[]" id="BAL_QTY_1" class="form-control form-control-sm">
                                                 </td>
                                                 <td>
                                                     <button class="btn btn-sm border border-danger">
@@ -255,15 +259,15 @@
                                             <div class="row mt-4">
                                                 <div class="col-md-4">
                                                     <label for="" class="fs-6 fw-bold mb-2">Currency</label>
-                                                    <input type="text" id="CURRENCY" name="CURRENCY" class="form-control">
+                                                    <input type="text" id="CURRENCY" name="CURRENCY" class="form-control form-control-sm">
                                                 </div>
                                                 <div class="col-md-4">
                                                     <label for="" class="fs-6 fw-bold mb-2">Payment Term</label>
-                                                    <input type="text" name="PAYMENT_TERM" id="PAYMENT_TERM" class="form-control">
+                                                    <input type="text" name="PAYMENT_TERM" id="PAYMENT_TERM" class="form-control form-control-sm">
                                                 </div>
                                                 <div class="col-md-4">
                                                     <label for="" class="fs-6 fw-bold mb-2">Status</label>
-                                                    <select name="STATUS" class="form-control" id="STATUS">
+                                                    <select name="STATUS" class="form-control form-control-sm" id="STATUS">
                                                         <option value="">Select Status</option>
                                                         <option value="Approved">Approved</option>
                                                         <option value="Rejected">Rejected</option>
@@ -284,7 +288,7 @@
                                                     <label for="" class="fs-6 fw-bold">Sub Total</label>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <input type="text" name="SUBTOTAL" id="SUBTOTAL" class="form-control" oninput="calculateBillingTotals()" readonly>
+                                                    <input type="text" name="SUBTOTAL" id="SUBTOTAL" class="form-control form-control-sm" oninput="calculateBillingTotals()" readonly>
                                                 </div>
                                             </div>
                                             <div class="row mb-2">
@@ -292,7 +296,7 @@
                                                     <label for="" class="fs-6 fw-bold">Discount in %</label>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <input type="text" name="DISCOUNT_PERCENTAGE" id="DISCOUNT_PERCENTAGE" class="form-control" oninput="calculateBillingTotals()">
+                                                    <input type="text" name="DISCOUNT_PERCENTAGE" id="DISCOUNT_PERCENTAGE" class="form-control form-control-sm" oninput="calculateBillingTotals()">
                                                 </div>
                                             </div>
                                             <div class="row mb-2">
@@ -300,7 +304,7 @@
                                                     <label for="" class="fs-6 fw-bold">Tax in %</label>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <input type="text" id="TAX_PERCENTAGE" name="TAX_PERCENTAGE" class="form-control" oninput="calculateBillingTotals()">
+                                                    <input type="text" id="TAX_PERCENTAGE" name="TAX_PERCENTAGE" class="form-control form-control-sm" oninput="calculateBillingTotals()">
                                                 </div>
                                             </div>
                                             <div class="row mb-2">
@@ -308,7 +312,7 @@
                                                     <label for="" class="fs-6 fw-bold">Total</label>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <input type="text" name="TOTAL_AMOUNT" id="TOTAL_AMOUNT" class="form-control" readonly>
+                                                    <input type="text" name="TOTAL_AMOUNT" id="TOTAL_AMOUNT" class="form-control form-control-sm" readonly>
                                                 </div>
                                             </div>
                                         </div>

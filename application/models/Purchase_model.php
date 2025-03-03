@@ -61,7 +61,7 @@ class Purchase_model extends CI_Model
             // Check if update was successful
             if ($this->db->affected_rows() > 0) {
                 // Add Lines
-                $this->addRequestLines($po_id, $data);
+                $this->addPurchaseLines($po_id, $data);
                 return true;
             } else {
                 return false;
@@ -81,14 +81,14 @@ class Purchase_model extends CI_Model
                 $this->db->update($this->xx_crm_po_header, ['PO_NUMBER' => $request_number]);
 
                 // Add Lines
-                $this->addRequestLines($inserted_id, $data);
+                $this->addPurchaseLines($inserted_id, $data);
                 return true;
             } else
                 return false;
         }
     }
 
-    function addRequestLines($po_id, $data)
+    function addPurchaseLines($po_id, $data)
     {
         $total_lines = 0;
         if (isset($data['PRODUCT_ID']) && is_array($data['PRODUCT_ID']))
@@ -101,6 +101,7 @@ class Purchase_model extends CI_Model
                 'po_id' => $po_id,
                 'PRODUCT_ID' => $data['PRODUCT_ID'][$row] ?? null,
                 'PRODUCT_DESC' => $data['PRODUCT_DESC'][$row] ?? null,
+                'SUPP_PROD_CODE' => $data['SUPP_PROD_CODE'][$row] ?? null,
                 'QTY' => $data['QTY'][$row] ?? null,
                 'UNIT_PRICE' => $data['UNIT_PRICE'][$row] ?? null,
                 'TOTAL' => $data['TOTAL'][$row] ?? null,
@@ -113,8 +114,10 @@ class Purchase_model extends CI_Model
             $this->db->insert($this->xx_crm_po_lines, $line);
         }
     }
-    public function get_req($type = 'list', $limit = 10, $currentPage = 1, $filters = [])
+    public function get_req($type = 'list', $limit = 10, $currentPage = 1, $filters = [], $user = [])
     {
+        $userid = $user['userid'] ?? 0;
+        $usertype = strtolower($user['role'] ?? 'guest');
         $offset = get_limit_offset($currentPage, $limit);
 
         $this->db->select("PO.PO_ID, PO.PO_STATUS, PO.PO_NUMBER, PO.REQUEST_ID,  PO.UUID, PO.COMPANY_NAME, PO.EMAIL_ADDRESS, 
@@ -130,6 +133,10 @@ class Purchase_model extends CI_Model
             }
         }
 
+        // Check if user is not an admin then get him his quotes only
+        if ($usertype != 'admin') {
+            $this->db->where('PO.CLIENT_ID', $userid);
+        }
         // Apply limit and offset only if 'list' type
         if ($type == 'list') {
             if ($limit > 0) {
@@ -161,7 +168,7 @@ class Purchase_model extends CI_Model
 
             // Fetch line items if header exists
             if (isset($data['header']['PO_ID'])) {
-                $data['lines'] = $this->db->select("POL.LINE_ID, POL.PO_ID, POL.PRODUCT_ID, POL.PRODUCT_DESC, POL.QTY, POL.UNIT_PRICE, POL.TOTAL, POL.COLOR, POL.TRANSPORT, POL.SOC, POL.REC_QTY, POL.BAL_QTY, P.PRODUCT_NAME")
+                $data['lines'] = $this->db->select("POL.LINE_ID, POL.PO_ID, POL.PRODUCT_ID, POL.PRODUCT_DESC, POL.SUPP_PROD_CODE, POL.QTY, POL.UNIT_PRICE, POL.TOTAL, POL.COLOR, POL.TRANSPORT, POL.SOC, POL.REC_QTY, POL.BAL_QTY, P.PRODUCT_NAME")
                     ->from(" xx_crm_po_lines POL")
                     ->join("xx_crm_products P", "POL.PRODUCT_ID = P.PRODUCT_ID")
                     ->where("POL.PO_ID", $data['header']['PO_ID'])
@@ -195,7 +202,7 @@ class Purchase_model extends CI_Model
 
             // Fetch line items if header exists
             if (isset($data['header']['PO_ID'])) {
-                $data['lines'] = $this->db->select("POL.LINE_ID, POL.PO_ID, POL.PRODUCT_ID, POL.PRODUCT_DESC, POL.QTY, POL.UNIT_PRICE, POL.TOTAL, 
+                $data['lines'] = $this->db->select("POL.LINE_ID, POL.PO_ID, POL.PRODUCT_ID, POL.PRODUCT_DESC, POL.QTY, POL.SUPP_PROD_CODE, POL.UNIT_PRICE, POL.TOTAL, 
                     POL.COLOR, POL.TRANSPORT, POL.SOC, POL.REC_QTY, POL.BAL_QTY, P.PRODUCT_NAME")
                     ->from("xx_crm_po_lines POL")
                     ->join("xx_crm_products P", "POL.PRODUCT_ID = P.PRODUCT_ID", "left")

@@ -112,6 +112,33 @@ class Auth extends CI_Controller
                     // Add token value to the database
                     $this->Auth_model->create_token($user['ID'], $auth_token, 'auth', $expiry);
 
+
+                    // ***** ===== Add User Activity - STARTS ===== *****
+                    $userForActivity = [
+                        'userid' => $user['ID'],
+                        'role' => $user['USER_TYPE'],
+                        'name' => "$user[FIRST_NAME] $user[LAST_NAME]"
+                    ];
+                    $system = [
+                        'IP_ADDRESS' => $this->get_local_ip(),
+                        'USER_AGENT' => $this->get_user_agent(),
+                        'BROWSER' => $this->get_browser_name(),
+                    ];
+                    $action = [
+                        'ACTIVITY_TYPE' => 'LOGGED IN',
+                        'DESCRIPTION' => "User $userForActivity[name] (Role: $userForActivity[role]) logged in from IP $system[IP_ADDRESS] using $system[BROWSER] on " . date('D, d M Y - H:i:s')
+                    ];
+
+                    $request = [
+                        'REQUEST_URI' => $this->get_request_uri(),
+                        'REQUEST_METHOD' => strtoupper($this->input->method()),
+                        'RESPONSE_STATUS' => 'success'
+                    ];
+
+                    $this->App_model->add_activity_logs($action, $userForActivity, $system, $request);
+
+                    // ***** ===== Add User Activity - ENDS ===== *****
+
                     // User logged in 
                     $response = [
                         'status' => true,
@@ -320,5 +347,41 @@ class Auth extends CI_Controller
                     'message' => 'Error logging out: ' . $e->getMessage()
                 ]));
         }
+    }
+
+    function get_browser_name()
+    {
+        $user_agent = $_SERVER['HTTP_USER_AGENT'];
+
+        if (strpos($user_agent, 'Edge') !== false || strpos($user_agent, 'Edg') !== false) {
+            return 'Microsoft Edge';
+        } elseif (strpos($user_agent, 'Opera') !== false || strpos($user_agent, 'OPR') !== false) {
+            return 'Opera';
+        } elseif (strpos($user_agent, 'Chrome') !== false) {
+            return 'Google Chrome';
+        } elseif (strpos($user_agent, 'Firefox') !== false) {
+            return 'Mozilla Firefox';
+        } elseif (strpos($user_agent, 'Safari') !== false && strpos($user_agent, 'Chrome') === false) {
+            return 'Apple Safari';
+        } elseif (strpos($user_agent, 'MSIE') !== false || strpos($user_agent, 'Trident') !== false) {
+            return 'Internet Explorer';
+        } else {
+            return 'Unknown Browser';
+        }
+    }
+
+    function get_user_agent()
+    {
+        return $_SERVER['HTTP_USER_AGENT'] ?? '';
+    }
+
+    public function get_local_ip()
+    {
+        return gethostbyname(gethostname());
+    }
+
+    public function get_request_uri()
+    {
+        return isset($_SERVER['REQUEST_URI']) ? base_url($_SERVER['REQUEST_URI']) : '';
     }
 }

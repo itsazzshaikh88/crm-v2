@@ -133,8 +133,8 @@ class Purchase extends Api_controller
         $currentPage = isset($data['currentPage']) ? $data['currentPage'] : null;
         $filters = isset($data['filters']) ? $data['filters'] : [];
 
-        $total_po = $this->Purchase_model->get_req('total', $limit, $currentPage, $filters);
-        $po_list = $this->Purchase_model->get_req('list', $limit, $currentPage, $filters);
+        $total_po = $this->Purchase_model->get_req('total', $limit, $currentPage, $filters, $isAuthorized);
+        $po_list = $this->Purchase_model->get_req('list', $limit, $currentPage, $filters, $isAuthorized);
 
         $response = [
             'pagination' => [

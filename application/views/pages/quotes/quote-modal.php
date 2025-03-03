@@ -126,6 +126,7 @@ $loggedInUserType = strtolower($loggedInUser['usertype']);
                                                 <label for="QUOTE_STATUS" class="text-gray-800 fw-bold">Status<span class="text-danger">*</span></label>
                                                 <select name="QUOTE_STATUS" id="QUOTE_STATUS" class="form-control form-control-sm border border-blue-100 text-gray-700">
                                                     <option value="">Select Status</option>
+                                                    <option value="Draft">Draft</option>
                                                     <option value="Approved">Approved</option>
                                                     <option value="Pending" selected="">Pending</option>
                                                     <option value="Rejected">Rejected</option>

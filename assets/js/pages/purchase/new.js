@@ -94,36 +94,39 @@ function addRow() {
     const row = document.createElement('tr');
     row.innerHTML = `
        <td>
-                                        <select name="PRODUCT_ID[]" id="PRODUCT_ID_${rowCount}" class="form-control" onclick="chooseProduct(${rowCount})">
+                                        <select name="PRODUCT_ID[]" id="PRODUCT_ID_${rowCount}" class="form-control form-control-sm" onclick="chooseProduct(${rowCount})">
                                             <option value="">Select</option>
                                         </select>
                                     </td>
                                     <td>
-                                        <input type="text" name="PRODUCT_DESC[]" id="PRODUCT_DESC_${rowCount}" class="form-control">
+                                        <input type="text" name="PRODUCT_DESC[]" id="PRODUCT_DESC_${rowCount}" class="form-control form-control-sm">
                                     </td>
                                     <td>
-                                        <input type="text" name="QTY[]" id="QTY_${rowCount}" class="form-control" oninput="updateTotal(${rowCount})">
+                                        <input type="text" name="SUPP_PROD_CODE[]" id="SUPP_PROD_CODE_${rowCount}" class="form-control form-control-sm">
                                     </td>
                                     <td>
-                                        <input type="text" name="UNIT_PRICE[]" id="UNIT_PRICE_${rowCount}" class="form-control" oninput="updateTotal(${rowCount})">
+                                        <input type="text" name="QTY[]" id="QTY_${rowCount}" class="form-control form-control-sm" oninput="updateTotal(${rowCount})">
                                     </td>
                                     <td>
-                                        <input type="text" name="TOTAL[]" id="TOTAL_${rowCount}" class="form-control" oninput="updateTotal(${rowCount})">
+                                        <input type="text" name="UNIT_PRICE[]" id="UNIT_PRICE_${rowCount}" class="form-control form-control-sm" oninput="updateTotal(${rowCount})">
                                     </td>
                                     <td>
-                                        <input type="text" name="COLOR[]" id="COLOR_${rowCount}" class="form-control">
+                                        <input type="text" name="TOTAL[]" id="TOTAL_${rowCount}" class="form-control form-control-sm" oninput="updateTotal(${rowCount})">
                                     </td>
                                     <td>
-                                        <input type="text" name="TRANSPORT[]" id="TRANSPORT_${rowCount}" class="form-control">
+                                        <input type="text" name="COLOR[]" id="COLOR_${rowCount}" class="form-control form-control-sm">
                                     </td>
                                     <td>
-                                        <input type="text" name="SOC[]" id="SOC_${rowCount}" class="form-control">
+                                        <input type="text" name="TRANSPORT[]" id="TRANSPORT_${rowCount}" class="form-control form-control-sm">
                                     </td>
                                     <td>
-                                        <input type="text" name="REC_QTY[]" id="REC_QTY_${rowCount}" class="form-control">
+                                        <input type="text" name="SOC[]" id="SOC_${rowCount}" class="form-control form-control-sm">
                                     </td>
                                     <td>
-                                        <input type="text" name="BAL_QTY[]" id="BAL_QTY_${rowCount}" class="form-control">
+                                        <input type="text" name="REC_QTY[]" id="REC_QTY_${rowCount}" class="form-control form-control-sm">
+                                    </td>
+                                    <td>
+                                        <input type="text" name="BAL_QTY[]" id="BAL_QTY_${rowCount}" class="form-control form-control-sm">
                                     </td>    
                                     <td>  <button class="btn btn-sm border border-danger" type="button" onclick="removeRow(this)">
                 <i class="las la-times fs-4 cursor-pointer text-danger m-0 p-0"></i>
@@ -518,35 +521,38 @@ function showRequestLines(lines) {
         // Create a new row
         const row = document.createElement('tr');
         row.innerHTML = `<td>
-                                <select name="PRODUCT_ID[]" id="PRODUCT_ID_${++rowCount}" class="form-control" onclick="chooseProduct(${rowCount})">
+                                <select name="PRODUCT_ID[]" id="PRODUCT_ID_${++rowCount}" class="form-control form-control-sm" onclick="chooseProduct(${rowCount})">
                                     <option selected value="${line.PRODUCT_ID}">${line.PRODUCT_NAME}</option>
                                 </select>
                             </td>
                             <td>
-                                <input type="text" class="form-control" name="PRODUCT_DESC[]" id="PRODUCT_DESC_${rowCount}" value="${escapeSpecialCharacters(desc)}">
+                                <input type="text" class="form-control form-control-sm" name="PRODUCT_DESC[]" id="PRODUCT_DESC_${rowCount}" value="${escapeSpecialCharacters(desc)}">
                             </td>
                             <td>
-                                <input type="text" class="form-control" name="QTY[]" id="QTY_${rowCount}" value="${line.QTY}" oninput="updateTotal(${rowCount})">
+                                <input type="text" class="form-control form-control-sm" name="SUPP_PROD_CODE[]" id="SUPP_PROD_CODE_${rowCount}" value="${line.SUPP_PROD_CODE}">
                             </td>
                             <td>
-                                <input type="text" class="form-control" name="UNIT_PRICE[]" id="UNIT_PRICE_${rowCount}" value="${line.UNIT_PRICE}" oninput="updateTotal(${rowCount})">
+                                <input type="text" class="form-control form-control-sm" name="QTY[]" id="QTY_${rowCount}" value="${line.QTY}" oninput="updateTotal(${rowCount})">
                             </td>
                             <td>
-                                <input type="text" class="form-control" name="TOTAL[]" id="TOTAL_${rowCount}" value="${line.TOTAL}" oninput="updateTotal(${rowCount})">
+                                <input type="text" class="form-control form-control-sm" name="UNIT_PRICE[]" id="UNIT_PRICE_${rowCount}" value="${line.UNIT_PRICE}" oninput="updateTotal(${rowCount})">
                             </td>
                             <td>
-                                <input type="text" class="form-control" name="COLOR[]" id="COLOR_${rowCount}" value="${line.COLOR}">
+                                <input type="text" class="form-control form-control-sm" name="TOTAL[]" id="TOTAL_${rowCount}" value="${line.TOTAL}" oninput="updateTotal(${rowCount})">
+                            </td>
+                            <td>
+                                <input type="text" class="form-control form-control-sm" name="COLOR[]" id="COLOR_${rowCount}" value="${line.COLOR}">
                             </td>
                              <td>
-                                <input type="text" class="form-control" name="TRANSPORT[]" id="TRANSPORT_${rowCount}" value="${line.TRANSPORT || ''}">
+                                <input type="text" class="form-control form-control-sm" name="TRANSPORT[]" id="TRANSPORT_${rowCount}" value="${line.TRANSPORT || ''}">
                             </td> <td>
-                                <input type="text" class="form-control" name="SOC[]" id="SOC_${rowCount}" value="${line.SOC}">
+                                <input type="text" class="form-control form-control-sm" name="SOC[]" id="SOC_${rowCount}" value="${line.SOC}">
                             </td>
                             <td>
-                                <input type="text" class="form-control" name="REC_QTY[]" id="REC_QTY_${rowCount}" value="${line.REC_QTY}">
+                                <input type="text" class="form-control form-control-sm" name="REC_QTY[]" id="REC_QTY_${rowCount}" value="${line.REC_QTY}">
                             </td>
                              </td> <td>
-                                <input type="text" class="form-control" name="BAL_QTY[]" id="BAL_QTY_${rowCount}" value="${line.BAL_QTY}">
+                                <input type="text" class="form-control form-control-sm" name="BAL_QTY[]" id="BAL_QTY_${rowCount}" value="${line.BAL_QTY}">
                             </td>
                             <td>
                                 <button class="btn btn-sm border border-danger" type="button" onclick="removeRow(this)">
@@ -633,7 +639,7 @@ async function fetchQuotesDetailForPurchase(quotesElement) {
 }
 
 function displayQuotesInfo(data) {
-    
+
     if (!data) return;
     const { header, lines } = data;
 
@@ -648,7 +654,7 @@ function displayQuotesInfo(data) {
 function showQuoteLines(lines) {
     const tableBody = document.querySelector('#purchase-line-table tbody');
     console.log('from here');
-    
+
     tableBody.innerHTML = ''
     let rowCount = 0;
     lines.forEach((line) => {
@@ -656,36 +662,39 @@ function showQuoteLines(lines) {
         // Create a new row
         const row = document.createElement('tr');
         row.innerHTML = `<td>
-                                <select name="PRODUCT_ID[]" id="PRODUCT_ID_${++rowCount}" class="form-control" onclick="chooseProduct(${rowCount})">
+                                <select name="PRODUCT_ID[]" id="PRODUCT_ID_${++rowCount}" class="form-control form-control-sm" onclick="chooseProduct(${rowCount})">
                                     <option selected value="${line.PRODUCT_ID}">${line.PRODUCT_NAME}</option>
                                 </select>
                             </td>
                             <td>
-                                <input type="text" class="form-control" name="PRODUCT_DESC[]" id="PRODUCT_DESC_${rowCount}" value="${escapeSpecialCharacters(desc)}">
+                                <input type="text" class="form-control form-control-sm" name="PRODUCT_DESC[]" id="PRODUCT_DESC_${rowCount}" value="${escapeSpecialCharacters(desc)}">
                             </td>
                             <td>
-                                <input type="number" class="form-control" name="QTY[]" id="QTY_${rowCount}" value="${line.QTY}" oninput="updateTotal(${rowCount})">
+                                <input type="number" class="form-control form-control-sm" name="SUPP_PROD_CODE[]" id="SUPP_PROD_CODE_${rowCount}" value="${line.SUPP_PROD_CODE}" >
                             </td>
                             <td>
-                                <input type="number" class="form-control" name="UNIT_PRICE[]" id="UNIT_PRICE_${rowCount}" value="${line.UNIT_PRICE}" oninput="updateTotal(${rowCount})">
+                                <input type="number" class="form-control form-control-sm" name="QTY[]" id="QTY_${rowCount}" value="${line.QTY}" oninput="updateTotal(${rowCount})">
                             </td>
                             <td>
-                                <input type="number" class="form-control" name="TOTAL[]" id="TOTAL_${rowCount}" value="${line.TOTAL}" oninput="updateTotal(${rowCount})">
+                                <input type="number" class="form-control form-control-sm" name="UNIT_PRICE[]" id="UNIT_PRICE_${rowCount}" value="${line.UNIT_PRICE}" oninput="updateTotal(${rowCount})">
                             </td>
                             <td>
-                                <input type="text" class="form-control" name="COLOR[]" id="COLOR_${rowCount}" value="${line.COLOR}">
+                                <input type="number" class="form-control form-control-sm" name="TOTAL[]" id="TOTAL_${rowCount}" value="${line.TOTAL}" oninput="updateTotal(${rowCount})">
                             </td>
                             <td>
-                                <input type="text" class="form-control" name="TRANSPORTATION[]" id="TRANSPORTATION_${rowCount}" value="${line.TRANSPORTATION != 'null' && line.TRANSPORTATION != null ? line.TRANSPORTATION : ''}">
+                                <input type="text" class="form-control form-control-sm" name="COLOR[]" id="COLOR_${rowCount}" value="${line.COLOR}">
                             </td>
                             <td>
-                                <input type="text" class="form-control" name="SOC[]" id="SOC_${rowCount}" value="">
+                                <input type="text" class="form-control form-control-sm" name="TRANSPORTATION[]" id="TRANSPORTATION_${rowCount}" value="${line.TRANSPORTATION != 'null' && line.TRANSPORTATION != null ? line.TRANSPORTATION : ''}">
                             </td>
                             <td>
-                                <input type="text" class="form-control" name="REC_QTY[]" id="REC_QTY_${rowCount}" value="">
+                                <input type="text" class="form-control form-control-sm" name="SOC[]" id="SOC_${rowCount}" value="">
                             </td>
                             <td>
-                                <input type="text" class="form-control" name="BAL_QTY[]" id="BAL_QTY_${rowCount}" value="">
+                                <input type="text" class="form-control form-control-sm" name="REC_QTY[]" id="REC_QTY_${rowCount}" value="">
+                            </td>
+                            <td>
+                                <input type="text" class="form-control form-control-sm" name="BAL_QTY[]" id="BAL_QTY_${rowCount}" value="">
                             </td>
                             <td>
                                 <button class="btn btn-sm border border-danger" type="button" onclick="removeRow(this)">

@@ -61,6 +61,7 @@ async function fetcPOList() {
 }
 
 const statusColors = {
+    Draft: '#3674B5',   // Golden Yellow (Attractive and stands out)
     Pending: '#FFC107',   // Golden Yellow (Attractive and stands out)
     Approved: '#4CAF50',  // Vibrant Green (Positive and fresh)
     Rejected: '#F44336',  // Bright Red (Warning and attention-grabbing)
@@ -78,7 +79,7 @@ function showPODetails(po, tbody) {
                                 <td>
                                     <div class="d-flex">
                                         <div class="">
-                                            <a href="purchase/view/${request.UUID}" class="text-gray-800 text-hover-primary fs-5 fw-bold mb-1 line-clamp-1" data-kt-ecommerce-category-filter="category_name">${request?.COMPANY_NAME || ''}</a>
+                                            <a href="purchase/view/${request.UUID}" class="text-gray-800 text-hover-primary fw-normal mb-1 line-clamp-1" data-kt-ecommerce-category-filter="category_name">${request?.COMPANY_NAME || ''}</a>
                                         </div>
                                     </div>
                                 </td> <!-- Company -->
@@ -88,31 +89,36 @@ function showPODetails(po, tbody) {
                                 <td>${request?.PAYMENT_TERM || ''}</td> <!-- Payment -->
                                 <td>${request?.TOTAL_AMOUNT || ''}</td> <!-- amount -->
                                 <td><span class="badge text-white" style="background-color: ${statusColors[request?.PO_STATUS || '']}">${request?.PO_STATUS || ''}</span></td> <!-- Comments -->
-                                <td>${request?.QTY || ''}</td> <!-- Qty -->
-                                
-                                <td></td> 
-                              
-                                <!-- U_price -->
+                                <td>${request?.QTY || ''}</td> 
                                 <td class="text-end">
-                                    <div class="d-flex align-items-center justify-content-end gap-4">
-                                        <a href="purchase/view/${request.UUID}">
-                                            <small>
-                                                <i class="fs-5 fa-solid fa-file-lines text-success"></i>
-                                            </small>
-                                        </a>
-                                      <a href="javascript:void(0)" onclick="openNewPurchaseModal('edit',${request.PO_ID})" title="Edit Purchase">
-
-                                            <small>
-                                                <i class="fs-5 fa-regular fa-pen-to-square text-gray-700"></i>
-                                            </small>
-                                        </a>
-                                        <a href="javascript:void(0)" onclick="deletePO(${request.PO_ID})">
-                                            <small>
-                                                <i class="fs-5 fa-solid fa-trash-can text-danger"></i>
-                                            </small>
-                                        </a>
+                                    <div class="dropdown">
+                                        <!-- Button to toggle the dropdown, without the caret (down arrow) -->
+                                        <button class="btn btn-link p-0" type="button" id="optionsMenu_${request.PO_ID}" data-bs-toggle="dropdown"
+                                            aria-expanded="false">
+                                            <i class="fs-8 me-2 fa-solid fa-ellipsis-vertical"></i> <!-- Three vertical dots -->
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-end px-0 py-2 shadow-lg border"
+                                            aria-labelledby="optionsMenu_${request.PO_ID}">
+                                            <li class="mb-1 fs-8">
+                                                <a class="dropdown-item" href="purchase/view/${request.UUID}" title="View PO">
+                                                    <i class="fs-8 me-2 fa-solid fa-file-lines text-success"></i> View PO
+                                                </a>
+                                            </li>
+                                            <li class="mb-1 fs-8">
+                                                <a class="dropdown-item" href="javascript:void(0)"
+                                                    onclick="openNewPurchaseModal('edit', ${request.PO_ID})" title="Edit PO">
+                                                    <i class="fs-8 me-2 fa-regular fa-pen-to-square text-gray-700"></i> Edit PO
+                                                </a>
+                                            </li>
+                                            <li class="mb-1 fs-8">
+                                                <a class="dropdown-item" href="javascript:void(0)" onclick="deletePO(${request.PO_ID})"
+                                                    title="Delete PO">
+                                                    <i class="fs-8 me-2 fa-solid fa-trash-can text-danger"></i> Delete PO
+                                                </a>
+                                            </li>
+                                        </ul>
                                     </div>
-                                </td> <!-- Action -->
+                                </td>
                             </tr>`;
         });
         tbody.innerHTML = content;

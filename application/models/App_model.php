@@ -128,4 +128,40 @@ class App_Model extends CI_Model
         $row = $query->row_array();
         return $row[$column] ?? null;
     }
+
+    function add_activity_logs($action, $user, $system, $request)
+    {
+        $activity = [
+            'USER_ID' => $user['userid'] ?? '0',
+            'USER_TYPE' => $user['role'] ?? 'guest',
+            'ACTIVITY_TYPE' => $action['ACTIVITY_TYPE'] ?? '',
+            'DESCRIPTION' => $action['DESCRIPTION'] ?? '',
+            'MODULE' => $action['MODULE'] ?? '',
+            'PAGE_URL' => $request['REQUEST_URI'] ?? '',
+            'REQUEST_METHOD' => $request['REQUEST_METHOD'] ?? '',
+            'REQUEST_DATA' => json_encode($request['REQUEST_DATA'] ?? '[]'),
+            'RESPONSE_STATUS' => $request['RESPONSE_STATUS'] ?? '',
+            'RESPONSE_TIME' => $request['RESPONSE_TIME'] ?? '',
+            'IP_ADDRESS' => $system['IP_ADDRESS'] ?? '',
+            'BROWSER' => $system['BROWSER'] ?? 'Unknown',
+            'BROWSER_VERSION' => '',
+            'OS' => '',
+            'OS_VERSION' => '',
+            'DEVICE_TYPE' => '',
+            'DEVICE_NAME' => '',
+            'USER_AGENT' => $system['USER_AGENT'] ?? '',
+            'SCREEN_RESOLUTION' => '',
+            'LOCATION_COUNTRY' => '',
+            'LOCATION_REGION' => '',
+            'LOCATION_CITY' => '',
+            'LATITUDE' => '',
+            'LONGITUDE' => '',
+            'SESSION_ID' => '',
+            'REFERER_URL' => '',
+            'IS_SUCCESS' => '',
+            'ERROR_MESSAGE' => '',
+        ];
+
+        return $this->db->insert('xx_crm_activity_log', $activity);
+    }
 }
