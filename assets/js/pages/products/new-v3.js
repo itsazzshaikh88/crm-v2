@@ -167,9 +167,9 @@ async function submitForm(e) {
             if (data?.type === 'insert') {
                 closeProductModal();
                 newProductModal.hide();
-                fetctProducts();
+                fetchProducts();
             } else if (data?.type === 'update') {
-
+                fetchProducts();
             }
 
 
