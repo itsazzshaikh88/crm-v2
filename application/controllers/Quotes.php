@@ -27,6 +27,7 @@ class Quotes extends App_Controller
         $data['navlink'] = 'quotes';
         $data['toolbar'] = ['name' => 'new-quote', 'action' => 'list'];
         $data['scripts'] = [
+            'assets/js/pages/products/modals/product-list.js',
             'assets/js/pages/quotes/new-v1.js',
             'assets/js/pages/clients/modals/modal-list.js',
             'assets/js/pages/quotes/list.js',

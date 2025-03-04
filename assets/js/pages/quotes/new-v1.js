@@ -38,14 +38,6 @@ const emailAddress = document.getElementById("EMAIL_ADDRESS");
 const requestNumber = document.getElementById("REQUEST_NUMBER");
 // --------------------- ========================= ------------------------------------
 
-var productListModal = new bootstrap.Modal(document.getElementById("product-list-modal"), {
-    keyboard: false,        // Disable closing on escape key
-    backdrop: 'static'      // Disable closing when clicking outside the modal
-});
-
-
-const prodListPaginate = new Pagination('prd-mdl-current-page', 'prd-mdl-total-pages', 'prd-mdl-page-of-pages', 'prd-mdl-range-of-records');
-prodListPaginate.pageLimit = 10; // Set your page limit here
 
 
 
@@ -277,7 +269,6 @@ async function submitForm(e) {
     } catch (error) {
         toasterNotification({ type: 'error', message: 'Request failed:' + error });
         console.log(error);
-        error
 
     } finally {
         submitBtn.disabled = false;
@@ -289,18 +280,37 @@ async function submitForm(e) {
 
 
 
+// function chooseProduct(index) {
+//     selectedProductElementIndex = index
+//     const element = document.getElementById(`PRODUCT_ID_${index}`)
+//     const descElement = document.getElementById(`DESCRIPTION_${index}`)
+//     if (typeof element != undefined) {
+//         // remove other elements from select
+//         element.innerHTML = '';
+//         descElement.value = '';
+//         fetchProductsForModalListing();
+//     }
+// }
+
 function chooseProduct(index) {
-    selectedProductElementIndex = index
-    const element = document.getElementById(`PRODUCT_ID_${index}`)
-    const descElement = document.getElementById(`DESCRIPTION_${index}`)
-    if (typeof element != undefined) {
-        // remove other elements from select
-        element.innerHTML = '';
-        descElement.value = '';
-        productListModal.show()
-        fetchProductsForModalListing();
+    const element = document.getElementById(`PRODUCT_ID_${index}`);
+    const descElement = document.getElementById(`DESCRIPTION_${index}`);
+
+    if (!element || !descElement) {
+        console.warn(`Elements for index ${index} not found.`);
+        return;
     }
 
+    element.value = ''; // Clear input value
+    descElement.value = ''; // Clear input value
+
+    selectedProductElementIndex = index;
+
+    if (typeof showProductListingFullScreenModal === 'function') {
+        showProductListingFullScreenModal(setProductToRequestLine);
+    } else {
+        console.warn("showProductListingFullScreenModal function is not defined.");
+    }
 }
 
 function setProductToRequestLine(productID, productName, productDesc) {
@@ -314,55 +324,53 @@ function setProductToRequestLine(productID, productName, productDesc) {
 
     productDescElement.value = productDesc
 
-    // close modal window
-    productListModal.hide()
 }
 
 
-async function fetchProductsForModalListing(query = null) {
-    try {
-        const authToken = getCookie('auth_token');
-        if (!authToken) {
-            toasterNotification({ type: 'error', message: "Authorization token is missing. Please Login again to make API request." });
-            return;
-        }
-        // Set loader to the screen 
-        const prodListContainer = document.getElementById("modal-product-list");
+// async function fetchProductsForModalListing(query = null) {
+//     try {
+//         const authToken = getCookie('auth_token');
+//         if (!authToken) {
+//             toasterNotification({ type: 'error', message: "Authorization token is missing. Please Login again to make API request." });
+//             return;
+//         }
+//         // Set loader to the screen 
+//         const prodListContainer = document.getElementById("modal-product-list");
 
-        productModalListingSkeleton(prodListContainer, prodListPaginate.pageLimit || 0);
+//         productModalListingSkeleton(prodListContainer, prodListPaginate.pageLimit || 0);
 
-        const url = `${APIUrl}/products/list`;
-        const filters = filterCriterias(['CATEGORY_ID']);
-        const inputSearchParams = query ?? document.getElementById("searchInput").value.trim()
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${authToken}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                limit: prodListPaginate.pageLimit,
-                currentPage: prodListPaginate.currentPage,
-                filters: filters,
-                search: { "product": inputSearchParams }
-            })
-        });
+//         const url = `${APIUrl}/products/list`;
+//         const filters = filterCriterias(['CATEGORY_ID']);
+//         const inputSearchParams = query ?? document.getElementById("searchInput").value.trim()
+//         const response = await fetch(url, {
+//             method: 'POST',
+//             headers: {
+//                 'Authorization': `Bearer ${authToken}`,
+//                 'Content-Type': 'application/json'
+//             },
+//             body: JSON.stringify({
+//                 limit: prodListPaginate.pageLimit,
+//                 currentPage: prodListPaginate.currentPage,
+//                 filters: filters,
+//                 search: { "product": inputSearchParams }
+//             })
+//         });
 
-        if (!response.ok) {
-            throw new Error('Failed to fetch product data');
-        }
+//         if (!response.ok) {
+//             throw new Error('Failed to fetch product data');
+//         }
 
-        const data = await response.json();
-        prodListPaginate.totalPages = parseFloat(data?.pagination?.total_pages) || 0;
-        prodListPaginate.totalRecords = parseFloat(data?.pagination?.total_records) || 0;
+//         const data = await response.json();
+//         prodListPaginate.totalPages = parseFloat(data?.pagination?.total_pages) || 0;
+//         prodListPaginate.totalRecords = parseFloat(data?.pagination?.total_records) || 0;
 
-        showProducts(data.products || [], prodListContainer);
+//         showProducts(data.products || [], prodListContainer);
 
-    } catch (error) {
-        toasterNotification({ type: 'error', message: 'Request failed: ' + error.message });
-        prodListContainer.innerHTML = renderNoResponseCode({ colspan: numberOfHeaders });
-    }
-}
+//     } catch (error) {
+//         toasterNotification({ type: 'error', message: 'Request failed: ' + error.message });
+//         prodListContainer.innerHTML = renderNoResponseCode({ colspan: numberOfHeaders });
+//     }
+// }
 
 function showProducts(products, prodListContainer) {
 
@@ -402,16 +410,19 @@ function showProducts(products, prodListContainer) {
     }
 }
 
-function filterProducts() {
-    prodListPaginate.currentPage = 1;
-    fetchProductsForModalListing();
-}
+// function filterProducts() {
+//     prodListPaginate.currentPage = 1;
+//     fetchProductsForModalListing();
+// }
 
 
 
 async function fetchRequestsDetailForQuote(requestElement) {
 
     const valueOfElement = requestElement.value;
+
+    if (!valueOfElement) return;
+
     const selectedOption = requestElement.options[requestElement.selectedIndex];
     let searchKey;
     if (selectedOption)
@@ -699,12 +710,12 @@ async function fetchCategories() {
     }
 }
 
-function searchProductFromModalList(event) {
-    const query = event.target.value.trim(); // Get the input value
-    prodListPaginate.currentPage = 1;
-    fetchProductsForModalListing(query);
-}
-const debouncedInput = debounce(searchProductFromModalList, 300);
+// function searchProductFromModalList(event) {
+//     const query = event.target.value.trim(); // Get the input value
+//     prodListPaginate.currentPage = 1;
+//     fetchProductsForModalListing(query);
+// }
+// const debouncedInput = debounce(searchProductFromModalList, 300);
 
 function clearModalFilterInputs() {
     document.getElementById("searchInput").value = ''
@@ -740,7 +751,7 @@ function removeClientName() {
     contactNumber && (contactNumber.value = '');
     emailAddress && (emailAddress.value = '');
 
-    document.getElementById("REQUEST_NUMBER").innerHTML = '<option>Select Request Number</option>';
+    document.getElementById("REQUEST_NUMBER").innerHTML = '<option value="">Select Request Number</option>';
 
     // Clear product details
     const productTableBody = document.querySelector("#quotes-lines-table tbody"); // Assuming a table structure
@@ -790,7 +801,7 @@ async function fetchClientRequests(ClientID) {
         // Await the parsing of the JSON data
         const data = await response.json();
         const requests = data?.data || [];
-        let str = "<option>Select Request</option>";
+        let str = "<option value=''>Select Request</option>";
         if (requests.length > 0) {
             requests.forEach((req) => {
                 str += `<option value="${req.ID}" data-column="ID">${req.REQUEST_NUMBER}</option>`;
