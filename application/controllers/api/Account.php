@@ -63,6 +63,9 @@ class Account extends Api_controller
             // Check if the account is not locked to update password
             $userid = $isAuthorized['userid'];
             $user = $this->User_model->get_user_by_id($userid);
+
+            $userNameOfUser = $user['FIRST_NAME'] ?? '' . ' ' . $user['LAST_NAME'] ?? '';
+
             if (empty($user)) {
                 $this->sendHTTPResponse(404, [
                     'status' => 404,
@@ -101,6 +104,35 @@ class Account extends Api_controller
             $passwordUpdated = $this->User_model->update_password($new_password, $userid);
 
             if ($passwordUpdated) {
+
+                $action_type = 'UPDATED';
+                // ***** ===== Add User Activity - STARTS ===== *****
+                $userForActivity = [
+                    'userid' => $isAuthorized['userid'] ?? '',
+                    'role' => $isAuthorized['role'] ?? '',
+                    'name' => $isAuthorized['name'] ?? ''
+                ];
+                $system = [
+                    'IP_ADDRESS' => $this->get_local_ip(),
+                    'USER_AGENT' => $this->get_user_agent(),
+                    'BROWSER' => $this->get_browser_name(),
+                ];
+
+                $action = [
+                    'ACTIVITY_TYPE' => "PASSWORD {$action_type}",
+                    'DESCRIPTION' => "User {$userForActivity['name']} (Role: {$userForActivity['role']}) {$action_type} a PASSWORD from IP {$system['IP_ADDRESS']} using {$system['BROWSER']} on " . date('D, d M Y - H:i:s')
+                ];
+
+                $request = [
+                    'REQUEST_URI' => $this->get_request_uri(),
+                    // 'REQUEST_DATA' => $data,
+                    'REQUEST_METHOD' => strtoupper($this->input->method()),
+                    'RESPONSE_STATUS' => 'success'
+                ];
+
+                $this->App_model->add_activity_logs($action, $userForActivity, $system, $request);
+                // ***** ===== Add User Activity - ENDS ===== *****
+
                 $this->sendHTTPResponse(201, [
                     'status' => 201,
                     'message' => 'Password Updated Successfully',
@@ -209,6 +241,34 @@ class Account extends Api_controller
                 ];
                 $status = $this->User_model->add_2fa_details($mfa_data);
                 if ($status) {
+
+                    $action_type = strtoupper($action) . "D";
+                    // ***** ===== Add User Activity - STARTS ===== *****
+                    $userForActivity = [
+                        'userid' => $isAuthorized['userid'] ?? '',
+                        'role' => $isAuthorized['role'] ?? '',
+                        'name' => $isAuthorized['name'] ?? ''
+                    ];
+                    $system = [
+                        'IP_ADDRESS' => $this->get_local_ip(),
+                        'USER_AGENT' => $this->get_user_agent(),
+                        'BROWSER' => $this->get_browser_name(),
+                    ];
+
+                    $activityAction = [
+                        'ACTIVITY_TYPE' => "TWO STEP VERIFICATION {$action_type}",
+                        'DESCRIPTION' => "User {$userForActivity['name']} (Role: {$userForActivity['role']}) {$action_type} Two Step Verification from IP {$system['IP_ADDRESS']} using {$system['BROWSER']} on " . date('D, d M Y - H:i:s')
+                    ];
+
+                    $request = [
+                        'REQUEST_URI' => $this->get_request_uri(),
+                        // 'REQUEST_DATA' => $data,
+                        'REQUEST_METHOD' => strtoupper($this->input->method()),
+                        'RESPONSE_STATUS' => 'success'
+                    ];
+
+                    $this->App_model->add_activity_logs($activityAction, $userForActivity, $system, $request);
+                    // ***** ===== Add User Activity - ENDS ===== *****
                     $this->sendHTTPResponse(201, [
                         'status' => 201,
                         'message' => 'Two Factor Autentication ' . ucfirst($action) . "d successfully.",
@@ -226,6 +286,35 @@ class Account extends Api_controller
                     return;
                 }
             } else {
+
+                $action_type = strtoupper($action) . "D";
+                // ***** ===== Add User Activity - STARTS ===== *****
+                $userForActivity = [
+                    'userid' => $isAuthorized['userid'] ?? '',
+                    'role' => $isAuthorized['role'] ?? '',
+                    'name' => $isAuthorized['name'] ?? ''
+                ];
+                $system = [
+                    'IP_ADDRESS' => $this->get_local_ip(),
+                    'USER_AGENT' => $this->get_user_agent(),
+                    'BROWSER' => $this->get_browser_name(),
+                ];
+
+                $activityAction = [
+                    'ACTIVITY_TYPE' => "TWO STEP VERIFICATION {$action_type}",
+                    'DESCRIPTION' => "User {$userForActivity['name']} (Role: {$userForActivity['role']}) {$action_type} Two Step Verification from IP {$system['IP_ADDRESS']} using {$system['BROWSER']} on " . date('D, d M Y - H:i:s')
+                ];
+
+                $request = [
+                    'REQUEST_URI' => $this->get_request_uri(),
+                    // 'REQUEST_DATA' => $data,
+                    'REQUEST_METHOD' => strtoupper($this->input->method()),
+                    'RESPONSE_STATUS' => 'success'
+                ];
+
+                $this->App_model->add_activity_logs($activityAction, $userForActivity, $system, $request);
+                // ***** ===== Add User Activity - ENDS ===== *****
+
                 $this->sendHTTPResponse(201, [
                     'status' => 201,
                     'message' => 'Two Factor Autentication ' . ucfirst($action) . "d successfully.",

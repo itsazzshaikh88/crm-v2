@@ -87,6 +87,35 @@ class Users extends Api_controller
             $createdUser = $this->User_model->add_user($data, $isAuthorized['userid']);
 
             if ($createdUser) {
+
+                $action_type = "CREATED";
+                // ***** ===== Add User Activity - STARTS ===== *****
+                $userForActivity = [
+                    'userid' => $isAuthorized['userid'] ?? '',
+                    'role' => $isAuthorized['role'] ?? '',
+                    'name' => $isAuthorized['name'] ?? ''
+                ];
+                $system = [
+                    'IP_ADDRESS' => $this->get_local_ip(),
+                    'USER_AGENT' => $this->get_user_agent(),
+                    'BROWSER' => $this->get_browser_name(),
+                ];
+
+                $action = [
+                    'ACTIVITY_TYPE' => "USER {$action_type}",
+                    'DESCRIPTION' => "User {$userForActivity['name']} (Role: {$userForActivity['role']}) {$action_type} new user from IP {$system['IP_ADDRESS']} using {$system['BROWSER']} on " . date('D, d M Y - H:i:s')
+                ];
+
+                $request = [
+                    'REQUEST_URI' => $this->get_request_uri(),
+                    // 'REQUEST_DATA' => $data,
+                    'REQUEST_METHOD' => strtoupper($this->input->method()),
+                    'RESPONSE_STATUS' => 'success'
+                ];
+
+                $this->App_model->add_activity_logs($action, $userForActivity, $system, $request);
+                // ***** ===== Add User Activity - ENDS ===== *****
+
                 $this->sendHTTPResponse(201, [
                     'status' => 201,
                     'message' => 'New User Created Successfully',
@@ -183,6 +212,35 @@ class Users extends Api_controller
             $updatedUser = $this->User_model->update_user_details($userID, $data, $isAuthorized['userid']);
 
             if ($updatedUser) {
+
+                $action_type = "UPDATED";
+                // ***** ===== Add User Activity - STARTS ===== *****
+                $userForActivity = [
+                    'userid' => $isAuthorized['userid'] ?? '',
+                    'role' => $isAuthorized['role'] ?? '',
+                    'name' => $isAuthorized['name'] ?? ''
+                ];
+                $system = [
+                    'IP_ADDRESS' => $this->get_local_ip(),
+                    'USER_AGENT' => $this->get_user_agent(),
+                    'BROWSER' => $this->get_browser_name(),
+                ];
+
+                $action = [
+                    'ACTIVITY_TYPE' => "USER {$action_type}",
+                    'DESCRIPTION' => "User {$userForActivity['name']} (Role: {$userForActivity['role']}) {$action_type} user account from IP {$system['IP_ADDRESS']} using {$system['BROWSER']} on " . date('D, d M Y - H:i:s')
+                ];
+
+                $request = [
+                    'REQUEST_URI' => $this->get_request_uri(),
+                    // 'REQUEST_DATA' => $data,
+                    'REQUEST_METHOD' => strtoupper($this->input->method()),
+                    'RESPONSE_STATUS' => 'success'
+                ];
+
+                $this->App_model->add_activity_logs($action, $userForActivity, $system, $request);
+                // ***** ===== Add User Activity - ENDS ===== *****
+
                 $this->sendHTTPResponse(201, [
                     'status' => 201,
                     'message' => 'User Details Updated Successfully',
@@ -349,6 +407,35 @@ class Users extends Api_controller
         // Attempt to delete the product
         $result = $this->User_model->delete_user_by_id($userID);
         if ($result) {
+
+            $action_type = "DELETED";
+            // ***** ===== Add User Activity - STARTS ===== *****
+            $userForActivity = [
+                'userid' => $isAuthorized['userid'] ?? '',
+                'role' => $isAuthorized['role'] ?? '',
+                'name' => $isAuthorized['name'] ?? ''
+            ];
+            $system = [
+                'IP_ADDRESS' => $this->get_local_ip(),
+                'USER_AGENT' => $this->get_user_agent(),
+                'BROWSER' => $this->get_browser_name(),
+            ];
+
+            $action = [
+                'ACTIVITY_TYPE' => "USER {$action_type}",
+                'DESCRIPTION' => "User {$userForActivity['name']} (Role: {$userForActivity['role']}) {$action_type} user account from IP {$system['IP_ADDRESS']} using {$system['BROWSER']} on " . date('D, d M Y - H:i:s')
+            ];
+
+            $request = [
+                'REQUEST_URI' => $this->get_request_uri(),
+                // 'REQUEST_DATA' => $data,
+                'REQUEST_METHOD' => strtoupper($this->input->method()),
+                'RESPONSE_STATUS' => 'success'
+            ];
+
+            $this->App_model->add_activity_logs($action, $userForActivity, $system, $request);
+            // ***** ===== Add User Activity - ENDS ===== *****
+
             $this->output
                 ->set_content_type('application/json')
                 ->set_status_header(200) // 200 OK status code
@@ -445,6 +532,35 @@ class Users extends Api_controller
             $updated = $this->User_model->update_user_password($userID, $data, $isAuthorized['userid']);
 
             if ($updated) {
+
+                $action_type = "UPDATED";
+                // ***** ===== Add User Activity - STARTS ===== *****
+                $userForActivity = [
+                    'userid' => $isAuthorized['userid'] ?? '',
+                    'role' => $isAuthorized['role'] ?? '',
+                    'name' => $isAuthorized['name'] ?? ''
+                ];
+                $system = [
+                    'IP_ADDRESS' => $this->get_local_ip(),
+                    'USER_AGENT' => $this->get_user_agent(),
+                    'BROWSER' => $this->get_browser_name(),
+                ];
+
+                $action = [
+                    'ACTIVITY_TYPE' => "USER PASSWORD {$action_type}",
+                    'DESCRIPTION' => "User {$userForActivity['name']} (Role: {$userForActivity['role']}) {$action_type} user account password from IP {$system['IP_ADDRESS']} using {$system['BROWSER']} on " . date('D, d M Y - H:i:s')
+                ];
+
+                $request = [
+                    'REQUEST_URI' => $this->get_request_uri(),
+                    // 'REQUEST_DATA' => $data,
+                    'REQUEST_METHOD' => strtoupper($this->input->method()),
+                    'RESPONSE_STATUS' => 'success'
+                ];
+
+                $this->App_model->add_activity_logs($action, $userForActivity, $system, $request);
+                // ***** ===== Add User Activity - ENDS ===== *****
+
                 $this->sendHTTPResponse(201, [
                     'status' => 201,
                     'message' => 'User Password Updated Successfully',

@@ -65,6 +65,35 @@ class Survey extends Api_controller
             // Save Data to the product table
             $created = $this->Survey_model->add_survey($survey_id, $data, $isAuthorized['userid']);
             if ($created) {
+
+                $action_type = $survey_id != null ? "UPDATED" : "CREATED";
+                // ***** ===== Add User Activity - STARTS ===== *****
+                $userForActivity = [
+                    'userid' => $isAuthorized['userid'] ?? '',
+                    'role' => $isAuthorized['role'] ?? '',
+                    'name' => $isAuthorized['name'] ?? ''
+                ];
+                $system = [
+                    'IP_ADDRESS' => $this->get_local_ip(),
+                    'USER_AGENT' => $this->get_user_agent(),
+                    'BROWSER' => $this->get_browser_name(),
+                ];
+
+                $action = [
+                    'ACTIVITY_TYPE' => "SURVEY {$action_type}",
+                    'DESCRIPTION' => "User {$userForActivity['name']} (Role: {$userForActivity['role']}) {$action_type} Survey from IP {$system['IP_ADDRESS']} using {$system['BROWSER']} on " . date('D, d M Y - H:i:s')
+                ];
+
+                $request = [
+                    'REQUEST_URI' => $this->get_request_uri(),
+                    // 'REQUEST_DATA' => $data,
+                    'REQUEST_METHOD' => strtoupper($this->input->method()),
+                    'RESPONSE_STATUS' => 'success'
+                ];
+
+                $this->App_model->add_activity_logs($action, $userForActivity, $system, $request);
+                // ***** ===== Add User Activity - ENDS ===== *****
+
                 $this->sendHTTPResponse(201, [
                     'status' => 201,
                     'message' => 'Survey created successfully.',
@@ -130,6 +159,35 @@ class Survey extends Api_controller
             $created = $this->Survey_model->fill_new_survey($data, $isAuthorized['userid']);
 
             if ($created) {
+
+                $action_type = "FILLED";
+                // ***** ===== Add User Activity - STARTS ===== *****
+                $userForActivity = [
+                    'userid' => $isAuthorized['userid'] ?? '',
+                    'role' => $isAuthorized['role'] ?? '',
+                    'name' => $isAuthorized['name'] ?? ''
+                ];
+                $system = [
+                    'IP_ADDRESS' => $this->get_local_ip(),
+                    'USER_AGENT' => $this->get_user_agent(),
+                    'BROWSER' => $this->get_browser_name(),
+                ];
+
+                $action = [
+                    'ACTIVITY_TYPE' => "SURVEY {$action_type}",
+                    'DESCRIPTION' => "User {$userForActivity['name']} (Role: {$userForActivity['role']}) {$action_type} Survey from IP {$system['IP_ADDRESS']} using {$system['BROWSER']} on " . date('D, d M Y - H:i:s')
+                ];
+
+                $request = [
+                    'REQUEST_URI' => $this->get_request_uri(),
+                    // 'REQUEST_DATA' => $data,
+                    'REQUEST_METHOD' => strtoupper($this->input->method()),
+                    'RESPONSE_STATUS' => 'success'
+                ];
+
+                $this->App_model->add_activity_logs($action, $userForActivity, $system, $request);
+                // ***** ===== Add User Activity - ENDS ===== *****
+
                 $this->sendHTTPResponse(201, [
                     'status' => 201,
                     'message' => 'Survey created successfully.',
@@ -461,6 +519,35 @@ class Survey extends Api_controller
         // Attempt to delete the product
         $result = $this->Survey_model->delete_survey_by_id($surveyId);
         if ($result) {
+
+            $action_type = "DELETED";
+            // ***** ===== Add User Activity - STARTS ===== *****
+            $userForActivity = [
+                'userid' => $isAuthorized['userid'] ?? '',
+                'role' => $isAuthorized['role'] ?? '',
+                'name' => $isAuthorized['name'] ?? ''
+            ];
+            $system = [
+                'IP_ADDRESS' => $this->get_local_ip(),
+                'USER_AGENT' => $this->get_user_agent(),
+                'BROWSER' => $this->get_browser_name(),
+            ];
+
+            $action = [
+                'ACTIVITY_TYPE' => "SURVEY {$action_type}",
+                'DESCRIPTION' => "User {$userForActivity['name']} (Role: {$userForActivity['role']}) {$action_type} Survey from IP {$system['IP_ADDRESS']} using {$system['BROWSER']} on " . date('D, d M Y - H:i:s')
+            ];
+
+            $request = [
+                'REQUEST_URI' => $this->get_request_uri(),
+                // 'REQUEST_DATA' => $data,
+                'REQUEST_METHOD' => strtoupper($this->input->method()),
+                'RESPONSE_STATUS' => 'success'
+            ];
+
+            $this->App_model->add_activity_logs($action, $userForActivity, $system, $request);
+            // ***** ===== Add User Activity - ENDS ===== *****
+
             $this->output
                 ->set_content_type('application/json')
                 ->set_status_header(200) // 200 OK status code
@@ -508,6 +595,35 @@ class Survey extends Api_controller
         // Attempt to delete the product
         $result = $this->Survey_model->delete_survey_fill_by_id($surveyId);
         if ($result) {
+
+            $action_type = "DELETED";
+            // ***** ===== Add User Activity - STARTS ===== *****
+            $userForActivity = [
+                'userid' => $isAuthorized['userid'] ?? '',
+                'role' => $isAuthorized['role'] ?? '',
+                'name' => $isAuthorized['name'] ?? ''
+            ];
+            $system = [
+                'IP_ADDRESS' => $this->get_local_ip(),
+                'USER_AGENT' => $this->get_user_agent(),
+                'BROWSER' => $this->get_browser_name(),
+            ];
+
+            $action = [
+                'ACTIVITY_TYPE' => "SURVEY {$action_type}",
+                'DESCRIPTION' => "User {$userForActivity['name']} (Role: {$userForActivity['role']}) {$action_type} Survey from IP {$system['IP_ADDRESS']} using {$system['BROWSER']} on " . date('D, d M Y - H:i:s')
+            ];
+
+            $request = [
+                'REQUEST_URI' => $this->get_request_uri(),
+                // 'REQUEST_DATA' => $data,
+                'REQUEST_METHOD' => strtoupper($this->input->method()),
+                'RESPONSE_STATUS' => 'success'
+            ];
+
+            $this->App_model->add_activity_logs($action, $userForActivity, $system, $request);
+            // ***** ===== Add User Activity - ENDS ===== *****
+
             $this->output
                 ->set_content_type('application/json')
                 ->set_status_header(200) // 200 OK status code

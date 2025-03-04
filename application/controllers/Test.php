@@ -179,5 +179,22 @@ class Test extends CI_Controller
         echo http_response_code();
     }
 
-    
+    function json_test()
+    {
+        $table_data = json_encode([['name' => 'kamran', 'job' => 'faltu'], ['name' => 'kamran', 'job' => 'faltu']]);
+
+        $new_data = "UTC +05:30";
+
+        $timezone = json_encode([$new_data]);
+
+        echo $table_data;
+
+        echo "<br /> <br />     " . $new_data;
+        
+        echo "<br /> <br />     " . $timezone;
+
+        $decoded = json_decode($table_data, true);
+
+        beautify_array($decoded);
+    }
 }

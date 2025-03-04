@@ -281,6 +281,35 @@ class Products extends Api_controller
         // Attempt to delete the product
         $result = $this->Product_model->delete_product_by_id($productId);
         if ($result) {
+
+            $action_type = 'DELETED';
+            // ***** ===== Add User Activity - STARTS ===== *****
+            $userForActivity = [
+                'userid' => $isAuthorized['userid'] ?? '',
+                'role' => $isAuthorized['role'] ?? '',
+                'name' => $isAuthorized['name'] ?? ''
+            ];
+            $system = [
+                'IP_ADDRESS' => $this->get_local_ip(),
+                'USER_AGENT' => $this->get_user_agent(),
+                'BROWSER' => $this->get_browser_name(),
+            ];
+
+            $action = [
+                'ACTIVITY_TYPE' => "PRODUCT {$action_type}",
+                'DESCRIPTION' => "User {$userForActivity['name']} (Role: {$userForActivity['role']}) {$action_type} a Product from IP {$system['IP_ADDRESS']} using {$system['BROWSER']} on " . date('D, d M Y - H:i:s')
+            ];
+
+            $request = [
+                'REQUEST_URI' => $this->get_request_uri(),
+                // 'REQUEST_DATA' => $data,
+                'REQUEST_METHOD' => strtoupper($this->input->method()),
+                'RESPONSE_STATUS' => 'success'
+            ];
+
+            $this->App_model->add_activity_logs($action, $userForActivity, $system, $request);
+            // ***** ===== Add User Activity - ENDS ===== *****
+
             $this->output
                 ->set_content_type('application/json')
                 ->set_status_header(200) // 200 OK status code

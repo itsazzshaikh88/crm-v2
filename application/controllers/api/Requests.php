@@ -75,6 +75,34 @@ class Requests extends Api_controller
             // Save Data to the Request table
             $created = $this->Request_model->add_request($request_id, $data, $isAuthorized['userid'], $isAuthorized['role']);
             if ($created) {
+                $action_type = $request_id != null ? 'UPDATED' : 'CREATED';
+                // ***** ===== Add User Activity - STARTS ===== *****
+                $userForActivity = [
+                    'userid' => $isAuthorized['userid'] ?? '',
+                    'role' => $isAuthorized['role'] ?? '',
+                    'name' => $isAuthorized['name'] ?? ''
+                ];
+                $system = [
+                    'IP_ADDRESS' => $this->get_local_ip(),
+                    'USER_AGENT' => $this->get_user_agent(),
+                    'BROWSER' => $this->get_browser_name(),
+                ];
+
+                $action = [
+                    'ACTIVITY_TYPE' => "REQUEST {$action_type}",
+                    'DESCRIPTION' => "User {$userForActivity['name']} (Role: {$userForActivity['role']}) {$action_type} a request from IP {$system['IP_ADDRESS']} using {$system['BROWSER']} on " . date('D, d M Y - H:i:s')
+                ];
+
+                $request = [
+                    'REQUEST_URI' => $this->get_request_uri(),
+                    // 'REQUEST_DATA' => $data,
+                    'REQUEST_METHOD' => strtoupper($this->input->method()),
+                    'RESPONSE_STATUS' => 'success'
+                ];
+
+                $this->App_model->add_activity_logs($action, $userForActivity, $system, $request);
+                // ***** ===== Add User Activity - ENDS ===== *****
+
                 $this->sendHTTPResponse(201, [
                     'status' => 201,
                     'message' => 'Request Saved Successfully',
@@ -148,68 +176,6 @@ class Requests extends Api_controller
             ->set_output(json_encode($response));
     }
 
-    /* --- Shaikh Ab Azim ---
-    public function detail()
-    {
-        // Check if the authentication is valid
-        $isAuthorized = $this->isAuthorized();
-        if (!$isAuthorized['status']) {
-            $this->output
-                ->set_status_header(401) // Set HTTP response status to 400 Bad Request
-                ->set_content_type('application/json')
-                ->set_output(json_encode(['error' => 'Unauthorized access. You do not have permission to perform this action.']))
-                ->_display();
-            exit;
-        };
-
-        // Get the raw input data from the request
-        $input = $this->input->raw_input_stream;
-
-        // Decode the JSON data as an associative array
-        $data = json_decode($input, true);
-
-        // Validate input and check if `requestUUID` is provided
-        if (!$data || !isset($data['requestUUID'])) {
-            return $this->output
-                ->set_status_header(400)
-                ->set_content_type('application/json')
-                ->set_output(json_encode([
-                    'status' => 'error',
-                    'code' => 400,
-                    'message' => 'Invalid JSON input or missing requestUUID'
-                ]));
-        }
-
-        // Retrieve Request details using the provided requestUUID
-        $requestUUID = $data['requestUUID'];
-        $requestData = $this->Request_model->get_request_by_uuid($requestUUID);
-
-        // Check if Request data exists
-        if (empty($requestData['header'])) {
-            return $this->output
-                ->set_status_header(404)
-                ->set_content_type('application/json')
-                ->set_output(json_encode([
-                    'status' => 'error',
-                    'code' => 404,
-                    'message' => 'Request not found'
-                ]));
-        }
-
-        // Successful response with Request data
-        return $this->output
-            ->set_status_header(200)
-            ->set_content_type('application/json')
-            ->set_output(json_encode([
-                'status' => 'success',
-                'code' => 200,
-                'message' => 'Request details retrieved successfully',
-                'data' => $requestData
-            ]));
-    }
-
-    -- End of the code
-    */
     public function detail()
     {
         // Check if the authentication is valid
@@ -316,6 +282,34 @@ class Requests extends Api_controller
         // Attempt to delete the Request
         $result = $this->Request_model->delete_Request_by_id($requestId);
         if ($result) {
+            $action_type = 'DELETED';
+            // ***** ===== Add User Activity - STARTS ===== *****
+            $userForActivity = [
+                'userid' => $isAuthorized['userid'] ?? '',
+                'role' => $isAuthorized['role'] ?? '',
+                'name' => $isAuthorized['name'] ?? ''
+            ];
+            $system = [
+                'IP_ADDRESS' => $this->get_local_ip(),
+                'USER_AGENT' => $this->get_user_agent(),
+                'BROWSER' => $this->get_browser_name(),
+            ];
+
+            $action = [
+                'ACTIVITY_TYPE' => "REQUEST {$action_type}",
+                'DESCRIPTION' => "User {$userForActivity['name']} (Role: {$userForActivity['role']}) {$action_type} a request from IP {$system['IP_ADDRESS']} using {$system['BROWSER']} on " . date('D, d M Y - H:i:s')
+            ];
+
+            $request = [
+                'REQUEST_URI' => $this->get_request_uri(),
+                // 'REQUEST_DATA' => $data,
+                'REQUEST_METHOD' => strtoupper($this->input->method()),
+                'RESPONSE_STATUS' => 'success'
+            ];
+
+            $this->App_model->add_activity_logs($action, $userForActivity, $system, $request);
+            // ***** ===== Add User Activity - ENDS ===== *****
+
             $this->output
                 ->set_content_type('application/json')
                 ->set_status_header(200) // 200 OK status code

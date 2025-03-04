@@ -60,6 +60,35 @@ class Mom extends Api_controller
             $newlyCreatedMinutes = $this->Mom_model->add_mom($data, $isAuthorized['userid']);
 
             if ($newlyCreatedMinutes) {
+
+                $action_type = 'CREATED';
+                // ***** ===== Add User Activity - STARTS ===== *****
+                $userForActivity = [
+                    'userid' => $isAuthorized['userid'] ?? '',
+                    'role' => $isAuthorized['role'] ?? '',
+                    'name' => $isAuthorized['name'] ?? ''
+                ];
+                $system = [
+                    'IP_ADDRESS' => $this->get_local_ip(),
+                    'USER_AGENT' => $this->get_user_agent(),
+                    'BROWSER' => $this->get_browser_name(),
+                ];
+
+                $action = [
+                    'ACTIVITY_TYPE' => "MOM {$action_type}",
+                    'DESCRIPTION' => "User {$userForActivity['name']} (Role: {$userForActivity['role']}) {$action_type} Minutes of Meeting from IP {$system['IP_ADDRESS']} using {$system['BROWSER']} on " . date('D, d M Y - H:i:s')
+                ];
+
+                $request = [
+                    'REQUEST_URI' => $this->get_request_uri(),
+                    // 'REQUEST_DATA' => $data,
+                    'REQUEST_METHOD' => strtoupper($this->input->method()),
+                    'RESPONSE_STATUS' => 'success'
+                ];
+
+                $this->App_model->add_activity_logs($action, $userForActivity, $system, $request);
+                // ***** ===== Add User Activity - ENDS ===== *****
+
                 $this->sendHTTPResponse(201, [
                     'status' => 201,
                     'message' => 'Minutes of Meeting saved Successfully',
@@ -155,6 +184,35 @@ class Mom extends Api_controller
             $updatedMOM = $this->Mom_model->update_mom($momID, $data, $isAuthorized['userid']);
 
             if ($updatedMOM) {
+
+                $action_type = 'UPDATED';
+                // ***** ===== Add User Activity - STARTS ===== *****
+                $userForActivity = [
+                    'userid' => $isAuthorized['userid'] ?? '',
+                    'role' => $isAuthorized['role'] ?? '',
+                    'name' => $isAuthorized['name'] ?? ''
+                ];
+                $system = [
+                    'IP_ADDRESS' => $this->get_local_ip(),
+                    'USER_AGENT' => $this->get_user_agent(),
+                    'BROWSER' => $this->get_browser_name(),
+                ];
+
+                $action = [
+                    'ACTIVITY_TYPE' => "MOM {$action_type}",
+                    'DESCRIPTION' => "User {$userForActivity['name']} (Role: {$userForActivity['role']}) {$action_type} Minutes of Meeting from IP {$system['IP_ADDRESS']} using {$system['BROWSER']} on " . date('D, d M Y - H:i:s')
+                ];
+
+                $request = [
+                    'REQUEST_URI' => $this->get_request_uri(),
+                    // 'REQUEST_DATA' => $data,
+                    'REQUEST_METHOD' => strtoupper($this->input->method()),
+                    'RESPONSE_STATUS' => 'success'
+                ];
+
+                $this->App_model->add_activity_logs($action, $userForActivity, $system, $request);
+                // ***** ===== Add User Activity - ENDS ===== *****
+
                 $this->sendHTTPResponse(201, [
                     'status' => 201,
                     'message' => 'Minutes of meeting Updated Successfully',
@@ -321,6 +379,35 @@ class Mom extends Api_controller
         // Attempt to delete the product
         $result = $this->Mom_model->delete_mom_by_id($momID);
         if ($result) {
+
+            $action_type = 'DELETED';
+            // ***** ===== Add User Activity - STARTS ===== *****
+            $userForActivity = [
+                'userid' => $isAuthorized['userid'] ?? '',
+                'role' => $isAuthorized['role'] ?? '',
+                'name' => $isAuthorized['name'] ?? ''
+            ];
+            $system = [
+                'IP_ADDRESS' => $this->get_local_ip(),
+                'USER_AGENT' => $this->get_user_agent(),
+                'BROWSER' => $this->get_browser_name(),
+            ];
+
+            $action = [
+                'ACTIVITY_TYPE' => "MOM {$action_type}",
+                'DESCRIPTION' => "User {$userForActivity['name']} (Role: {$userForActivity['role']}) {$action_type} Minutes of Meeting from IP {$system['IP_ADDRESS']} using {$system['BROWSER']} on " . date('D, d M Y - H:i:s')
+            ];
+
+            $request = [
+                'REQUEST_URI' => $this->get_request_uri(),
+                // 'REQUEST_DATA' => $data,
+                'REQUEST_METHOD' => strtoupper($this->input->method()),
+                'RESPONSE_STATUS' => 'success'
+            ];
+
+            $this->App_model->add_activity_logs($action, $userForActivity, $system, $request);
+            // ***** ===== Add User Activity - ENDS ===== *****
+
             $this->output
                 ->set_content_type('application/json')
                 ->set_status_header(200) // 200 OK status code
