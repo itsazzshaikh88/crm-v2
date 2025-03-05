@@ -205,5 +205,5 @@
 $this->load->view('loaders/full-page-loader');
 $this->load->view('modals/clients/client-list');
 $this->load->view('modals/clients/new-client');
-$this->load->view('modals/products/product-list');
+
 ?>

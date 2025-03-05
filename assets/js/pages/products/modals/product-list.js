@@ -553,7 +553,7 @@ function triggerOnChange(element) {
 function selectProduct(selectedProductCard) {
     const productID = selectedProductCard.getAttribute('data-product-id');
     const productName = decodeURIComponent(selectedProductCard.getAttribute('data-product-name') || '');
-    const productDesc = decodeURIComponent(selectedProductCard.getAttribute('data-product-desc') || '');
+    const productDesc = stripHtmlTags(decodeURIComponent(selectedProductCard.getAttribute('data-product-desc') || ''));
     callbackFunc(productID, productName, productDesc);
 
     // close modal

@@ -36,6 +36,6 @@ $this->load->view('pages/purchase/purchase-modal');
 $this->load->view('loaders/full-page-loader');
 $this->load->view('modals/clients/client-list');
 $this->load->view('modals/clients/new-client');
-$this->load->view('modals/products/product-list');
+$this->load->view('pages/products/modals/product-list');
 
 ?>

@@ -275,83 +275,36 @@ async function submitForm(e) {
 }
 
 // Product Modal List -------------------------------------------------
-// Modal Related Code
-var productListModal = new bootstrap.Modal(document.getElementById("product-list-modal"), {
-    keyboard: false,        // Disable closing on escape key
-    backdrop: 'static'      // Disable closing when clicking outside the modal
-});
-// Declare the pagination instance globally
-const prodListPaginate = new Pagination('prd-mdl-current-page', 'prd-mdl-total-pages', 'prd-mdl-page-of-pages', 'prd-mdl-range-of-records');
-prodListPaginate.pageLimit = 10; // Set your page limit here
 
-// Function to handle pagination button clicks
-function handlePagination(action) {
-    prodListPaginate.paginate(action); // Update current page based on the action
-    fetchProductsForModalListing(); // Fetch products for the updated current page
-}
+
 
 // Chooose your prodict in lines
 function chooseProduct(index) {
-    selectedProductElementIndex = index
-    const element = document.getElementById(`PRODUCT_ID_${index}`)
-    const descElement = document.getElementById(`PRODUCT_DESC_${index}`)
-    if (typeof element != undefined) {
-        // remove other elements from select
-        element.innerHTML = '';
-        descElement.value = '';
-        productListModal.show()
-        fetchProductsForModalListing();
+    const element = document.getElementById(`PRODUCT_ID_${index}`);
+    const descElement = document.getElementById(`PRODUCT_DESC_${index}`);
+
+    if (!element || !descElement) {
+        console.warn(`Elements for index ${index} not found.`);
+        return;
     }
 
+    element.value = ''; // Clear input value
+    descElement.value = ''; // Clear input value
+
+    selectedProductElementIndex = index;
+
+    if (typeof showProductListingFullScreenModal === 'function') {
+        showProductListingFullScreenModal(setProductToRequestLine);
+    } else {
+        console.warn("showProductListingFullScreenModal function is not defined.");
+    }
 }
 
 function renderNoResponseCode() {
     return `Products Not Available`
 }
 
-async function fetchProductsForModalListing(query = null) {
-    try {
-        const authToken = getCookie('auth_token');
-        if (!authToken) {
-            toasterNotification({ type: 'error', message: "Authorization token is missing. Please Login again to make API request." });
-            return;
-        }
-        const prodListContainer = document.getElementById("modal-product-list");
-        // Set loader to the screen 
-        productModalListingSkeleton(prodListContainer, prodListPaginate.pageLimit || 0);
 
-        const url = `${APIUrl}/products/list`;
-        const filters = filterCriterias(['CATEGORY_ID']);
-        const inputSearchParams = query ?? document.getElementById("searchInput").value.trim()
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${authToken}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                limit: prodListPaginate.pageLimit,
-                currentPage: prodListPaginate.currentPage,
-                filters: filters,
-                search: { "product": inputSearchParams }
-            })
-        });
-
-        if (!response.ok) {
-            throw new Error('Failed to fetch product data');
-        }
-
-        const data = await response.json();
-        prodListPaginate.totalPages = parseFloat(data?.pagination?.total_pages) || 0;
-        prodListPaginate.totalRecords = parseFloat(data?.pagination?.total_records) || 0;
-
-        showProducts(data.products || [], prodListContainer);
-
-    } catch (error) {
-        toasterNotification({ type: 'error', message: 'Request failed: ' + error.message });
-        prodListContainer.innerHTML = renderNoResponseCode({ colspan: numberOfHeaders });
-    }
-}
 function setProductToRequestLine(productID, productName, productDesc) {
 
     const productCodeElement = document.getElementById(`PRODUCT_ID_${selectedProductElementIndex}`)
@@ -362,9 +315,6 @@ function setProductToRequestLine(productID, productName, productDesc) {
     productCodeElement.value = productID
 
     productDescElement.value = productDesc
-
-    // close modal window
-    productListModal.hide()
 }
 
 function showProducts(products, prodListContainer) {
@@ -405,10 +355,7 @@ function showProducts(products, prodListContainer) {
     }
 }
 
-function filterProducts() {
-    prodListPaginate.currentPage = 1;
-    fetchProductsForModalListing();
-}
+
 
 
 
@@ -570,15 +517,6 @@ function showClientDetails(header) {
     clientID.value = header?.CLIENT_ID || 0
     clientName.value = `${header?.FIRST_NAME || ''} ${header?.LAST_NAME || ''}`
 }
-
-
-
-function searchProductFromModalList(event) {
-    const query = event.target.value.trim(); // Get the input value
-    prodListPaginate.currentPage = 1;
-    fetchProductsForModalListing(query);
-}
-const debouncedInput = debounce(searchProductFromModalList, 300);
 
 function clearModalFilterInputs() {
     document.getElementById("searchInput").value = ''

@@ -29,14 +29,13 @@ class Purchase extends App_Controller
         $data['page_heading'] = 'Purchase Order List';
         $data['navlink'] = 'purchase';
         $data['scripts'] = [
+            'assets/js/pages/products/modals/product-list.js',
             'assets/js/pages/purchase/new.js',
             'assets/js/pages/clients/modals/modal-list.js',
             'assets/js/pages/purchase/list.js',
             'assets/js/pages/clients/modals/create-new-client.js',
         ];
         $data['toolbar'] = ['name' => 'new-purchase', 'action' => 'list'];
-
-
         $this->load->view('layout', $data);
     }
     public function view($uuid = null)
