@@ -6,7 +6,7 @@
             <div class="card-body">
                     <table class="table table-row-bordered gy-3" id="purchase-list">
                         <thead>
-                            <tr class="fw-bold fs-6 text-gray-800">
+                            <tr class="fw-bold fs-7 text-gray-900">
                                 <th>#</th>
                                 <th>PO #</th>
                                 <th>Company</th>

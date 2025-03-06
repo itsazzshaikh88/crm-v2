@@ -112,11 +112,11 @@ function renderOpenOrders(pos, tbody) {
         let content = '';
         if (pos.length > 0) {
             pos.forEach((po) => {
-                content += `<tr>
+                content += `<tr class="text-gray-800 fs-7">
 								<td>${po?.PO_NUMBER}</td>
 								<td>${po?.COMPANY_ADDRESS}</td>
 								<td>${po?.TOTAL_AMOUNT}</td>
-								<td>${po?.PO_STATUS}</td>
+								<td><small class="badge bg-light text-black fw-normal border">${po?.PO_STATUS}</small></td>
 								<td>${formatAppDate(po?.CREATED_AT)}</td>
                                 <td>
                                     <button class="btn btn-sm btn-secondary p-0 px-4 py-1"> <i class="fa-solid fa-location-arrow"></i> Track</button>

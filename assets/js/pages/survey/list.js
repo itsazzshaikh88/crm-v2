@@ -96,37 +96,34 @@ function showSurvey(surveys, tbody) {
 
 
             content += `<tr data-survey-id="${survey.SURVEY_ID}">
-                                <td>
-                                   ${index + 1}
-                                </td>
-                                
-                                    <td class="pe-0 fw-bold text-primary">${survey.SURVEY_NAME}</td>
-                                
-                                
-                                <td class=" pe-0">${survey.SURVEY_DESC || ''}</td>
-                                <td class="pe-0">${formatAppDate(survey.START_DATE || '')} - ${formatAppDate(survey.END_DATE || '')}</td>
-                                
-                                <td class="pe-0">${survey.CONDUCTED_BY || ''}</td>
-                                <td class="pe-0"><span class="text-white badge" style="background-color: ${surveyStatusColors[survey.STATUS || '']}">${capitalizeWords(survey.STATUS || '')}</span></td>
-                                
-                                <td class="text-center">
-                                    <div class="d-flex align-items-center justify-content-center gap-4">
-                                      
-                                        <a href="survey/new/${survey.UUID}?action=edit">
-                                            <small>
-                                                <i class="fs-5 fa-regular fa-pen-to-square text-gray-700"></i>
-                                            </small>
-                                        </a>`;
+                            <td>${index + 1}</td>
+                            <td class=" ">${survey.SURVEY_NAME}</td>
+                            <td class=" ">${survey.SURVEY_DESC || ''}</td>
+                            <td class="">${formatAppDate(survey.START_DATE || '')} - ${formatAppDate(survey.END_DATE || '')}</td>
+                            <td class="">${survey.CONDUCTED_BY || ''}</td>
+                            <td class="">
+                                <span class="text-white badge" style="background-color: ${surveyStatusColors[survey.STATUS || '']}">
+                                ${capitalizeWords(survey.STATUS || '')}
+                                </span>
+                            </td>
+                            <td class="text-center">
+                                <div class="d-flex align-items-center justify-content-center gap-3">
+
+                                    <a href="survey/new/${survey.UUID}?action=edit">
+                                        <small>
+                                            <i class="fs-8 fa-regular fa-pen-to-square text-gray-700"></i>
+                                        </small>
+                                    </a>`;
             if (isAdmin) {
                 content += `<a href="javascript:void(0)" onclick="deleteSurvey(${survey.SURVEY_ID})">
-                <small>
-                    <i class="fs-5 fa-solid fa-trash-can text-danger"></i>
-                </small>
-            </a>`;
+                                        <small>
+                                            <i class="fs-8 fa-solid fa-trash-can text-danger"></i>
+                                        </small>
+                                    </a>`;
             }
             content += `</div>
-                                </td>
-                            </tr>`;
+                            </td>
+                        </tr>`;
         });
 
         tbody.innerHTML = content;

@@ -41,17 +41,17 @@ function setListActions(actionID) {
                 </a>`;
     }
     else {
-        return `<div class="d-flex align-items-center justify-content-end gap-4">
+        return `<div class="d-flex align-items-center justify-content-end gap-3">
                                        
                                         <a href="javascript:void(0);" onclick="openUserModal('edit','${actionID}')" title="Edit User">
                                             <small>
-                                                <i class="fs-5 fa-regular fa-pen-to-square text-gray-700"></i>
+                                                <i class="fs-8 fa-regular fa-pen-to-square text-gray-700"></i>
                                             </small>
                                         </a>
 
                                         <a href="javascript:void(0)" onclick="deleteUser(${actionID})" title="Delete User">
                                             <small>
-                                                <i class="fs-5 fa-solid fa-trash-can text-danger"></i>
+                                                <i class="fs-8 fa-solid fa-trash-can text-danger"></i>
                                             </small>
                                         </a>
                                     </div>`;
@@ -123,21 +123,20 @@ function showUsers(products, tbody) {
     if (products?.length > 0) {
         // show products
         products.forEach(user => {
-            content += `<tr data-user-id="${user?.ID}">
+            content += `<tr data-user-id="${user?.ID}" class="fs-7 text-gray-800">
                                 <td class="text-center">${++counter}</td>
-                                <td class="pe-0">
+                                <td class="">
                                     <div>
                                         <p class="mb-0 fw-bold">${user?.FIRST_NAME} ${user?.LAST_NAME}</p>
                                         <small class="text-gray-600">${user?.USER_ID}</small>
                                     </div>
                                 </td>
-                                <td class="pe-0 "><span class="badge bg-light fw-normal text-gray-700">${capitalizeWords(user?.USER_TYPE)}</span></td>
-                                <td class="pe-0 text-primary">${user?.EMAIL || 0}</td>
-                                <td class="pe-0">${user?.PHONE_NUMBER || 0}</td>
-                                <td class="pe-0"><span class='fw-normal badge text-white' style="background-color: ${userAccountStatusColors[user?.STATUS || '']}">${capitalizeWords(user?.STATUS || '')}</span></td>
-                                <td class="pe-0 text-center">${show2FAStatus(user?.IS_2FA_ENABLED || '')}</td>
+                                <td class=" "><span class="badge bg-light fw-normal text-gray-700">${capitalizeWords(user?.USER_TYPE)}</span></td>
+                                <td class=" text-primary">${user?.EMAIL || 0}</td>
+                                <td class="">${user?.PHONE_NUMBER || 0}</td>
+                                <td class=""><span class='fw-normal badge text-white' style="background-color: ${userAccountStatusColors[user?.STATUS || '']}">${capitalizeWords(user?.STATUS || '')}</span></td>
+                                <td class=" text-center">${show2FAStatus(user?.IS_2FA_ENABLED || '')}</td>
                                 <td class="text-end">${setListActions(user?.ID || 0)}</td>
-
                             </tr>`;
         });
         tbody.innerHTML = content;

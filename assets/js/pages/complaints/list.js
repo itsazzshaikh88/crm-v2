@@ -74,13 +74,13 @@ function showRequests(complaints, tbody) {
 		complaints.forEach(complaint => {
 			let color = '';
 			if (complaint.STATUS == 'Active') {
-				color = 'text-danger';
+				color = 'danger';
 			} else if (complaint.STATUS == 'Closed') {
-				color = 'text-success';
+				color = 'success';
 			} else {
-				color = 'text-dark'
+				color = 'primary'
 			}
-			content += `<tr data-complaint-id="${complaint.COMPLAINT_ID}">
+			content += `<tr data-complaint-id="${complaint.COMPLAINT_ID}" class="text-gray-800 fs-7">
 							<td class="text-center">${++counter}</td>
 							<td>${complaint.COMPLAINT_NUMBER || ''}</td>
 							<td>${complaint.COMPLAINT_DATE || ''}</td>
@@ -89,24 +89,19 @@ function showRequests(complaints, tbody) {
 							<td>${complaint.COMPLAINT_RAISED_BY || ''}</td>
 							<td>${complaint.EMAIL || ''}</td>
 							<td>${complaint.MOBILE_NUMBER || ''}</td>
-							<td class="${color}">${complaint.STATUS || ''}</td>
-							<td class="text-center">
-								<div class="d-flex align-items-center justify-content-center gap-4">
-									<a href="complaints/view/${complaint.UUID}">
-										<small>
-											<i class="fs-5 fa-solid fa-file-lines text-success"></i>
-										</small>
-									</a>
+							<td class=""> <small class="text-white bg-${color} border border-${color} px-2 py-1 rounded">${complaint.STATUS || ''}</small></td>
+							<td class="text-end">
+								<div class="d-flex align-items-center justify-content-end gap-3">
 									${complaint.STATUS === 'Draft' && userType === 'client' || complaint.STATUS === 'Active' && userType === 'client'
 					? `
 											<a href="complaints/new/${complaint.UUID}?action=edit">
 												<small>
-													<i class="fs-5 fa-regular fa-pen-to-square text-gray-700"></i>
+													<i class="fs-8 fa-regular fa-pen-to-square text-gray-700"></i>
 												</small>
 											</a>
 											<a href="javascript:void(0)" onclick="deleteRequest(${complaint.COMPLAINT_ID})">
 												<small>
-													<i class="fs-5 fa-solid fa-trash-can text-danger"></i>
+													<i class="fs-8 fa-solid fa-trash-can text-danger"></i>
 												</small>
 											</a>
 										`
@@ -116,12 +111,17 @@ function showRequests(complaints, tbody) {
 					? `
 											<a href="complaints/resolve/${complaint.COMPLAINT_ID}">
 												<small>
-													<i class="fs-5 fa-regular fa-pen-to-square text-gray-700"></i>
+													<i class="fs-8 fa-regular fa-pen-to-square text-primary"></i>
 												</small>
 											</a>
 										`
 					: ''
 				}
+				<a href="complaints/view/${complaint.UUID}">
+										<small>
+											<i class="fs-8 fa-solid fa-up-right-from-square text-gray-800"></i>
+										</small>
+									</a>
 								</div>
 							</td>
 						</tr>`;

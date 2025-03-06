@@ -5,9 +5,9 @@
         <div class="card">
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-row-bordered gy-7" id="survey-list">
+                    <table class="table table-row-bordered gy-3" id="survey-list">
                         <thead>
-                            <tr class="fw-bold fs-6 text-gray-800">
+                            <tr class="fw-bold fs-7 text-gray-900">
                                 <th>#</th>
                                 <th>Survey Name</th>
                                 <th>Survey Desc</th>

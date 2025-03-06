@@ -73,7 +73,7 @@ function showPODetails(po, tbody) {
     if (po?.length > 0) {
         po.forEach(request => {
 
-            content += `<tr data-request-id="${request.PO_ID}">
+            content += `<tr data-request-id="${request.PO_ID}" class="text-gray-800 fs-7">
                                 <td class="text-center">${++counter}</td> <!-- # -->
                                  <td>${request?.PO_NUMBER || ''}</td>
                                 <td>

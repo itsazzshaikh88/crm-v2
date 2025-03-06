@@ -67,23 +67,16 @@ function showClients(products, tbody) {
     let content = '';
     let default_img = "assets/images/default-image.png";
     if (products?.length > 0) {
+        let counter = 0
         // show products
         products.forEach(client => {
-            content += `<tr>
-                                <td>
-                                    <div class="form-check form-check-sm form-check-custom form-check-solid">
-                                        <input class="form-check-input" type="checkbox" value="${client.ID}" />
-                                    </div>
-                                </td>
+            content += `<tr class="fs-7 text-gray-800">
+                                <td>${++counter}</td>
                                 <td>
                                     <div class="d-flex align-items-center">
-                                        <div class="symbol symbol-40px me-3">
-                                            <img src="assets/images/avatar-user-placeholder.png" class="" alt="">
-                                        </div>
-
                                         <div class="d-flex justify-content-start flex-column">
-                                            <a href="#" class="text-gray-900 fw-bold text-hover-primary mb-1 fs-6">${client.FIRST_NAME} ${client.LAST_NAME}</a>
-                                            <span class="text-muted fw-semibold d-block fs-7">${client.USER_ID}</span>
+                                            <p class="fw-bold text-hover-primary mb-0">${client.FIRST_NAME} ${client.LAST_NAME}</p>
+                                            <span class="text-muted fw-semibold d-block fs-9">${client.USER_ID}</span>
                                         </div>
                                     </div>
                                 </td>
@@ -97,20 +90,20 @@ function showClients(products, tbody) {
                                 <td class="pe-0 dt-type-numeric">${client.TAXES || '0'}%</td>
                                 <td class="pe-0 dt-type-numeric">${showClientStatus(client.STATUS || '')}</td>
                                 <td class="text-end">
-                                    <div class="d-flex align-items-center justify-content-end gap-4">
+                                    <div class="d-flex align-items-center justify-content-end gap-3">
                                         <a href="clients/view/${client.UUID}">
                                             <small>
-                                                <i class="fs-5 fa-solid fa-file-lines text-success"></i>
+                                                <i class="fs-8 fa-solid fa-file-lines text-success"></i>
                                             </small>
                                         </a>
                                         <a href="clients/new/${client.UUID}?action=edit">
                                             <small>
-                                                <i class="fs-5 fa-regular fa-pen-to-square text-gray-700"></i>
+                                                <i class="fs-8 fa-regular fa-pen-to-square text-gray-700"></i>
                                             </small>
                                         </a>
                                         <a href="javascript:void(0)" onclick="deleteClient(${client.ID})">
                                             <small>
-                                                <i class="fs-5 fa-solid fa-trash-can text-danger"></i>
+                                                <i class="fs-8 fa-solid fa-trash-can text-danger"></i>
                                             </small>
                                         </a>
                                     </div>

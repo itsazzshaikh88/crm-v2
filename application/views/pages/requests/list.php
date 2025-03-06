@@ -4,9 +4,9 @@
         <!--begin::PAGE CONTENT GOES FROM HERE-->
         <div class="card">
             <div class="card-body">
-                    <table class="table gy-3" id="request-list" style="white-space: nowrap;">
+                    <table class="table table-row-bordered gy-3" id="request-list" style="white-space: nowrap;">
                         <thead>
-                            <tr class="fw-bold fs-6 text-gray-800">
+                            <tr class="fw-bold fs-7 text-gray-900">
                                 <th>#</th>
                                 <th>Request #</th>
                                 <th class="w-350">Title</th>

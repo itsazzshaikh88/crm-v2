@@ -64,74 +64,65 @@ function showRequests(requests, tbody) {
     if (requests?.length > 0) {
         // show requests
         requests.forEach(request => {
-            content += `<tr data-request-id="${request.ID}">
-                            <td class="text-center">${++counter}</td>
-                            <td class="">
-                                <p class="mb-0 text-primary"><small>${request?.REQUEST_NUMBER || ''}</small></p>
-                            </td>
-                            <td>
-                                <div class="d-flex">
-                                    <div class="">
-                                        <!--begin::Title-->
-                                        <a href="requests/view/${request.UUID}"
-                                            class="text-gray-800 text-hover-primary fs-6 fw-bold line-clamp-1s fw-normal"
-                                            data-kt-ecommerce-category-filter="category_name">${request?.REQUEST_TITLE || ''}</a>
-                                        <!--end::Title-->
+            content += `<tr data-request-id="${request.ID}" class="text-gray-800 fs-7">
+                                <td class="text-center">${++counter}</td>
+                                <td class="">
+                                    <p class="mb-0 text-primary"><small>${request?.REQUEST_NUMBER || ''}</small></p>
+                                </td>
+                                <td>
+                                    <a href="requests/view/${request.UUID}"
+                                        class="text-gray-800 text-hover-primary fs-7 line-clamp-1 fw-normal">${request?.REQUEST_TITLE || ''}
+                                    </a>
+                                </td>
+                                <td>
+                                    <p class="mb-0 line-clamp-1">${request?.REQUEST_DETAILS || ''}</p>
+                                </td>
+                                <td>
+                                    <p class="mb-0 line-clamp-1">${request?.COMPANY_NAME || ''}</p>
+                                </td>
+                                <td>
+                                    <p class="mb-0 line-clamp-1">${request?.FIRST_NAME || ''} ${request?.LAST_NAME || ''}</p>
+                                </td>
+                                <td>${request?.CONTACT_NUMBER || ''}</td>
+                                <td>
+                                    ${request?.EMAIL_ADDRESS || ''}
+                                </td>
+                                <td>${formatAppDate(request?.CREATED_AT || '') ?? ''}</td>
+                                <td class="text-end">
+                                    <div class="dropdown">
+                                        <!-- Button to toggle the dropdown, without the caret (down arrow) -->
+                                        <button class="btn btn-link p-0" type="button" id="optionsMenu" data-bs-toggle="dropdown"
+                                            aria-expanded="false">
+                                            <i class="fs-8 me-2 fa-solid fa-ellipsis-vertical"></i> <!-- Three vertical dots -->
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-end px-0 py-2 shadow-lg border" aria-labelledby="optionsMenu">
+                                            <li class="mb-1 fs-8">
+                                                <a class="dropdown-item" href="requests/view/${request.UUID}" title="View Quote">
+                                                    <i class="fs-8 me-2 fa-solid fa-file-lines text-success"></i> View Request
+                                                </a>
+                                            </li>
+                                            <li class="mb-1 fs-8">
+                                                <a class="dropdown-item" href="javascript:void(0)"
+                                                    onclick="openNewRequestModal('edit', ${request.ID})" title="Edit Quote">
+                                                    <i class="fs-8 me-2 fa-regular fa-pen-to-square text-gray-700"></i> Edit Request
+                                                </a>
+                                            </li>
+                                            <li class="mb-1 fs-8">
+                                                <a class="dropdown-item" href="javascript:void(0)" onclick="deleteRequest(${request.ID})"
+                                                    title="Delete Quote">
+                                                    <i class="fs-8 me-2 fa-solid fa-trash-can text-danger"></i> Delete Request
+                                                </a>
+                                            </li>
+                                            <li class="mb-1 fs-8">
+                                                <a class="dropdown-item" href="javascript:void(0)" onclick="convertToQuotation(${request.ID})"
+                                                    title="Convert to New Quote">
+                                                    <i class="fs-8 me-2 fa-solid fa-up-right-from-square text-info"></i> Convert to Quote
+                                                </a>
+                                            </li>
+                                        </ul>
                                     </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="text-muted fs-7 fw-normal line-clamp-1">${request?.REQUEST_DETAILS || ''}</div>
-                            </td>
-                            <td>
-                                <span class="line-clamp-1">${request?.COMPANY_NAME || ''}</span>
-                            </td>
-                            <td>
-                                <!--begin::Description-->
-                                <div class="text-muted fs-7 fw-normal line-clamp-1">${request?.FIRST_NAME || ''} ${request?.LAST_NAME || ''}
-                                </div>
-                                <!--end::Description-->
-                            </td>
-                            <td>${request?.CONTACT_NUMBER || ''}</td>
-                            <td>
-                                ${request?.EMAIL_ADDRESS || ''}
-                            </td>
-                            <td>${formatAppDate(request?.CREATED_AT || '') ?? ''}</td>
-                            <td class="text-end">
-                                <div class="dropdown">
-                                    <!-- Button to toggle the dropdown, without the caret (down arrow) -->
-                                    <button class="btn btn-link p-0" type="button" id="optionsMenu" data-bs-toggle="dropdown"
-                                        aria-expanded="false">
-                                        <i class="fs-8 me-2 fa-solid fa-ellipsis-vertical"></i> <!-- Three vertical dots -->
-                                    </button>
-                                    <ul class="dropdown-menu dropdown-menu-end px-0 py-2 shadow-lg border" aria-labelledby="optionsMenu">
-                                        <li class="mb-1 fs-8">
-                                            <a class="dropdown-item" href="requests/view/${request.UUID}" title="View Quote">
-                                                <i class="fs-8 me-2 fa-solid fa-file-lines text-success"></i> View Request
-                                            </a>
-                                        </li>
-                                        <li class="mb-1 fs-8">
-                                            <a class="dropdown-item" href="javascript:void(0)"
-                                                onclick="openNewRequestModal('edit', ${request.ID})" title="Edit Quote">
-                                                <i class="fs-8 me-2 fa-regular fa-pen-to-square text-gray-700"></i> Edit Request
-                                            </a>
-                                        </li>
-                                        <li class="mb-1 fs-8">
-                                            <a class="dropdown-item" href="javascript:void(0)" onclick="deleteRequest(${request.ID})"
-                                                title="Delete Quote">
-                                                <i class="fs-8 me-2 fa-solid fa-trash-can text-danger"></i> Delete Request
-                                            </a>
-                                        </li>
-                                        <li class="mb-1 fs-8">
-                                            <a class="dropdown-item" href="javascript:void(0)" onclick="convertToQuotation(${request.ID})"
-                                                title="Convert to New Quote">
-                                                <i class="fs-8 me-2 fa-solid fa-up-right-from-square text-info"></i> Convert to Quote
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </td>
-                        </tr>`;
+                                </td>
+                            </tr>`;
         });
         tbody.innerHTML = content;
     } else {

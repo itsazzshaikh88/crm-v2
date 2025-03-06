@@ -5,9 +5,9 @@
         <div class="card">
             <div class="card-body pt-8">
                 <div class="table-responsive">
-                    <table class="table align-middle table-row-dashed fs-6 gy-5 table-row-bordered " id="contact-list">
+                    <table class="table align-middle table-row-bordered fs-7 gy-3 table-row-bordered " id="contact-list">
                         <thead>
-                            <tr class="fw-bold fs-6 text-gray-800">
+                            <tr class="fw-bold fs-7 text-gray-900">
                                 <th class="text-center">#</th>
                                 <th>Contact</th>
                                 <th>Company Name</th>

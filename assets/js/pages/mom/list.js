@@ -77,9 +77,11 @@ function showMinutes(minutes, tbody) {
     let content = '';
     let counter = 0;
     if (minutes?.length > 0) {
+        let counter = 0;
         // show minutes
         minutes.forEach(minute => {
-            content += `<tr data-minute-id="${minute?.MOM_ID}" class="">
+            content += `<tr data-minute-id="${minute?.MOM_ID}" class="text-gray-800 fs-7">
+                                <td>${++counter}</td>
                                 <td>${minute?.MEETING_TITLE}</td>
                                 <td>${formatAppDate(minute?.MEETING_DATE)}</td>
                                 <td>${minute?.DURATION}</td>
@@ -87,15 +89,15 @@ function showMinutes(minutes, tbody) {
                                 <td>${minute?.ORGANIZER}</td>
                                 <td class=""><small class="d-flex align-items-center justify-content-start gap-1  flex-wrap text-gray-700 ">${showAttendees(minute?.ATTENDEES || {})}</small></td>
                                 <td class="text-end">
-                                    <div class="d-flex align-items-center justify-content-end gap-4">
+                                    <div class="d-flex align-items-center justify-content-end gap-3">
                                         <a href="javascript:void(0)" onclick="openMomModal('edit', ${minute?.MOM_ID})">
                                             <small>
-                                                <i class="fs-5 fa-regular fa-pen-to-square text-primary"></i>
+                                                <i class="fs-8 fa-regular fa-pen-to-square text-primary"></i>
                                             </small>
                                         </a>
                                         <a href="javascript:void(0)" onclick="deleteMinute(${minute?.MOM_ID})">
                                             <small>
-                                                <i class="fs-5 fa-solid fa-trash-can text-danger"></i>
+                                                <i class="fs-8 fa-solid fa-trash-can text-danger"></i>
                                             </small>
                                         </a>
                                     </div>

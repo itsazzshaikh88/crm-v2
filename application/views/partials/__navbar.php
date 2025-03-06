@@ -369,7 +369,7 @@ $userid = $loggedInUser['userid'] ?? '0';
                 <!--begin::Toolbar wrapper-->
                 <div class="topbar d-flex align-items-stretch flex-shrink-0">
                     <!--begin::Notifications-->
-                    <div class="d-flex align-items-center ms-1 ms-lg-3">
+                    <div class="d-flex align-items-center ms-1 ms-lg-3 d-none">
                         <!--begin::Menu- wrapper-->
                         <div class="btn btn-icon btn-custom btn-active-light position-relative w-30px h-30px w-md-40px h-md-40px" data-kt-menu-trigger="click" data-kt-menu-attach="parent" data-kt-menu-placement="bottom-end">
                             <!--begin::Svg Icon | path: icons/duotune/general/gen022.svg-->
@@ -390,7 +390,7 @@ $userid = $loggedInUser['userid'] ?? '0';
                     </div>
                     <!--end::Notifications-->
                     <!--begin::Quick links-->
-                    <div class="d-flex align-items-center ms-1 ms-lg-3">
+                    <div class="d-flex align-items-center ms-1 ms-lg-3 d-none">
                         <!--begin::Menu wrapper-->
                         <div class="btn btn-icon btn-custom btn-active-light w-30px h-30px w-md-40px h-md-40px" data-kt-menu-trigger="click" data-kt-menu-attach="parent" data-kt-menu-placement="bottom-end">
                             <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->

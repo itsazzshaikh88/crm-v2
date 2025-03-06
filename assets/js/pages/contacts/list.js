@@ -85,42 +85,40 @@ function showContactList(contact, tbody) {
         let content = ''
         let counter = 0;
         contact.forEach(contact => {
-            content += `<tr data-lead-id="${contact?.CONTACT_ID}">
+            content += `<tr data-lead-id="${contact?.CONTACT_ID}" class="text-gray-800 fs-7">
                                 <td class="text-center">${++counter}</td>
                                 <td>
-                                    <p class="mb-0 text-primary">${contact?.FIRST_NAME} ${contact?.LAST_NAME}</p>
+                                    <p class="mb-0">${contact?.FIRST_NAME} ${contact?.LAST_NAME}</p>
                                 </td>
                                 <td>
-                                    <p class="mb-0 fw-bold">${contact?.COMPANY_NAME}</p>
+                                    <p class="mb-0">${contact?.COMPANY_NAME}</p>
                                 </td>
                                 <td>${contact?.JOB_TITLE}</td>
                                 <td>
-                                    <p class="mb-0">${contact?.EMAIL}</p>
+                                    <p class="mb-0 text-primary">${contact?.EMAIL}</p>
                                     <p class="mb-0 text-muted"><small>${contact?.PHONE}</small></p>
                                 </td>
-                                <td>${contact?.ASSIGNED_TO}</td>
+                                <td>${contact?.ASSIGNED_TO || ''}</td>
                                 <td>
-                                    <p class="mb-0 badge bg-light text-info"><small>${contact?.CONTACT_SOURCE}</small></p>
+                                    <p class="mb-0 badge bg-light text-info"><small>${contact?.CONTACT_SOURCE?.toUpperCase()}</small></p>
                                 </td>
                                 <td>${capitalizeWords(contact?.PREFERRED_CONTACT_METHOD)}</td>
-                                <td>
-                                ${setContactStatus(contact?.STATUS)}
-                                </td>
+                                <td><small>${setContactStatus(contact?.STATUS)}</small></td>
                                 <td class="text-end">
-                                    <div class="d-flex align-items-center justify-content-end gap-4">
+                                    <div class="d-flex align-items-center justify-content-end gap-3">
                                         <a href="javascript:void(0)" onclick="viewContactDetails('${contact?.UUID}')">
                                             <small>
-                                                <i class="fs-5 fa-solid fa-file-lines text-info"></i>
+                                                <i class="fs-8 fa-solid fa-file-lines text-info"></i>
                                             </small>
                                         </a>
                                         <a href="contacts/new/${contact?.UUID}?action=edit">
                                             <small>
-                                                <i class="fs-5 fa-regular fa-pen-to-square text-gray-700"></i>
+                                                <i class="fs-8 fa-regular fa-pen-to-square text-gray-700"></i>
                                             </small>
                                         </a>
                                         <a href="javascript:void(0)" onclick="deleteContact(${contact?.CONTACT_ID})">
                                             <small>
-                                                <i class="fs-5 fa-solid fa-trash-can text-danger"></i>
+                                                <i class="fs-8 fa-solid fa-trash-can text-danger"></i>
                                             </small>
                                         </a>
                                     </div>
@@ -145,7 +143,7 @@ function setContactStatus(status) {
         'no-response': "#9E9E9E", // grey for no response
         'in-active': "#607D8B", // slate blue-gray for inactive
     };
-    return `<span class="badge text-white" style="background-color: ${statusBackgroundColors[status]}">${capitalizeWords(status)}</span>`
+    return `<span class="" style="color: ${statusBackgroundColors[status]}">${capitalizeWords(status)}</span>`
 }
 
 // Declare the pagination instance globally

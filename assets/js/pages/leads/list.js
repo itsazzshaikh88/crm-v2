@@ -83,18 +83,19 @@ function showLeads(leads, tbody) {
     if (leads?.length > 0) {
         // show leads
         leads.forEach(lead => {
-            content += `<tr data-lead-id="${lead?.LEAD_ID}">
+            content += `<tr data-lead-id="${lead?.LEAD_ID}" class="text-gray-800 fs-7">
                                 <td class="text-center">${++counter}</td>
+                                <td>${lead?.LEAD_NUMBER}</td>
                                 <td>
-                                    <p class="mb-0 text-primary">${lead?.FIRST_NAME} ${lead?.LAST_NAME}</p>
-                                    <small class="fs-xs text-muted">${lead?.LEAD_NUMBER}</small>
+                                    <p class="mb-0">${lead?.FIRST_NAME} ${lead?.LAST_NAME}</p>
+                                    <small class="fs-xs text-muted"></small>
                                 </td>
                                 <td>
-                                    <p class="mb-0 fw-bold">${lead?.COMPANY_NAME}</p>
+                                    <p class="mb-0">${lead?.COMPANY_NAME}</p>
                                 </td>
                                 <td>${lead?.JOB_TITLE}</td>
                                 <td>
-                                    <p class="mb-0">${lead?.EMAIL}</p>
+                                    <p class="mb-0 text-primary">${lead?.EMAIL}</p>
                                     <p class="mb-0"><small>${lead?.PHONE}</small></p>
                                 </td>
                                 <td>${formatAppDate(lead?.CREATED_AT)}</td>
@@ -105,20 +106,20 @@ function showLeads(leads, tbody) {
                                     <span class="badge text-white" style="background-color: ${leadStatusColors[lead?.STATUS]}">${capitalizeWords(lead?.STATUS)}</span>
                                 </td>
                                 <td class="text-end">
-                                    <div class="d-flex align-items-center justify-content-end gap-4">
+                                    <div class="d-flex align-items-center justify-content-end gap-3">
                                         <a href="javascript:void(0)" onclick="openLeadModal('view', ${lead?.LEAD_ID})">
                                             <small>
-                                                <i class="fs-5 fa-solid fa-file-lines text-info"></i>
+                                                <i class="fs-8 fa-solid fa-file-lines text-info"></i>
                                             </small>
                                         </a>
                                         <a href="javascript:void(0)" onclick="openLeadModal('edit', ${lead?.LEAD_ID})">
                                             <small>
-                                                <i class="fs-5 fa-regular fa-pen-to-square text-gray-700"></i>
+                                                <i class="fs-8 fa-regular fa-pen-to-square text-gray-700"></i>
                                             </small>
                                         </a>
                                         <a href="javascript:void(0)" onclick="deleteLead(${lead?.LEAD_ID})">
                                             <small>
-                                                <i class="fs-5 fa-solid fa-trash-can text-danger"></i>
+                                                <i class="fs-8 fa-solid fa-trash-can text-danger"></i>
                                             </small>
                                         </a>
                                     </div>

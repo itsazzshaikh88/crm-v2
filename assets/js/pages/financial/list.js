@@ -70,15 +70,13 @@ function showCredits(credits, tbody) {
     if (credits?.length > 0) {
         // show credits
         credits.forEach(credit => {
-            content += `<tr data-credit-id="${credit.HEADER_ID}">
+            content += `<tr data-credit-id="${credit.HEADER_ID}" class="fs-7 text-gray-800">
                                 <td class="text-center">${++counter}</td>
                                 <td>
                                     <div class="d-flex">
                                         <div class="">
-                                            <!--begin::Title-->
-                                            <div class="text-gray-800 fs-5 fw-bold mb-1 line-clamp-1" data-kt-ecommerce-category-filter="category_name">${credit?.APPLICANT_COMMENT || ''}</div>
-                                            <!--end::Title-->
-                                            <p class="mb-0 text-primary"><small>${credit?.APPLICATION_NUMBER || ''}</small></p>
+                                            <p class="fw-bold mb-0 line-clamp-1">${credit?.APPLICANT_COMMENT || ''}</p>
+                                            <small class="text-primary">${credit?.APPLICATION_NUMBER || ''}</small>
                                         </div>
                                     </div>
                                 </td>
@@ -86,15 +84,8 @@ function showCredits(credits, tbody) {
                                     <div class="d-flex">
                                         <div class="">
                                             <!--begin::Title-->
-                                            <div class="text-gray-800 fs-5 fw-bold mb-1" data-kt-ecommerce-category-filter="category_name">${credit?.COMPANY_NAME || ''}</div>
-                                            <!--end::Title-->
-
-                                             <!--begin::Description-->  
-                                            <div class="text-muted fs-7 fw-normal line-clamp-1">${credit?.FIRST_NAME || ''} ${credit?.LAST_NAME || ''}</div>
-                                            <!--end::Description-->
-                                            <div class="text-muted fs-7 fw-normal d-flex align-items-center mt-2">
-                                                <small class="text-black">${credit?.COMPANY_EMAIL || ''}</small>
-                                            </div>
+                                            <p class="mb-0">${credit?.COMPANY_NAME || ''}</p> 
+                                            <p class="text-muted fw-normal line-clamp-1">${credit?.FIRST_NAME || ''} ${credit?.LAST_NAME || ''}</p>
                                         </div>
                                     </div>
                                 </td>
@@ -104,25 +95,25 @@ function showCredits(credits, tbody) {
                                 </td>
                                 <td>${formatAppDate(credit?.CREATED_AT || '') ?? ''}</td>
                                 <td class="text-end">
-                                    <div class="d-flex align-items-center justify-content-end gap-4">
+                                    <div class="d-flex align-items-center justify-content-end gap-3">
                                       <a href="financial/view/${credit.UUID}">
                                             <small>
-                                                <i class="fs-5 fa-solid fa-file-lines text-success"></i>
+                                                <i class="fs-8 fa-solid fa-file-lines text-success"></i>
                                             </small>
                                         </a>
                                         <a href="financial/credit_application/${credit.UUID}?action=edit">
                                             <small>
-                                                <i class="fs-5 fa-regular fa-pen-to-square text-gray-700"></i>
+                                                <i class="fs-8 fa-regular fa-pen-to-square text-gray-700"></i>
                                             </small>
                                         </a>
                                         <a href="javascript:void(0)" onclick="deletecredit(${credit.HEADER_ID})">
                                             <small>
-                                                <i class="fs-5 fa-solid fa-trash-can text-danger"></i>
+                                                <i class="fs-8 fa-solid fa-trash-can text-danger"></i>
                                             </small>
                                         </a>
                                            <a href="javascript:void(0)" onclick="printApplication(${credit.HEADER_ID}, '${credit.UUID}', 'credit_application')">
                                             <small>
-                                                <i class="fs-5 fa-solid fa-print text-primary"></i>
+                                                <i class="fs-8 fa-solid fa-print text-primary"></i>
                                             </small>
                                         </a>
                                     </div>

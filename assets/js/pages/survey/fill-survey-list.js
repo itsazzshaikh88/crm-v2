@@ -81,37 +81,37 @@ function showfillSurvey(surveys, tbody) {
         // show products
         surveys.forEach((survey, index) => {
 
-            content += `<tr data-survey-id="${survey?.HEADER_ID}">
-                               
-                                    <td class="pe-0 ">${index + 1}</td>
-                                    <td class="pe-0 "> ${survey?.SURVEY_NUMBER || ''}</td>
-                                    <td class="pe-0 text-primary">${survey?.SURVEY_NAME ? survey?.SURVEY_NAME :
-                    '<span style="color: red;">Survey Name Not Available</span>'}</td>
-                                
-                                
-                                <td class="pe-0 ">${formatAppDate(survey?.FILLED_DATE) || ''}</td>
-                                
-                                <td class="pe-0 ">${survey?.SURVEY_USERNAME || ''}</td>
-                                <td class="pe-0 ">${survey?.SURVEY_YEAR || ''}</td>
-                                
-                                <td class="text-end">
-                                    <div class="d-flex align-items-center justify-content-start gap-4">
-                                        <a href="survey/responses/${survey?.HEADER_ID}/${survey?.UUID}">
-                                            <small>
-                                                <i class="fs-5 fa-solid fa fa-arrow-right text-success"></i>
-                                            </small>
-                                        </a>
-                                      `;
+            content += `<tr data-survey-id="${survey?.HEADER_ID}" class="fs-7 text-gray-800">
+                            <td class="">${index + 1}</td>
+                            <td class=""> ${survey?.SURVEY_NUMBER || ''}</td>
+                            <td class="">
+                            <p class="mb-0 line-clamp-1">${survey?.SURVEY_NAME || 
+                    '<span style="color: red;">Survey Name Not Available</span>'}</p>
+                            </td>
+
+                            <td class="">${formatAppDate(survey?.FILLED_DATE) || ''}</td>
+
+                            <td class="">${survey?.SURVEY_USERNAME || ''}</td>
+                            <td class="">${survey?.SURVEY_YEAR || ''}</td>
+
+                            <td class="text-end">
+                                <div class="d-flex align-items-center justify-content-start gap-4">
+                                    <a href="survey/responses/${survey?.HEADER_ID}/${survey?.UUID}">
+                                        <small>
+                                            <i class="fs-5 fa-solid fa fa-arrow-right text-success"></i>
+                                        </small>
+                                    </a>
+                                    `;
             if (isAdmin) {
                 content += `<a href="javascript:void(0)" onclick="deletefillSurvey(${survey?.HEADER_ID})">
-                <small>
-                    <i class="fs-5 fa-solid fa-trash-can text-danger"></i>
-                </small>
-            </a>`;
+                                        <small>
+                                            <i class="fs-5 fa-solid fa-trash-can text-danger"></i>
+                                        </small>
+                                    </a>`;
             }
             content += `</div>
-                                </td>
-                            </tr>`;
+                            </td>
+                        </tr>`;
         });
 
         tbody.innerHTML = content;

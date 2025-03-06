@@ -81,7 +81,7 @@ function showQuotes(Quotes, tbody) {
         // show Quotes
         Quotes.forEach(quote => {
 
-            content += `<tr data-quote-id="${quote.QUOTE_ID}" class="text-gray-800">
+            content += `<tr data-quote-id="${quote.QUOTE_ID}" class="text-gray-800 fs-7">
                             <td>${++counter}</td>        
                             <td>${quote?.QUOTE_NUMBER || ''}</td>        
                             <td>${quote?.COMPANY_NAME || ''}</td>        

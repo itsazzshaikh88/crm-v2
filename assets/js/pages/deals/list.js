@@ -106,35 +106,37 @@ async function fetchDeals() {
 
 function showDeals(deals, tbody) {
     const dealStatusColors = {
-        new: "#6610f2",           // Blue - Represents new beginnings
-        contacted: "#0078d7",     // Gray - Neutral, awaiting response
-        engaged: "#17a2b8",       // Teal - Active engagement
-        qualified: "#28a745",     // Green - Qualified and ready to move forward
-        disqualified: "#dc3545",  // Red - Disqualified or not suitable
+        new: "#6610f2",               // Purple - Represents new beginnings
+        contacted: "#0078d7",         // Blue - Contact made, waiting for response
+        qualified: "#28a745",         // Green - Qualified and ready to move forward
+        "proposal-sent": "#ffc107",   // Yellow - Proposal has been sent
+        negotiation: "#17a2b8",       // Teal - Negotiation in progress
+        "closed-won": "#198754",      // Dark Green - Deal successfully closed
+        "closed-lost": "#dc3545"      // Red - Deal lost
     };
+
 
     let content = '';
     let counter = 0;
     if (deals?.length > 0) {
         // show deals
         deals.forEach(deal => {
-            content += `<tr data-deal-id="${deal?.DEAL_ID}" class="">
+            content += `<tr data-deal-id="${deal?.DEAL_ID}" class="text-gray-800 fs-7">
                                 <td class="min-w-175px">
                                     <div class="position-relative ps-6 pe-3 py-2">
-                                        <div class="position-absolute start-0 top-0 w-4px h-100 rounded-2 bg-gray-100"></div>
                                         <a href="javascript:void(0)" class="mb-1 text-gray-900 text-hover-primary fw-bold">${deal?.DEAL_NAME}</a>
                                         <div class="fs-8 text-muted fw-normal">Created on ${formatAppDate(deal.CREATED_AT)}</div>
                                     </div>
                                 </td>
                                 <td>
 
-                                    <div class="fs-7 text-muted fw-bold">${deal?.ASSOCIATED_CONTACT_ID}</div>
+                                    <div class="fs-7">${deal?.ASSOCIATED_CONTACT_ID}</div>
                                 </td>
                                 <td>
-                                    <span class="bg-light badge fw-bold" style="color: ${dealStageColors[deal?.DEAL_STAGE]}">${capitalizeWords(deal?.DEAL_STAGE?.replace("-", " "), true)}</span>
+                                    <span class="" style="color: ${dealStageColors[deal?.DEAL_STAGE]}">${capitalizeWords(deal?.DEAL_STAGE?.replace("-", " "), true)}</span>
                                 </td>
                                 <td>
-                                    <span class="bg-light badge fw-bold" style="color: ${dealTypeColors[deal?.DEAL_TYPE]}">${capitalizeWords(deal?.DEAL_TYPE?.replace("-", " "), true)}</span>
+                                    <span class="" style="color: ${dealTypeColors[deal?.DEAL_TYPE]}">${capitalizeWords(deal?.DEAL_TYPE?.replace("-", " "), true)}</span>
                                 </td>
                                 <td class="">
 
@@ -144,17 +146,17 @@ function showDeals(deals, tbody) {
                                     <div class="mb-2 fw-normal text-gray-600">${formatAppDate(deal?.EXPECTED_CLOSE_DATE)}</div>
                                 </td>
                                 <td><span class="badge text-white" style="background-color: ${priorityColors[deal?.DEAL_PRIORITY]}">${capitalizeWords(deal?.DEAL_PRIORITY)}</span></td>
-                                <td><span class="bg-light badge" style="color: ${dealStatusColors[deal?.DEAL_STATUS]}">${capitalizeWords(deal?.DEAL_STATUS)}</span></td>
+                                <td><span class="" style="color: ${dealStatusColors[deal?.DEAL_STATUS]}">${capitalizeWords(deal?.DEAL_STATUS?.replaceAll("-", " "), true)}</span></td>
                                 <td class="text-end">
-                                    <div class="d-flex align-items-center justify-content-end gap-4">
+                                    <div class="d-flex align-items-center justify-content-end gap-3">
                                         <a href="javascript:void(0)" onclick="openDealModal('edit', ${deal?.DEAL_ID})">
                                             <small>
-                                                <i class="fs-5 fa-regular fa-pen-to-square text-primary"></i>
+                                                <i class="fs-8 fa-regular fa-pen-to-square text-primary"></i>
                                             </small>
                                         </a>
                                         <a href="javascript:void(0)" onclick="deleteDeal(${deal?.DEAL_ID})">
                                             <small>
-                                                <i class="fs-5 fa-solid fa-trash-can text-danger"></i>
+                                                <i class="fs-8 fa-solid fa-trash-can text-danger"></i>
                                             </small>
                                         </a>
                                     </div>

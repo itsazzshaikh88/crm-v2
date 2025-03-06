@@ -5,9 +5,9 @@
         <div class="card">
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-row-bordered gy-7" id="credit-report">
+                    <table class="table table-row-bordered gy-3" id="credit-report">
                         <thead>
-                            <tr class="fw-bold fs-6 text-gray-800">
+                            <tr class="fw-bold fs-7 text-gray-900">
                                 <th>#</th>
                                 <th>Cust #</th>
                                 <th>Customer</th>
@@ -21,7 +21,7 @@
                             </tr>
                         </thead>
                         <tbody id="credit-report-tbody">
-                           
+
                         </tbody>
                     </table>
                 </div>

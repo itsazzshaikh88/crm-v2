@@ -7,7 +7,7 @@
 <?php if (isset($options) && is_array($options)): ?>
     <?php if ($options['action'] === 'list'): ?>
         <a href="survey/new" class="btn btn-sm btn-success my-2">Create New Survey</a>
-        <a href="survey/feedback" class="btn border text-white my-2 mx-2">Survey List</a>
+        <a href="survey/feedback" class="btn btn-sm border text-white my-2 mx-2">Survey List</a>
 
     <?php elseif ($options['action'] === 'form'): ?>
         <a href="survey/list" class="btn btn-sm btn-success my-2">Survey List</a>

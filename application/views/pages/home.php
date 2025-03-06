@@ -49,9 +49,9 @@ $stats_cards = $usertype === 'admin' ? $admin_stats_cards : $client_stats_cards;
 					<div class="card-body">
 						<h2 class="fw-semibold text-gray-800 text-start">Open Orders</h2>
 						<div class="table-responsive">
-							<table class="table" id="open-orders-list">
+							<table class="table table-sm table-row-bordered" id="open-orders-list">
 								<thead>
-									<tr class="fw-semibold fs-6 text-gray-800 border-bottom border-gray-200 bg-light">
+									<tr class="fw-bold fs-7 text-gray-900">
 										<th>PO</th>
 										<th>Address</th>
 										<th>Total</th>
@@ -61,7 +61,7 @@ $stats_cards = $usertype === 'admin' ? $admin_stats_cards : $client_stats_cards;
 									</tr>
 								</thead>
 								<tbody id="open-orders-list-tbody">
-									
+
 								</tbody>
 							</table>
 						</div>
@@ -72,34 +72,83 @@ $stats_cards = $usertype === 'admin' ? $admin_stats_cards : $client_stats_cards;
 			<div class="col-md-4">
 				<div class="card" dir="ltr">
 					<!--begin::Body-->
-					<div class="card-body d-flex flex-column align-items-center justify-content-center">
+					<div class="card-body">
 						<!--begin::Heading-->
 						<div class="mb-2">
 							<!--begin::Title-->
 							<h2 class="fw-semibold text-gray-800 text-center">Track Your Order</h2>
 							<!--end::Title-->
-
 							<!--begin::Illustration-->
-							<div class="py-10 text-center">
+							<div class="py-10 text-center" id="track-idle-container">
 								<img src="assets/images/track-order.png" class="theme-light-show w-250px" alt="">
 							</div>
 							<!--end::Illustration-->
+
+							<div class="d-none" id="track-processing-container">
+								<div class="timeline timeline-border-dashed">
+									<!--begin::Timeline item-->
+									<div class="timeline-item pb-5">
+										<!--begin::Timeline line-->
+										<div class="timeline-line"></div>
+										<!--end::Timeline line-->
+
+										<!--begin::Timeline icon-->
+										<div class="timeline-icon">
+											<i class="ki-duotone ki-cd fs-2 text-success"><span class="path1"></span><span class="path2"></span></i>
+										</div>
+										<!--end::Timeline icon-->
+
+										<!--begin::Timeline content-->
+										<div class="timeline-content m-0">
+											<!--begin::Label-->
+											<span class="fs-8 fw-bolder text-success text-uppercase">Sender</span>
+											<!--begin::Label-->
+
+											<!--begin::Title-->
+											<a href="#" class="fs-6 text-gray-800 fw-bold d-block text-hover-primary">Albert Flores</a>
+											<!--end::Title-->
+
+											<!--begin::Title-->
+											<span class="fw-semibold text-gray-500">3517 W. Gray St. Utica, Pennsylvania 57867</span>
+											<!--end::Title-->
+										</div>
+										<!--end::Timeline content-->
+									</div>
+									<!--end::Timeline item-->
+
+									<!--begin::Timeline item-->
+									<div class="timeline-item">
+										<!--begin::Timeline line-->
+										<div class="timeline-line"></div>
+										<!--end::Timeline line-->
+
+										<!--begin::Timeline icon-->
+										<div class="timeline-icon">
+											<i class="ki-duotone ki-geolocation fs-2 text-info"><span class="path1"></span><span class="path2"></span></i>
+										</div>
+										<!--end::Timeline icon-->
+
+										<!--begin::Timeline content-->
+										<div class="timeline-content m-0">
+											<!--begin::Label-->
+											<span class="fs-8 fw-bolder text-info text-uppercase">Receiver</span>
+											<!--begin::Label-->
+
+											<!--begin::Title-->
+											<a href="#" class="fs-6 text-gray-800 fw-bold d-block text-hover-primary">Jessie Clarcson</a>
+											<!--end::Title-->
+
+											<!--begin::Title-->
+											<span class="fw-semibold text-gray-500">Total 2,356 Items in the Stock</span>
+											<!--end::Title-->
+										</div>
+										<!--end::Timeline content-->
+									</div>
+									<!--end::Timeline item-->
+								</div>
+							</div>
 						</div>
 						<!--end::Heading-->
-
-						<!--begin::Links-->
-						<div class="text-center mb-1">
-							<!--begin::Link-->
-							<a class="btn btn-sm btn-primary me-2" data-bs-target="#kt_modal_create_app" data-bs-toggle="modal">
-								Try now </a>
-							<!--end::Link-->
-
-							<!--begin::Link-->
-							<a class="btn btn-sm btn-light" href="../pages/user-profile/activity.html">
-								Learn more </a>
-							<!--end::Link-->
-						</div>
-						<!--end::Links-->
 					</div>
 					<!--end::Body-->
 				</div>

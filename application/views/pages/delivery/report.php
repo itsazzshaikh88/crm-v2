@@ -7,7 +7,7 @@
                 <div class="table-responsive">
                     <table class="table table-row-bordered gy-7" id="asn-list">
                         <thead>
-                            <tr class="fw-bold fs-6 text-gray-800">
+                            <tr class="fw-bold fs-7 text-gray-900">
                                 <th>#</th>
                                 <th>ASN ID #</th>
                                 <th>ASN Date</th>

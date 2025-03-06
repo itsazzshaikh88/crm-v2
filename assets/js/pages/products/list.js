@@ -98,6 +98,7 @@ function showProducts(products, tbody) {
     let default_img = "assets/images/default-image.png";
     if (products?.length > 0) {
         // show products
+        let counter = 0;
         products.forEach(product => {
             let desc = stripHtmlTags(product?.DESCRIPTION || '');
             let img = parseJsonString(product.PRODUCT_IMAGES || '', 0);
@@ -105,54 +106,31 @@ function showProducts(products, tbody) {
                 img = `${PRODUCT_IMAGES_URL}${img}`;
 
 
-            content += `<tr data-product-id="${product.PRODUCT_ID}">
-                                <td>
-                                    <div class="form-check form-check-sm form-check-custom form-check-solid">
-                                        <input class="form-check-input" type="checkbox" value="${product.PRODUCT_ID}" />
-                                    </div>
-                                </td>
+            content += `<tr data-product-id="${product.PRODUCT_ID}" class="text-gray-800 fs-7">
+                                <td>${++counter}</td>
                                 <td class="w-300">
-                                    <div class="d-flex align-items-center">
-                                        <!--begin::Thumbnail-->
-                                        <a href="javascript:void(0)" class="symbol symbol-50px d-none">
-                                            <span
-                                                class="symbol-label"
-                                                style="background-image: url(${img ?? default_img});">
-                                            </span>
-                                        </a>
-                                        <!--end::Thumbnail-->
-
-                                        <div class="ms-5">
-                                            <!--begin::Title-->
-                                            <a
-                                                href="javascript:void(0)"
-                                                class="text-gray-800 text-hover-primary fs-6 fw-bold line-clamp-1"
-                                                data-kt-ecommerce-product-filter="product_name">${product.PRODUCT_NAME}</a>
-                                            <!--end::Title-->
-                                            
-                                        </div>
-                                    </div>
+                                    <p class="mb-0 line-clamp-1">${product.PRODUCT_NAME}</p>
                                 </td>
                                 <td class="w-300">
                                     <p class="mb-0 line-clamp-1">
-                                        <small>${(desc == 'null' ? '' : desc)}</small>
+                                        ${(desc == 'null' ? '' : desc)}
                                     </p>
                                 </td>
-                                <td class=" pe-0 dt-type-numeric">
-                                    <span class=""><span class="badge bg-light text-primary">${product.UOM || 'PCS'}</span></span>
+                                <td class="">
+                                    <span class="fw-normal"><span class="badge bg-light text-primary">${product.UOM || 'PCS'}</span></span>
                                 </td>
-                                <td class=" pe-0 dt-type-numeric" data-order="18">
-                                    <span class="fw-bold ms-3">${product.BASE_PRICE || ''}</span>
+                                <td>
+                                    <span class="">${product.BASE_PRICE || ''}</span>
                                 </td>
-                                <td class="pe-0 dt-type-numeric">${product.AVL_QTY || ''}</td>
-                                <td class="pe-0 dt-type-numeric">${product.WEIGHT || ''}</td>
-                                <td class="pe-0 dt-type-numeric">${product.COLOR || ''}</td>
-                                <td class="pe-0 dt-type-numeric"><span class="badge bg-light text-gray-800">${product.CATEGORY_CODE || ''}</span></td>
+                                <td class="">${product.AVL_QTY || ''}</td>
+                                <td class="">${product.WEIGHT || ''}</td>
+                                <td class="">${product.COLOR || ''}</td>
+                                <td class=""><span class="badge bg-light text-gray-800">${product.CATEGORY_CODE || ''}</span></td>
                                 <td class="text-end">
-                                    <div class="d-flex align-items-center justify-content-end gap-4">
+                                    <div class="d-flex align-items-center justify-content-end gap-3">
                                         <a href="products/view/${product.UUID}">
                                             <small>
-                                                <i class="fs-5 fa-solid fa-up-right-from-square text-gray-800"></i>
+                                                <i class="fs-8 fa-solid fa-up-right-from-square text-gray-800"></i>
                                             </small>
                                         </a>
                                         `;
@@ -160,12 +138,12 @@ function showProducts(products, tbody) {
                 content += `
                 <a href="javascript:void(0)" onclick="openNewProductModal('edit', ${product.PRODUCT_ID})">
                                             <small>
-                                                <i class="fs-5 fa-solid fa-pen text-gray-800"></i>
+                                                <i class="fs-8 fa-solid fa-pen text-primary"></i>
                                             </small>
                                         </a>
                 <a href="javascript:void(0)" onclick="deleteProduct(${product.PRODUCT_ID})">
                 <small>
-                    <i class="fs-5 fa-solid fa-trash-can text-danger"></i>
+                    <i class="fs-8 fa-solid fa-trash-can text-danger"></i>
                 </small>
             </a>`;
             }

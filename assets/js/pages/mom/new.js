@@ -113,11 +113,11 @@ async function submitMinutes(e) {
             if (data?.type == 'insert') {
                 // Data is inserted
                 showSavedMOM(data?.data);
-                startNewMinute();
+                fetchMOMS();
                 toasterNotification({ type: 'success', message: "Minutes of Meeting Saved Successfully" });
             } else if (data?.type == 'update') {
                 // Data is updated
-                showSavedMOM(data?.data, mom_id);
+                fetchMOMS();
                 toasterNotification({ type: 'success', message: "Minutes of Meeting Updated Successfully" });
             } else {
                 toasterNotification({ type: 'error', message: 'Internal Server Error' });

@@ -95,9 +95,9 @@
                     <div class="row d-none" id="list-style-listing">
                         <div class="col-md-12">
                             <div class="table-responsive">
-                                <table class="table align-middle table-row-dashed fs-6 gy-5 dataTable table-row-bordered " id="product-list">
+                                <table class="table align-middle fs-7 gy-3 table-row-bordered " id="product-list">
                                     <thead>
-                                        <tr class="fw-bold fs-6 text-gray-800">
+                                        <tr class="fw-bold fs-7 text-gray-900">
                                             <th>#</th>
                                             <th>Product</th>
                                             <th>Description</th>
