@@ -13,7 +13,7 @@ class Welcome extends App_Controller
 	public function index()
 	{
 		$data['view_path'] = 'pages/home';
-		$data['page_title'] = 'Home - Fixed Assets Application';
+		$data['page_title'] = 'Home - Zamil CRM';
 		$data['page_heading'] = 'Dashboard';
 		$data['navlink'] = HOME_ACTIVE_LINK;
 		$data['scripts'] = ['assets/js/pages/dashboard/stats.js'];
@@ -23,7 +23,7 @@ class Welcome extends App_Controller
 	public function not_found()
 	{
 		$data['view_path'] = 'pages/not_found';
-		$data['page_title'] = 'Page Not Found - Fixed Assets Application';
+		$data['page_title'] = 'Page Not Found - Zamil CRM';
 		$data['page_heading'] = 'Page Not Found';
 		$data['navlink'] = HOME_ACTIVE_LINK;
 		$this->load->view('layout', $data);

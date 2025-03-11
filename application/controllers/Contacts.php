@@ -6,7 +6,7 @@ class Contacts extends App_Controller
     public function index()
     {
         $data['view_path'] = 'pages/contacts/list';
-        $data['page_title'] = 'Contacts - Fixed Assets Application';
+        $data['page_title'] = 'Contacts - Zamil CRM';
         $data['page_heading'] = 'Contacts';
         $data['navlink'] = ['main-link' => ADMIN_ACTIVE_LINK, 'sub-link' => 'contacts'];
         $data['scripts'] = ['assets/js/pages/contacts/list.js'];

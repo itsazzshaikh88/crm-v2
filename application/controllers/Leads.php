@@ -6,7 +6,7 @@ class Leads extends App_Controller
     public function index()
     {
         $data['view_path'] = 'pages/leads/list';
-        $data['page_title'] = 'Leads - Fixed Assets Application';
+        $data['page_title'] = 'Leads - Zamil CRM';
         $data['page_heading'] = 'Leads';
         $data['navlink'] = ['main-link' => ADMIN_ACTIVE_LINK, 'sub-link' => 'leads'];
         $data['scripts'] = ['assets/js/pages/leads/list.js', 'assets/js/pages/leads/new-lead.js', 'assets/js/pages/activities/add-activities.js'];

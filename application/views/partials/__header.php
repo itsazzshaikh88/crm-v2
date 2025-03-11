@@ -6,11 +6,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 <head>
     <base href="<?= base_url() ?>">
-    <title><?= $page_title ?? "Olivesofts - Fixed Assets Tracking Application" ?></title>
+    <title><?= $page_title ?? "Zamil CRM Application" ?></title>
 
-    <meta name="description" content="Manage your organization's fixed assets effortlessly with our Fixed Assets Management and Asset Tracking application. This comprehensive tool allows you to categorize assets, generate QR codes for easy tracking, and monitor physical asset locations in real time. Enhance efficiency, reduce losses, and streamline your asset management process with user-friendly features tailored for small to large-scale companies.">
+    <meta name="description" content="Enhance your customer relationships with Zamil CRM – a powerful solution designed to streamline sales, automate workflows, and improve customer interactions. Manage leads, track communications, and optimize business operations with an intuitive, feature-rich platform tailored for businesses of all sizes.">
 
-    <meta name="keywords" content="Fixed Assets Management, Asset Tracking, QR Code Generation, Asset Categorization, Asset Reports, Physical Asset Tracking, User Management, Authentication, Authorization, Asset Image Uploads" />
+    <meta name="keywords" content="CRM Software, Customer Relationship Management, Sales Tracking, Lead Management, Workflow Automation, Customer Engagement, Business Optimization, User Management, Authentication, Authorization" />
+
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta charset="utf-8" />
     <meta property="og:locale" content="en_US" />
@@ -45,7 +46,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
     <?php endforeach;
     endif; ?>
 
-    
+
 </head>
 <!--end::Head-->
 <!--begin::Body-->

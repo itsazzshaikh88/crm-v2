@@ -358,4 +358,43 @@ class Activities extends Api_controller
                 ->set_output(json_encode(['status' => false, 'message' => 'Failed to delete the Activity.']));
         }
     }
+
+
+    // Activity logs
+    function logs()
+    {
+        // Check if the authentication is valid
+        $isAuthorized = $this->isAuthorized();
+        if (!$isAuthorized['status']) {
+            $this->output
+                ->set_status_header(401) // Set HTTP response status to 400 Bad Request
+                ->set_content_type('application/json')
+                ->set_output(json_encode(['error' => 'Unauthorized access. You do not have permission to perform this action.']))
+                ->_display();
+            exit;
+        };
+
+        // Access the parameters
+        $limit = $this->input->get('limit') ?? null;
+        $currentPage = $this->input->get('page') ?? null;
+        $source = $this->input->get('source') ?? null;
+        $filters = $this->input->get('filters') ?? [];
+
+        $total_activity_logs = $this->Activity_logs_model->get_activities_logs('total', $limit, $currentPage, $source, $filters, null, $isAuthorized);
+        $activity_logs = $this->Activity_logs_model->get_activities_logs('list', $limit, $currentPage, $source, $filters, null, $isAuthorized);
+
+        $response = [
+            'pagination' => [
+                'total_records' => $total_activity_logs,
+                'total_pages' => generatePages($total_activity_logs, $limit),
+                'current_page' => $currentPage,
+                'limit' => $limit
+            ],
+            'activity_logs' => $activity_logs,
+        ];
+        return $this->output
+            ->set_content_type('application/json')
+            ->set_status_header(200)
+            ->set_output(json_encode($response));
+    }
 }

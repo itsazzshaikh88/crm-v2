@@ -14,6 +14,7 @@ class Lead_model extends App_Model
         $this->lead_table = 'xx_crm_leads'; // Initialize token table
         $this->contact_table = 'xx_crm_contacts'; // Initialize token table
     }
+    
     // Function to add or update product
     public function add_lead($data, $userid)
     {

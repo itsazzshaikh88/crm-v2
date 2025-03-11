@@ -50,6 +50,31 @@ function listingSkeleton(tableId, rows, list_name) {
     }
 }
 
+function commonListingSkeleton(tableId, rows, columns) {
+    // Locate the table body of the specified table
+    const table = document.getElementById(tableId);
+    const tbody = table.querySelector("tbody");
+
+    // Clear any existing rows in the tbody (in case the skeleton is being regenerated)
+    tbody.innerHTML = "";
+
+    // Generate skeleton rows
+    for (let i = 0; i < rows; i++) {
+        const tr = document.createElement("tr");
+        tr.classList.add("skeleton-loader");
+
+        // Generate skeleton cells
+        for (let j = 0; j < columns; j++) {
+            const td = document.createElement("td");
+            td.innerHTML = `<div class="skeleton-box" style="width: 100%; height: 20px;"></div>`;
+            tr.appendChild(td);
+        }
+
+        tbody.appendChild(tr);
+    }
+}
+
+
 
 function getSkeletonStructure(list) {
 
@@ -604,7 +629,7 @@ function getSkeletonStructure(list) {
         </div>
     </td>
 </tr>
-`
+`;
 }
 
 function clientListModalSkeleton(container, rows) {

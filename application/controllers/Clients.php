@@ -6,7 +6,7 @@ class Clients extends App_Controller
     public function index()
     {
         $data['view_path'] = 'pages/clients/list';
-        $data['page_title'] = 'Clients - Fixed Assets Application';
+        $data['page_title'] = 'Clients - Zamil CRM';
         $data['page_heading'] = 'Our Clients';
         $data['navlink'] = 'admin-suite';
         $data['toolbar'] = ['name' => 'clients', 'action' => 'list'];

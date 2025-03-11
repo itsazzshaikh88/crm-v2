@@ -6,7 +6,7 @@ class Projects extends App_Controller
     public function index()
     {
         $data['view_path'] = 'pages/projects/list';
-        $data['page_title'] = 'Projects - Fixed Assets Application';
+        $data['page_title'] = 'Projects - Zamil CRM';
         $data['page_heading'] = 'Projects';
         $data['navlink'] = ['main-link' => ADMIN_ACTIVE_LINK, 'sub-link' => 'projects'];
         $data['scripts'] = ['assets/js/pages/projects/list.js'];

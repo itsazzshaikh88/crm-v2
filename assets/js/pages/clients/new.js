@@ -76,7 +76,7 @@ async function fetchClients() {
 
     try {
         // Fetch categories from the API (replace 'your-api-endpoint' with the actual API URL)
-        const response = await fetch(`${APIUrl}/categories/list`, {
+        const response = await fetch(`${APIUrl}/categories/all`, {
             method: 'GET', // or POST, depending on the API endpoint
             headers: {
                 'Authorization': `Bearer ${authToken}`,
