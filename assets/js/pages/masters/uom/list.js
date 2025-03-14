@@ -11,13 +11,13 @@ function renderNoResponseCode(option, isAdmin = false) {
 
 // Global Level Elements
 // get table id to store
-const tableId = "category-list";
+const tableId = "uom-list";
 const table = document.getElementById(tableId);
 const tbody = document.querySelector(`#${tableId} tbody`);
 
 const numberOfHeaders = document.querySelectorAll(`#${tableId} thead th`).length || 0;
 
-async function fetchCategories() {
+async function fetchUOM() {
     try {
         const authToken = getCookie('auth_token');
         if (!authToken) {
@@ -26,7 +26,7 @@ async function fetchCategories() {
         }
         // Set loader to the screen 
         commonListingSkeleton(tableId, paginate.pageLimit || 0, numberOfHeaders);
-        const url = `${APIUrl}/categories/list`;
+        const url = `${APIUrl}/uom/list`;
         const filters = filterCriterias([]);
 
         const response = await fetch(url, {
@@ -50,7 +50,7 @@ async function fetchCategories() {
         paginate.totalPages = parseFloat(data?.pagination?.total_pages) || 0;
         paginate.totalRecords = parseFloat(data?.pagination?.total_records) || 0;
 
-        showCategories(data.categories || [], tbody);
+        showUOM(data.uom || [], tbody);
 
     } catch (error) {
         toasterNotification({ type: 'error', message: 'Request failed: ' + error.message });
@@ -58,25 +58,31 @@ async function fetchCategories() {
     }
 }
 
-function showCategories(categories, tbody) {
+function showUOM(uom, tbody) {
     let content = '';
     let counter = 0;
-    if (categories?.length > 0) {
-        // show categories
-        categories.forEach(category => {
-            content += `<tr data-category-id="${category?.ID}" class="text-gray-800 fs-7">
+    if (uom?.length > 0) {
+        // show uom
+        uom.forEach(uom => {
+            content += `<tr data-uom-id="${uom?.UOM_ID}" class="text-gray-800 fs-7">
                                 <td class="text-center">${++counter}</td>
-                                <td>${category?.CATEGORY_CODE}</td>
-                                <td>${category?.CATEGORY_NAME}</td>
-                                <td><p class="line-clamp-1">${category?.DESCRIPTION || ''}</p></td>                                
+                                <td>${uom?.UOM_CODE}</td>
+                                <td>${uom?.UOM_DESCRIPTION}</td>                               
+                                <td>${uom?.UOM_TYPE}</td>                               
+                                <td>
+                                    <span class="badge ${uom?.IS_ACTIVE == 1 ? 'bg-success' : 'bg-danger'}">
+                                        ${uom?.IS_ACTIVE == 1 ? 'Active' : 'Inactive'}
+                                    </span>
+                                </td>
+                            
                                 <td class="text-end">
                                     <div class="d-flex align-items-center justify-content-end gap-3">
-                                        <a href="javascript:void(0)" onclick="fetchCategoryDetailsToEdit(${category?.ID})">
+                                        <a href="javascript:void(0)" onclick="fetchUOMDetailsToEdit(${uom?.UOM_ID})">
                                             <small>
                                                 <i class="fs-8 fa-regular fa-pen-to-square text-gray-700"></i>
                                             </small>
                                         </a>
-                                        <a href="javascript:void(0)" onclick="deleteCategory(${category?.ID})">
+                                        <a href="javascript:void(0)" onclick="deleteUOM(${uom?.UOM_ID})">
                                             <small>
                                                 <i class="fs-8 fa-solid fa-trash-can text-danger"></i>
                                             </small>
@@ -101,19 +107,19 @@ paginate.pageLimit = 10; // Set your page limit here
 // Function to handle pagination button clicks
 function handlePagination(action) {
     paginate.paginate(action); // Update current page based on the action
-    fetchCategories(); // Fetch leads for the updated current page
+    fetchUOM(); // Fetch leads for the updated current page
 }
 document.addEventListener('DOMContentLoaded', () => {
     // Fetch initial product data
-    fetchCategories();
+    fetchUOM();
 });
 
 
 
 
-async function deleteCategory(categoryID) {
-    if (!categoryID) {
-        throw new Error("Invalid Category ID, Please try Again");
+async function deleteUOM(uomID) {
+    if (!uomID) {
+        throw new Error("Invalid UOM ID, Please try Again");
     }
 
     try {
@@ -121,7 +127,7 @@ async function deleteCategory(categoryID) {
         // Show a confirmation alert
         const confirmation = await Swal.fire({
             title: "Are you sure?",
-            text: "Do you really want to delete Category? This action cannot be undone.",
+            text: "Do you really want to delete UOM? This action cannot be undone.",
             icon: "warning",
             showCancelButton: true,
             confirmButtonText: "Yes, delete it",
@@ -146,8 +152,8 @@ async function deleteCategory(categoryID) {
 
         // Show a non-closable alert box while the activity is being deleted
         Swal.fire({
-            title: "Deleting Category...",
-            text: "Please wait while the Category is being deleted.",
+            title: "Deleting UOM...",
+            text: "Please wait while the UOM is being deleted.",
             icon: "info",
             showConfirmButton: false,
             allowOutsideClick: false,
@@ -156,7 +162,7 @@ async function deleteCategory(categoryID) {
             },
         });
 
-        const url = `${APIUrl}/categories/delete/${categoryID}`;
+        const url = `${APIUrl}/uom/delete/${uomID}`;
 
         const response = await fetch(url, {
             method: 'DELETE', // Change to DELETE for a delete request
@@ -172,15 +178,15 @@ async function deleteCategory(categoryID) {
 
         if (!response.ok) {
             // If the response is not ok, throw an error with the message from the response
-            throw new Error(data.error || 'Failed to delete Category details');
+            throw new Error(data.error || 'Failed to delete UOM details');
         }
 
         if (data.status) {
             // Here, we directly handle the deletion without checking data.status
-            toasterNotification({ type: 'success', message: 'Category Deleted Successfully' });
-            fetchCategories();
+            toasterNotification({ type: 'success', message: 'UOM Deleted Successfully' });
+            fetchUOM();
         } else {
-            throw new Error(data.message || 'Failed to delete Category details');
+            throw new Error(data.message || 'Failed to delete UOM details');
         }
 
     } catch (error) {
