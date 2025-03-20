@@ -11,6 +11,10 @@ class Login extends CI_Controller
     public function index()
     {
         $data['account'] = $this->input->get('account') ?? 'admin-central';
-        $this->load->view('pages/login', $data);
+        $data['view_path'] = 'pages/login';
+        $data['page_title'] = 'Login - Zamil CRM';
+        $data['navlink'] = 'login';
+        $data['scripts'] = ['assets/js/pages/login.js'];
+        $this->load->view('front/layout', $data);
     }
 }
