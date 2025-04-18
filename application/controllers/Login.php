@@ -17,4 +17,14 @@ class Login extends CI_Controller
         $data['scripts'] = ['assets/js/pages/login.js'];
         $this->load->view('front/layout', $data);
     }
+
+    public function auth()
+    {
+        $data['account'] = $this->input->get('account') ?? 'admin-central';
+        $data['view_path'] = 'pages/portal/login';
+        $data['page_title'] = 'Login - Zamil CRM';
+        $data['navlink'] = 'login';
+        $data['scripts'] = ['assets/js/pages/login.js'];
+        $this->load->view('pages/portal/layout', $data);
+    }
 }
