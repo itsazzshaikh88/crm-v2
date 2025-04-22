@@ -2,6 +2,12 @@
 $usertype = $loggedInUser['usertype'] ?? 'guest';
 $userid = $loggedInUser['userid'] ?? '0';
 ?>
+
+<style>
+    .text-sales {
+        color: #faff28 !important;
+    }
+</style>
 <!--begin::Header-->
 <div id="kt_header" class="header align-items-stretch" data-kt-sticky="true" data-kt-sticky-name="header" data-kt-sticky-offset="{default: '200px', lg: '300px'}">
     <!--begin::Container-->
@@ -39,6 +45,11 @@ $userid = $loggedInUser['userid'] ?? '0';
                         <a href="<?= base_url() ?>" class="menu-item me-lg-1 <?= setNavigationLinkActive($navlink, HOME_ACTIVE_LINK, 'here show') ?>">
                             <span class="menu-link py-3">
                                 <span class="menu-title">Dashboard</span>
+                            </span>
+                        </a>
+                        <a href="sales/forecast" class="menu-item me-lg-1 <?= setNavigationLinkActive($navlink, "sales", 'here show') ?>">
+                            <span class="menu-link py-3">
+                                <span class="menu-title text-sales">Sales</span>
                             </span>
                         </a>
                         <!-- Custom Navlinks  -->
