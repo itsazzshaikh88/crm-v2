@@ -1,5 +1,5 @@
 let paginate = {
-    pageLimit: 2,
+    pageLimit: 100,
     currentPage: 1,
     totalRecords: 0,
     totalPages: 0,
@@ -16,7 +16,6 @@ async function fetchSalesForecastData(mode = 'replace') {
             return;
         }
 
-        // Set current page to 1 if user is clicking 'View'
         if (mode === 'replace') {
             paginate.currentPage = 1;
         }
@@ -45,14 +44,22 @@ async function fetchSalesForecastData(mode = 'replace') {
         paginate.totalPages = data.pagination.total_pages || 0;
         paginate.totalRecords = data.pagination.total_records || 0;
 
-        const tableId = 'sales-forecast-list-tbody';
         const forecasts = data.forecasts || [];
+        const tableId = 'sales-forecast-list-tbody';
 
         if (mode === 'replace') {
-            document.getElementById(tableId).innerHTML = ''; // Clear table if it's a fresh load
+            document.getElementById(tableId).innerHTML = '';
         }
 
         showSalesForecastData(forecasts, tableId);
+
+        // Toggle download button visibility
+        const downloadContainer = document.getElementById('download-buttons-container');
+        if (forecasts.length > 0) {
+            downloadContainer.classList.remove('d-none');
+        } else {
+            downloadContainer.classList.add('d-none');
+        }
 
         document.getElementById('load-more-btn-container').style.display =
             paginate.currentPage < paginate.totalPages ? 'block' : 'none';
@@ -60,10 +67,14 @@ async function fetchSalesForecastData(mode = 'replace') {
     } catch (error) {
         toasterNotification({ type: 'error', message: 'Request failed: ' + error.message });
         document.getElementById('sales-forecast-list-tbody').innerHTML = renderNoResponseCode({ colspan: numberOfHeaders });
+
+        // Hide download buttons on error
+        document.getElementById('download-buttons-container').classList.add('d-none');
     } finally {
         fullPageLoader.classList.add("d-none");
     }
 }
+
 
 
 // Render rows to table
@@ -99,7 +110,7 @@ function showSalesForecastData(forecasts, tableId) {
 
         // Field keys
         const inputFields = [
-            'CUSTOMER_NUMBER', 'CUSTOMER_NAME', 'ITEM_C', 'ITEM_DESC', 'PRODUCT_WEIGHT',
+            'CUSTOMER_NUMBER', 'CUSTOMER_NAME', 'CATEGORY_CODE', 'SUB_CATEGORY_CODE', 'ITEM_C', 'ITEM_DESC', 'PRODUCT_WEIGHT',
             'UOM', 'SALES_MAN', 'REGION', 'STATUS'
         ];
 
@@ -411,3 +422,46 @@ function downloadForecastData(format = 'csv') {
     link.click();
     link.remove();
 }
+
+function toggleFullScreen() {
+    const icon = document.getElementById("fullscreen-icon");
+
+    if (!document.fullscreenElement) {
+        // Request fullscreen for the whole document
+        const docEl = document.documentElement;
+
+        if (docEl.requestFullscreen) {
+            docEl.requestFullscreen();
+        } else if (docEl.webkitRequestFullscreen) {
+            docEl.webkitRequestFullscreen();
+        } else if (docEl.msRequestFullscreen) {
+            docEl.msRequestFullscreen();
+        }
+
+        // Change icon and color
+        icon.classList.remove("fa-expand", "text-primary");
+        icon.classList.add("fa-compress", "text-danger");
+
+    } else {
+        // Exit fullscreen
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) {
+            document.msExitFullscreen();
+        }
+
+        // Change icon and color
+        icon.classList.remove("fa-compress", "text-danger");
+        icon.classList.add("fa-expand", "text-primary");
+    }
+}
+
+document.addEventListener("fullscreenchange", () => {
+    const icon = document.getElementById("fullscreen-icon");
+    if (!document.fullscreenElement) {
+        icon.classList.remove("fa-compress", "text-danger");
+        icon.classList.add("fa-expand", "text-primary");
+    }
+});

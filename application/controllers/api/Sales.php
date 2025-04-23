@@ -1,6 +1,10 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 require_once(APPPATH . 'core/Api_controller.php');
+
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
 class Sales extends Api_controller
 {
     public function __construct()
@@ -479,10 +483,9 @@ class Sales extends Api_controller
 
         if ($format === 'csv') {
             $this->_export_csv($forecastData, $filename);
+        } else {
+            $this->_export_excel($forecastData, $filename);
         }
-        //  else {
-        //     $this->_export_excel($forecastData, $filename);
-        // }
     }
 
     private function _export_csv($data, $filename)
@@ -500,6 +503,38 @@ class Sales extends Api_controller
         }
 
         fclose($output);
+        exit;
+    }
+
+    private function _export_excel($data, $filename)
+    {
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // Headers
+        $headers = array_keys((array)$data[0]);
+        $col = 'A';
+        foreach ($headers as $header) {
+            $sheet->setCellValue($col . '1', $header);
+            $col++;
+        }
+
+        // Data Rows
+        $rowNum = 2;
+        foreach ($data as $row) {
+            $col = 'A';
+            foreach ((array)$row as $value) {
+                $sheet->setCellValue($col . $rowNum, $value);
+                $col++;
+            }
+            $rowNum++;
+        }
+
+        // Output to browser
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header("Content-Disposition: attachment; filename=\"$filename\"");
+        $writer = new Xlsx($spreadsheet);
+        $writer->save('php://output');
         exit;
     }
 }

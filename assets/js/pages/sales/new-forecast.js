@@ -28,6 +28,8 @@ async function createNewForecast() {
     const inputFields = [
         { name: 'CUSTOMER_NUMBER', type: 'text' },
         { name: 'CUSTOMER_NAME', type: 'text' },
+        { name: 'CATEGORY_CODE', type: 'text' },
+        { name: 'SUB_CATEGORY_CODE', type: 'text' },
         { name: 'ITEM_C', type: 'text' },
         { name: 'ITEM_DESC', type: 'text' },
         { name: 'PRODUCT_WEIGHT', type: 'number' },
@@ -199,8 +201,7 @@ function prependSalesForecastRow(forecast, tableId) {
 
     // Field keys
     const inputFields = [
-        'CUSTOMER_NUMBER', 'CUSTOMER_NAME', 'ITEM_C', 'ITEM_DESC', 'PRODUCT_WEIGHT',
-        'UOM', 'SALES_MAN', 'REGION', 'STATUS'
+        'CUSTOMER_NUMBER', 'CUSTOMER_NAME', 'CATEGORY_CODE', 'SUB_CATEGORY_CODE', 'ITEM_C', 'ITEM_DESC', 'PRODUCT_WEIGHT', 'UOM', 'SALES_MAN', 'REGION', 'STATUS'
     ];
 
     const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN',
