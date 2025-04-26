@@ -47,11 +47,15 @@ $userid = $loggedInUser['userid'] ?? '0';
                                 <span class="menu-title">Dashboard</span>
                             </span>
                         </a>
-                        <a href="sales/forecast" class="menu-item me-lg-1 <?= setNavigationLinkActive($navlink, "sales", 'here show') ?>">
-                            <span class="menu-link py-3">
-                                <span class="menu-title text-sales">Sales</span>
-                            </span>
-                        </a>
+                        <?php
+                        if ($usertype == 'admin'):
+                        ?>
+                            <a href="sales/forecast" class="menu-item me-lg-1 <?= setNavigationLinkActive($navlink, "sales", 'here show') ?>">
+                                <span class="menu-link py-3">
+                                    <span class="menu-title text-sales">Sales</span>
+                                </span>
+                            </a>
+                        <?php endif; ?>
                         <!-- Custom Navlinks  -->
                         <a href="products/list" class="menu-item me-lg-1 <?= setNavigationLinkActive($navlink, PRODUCT_ACTIVE_LINK, 'here show') ?>">
                             <span class="menu-link py-3">
@@ -354,6 +358,16 @@ $userid = $loggedInUser['userid'] ?? '0';
                                                         <a href="news"
                                                             class="menu-link ">
                                                             <span class="menu-title">News</span>
+                                                        </a>
+                                                        <!--end:Menu link-->
+                                                    </div>
+                                                    <!--end:Menu item-->
+                                                    <!--begin:Menu item-->
+                                                    <div class="menu-item p-0 m-0">
+                                                        <!--begin:Menu link-->
+                                                        <a href="tasks"
+                                                            class="menu-link text-primary">
+                                                            <span class="menu-title text-primary">Task Manager</span>
                                                         </a>
                                                         <!--end:Menu link-->
                                                     </div>
