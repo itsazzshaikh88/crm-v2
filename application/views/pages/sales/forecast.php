@@ -74,7 +74,7 @@
                             <button type="button" class="btn btn-sm btn-primary" onclick="createNewForecast()">
                                 <i class="fas fa-plus-circle me-1"></i> New Sales Forecast
                             </button>
-                            <button type="button" class="btn btn-sm btn-light-warning" onclick="createNewForecast()">
+                            <button type="button" class="btn btn-sm btn-light-warning" onclick="openSuggestiveSalesForecastModal()">
                                 <i class="fas fa-lightbulb me-1"></i> Suggest Forecast
                             </button>
                         </div>
@@ -246,4 +246,5 @@
 
 <?php
 $this->load->view('loaders/full-page-loader');
+$this->load->view('pages/sales/sugest-forecast');
 ?>

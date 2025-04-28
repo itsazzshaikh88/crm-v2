@@ -10,7 +10,7 @@ class Sales extends App_Controller
         $data['page_heading'] = 'Zamil Sales Forecast';
         $data['navlink'] = 'sales';
         $data['css_files'] = [];
-        $data['scripts'] = ['assets/js/pages/sales/forecast-list.js', 'assets/js/pages/sales/new-forecast.js'];
+        $data['scripts'] = ['assets/js/pages/sales/forecast-list.js', 'assets/js/pages/sales/new-forecast.js', 'assets/js/pages/sales/suggest-forecast.js'];
         $data['toolbar'] = ['name' => 'sales-forecast', 'action' => 'list'];
         $this->load->view('layout', $data);
     }
