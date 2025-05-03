@@ -1,5 +1,5 @@
 <style>
-    .ql-toolbar {
+    .ql-toolbar, .ql-editor, .ql-container {
         border-color: #dbeafe !important;
     }
 </style>

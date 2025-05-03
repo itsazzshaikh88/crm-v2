@@ -15,7 +15,13 @@ $stats_cards = $usertype === 'admin' ? $admin_stats_cards : $client_stats_cards;
 					<!--begin::Card widget 2-->
 					<div class="card">
 						<!--begin::Body-->
-						<a href="" class="card-body d-flex justify-content-between align-items-center flex-row p-4">
+						<?php
+						$link_to_redirect = "javascript:void(0)";
+						if (isset($card['link']) && $card['link'] != '')
+							$link_to_redirect = $card['link'];
+
+						?>
+						<a href="<?= $link_to_redirect ?>" class="card-body d-flex justify-content-between align-items-center flex-row p-4">
 							<!--begin::Icon-->
 							<div class="m-0 ps-4">
 								<img src="<?= $card['image'] ?>" class="w-60px scale-1-1" alt="">

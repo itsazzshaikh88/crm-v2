@@ -44,16 +44,16 @@ $activities = LEAD_ACTIVITY_OPTIONS;
                                     </div>
 
                                     <div class="d-flex flex-row align-items-center justify-content-between mb-2">
-                                        <div class="d-inline-flex form-floating w-50">
+                                        <div class="d-inline-flex flex-column form-floating w-50">
                                             <input type="text" placeholder="Enter Value" class="form-control border border-blue-100 text-gray-700 " name="FIRST_NAME" id="FIRST_NAME">
                                             <label for="FIRST_NAME" class="text-gray-600">First Name <span class="text-danger">*</span> </label>
+                                            <span class="text-danger err-lbl" id="lbl-FIRST_NAME"></span>
                                         </div>
-                                        <span class="text-danger err-lbl" id="lbl-FIRST_NAME"></span>
-                                        <div class="d-inline-flex form-floating w-50">
+                                        <div class="d-inline-flex flex-column form-floating w-50">
                                             <input type="text" placeholder="Enter Value" class="form-control border border-blue-100 text-gray-700 " name="LAST_NAME" id="LAST_NAME">
                                             <label for="LAST_NAME" class="text-gray-600">Last Name <span class="text-danger">*</span></label>
+                                            <span class="text-danger err-lbl" id="lbl-LAST_NAME"></span>
                                         </div>
-                                        <span class="text-danger err-lbl" id="lbl-LAST_NAME"></span>
                                     </div>
                                     <div class="form-floating mb-2">
                                         <input type="text" placeholder="Enter Value" class="form-control border border-blue-100 text-gray-700 " name="JOB_TITLE" id="JOB_TITLE">
@@ -66,16 +66,16 @@ $activities = LEAD_ACTIVITY_OPTIONS;
                                     </div>
                                     <span class="text-danger err-lbl" id="lbl-COMPANY_NAME"></span>
                                     <div class="d-flex flex-row align-items-center justify-content-between mb-2">
-                                        <div class="d-inline-flex form-floating w-50">
+                                        <div class="d-inline-flex flex-column form-floating w-50">
                                             <input type="text" placeholder="Enter Value" class="form-control border border-blue-100 text-gray-700 " name="EMAIL" id="EMAIL">
                                             <label for="EMAIL" class="text-gray-600">Email Address <span class="text-danger">*</span> </label>
+                                            <span class="text-danger err-lbl" id="lbl-EMAIL"></span>
                                         </div>
-                                        <span class="text-danger err-lbl" id="lbl-EMAIL"></span>
-                                        <div class="d-inline-flex form-floating w-50">
+                                        <div class="d-inline-flex flex-column form-floating w-50">
                                             <input type="text" placeholder="Enter Value" class="form-control border border-blue-100 text-gray-700 " name="PHONE" id="PHONE">
                                             <label for="PHONE" class="text-gray-600">Contact Number <span class="text-danger">*</span></label>
+                                            <span class="text-danger err-lbl" id="lbl-PHONE"></span>
                                         </div>
-                                        <span class="text-danger err-lbl" id="lbl-PHONE"></span>
                                     </div>
                                     <div class="form-floating mb-2">
                                         <input type="text" placeholder="Enter Value" class="form-control border border-blue-100 text-gray-700 " name="LEAD_SOURCE" id="LEAD_SOURCE">
@@ -110,7 +110,7 @@ $activities = LEAD_ACTIVITY_OPTIONS;
                                 </div>
                                 <div class="col-md-12 text-end d-none" id="activity-button-container">
                                     <div class="d-flex items-center justify-content-end">
-                                        <button class="btn btn-sm btn-outline btn-outline-dashed btn-outline-info btn-active-light-info me-2 mb-2" type="button"><i class="fa-solid fa-paper-plane text-info"></i> New Email</button>
+                                        <button class="btn btn-sm btn-outline btn-outline-dashed btn-outline-info btn-active-light-info me-2 mb-2" type="button" onclick="openEmailActivityModal()"><i class="fa-solid fa-paper-plane text-info"></i> New Email</button>
                                         <div class="dropdown">
                                             <button class="btn btn-sm btn-outline btn-outline-dashed btn-outline-success btn-active-light-success btn-light-success me-2 mb-2 dropdown-toggle" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false">
                                                 <i class="fa-solid fa-layer-group text-success"></i> Activities
@@ -131,7 +131,7 @@ $activities = LEAD_ACTIVITY_OPTIONS;
                                 </div>
                             </div>
                             <div id="activity-container" class="mt-4">
-                                
+
                             </div>
                         </div>
                     </div>

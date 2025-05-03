@@ -198,11 +198,7 @@ async function deleteSurvey(surveyID) {
         if (data.status) {
             // Here, we directly handle the deletion without checking data.status
             toasterNotification({ type: 'success', message: 'Survey Deleted Successfully' });
-            // Logic to remove the current row from the table
-            const row = document.querySelector(`#survey-list-tbody tr[data-survey-id="${surveyID}"]`);
-            if (row) {
-                row.remove(); // Remove the row from the table
-            }
+            fetctSurvey();
         } else {
             throw new Error(data.message || 'Failed to delete survey details');
         }

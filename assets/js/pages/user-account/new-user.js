@@ -14,6 +14,7 @@ function closeNewUserModal() {
 }
 
 function openUserModal(action = 'new', userID = null) {
+    hideErrors();
     if (action === 'new') {
         // reset form and then open 
         form.reset()
@@ -74,6 +75,7 @@ async function submitForm(e) {
                 closeNewUserModal();
                 newUserModal.hide();
             }
+            fetchUsers();
         } else {
             const errorData = await response.json();
             if (errorData.status === 422) {

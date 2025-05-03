@@ -379,9 +379,10 @@ class Activities extends Api_controller
         $currentPage = $this->input->get('page') ?? null;
         $source = $this->input->get('source') ?? null;
         $filters = $this->input->get('filters') ?? [];
+        $type = $this->input->get('type') ?? [];
 
-        $total_activity_logs = $this->Activity_logs_model->get_activities_logs('total', $limit, $currentPage, $source, $filters, null, $isAuthorized);
-        $activity_logs = $this->Activity_logs_model->get_activities_logs('list', $limit, $currentPage, $source, $filters, null, $isAuthorized);
+        $total_activity_logs = $this->Activity_logs_model->get_activities_logs('total', $limit, $currentPage, $source, $filters, null, $isAuthorized, $type);
+        $activity_logs = $this->Activity_logs_model->get_activities_logs('list', $limit, $currentPage, $source, $filters, null, $isAuthorized, $type);
 
         $response = [
             'pagination' => [

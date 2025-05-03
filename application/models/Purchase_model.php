@@ -20,6 +20,7 @@ class Purchase_model extends CI_Model
             'UUID' => uuid_v4(),
             'QUOTE_ID' => $data['QUOTATION_NUMBER'] ?? null,
             'CLIENT_ID' => $data['CLIENT_ID'] ?? null,
+            'CLIENT_PO_NUMBER' => $data['CLIENT_PO_NUMBER'] ?? null,
             'REQUEST_ID' => $data['REQUEST_ID'] ?? null,
             'COMPANY_NAME' => $data['COMPANY_NAME'] ?? null,
             'COMPANY_ADDRESS' => $data['COMPANY_ADDRESS'] ?? null,

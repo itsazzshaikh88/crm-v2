@@ -84,23 +84,21 @@ function showContactList(contact, tbody) {
     if (contact && contact.length > 0) {
         let content = ''
         let counter = 0;
+
         contact.forEach(contact => {
+            const contactStatusIcon = contact?.STATUS?.toLowerCase() === 'in-active' ? "fas fa-toggle-off" : "fas fa-toggle-on";
+            const contactStatusIconColor = contact?.STATUS?.toLowerCase() === 'in-active' ? "danger" : "success";
+            const contactStatusIconLabel = contact?.STATUS?.toLowerCase() === 'in-active' ? "active" : "in-active";
             content += `<tr data-lead-id="${contact?.CONTACT_ID}" class="text-gray-800 fs-7">
                                 <td class="text-center">${++counter}</td>
-                                <td>
-                                    <p class="mb-0">${contact?.FIRST_NAME} ${contact?.LAST_NAME}</p>
-                                </td>
-                                <td>
-                                    <p class="mb-0">${contact?.COMPANY_NAME}</p>
-                                </td>
+                                <td>${contact?.FIRST_NAME} ${contact?.LAST_NAME}</td>
+                                <td>${contact?.COMPANY_NAME}</td>
                                 <td>${contact?.JOB_TITLE}</td>
-                                <td>
-                                    <p class="mb-0 text-primary">${contact?.EMAIL}</p>
-                                    <p class="mb-0 text-muted"><small>${contact?.PHONE}</small></p>
-                                </td>
+                                <td>${contact?.EMAIL}</td>
+                                <td>${contact?.PHONE}</td>
                                 <td>${contact?.ASSIGNED_TO || ''}</td>
                                 <td>
-                                    <p class="mb-0 badge bg-light text-info"><small>${contact?.CONTACT_SOURCE?.toUpperCase()}</small></p>
+                                    <span class="mb-0 badge bg-light text-info"><small>${contact?.CONTACT_SOURCE?.toUpperCase()}</small></span>
                                 </td>
                                 <td>${capitalizeWords(contact?.PREFERRED_CONTACT_METHOD)}</td>
                                 <td><small>${setContactStatus(contact?.STATUS)}</small></td>
@@ -108,17 +106,17 @@ function showContactList(contact, tbody) {
                                     <div class="d-flex align-items-center justify-content-end gap-3">
                                         <a href="javascript:void(0)" onclick="viewContactDetails('${contact?.UUID}')">
                                             <small>
-                                                <i class="fs-8 fa-solid fa-file-lines text-info"></i>
+                                                <i class="fs-6 fa-solid fa-file-lines text-info"></i>
                                             </small>
                                         </a>
                                         <a href="contacts/new/${contact?.UUID}?action=edit">
                                             <small>
-                                                <i class="fs-8 fa-regular fa-pen-to-square text-gray-700"></i>
+                                                <i class="fs-6 fa-regular fa-pen-to-square text-gray-700"></i>
                                             </small>
                                         </a>
-                                        <a href="javascript:void(0)" onclick="deleteContact(${contact?.CONTACT_ID})">
+                                        <a href="javascript:void(0)" onclick="deleteContact(${contact?.CONTACT_ID}, '${contactStatusIconLabel}')">
                                             <small>
-                                                <i class="fs-8 fa-solid fa-trash-can text-danger"></i>
+                                                <i class="fs-6 ${contactStatusIcon} text-${contactStatusIconColor}"></i>
                                             </small>
                                         </a>
                                     </div>
@@ -142,8 +140,9 @@ function setContactStatus(status) {
         'follow-up-required': "#FF9800", // bright orange for follow-up required
         'no-response': "#9E9E9E", // grey for no response
         'in-active': "#607D8B", // slate blue-gray for inactive
+        'active': "#4CAF50", // slate blue-gray for inactive
     };
-    return `<span class="" style="color: ${statusBackgroundColors[status]}">${capitalizeWords(status)}</span>`
+    return `<span class="bg-light badge" style="color: ${statusBackgroundColors[status]}">${capitalizeWords(status)}</span>`
 }
 
 // Declare the pagination instance globally
@@ -165,23 +164,20 @@ function filterContacts() {
     fetchContacts();
 }
 
-async function deleteContact(contactID) {
-
-
-
+async function deleteContact(contactID, action) {
     if (!contactID) {
         throw new Error("Invalid Contact ID, Please try Again");
     }
 
     try {
 
-        // Show a confirmation alert
+        // Show a confirmation alert for inactivation
         const confirmation = await Swal.fire({
             title: "Are you sure?",
-            text: "Do you really want to delete contact? This action cannot be undone.",
+            text: `Do you really want to ${action} this contact? You can reactivate it later.`,
             icon: "warning",
             showCancelButton: true,
-            confirmButtonText: "Yes, delete it",
+            confirmButtonText: `Yes, ${action}`,
             cancelButtonText: "Cancel",
             customClass: {
                 popup: 'small-swal',
@@ -189,6 +185,7 @@ async function deleteContact(contactID) {
                 cancelButton: 'swal-cancel-btn',
             },
         });
+
 
         if (!confirmation.isConfirmed) return;
 
@@ -203,8 +200,8 @@ async function deleteContact(contactID) {
 
         // Show a non-closable alert box while the activity is being deleted
         Swal.fire({
-            title: "Deleting Contact...",
-            text: "Please wait while the contact is being deleted.",
+            title: "Updating Contact Status ...",
+            text: "Please wait while the contact status is being updated.",
             icon: "info",
             showConfirmButton: false,
             allowOutsideClick: false,
@@ -213,7 +210,7 @@ async function deleteContact(contactID) {
             },
         });
 
-        const url = `${APIUrl}/contacts/delete/${contactID}`;
+        const url = `${APIUrl}/contacts/delete/${contactID}/${action}`;
 
         const response = await fetch(url, {
             method: 'DELETE', // Change to DELETE for a delete request
@@ -229,19 +226,15 @@ async function deleteContact(contactID) {
 
         if (!response.ok) {
             // If the response is not ok, throw an error with the message from the response
-            throw new Error(data.error || 'Failed to delete contact details');
+            throw new Error(data.error || 'Failed to update contact status');
         }
 
         if (data.status) {
             // Here, we directly handle the deletion without checking data.status
-            toasterNotification({ type: 'success', message: 'Contact Deleted Successfully' });
-            // Logic to remove the current row from the table
-            const row = document.querySelector(`#contact-list-tbody tr[data-contact-id="${contactID}"]`);
-            if (row) {
-                row.remove(); // Remove the row from the table
-            }
+            toasterNotification({ type: 'success', message: 'Contact Status Updated Successfully' });
+            fetchContacts();
         } else {
-            throw new Error(data.message || 'Failed to delete contact details');
+            throw new Error(data.message || 'Failed to update contact status');
         }
 
     } catch (error) {

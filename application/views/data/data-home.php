@@ -2,49 +2,49 @@
 $admin_stats_cards = [
     [
         'label' => "Total Clients",
-        "link" => "",
+        "link" => "clients",
         "image" => "assets/media/images/client-red.png",
         "color" => ""
     ],
     [
         'label' => "Purchase Orders",
-        "link" => "",
+        "link" => "purchase/list",
         "image" => "assets/media/images/checkout.png",
         "color" => ""
     ],
     [
         'label' => "Deliveries",
-        "link" => "",
+        "link" => "delivery/report",
         "image" => "assets/media/images/delivery-truck.png",
         "color" => ""
     ],
     [
         'label' => "Invoices",
-        "link" => "",
+        "link" => "invoices/list",
         "image" => "assets/media/images/bill.png",
         "color" => ""
     ],
     [
         'label' => "Leads",
-        "link" => "",
+        "link" => "leads",
         "image" => "assets/media/images/email-marketing.png",
         "color" => ""
     ],
     [
         'label' => "Deals",
-        "link" => "",
+        "link" => "deals",
         "image" => "assets/media/images/relationship.png",
         "color" => ""
     ],
     [
         'label' => "Requests",
-        "link" => "",
+        "link" => "requests/list",
         "image" => "assets/images/document.png",
         "color" => ""
     ],
     [
         'label' => "Quotations",
-        "link" => "",
+        "link" => "quotes/list",
         "image" => "assets/images/quotes.png",
         "color" => ""
     ],
@@ -53,19 +53,19 @@ $admin_stats_cards = [
 $client_stats_cards = [
     [
         'label' => "Purchase Orders",
-        "link" => "",
+        "link" => "purchase/list",
         "image" => "assets/media/images/checkout.png",
         "color" => ""
     ],
     [
         'label' => "Deliveries",
-        "link" => "",
+        "link" => "delivery/report",
         "image" => "assets/media/images/delivery-truck.png",
         "color" => ""
     ],
     [
         'label' => "Invoices",
-        "link" => "",
+        "link" => "invoices/list",
         "image" => "assets/media/images/bill.png",
         "color" => ""
     ]

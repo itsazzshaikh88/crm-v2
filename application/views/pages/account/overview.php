@@ -3,13 +3,13 @@
     <!--begin::details View-->
     <div class="card mb-5 mb-xl-10" id="kt_profile_details_view">
         <!--begin::Card header-->
-        <div class="card-header cursor-pointer">
+        <div class="card-header cursor-pointer d-flex align-items-center justify-content-between">
             <!--begin::Card title-->
             <div class="card-title m-0">
                 <h3 class="fw-bold m-0">Profile Details</h3>
             </div>
+            <a href="account/profile/edit" class="btn btn-sm btn-light">Edit Profile</a>
             <!--end::Card title-->
-
         </div>
         <!--begin::Card header-->
 

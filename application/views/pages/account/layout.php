@@ -20,3 +20,4 @@
     </div>
     <!--end::Post-->
 </div>
+<?php $this->load->view('loaders/full-page-loader'); ?>

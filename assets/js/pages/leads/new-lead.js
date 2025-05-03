@@ -28,6 +28,7 @@ var newLeadModal = new bootstrap.Modal(document.getElementById("newLeadModal"), 
 });
 
 function openLeadModal(action = 'new', leadID = null) {
+    hideErrors();
     if (action === 'new') {
         // reset form and then open 
         leadForm.reset()
@@ -107,7 +108,7 @@ async function submitLead(e) {
             if (data?.data?.STATUS === "qualified") {
                 convertLeadToContact(data?.data?.LEAD_ID);
             }
-
+            fetchLeads();
         } else {
             const errorData = await response.json();
             if (errorData.status === 422) {

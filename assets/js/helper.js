@@ -235,3 +235,47 @@ function getSegment(segmentNumber) {
     const index = segmentNumber - 1;
     return segments[index] || null; // Return null if the segment doesn't exist
 }
+
+
+/**
+ * Generate a datalist HTML code string.
+ * 
+ * @param {string} id - The id attribute for the <datalist> tag.
+ * @param {string} name - The name attribute for the <datalist> tag (optional).
+ * @param {Array} data - Array of objects [{ value: '', label: '' }, ...].
+ * @param {boolean} showLabels - If true, show label text along with value in option text.
+ * @returns {string} - A string containing the HTML code for the datalist.
+ */
+function generateDatalistHtml(id, name, data = [], showLabels = false) {
+    let datalistHtml = `<datalist id="${id}"${name ? ` name="${name}"` : ''}>`;
+
+    data.forEach(item => {
+        const value = item.value || '';
+        const label = showLabels && item.label ? item.label : value;
+
+        datalistHtml += `<option value="${value}">${label}</option>`;
+    });
+
+    datalistHtml += '</datalist>';
+
+    return datalistHtml;
+}
+
+function updateTableSequence(tableId) {
+    const table = document.getElementById(tableId);
+    if (!table) return; // If the table doesn't exist, exit the function
+
+    const tbody = table.querySelector('tbody');
+    if (!tbody) return; // If tbody doesn't exist, exit the function
+
+    const rows = tbody.querySelectorAll('tr');
+
+    // Loop through each row and update the first <td> (sequence number)
+    rows.forEach((row, index) => {
+        const firstTd = row.querySelector('td'); // Get the first <td>
+        if (firstTd) {
+            firstTd.textContent = index + 1; // Set the sequence number (index + 1)
+        }
+    });
+}
+

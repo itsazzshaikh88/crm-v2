@@ -75,6 +75,8 @@ function removeFile(index) {
 
 
 function openNewRequestModal(action = 'new', requestID = null) {
+    // Hide all errors that are previously shown on the page
+    hideErrors();
     if (action === 'new') {
         // reset form and then open 
         requestForm.reset();
@@ -97,6 +99,9 @@ function closeRequestModal() {
     document.getElementById("ID").value = '';
     document.getElementById("CLIENT_ID").value = '';
     initializeProductLinesTable();
+
+    // Hide all errors that are previously shown on the page
+    hideErrors();
 }
 
 function setClientDetails() {

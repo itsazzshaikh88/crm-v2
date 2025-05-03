@@ -156,9 +156,9 @@ $email = $loggedInUser['email'] ?? 'user@guest.crm';
             </div>
             <!--end::PAGE CONTENT GOES FROM HERE-->
             <div class="d-flex justify-content-end mb-10 mt-4 ">
-                <a href="javascript:void(0)" id="kt_ecommerce_add_product_cancel" class="btn btn-light me-5">
+                <button onclick="cancelFormAndReload()" type="button" id="kt_ecommerce_add_product_cancel" class="btn btn-light me-5">
                     Cancel
-                </a>
+                </button>
                 <button type="submit" id="submit-btn" class="btn btn-primary">
                     <span class="indicator-label">
                         Save Changes

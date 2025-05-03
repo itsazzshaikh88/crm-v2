@@ -183,11 +183,7 @@ async function deleteClient(clientID) {
         if (data.status) {
             // Here, we directly handle the deletion without checking data.status
             toasterNotification({ type: 'success', message: 'Client account Deleted Successfully' });
-            // Logic to remove the current row from the table
-            const row = document.querySelector(`#client-list-tbody tr[data-client-id="${clientID}"]`);
-            if (row) {
-                row.remove(); // Remove the row from the table
-            }
+            fetchClients();
         } else {
             throw new Error(data.message || 'Failed to delete client account details');
         }

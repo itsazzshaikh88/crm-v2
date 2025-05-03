@@ -136,3 +136,8 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchCardStats();
     fetchOpenOrders();
 });
+
+function handlePagination(action) {
+    openOrderTrackingPaginate.paginate(action); // Update current page based on the action
+    fetchOpenOrders(); // Fetch products for the updated current page
+}

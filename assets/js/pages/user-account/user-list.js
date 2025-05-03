@@ -220,11 +220,7 @@ async function deleteUser(userID) {
             // Successfully deleted from the backend
             toasterNotification({ type: 'success', message: 'User account Deleted Successfully' });
 
-            // Remove the user row from the table in the frontend
-            const row = document.querySelector(`#user-list-tbody tr[data-user-id="${userID}"]`);
-            if (row) {
-                row.remove(); // Remove the row from the table
-            }
+            fetchUsers();
         } else {
             throw new Error(data.message || 'Failed to delete user account details');
         }

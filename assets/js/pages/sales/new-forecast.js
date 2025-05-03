@@ -72,12 +72,19 @@ async function createNewForecast() {
 
     const allFields = [...inputFields, ...monthFields];
 
+    const itemCodes = retriveItemCodes();
+    const generatedDatalistHtml = generateDatalistHtml("ITEM_CODE_LIST", "ITEM_CODE_LIST", itemCodes);
+
     allFields.forEach(field => {
         const td = document.createElement('td');
         td.classList.add("bg-light");
         td.innerHTML = `
             <input type="${field.type}" name="${field.name}" id="${field.name}" 
-                   class="form-control form-control-sm py-0 px-2" style="min-width: 100px;" />
+                   class="form-control form-control-sm py-0 px-2" style="min-width: 100px;"
+                   autocomplete="off"
+                ${field?.name == 'ITEM_C' ? "list='ITEM_CODE_LIST'" : ''}   
+                />
+                ${field?.name == 'ITEM_C' ? generatedDatalistHtml : ''}
             <p class="text-danger err-lbl mb-0 fs-8" id="lbl-${field.name}"></p>
         `;
         row.appendChild(td);
@@ -243,9 +250,6 @@ function updateRowSequence(tableId) {
     });
 }
 
-
-
-
 // ✅ NEW FUNCTION: Restart Forecast
 async function restartForecast() {
     const existing = document.querySelector('.new-forecast-row');
@@ -271,3 +275,5 @@ async function restartForecast() {
         createNewForecast();
     }
 }
+
+

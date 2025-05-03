@@ -2,8 +2,9 @@
 
 class Activity_logs_model extends CI_Model
 {
-    function get_activities_logs($type = 'list', $limit = 10, $currentPage = 1, $source = '', $filters = [], $search = [], $user = [])
+    function get_activities_logs($type = 'list', $limit = 10, $currentPage = 1, $source = '', $filters = [], $search = [], $user = [], $activity_type = '')
     {
+        $activity_type = str_replace("%20", " ", $activity_type);
         $offset = get_limit_offset($currentPage, $limit);
 
         $this->db->select("lg.ID, lg.USER_ID, lg.USER_TYPE, lg.ACTIVITY_TYPE, lg.DESCRIPTION, 
@@ -21,6 +22,9 @@ class Activity_logs_model extends CI_Model
             foreach ($filters as $key => $value) {
                 $this->db->where($key, $value);
             }
+        }
+        if ($activity_type == 'LOGGED IN') {
+            $this->db->where("ACTIVITY_TYPE", "LOGGED IN");
         }
 
         if ($source === 'my-activities')

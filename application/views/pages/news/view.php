@@ -33,3 +33,7 @@
 <?php
 $this->load->view('loaders/full-page-loader');
 ?>
+
+<script>
+    const NEWS_ID_FROM_URL = '<?= $news_id ?>';
+</script>

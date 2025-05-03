@@ -13,13 +13,16 @@ class Account extends App_Controller
 		$data['scripts'] = ['assets/js/pages/accounts/overview.js'];
 		$this->load->view('layout', $data);
 	}
-	public function settings()
+	public function settings($navlink = null)
 	{
 		$data['view_path'] = 'pages/account/layout';
-		$data['sub_view_path'] = 'pages/account/settings';
-		$data['page_title'] = 'Account and Settings - Zamil CRM';
-		$data['page_heading'] = 'Account and Settings';
-		$data['navlink'] = ['main-link' => 'account', 'sub-link' => 'settings'];
+		$data['sub_view_path'] = 'pages/account/settings/layout';
+		$data['navlink_view'] = $navlink;
+		$data['page_title'] = $this->_get_setting_page_details($navlink, 'page_title');
+		$data['page_heading'] = $this->_get_setting_page_details($navlink, 'page_heading');
+		$data['navlink'] = ['main-link' => 'account', 'sub-link' => 'settings', 'navlink' => $navlink];
+		if ($navlink != null)
+			$data['scripts'] = ['assets/js/pages/accounts/settings/' . $navlink . ".js"];
 		$this->load->view('layout', $data);
 	}
 	public function security()
@@ -40,5 +43,30 @@ class Account extends App_Controller
 		$data['navlink'] = ['main-link' => 'account', 'sub-link' => 'activities'];
 		$data['scripts'] = ['assets/js/pages/accounts/activities.js'];
 		$this->load->view('layout', $data);
+	}
+
+	public function profile()
+	{
+		$data['view_path'] = 'pages/account/layout';
+		$data['sub_view_path'] = 'pages/account/update-profile';
+		$data['page_title'] = 'Update Profile - Zamil CRM';
+		$data['page_heading'] = 'Update Profile';
+		$data['navlink'] = ['main-link' => 'account', 'sub-link' => 'overview'];
+		$data['scripts'] = ['assets/js/pages/accounts/update-profile.js'];
+		$this->load->view('layout', $data);
+	}
+
+
+	// Internal functions to be called here
+	function _get_setting_page_details($navlink, $key)
+	{
+		$navlinks = [
+			'login-activities' => [
+				'page_title' => "User Login Activities - Zamil CRM",
+				'page_heading' => "User Login Activities",
+			]
+		];
+
+		return $navlinks[$navlink][$key] ?? "Zamil CRM";
 	}
 }

@@ -86,21 +86,14 @@ function showLeads(leads, tbody) {
             content += `<tr data-lead-id="${lead?.LEAD_ID}" class="text-gray-800 fs-7">
                                 <td class="text-center">${++counter}</td>
                                 <td>${lead?.LEAD_NUMBER}</td>
-                                <td>
-                                    <p class="mb-0">${lead?.FIRST_NAME} ${lead?.LAST_NAME}</p>
-                                    <small class="fs-xs text-muted"></small>
-                                </td>
-                                <td>
-                                    <p class="mb-0">${lead?.COMPANY_NAME}</p>
-                                </td>
+                                <td>${lead?.FIRST_NAME} ${lead?.LAST_NAME}</td>
+                                <td>${lead?.COMPANY_NAME}</td>
                                 <td>${lead?.JOB_TITLE}</td>
-                                <td>
-                                    <p class="mb-0 text-primary">${lead?.EMAIL}</p>
-                                    <p class="mb-0"><small>${lead?.PHONE}</small></p>
-                                </td>
+                                <td>${lead?.EMAIL}</td>
+                                <td>${lead?.PHONE}</td>
                                 <td>${formatAppDate(lead?.CREATED_AT)}</td>
                                 <td>
-                                    <p class="mb-0 badge bg-light text-info"><small>${lead?.LEAD_SOURCE}</small></p>
+                                    <span class="mb-0 badge bg-light text-info"><small>${lead?.LEAD_SOURCE}</small></span>
                                 </td>
                                 <td>
                                     <span class="badge text-white" style="background-color: ${leadStatusColors[lead?.STATUS]}">${capitalizeWords(lead?.STATUS)}</span>
@@ -269,11 +262,7 @@ async function deleteLead(leadID) {
         if (data.status) {
             // Here, we directly handle the deletion without checking data.status
             toasterNotification({ type: 'success', message: 'Lead Deleted Successfully' });
-            // Logic to remove the current row from the table
-            const row = document.querySelector(`#lead-list-tbody tr[data-lead-id="${leadID}"]`);
-            if (row) {
-                row.remove(); // Remove the row from the table
-            }
+            fetchLeads();
         } else {
             throw new Error(data.message || 'Failed to delete lead details');
         }

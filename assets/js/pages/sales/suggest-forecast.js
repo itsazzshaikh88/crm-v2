@@ -4,7 +4,7 @@ function openSuggestiveSalesForecastModal() {
     suggestiveModal.show();
 }
 
-openSuggestiveSalesForecastModal();
+
 
 function closeSuggestiveSalesForecastModal(){
     

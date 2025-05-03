@@ -167,6 +167,7 @@ function showMFADetails(mfa, action) {
                                         <input type="text" id="totp-code" name="TOTP_CODE" class="form-control flex-1" placeholder="Enter 6-digit code" />
                                         <button type="submit" id="verify-totp-button" class="btn btn-primary ">Verify</button>
                                     </div>
+                                    <p class="text-danger err-lbl" id="lbl-verify-TOTP_CODE"></p>
                                 </div>
                             </form>`;
     } else {
@@ -289,5 +290,65 @@ function toggleEnableDisableButton(action) {
         enable2FAButton.classList.remove("btn-danger");
         enable2FAButton.classList.add("btn-primary");
         enable2FAButton.setAttribute("onclick", "enable2FA('enable')");
+    }
+}
+
+
+// Account OTP Codes verifications
+// Update Password function
+async function verifyTOTP(e) {
+    e.preventDefault();
+    const form = e.target;
+    const formData = new FormData(form);
+
+    // Set Loading Animation on button
+    const submitBtn = document.getElementById("verify-totp-button");
+    let buttonText = submitBtn.innerHTML;
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = `Validating ...`;
+
+    // Hide Error
+    hideErrors();
+    try {
+        // Retrieve the auth_token from cookies
+        const authToken = getCookie('auth_token');
+        if (!authToken) {
+            toasterNotification({ type: 'error', message: "Authorization token is missing. Please Login again to make API request." });
+            return;
+        }
+        let url = `${APIUrl}/account/verify_totp`;
+        // Fetch API with Bearer token in Authorization header
+        const response = await fetch(url, {
+            method: 'POST', // or POST, depending on the API endpoint
+            headers: {
+                'Authorization': `Bearer ${authToken}`
+            },
+            body: formData
+        });
+
+
+        // Check if the response is OK (status 200-299)
+        if (response.ok) {
+            const data = await response.json();
+            if (data?.status) {
+                toasterNotification({ type: 'success', message: data?.message ?? 'Request Completed' });
+            } else {
+                toasterNotification({ type: 'error', message: data?.message ?? 'Request Failed' });
+            }
+        } else {
+            const errorData = await response.json();
+            if (errorData.status === 422) {
+                showErrors(errorData.validation_errors ?? [], 'lbl-verify');
+            } else {
+                toasterNotification({ type: 'error', message: errorData.message ?? 'Internal Server Error' });
+            }
+        }
+    } catch (error) {
+        console.error(error);
+        toasterNotification({ type: 'error', message: 'Request failed:' + error });
+    } finally {
+        form.reset();
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = buttonText;
     }
 }

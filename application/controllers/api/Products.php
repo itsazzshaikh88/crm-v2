@@ -400,4 +400,58 @@ class Products extends Api_controller
             ->set_status_header(200)
             ->set_output(json_encode($response));
     }
+
+    function itemcodes_list()
+    {
+        // Check if the authentication is valid
+        $isAuthorized = $this->isAuthorized();
+        if (!$isAuthorized['status']) {
+            $this->output
+                ->set_status_header(401) // Set HTTP response status to 400 Bad Request
+                ->set_content_type('application/json')
+                ->set_output(json_encode(['error' => 'Unauthorized access. You do not have permission to perform this action.']))
+                ->_display();
+            exit;
+        };
+
+        // Get the raw input data from the request
+        $input = $this->input->raw_input_stream;
+
+        // Decode the JSON data
+        $data = json_decode($input, true); // Decode as associative array
+
+        // Check if data is received
+        if (!$data) {
+            // Handle the error if no data is received
+            $this->output
+                ->set_status_header(400) // Set HTTP response status to 400 Bad Request
+                ->set_content_type('application/json')
+                ->set_output(json_encode(['error' => 'Invalid JSON input']))
+                ->_display();
+            exit;
+        }
+
+        // Access the parameters
+        $limit = isset($data['limit']) ? $data['limit'] : null;
+        $currentPage = isset($data['currentPage']) ? $data['currentPage'] : null;
+        $filters = isset($data['filters']) ? $data['filters'] : [];
+        $search = isset($data['search']) ? $data['search'] : [];
+
+        $total_itemcodes = $this->Product_model->get_item_codes('total', $limit, $currentPage, $filters, $search);
+        $item_codes = $this->Product_model->get_item_codes('list', $limit, $currentPage, $filters, $search);
+
+        $response = [
+            'pagination' => [
+                'total_records' => $total_itemcodes,
+                'total_pages' => generatePages($total_itemcodes, $limit),
+                'current_page' => $currentPage,
+                'limit' => $limit
+            ],
+            'item_codes' => $item_codes,
+        ];
+        return $this->output
+            ->set_content_type('application/json')
+            ->set_status_header(200)
+            ->set_output(json_encode($response));
+    }
 }

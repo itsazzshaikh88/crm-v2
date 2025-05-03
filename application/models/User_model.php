@@ -399,12 +399,27 @@ class User_model extends App_Model
     public function update_user_details($userID, $data, $created_by)
     {
         $user_data = [
-            'UUID' => uuid_v4(),
             'FIRST_NAME' => $data['FIRST_NAME'],
             'LAST_NAME' => $data['LAST_NAME'],
             'PHONE_NUMBER' => $data['PHONE_NUMBER'],
             'USER_TYPE' => $data['USER_TYPE'],
             'STATUS' => $data['STATUS']
+        ];
+
+        // Insert new lead
+        $updated = $this->db->where('ID', $userID)->update($this->user_table, $user_data);
+        if ($updated) {
+            return $this->get_user_by_id($userID);
+        } else
+            return false;
+    }
+
+    public function update_user_profile_details($userID, $data, $created_by)
+    {
+        $user_data = [
+            'FIRST_NAME' => $data['FIRST_NAME'],
+            'LAST_NAME' => $data['LAST_NAME'],
+            'PHONE_NUMBER' => $data['PHONE_NUMBER']
         ];
 
         // Insert new lead

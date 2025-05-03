@@ -58,7 +58,7 @@ async function fetchMOMS() {
         });
 
         if (!response.ok) {
-            throw new Error('Failed to fetch deal data');
+            throw new Error('Failed to fetch MOM data');
         }
 
         const data = await response.json();
@@ -135,14 +135,14 @@ paginate.pageLimit = 10; // Set your page limit here
 // Function to handle pagination button clicks
 function handlePagination(action) {
     paginate.paginate(action); // Update current page based on the action
-    fetchMOMS(); // Fetch deals for the updated current page
+    fetchMOMS(); // Fetch moms for the updated current page
 }
 document.addEventListener('DOMContentLoaded', () => {
     // Fetch initial product data
     fetchMOMS();
 });
 
-function filterdeals() {
+function filterMOMS() {
     paginate.currentPage = 1;
     fetchMOMS();
 }
@@ -183,7 +183,7 @@ async function deleteMinute(momID) {
 
         // Show a non-closable alert box while the activity is being deleted
         Swal.fire({
-            title: "Deleting deal...",
+            title: "Deleting Minutes ...",
             text: "Please wait while the minutes is being deleted.",
             icon: "info",
             showConfirmButton: false,
@@ -215,11 +215,7 @@ async function deleteMinute(momID) {
         if (data.status) {
             // Here, we directly handle the deletion without checking data.status
             toasterNotification({ type: 'success', message: 'Minutes Deleted Successfully' });
-            // Logic to remove the current row from the table
-            const row = document.querySelector(`#mom-list-tbody tr[data-minute-id="${momID}"]`);
-            if (row) {
-                row.remove(); // Remove the row from the table
-            }
+            fetchMOMS();
         } else {
             throw new Error(data.message || 'Failed to delete mom details');
         }

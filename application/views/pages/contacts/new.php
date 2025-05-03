@@ -92,6 +92,7 @@
                                 <option value="follow-up-required">Follow-up Required</option>
                                 <option value="no-response">No Response</option>
                                 <option value="in-active">In-Active</option>
+                                <option value="active">Active</option>
                             </select>
                             <span class="text-danger err-lbl" id="lbl-STATUS"></span>
                         </div>

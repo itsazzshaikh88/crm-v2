@@ -41,6 +41,15 @@
     .reset-btn-bg {
         background-color: #295F98 !important;
     }
+
+    #purchase-line-table thead tr th,
+    #purchase-line-table tbody tr td {
+        padding: 3px !important;
+    }
+
+    #purchase-line-table tbody tr td .form-control {
+        border-radius: 5px !important;
+    }
 </style>
 <div class="modal bg-body fade " tabindex="-1" id="newPurchaseModal">
     <div class="modal-dialog bg-light modal-fullscreen">
@@ -67,7 +76,10 @@
                                 <div class="col-md-6">
 
                                     <div class="d-flex align-items-center justify-content-between">
-                                        <h4 class="text-label-heading fw-normal">Purchase Details</h4>
+                                        <h4 class="text-label-heading fw-normal">
+                                            Purchase Details
+                                            <span id="PO_NUMBER" class="ms-2 text-danger"></span>
+                                        </h4>
                                         <div>
 
                                             <button type="submit" class="rounded-1 btn btn-sm btn-success" id="submit-btn"><i class="fa-solid fa-plus"></i> Save Purchase Details</button>
@@ -84,8 +96,8 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="d-flex flex-column gap-1">
-                                                <label for="PO_NUMBER" class="text-gray-800 fw-bold">PO #</label>
-                                                <input type="text" readonly placeholder="Auto Generated" value="" class="form-control form-control-sm border border-blue-100 text-gray-700" name="PO_NUMBER" id="PO_NUMBER">
+                                                <label for="CLIENT_PO_NUMBER" class="text-gray-800 fw-bold">Client PO #</label>
+                                                <input type="text" value="" class="form-control form-control-sm border border-blue-100 text-gray-700" name="CLIENT_PO_NUMBER" id="CLIENT_PO_NUMBER">
                                             </div>
                                         </div>
                                     </div>
@@ -179,7 +191,6 @@
                             </div>
                         </div>
                         <div class="col-md-12">
-
                             <div class="card-body">
                                 <h2 class="mb-4">Product Details</h2>
                                 <div class="table-responsive">
@@ -187,26 +198,28 @@
                                     <table class="table table-row-bordered align-middle gy-4 gs-9" id="purchase-line-table">
                                         <thead class="border-bottom border-gray-200 fs-6 text-gray-600 fw-bold bg-light bg-opacity-75">
                                             <tr>
-                                                <td class="min-w-150px">Product</td>
-                                                <td class="min-w-250px">Product Desc</td>
-                                                <td class="min-w-250px">Sup Prod Code</td>
-                                                <td class="min-w-150px">Qty</td>
-                                                <td class="min-w-150px">Unit Price</td>
-                                                <td class="min-w-150px">Total</td>
-                                                <td class="min-w-150px">Color</td>
-                                                <td class="min-w-150px">Transport</td>
-                                                <td class="min-w-150px">SOC #</td>
-                                                <td class="min-w-150px">Rec Qty</td>
-                                                <td class="min-w-150px">Bal Qty</td>
-                                                <td>
+                                                <th>#</th>
+                                                <th class="min-w-150px">Product</th>
+                                                <th class="min-w-250px">Product Desc</th>
+                                                <th class="min-w-250px">Sup Prod Code</th>
+                                                <th class="min-w-150px">Qty</th>
+                                                <th class="min-w-150px">Unit Price</th>
+                                                <th class="min-w-150px">Total</th>
+                                                <th class="min-w-150px">Color</th>
+                                                <th class="min-w-150px">Transport</th>
+                                                <th class="min-w-150px">SOC #</th>
+                                                <th class="min-w-150px">Rec Qty</th>
+                                                <th class="min-w-150px">Bal Qty</th>
+                                                <th>
                                                     <button class="btn btn-sm btn-success" type="button" onclick="addRow()">
                                                         <i class="las la-plus fs-4 cursor-pointer text-white m-0 p-0"></i>
                                                     </button>
-                                                </td>
+                                                </th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr>
+                                                <td>1</td>
                                                 <td>
                                                     <select name="PRODUCT_ID[]" id="PRODUCT_ID_1" class="form-control form-control-sm" onclick="chooseProduct(1)">
                                                         <option value="">Select</option>
@@ -243,7 +256,7 @@
                                                     <input type="text" name="BAL_QTY[]" id="BAL_QTY_1" class="form-control form-control-sm">
                                                 </td>
                                                 <td>
-                                                    <button class="btn btn-sm border border-danger">
+                                                    <button type="button" class="btn btn-sm border border-danger" onclick="removeRow(this)">
                                                         <i class="las la-times fs-4 cursor-pointer text-danger m-0 p-0"></i>
                                                     </button>
                                                 </td>

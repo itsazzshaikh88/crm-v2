@@ -39,11 +39,11 @@ class Product_model extends App_model
             'VOLUME' => $data['VOLUME'],
         ];
         $inventory_data = [
-            'SKU' => $data['SKU'],
+            'SKU' => $data['SKU'] ?? null,
             'MIN_QTY' => $data['MIN_QTY'],
             'MAX_QTY' => $data['MAX_QTY'],
             'AVL_QTY' => $data['AVL_QTY'],
-            'BARCODE' => $data['BARCODE'],
+            'BARCODE' => $data['BARCODE'] ?? null,
             'ALLOW_BACKORDERS' => isset($data['ALLOW_BACKORDERS']) ? 1 : 0
         ];
         if (!in_array($product_id, [' ', '', 0, null])) {
@@ -333,5 +333,50 @@ class Product_model extends App_model
             'widths' => $this->db->query("")->result_array(),
             'lengths' => $this->db->query("")->result_array(),
         ];
+    }
+
+
+    // Item Codes
+    function get_item_codes($type = 'list', $limit = 10, $currentPage = 1, $filters = [], $search = [])
+    {
+        $offset = get_limit_offset($currentPage, $limit);
+
+        $this->db->distinct();
+        $this->db->select("p.PRODUCT_CODE, p.PRODUCT_NAME");
+        $this->db->from("xx_crm_products p");
+        $this->db->order_by("p.PRODUCT_ID", "DESC");
+
+        // Apply filters dynamically from the $filters array
+        if (!empty($filters) && is_array($filters)) {
+            foreach ($filters as $key => $value) {
+                $this->db->where($key, $value);
+            }
+        }
+
+        if (!empty($search) && is_array($search)) {
+            if (isset($search['product'])) {
+                $this->db->group_start(); // Begin group for OR conditions
+                $this->db->like('p.PRODUCT_NAME', $search['product'], 'both', false);
+                $this->db->or_like('p.PRODUCT_CODE', $search['product'], 'both', false);
+                $this->db->group_end(); // End group for OR conditions
+            }
+        }
+
+
+        // Apply limit and offset only if 'list' type and offset is greater than zero
+        if ($type == 'list') {
+            if ($limit > 0) {
+                $this->db->limit($limit, ($offset > 0 ? $offset : 0));
+            }
+        }
+
+        // Execute query
+        $query = $this->db->get();
+
+        if ($type == 'list') {
+            return $query->result_array();
+        } else {
+            return $query->num_rows();
+        }
     }
 }

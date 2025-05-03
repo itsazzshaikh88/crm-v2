@@ -41,8 +41,7 @@ async function submitForm(e) {
         if (response.ok) {
             const data = await response.json();
             toasterNotification({ type: 'success', message: "Contact Saved Successfully!" });
-            if (data?.type === 'insert')
-                form.reset()
+            setTimeout(() => window.location = 'contacts', 2000);
         } else {
             const errorData = await response.json();
             if (errorData.status === 422) {

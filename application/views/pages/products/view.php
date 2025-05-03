@@ -312,7 +312,7 @@
                         <!--begin::Input group-->
                         <div class="row mb-7">
                             <!--begin::Label-->
-                            <label class="col-lg-4 fw-semibold text-muted">SKU</label>
+                            <label class="col-lg-4 fw-semibold text-muted">SKU #</label>
                             <!--end::Label-->
 
                             <!--begin::Col-->
@@ -321,7 +321,7 @@
                             </div>
                             <!--end::Col-->
                             <!--begin::Label-->
-                            <label class="col-lg-4 fw-semibold text-muted">Barcode</label>
+                            <label class="col-lg-4 fw-semibold text-muted">Barcode #</label>
                             <!--end::Label-->
 
                             <!--begin::Col-->

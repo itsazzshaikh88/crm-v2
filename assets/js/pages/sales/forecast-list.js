@@ -1,3 +1,6 @@
+let selectedItemCodes = [];
+let selectedItemCode = null;
+
 let paginate = {
     pageLimit: 100,
     currentPage: 1,
@@ -146,32 +149,50 @@ function editForecastRow(btn) {
 
     tds.forEach((td, index) => {
         if (index === 0 || index === 1) {
-            if (index == 1)
-                td.classList.add("bg-light");
-            return;
+            if (index === 1) td.classList.add("bg-light");
+            return; // Skip index 0 and 1
         }
 
         const value = td.querySelector('.view-span')?.textContent.trim() || '';
         const nameAttr = td.dataset.name || '';
-        td.innerHTML = '';
+        td.innerHTML = ''; // Clear existing content in td
 
+        // Create input element
         const input = document.createElement('input');
         input.type = 'text';
         input.value = value;
         input.name = nameAttr;
+        input.id = `${nameAttr}_${idValue}`;
         input.className = 'form-control form-control-sm py-0 px-2';
         input.style.minWidth = '100px';
 
+        // Add list attribute for ITEM_C input field
+        if (nameAttr === 'ITEM_C') {
+            input.setAttribute('list', `ITEM_CODE_LIST_${idValue}`);
+        }
+
+        // Create and append datalist if the field is ITEM_C
+        if (nameAttr === 'ITEM_C') {
+            const itemCodes = retriveItemCodes(); // Retrieve item codes from sessionStorage or API
+            const datalistHtml = generateDatalistHtml(`ITEM_CODE_LIST_${idValue}`, `ITEM_CODE_LIST_${idValue}`, itemCodes, false);
+            const datalistContainer = document.createElement('div');
+            datalistContainer.innerHTML = datalistHtml; // Dynamically generate the datalist HTML
+            td.appendChild(datalistContainer); // Append datalist to td
+        }
+
+        // Create error message element
         const error = document.createElement('p');
         error.className = 'text-danger err-lbl mb-0 fs-8';
         error.id = `lbl-${nameAttr}`;
 
+        // Append input and error message to td
         td.appendChild(input);
         td.appendChild(error);
 
-        td.classList.add("bg-light");
+        td.classList.add("bg-light"); // Highlight the td for editing
     });
 
+    // Handle action buttons (Cancel and Update)
     const actionTd = tds[0];
     actionTd.innerHTML = `
         <div class="d-flex gap-1 align-items-center">
@@ -184,6 +205,7 @@ function editForecastRow(btn) {
             <input type="hidden" name="RECORD_ID" value="${idValue}" />
         </div>`;
 }
+
 
 function cancelEditRow(btn) {
     const row = btn.closest('tr');
@@ -465,3 +487,99 @@ document.addEventListener("fullscreenchange", () => {
         icon.classList.add("fa-expand", "text-primary");
     }
 });
+
+// Fetch Item Codes
+async function fetchAndReturnItemCodes(selected = null) {
+
+    // Retrieve the auth_token from cookies
+    const authToken = getCookie('auth_token');
+    if (!authToken) {
+        alert("Authorization token is missing. Please Login again to make API request.");
+        return;
+    }
+
+    fullPageLoader.classList.remove("d-none");
+
+    try {
+        // Fetch item codes from the API (replace 'your-api-endpoint' with the actual API URL)
+        const response = await fetch(`${APIUrl}/products/itemcodes_list`, {
+            method: 'POST', // or POST, depending on the API endpoint
+            headers: {
+                'Authorization': `Bearer ${authToken}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                limit: 0,
+                currentPage: 1,
+                filters: {}
+            })
+        });
+
+        // Check if the response is okay (status code 200-299)
+        if (!response.ok) {
+            throw new Error('Failed to fetch item codes');
+        }
+
+        // Parse the JSON response
+        const data = await response.json();
+        // Save item_codes to sessionStorage
+        if (data?.item_codes) {
+            sessionStorage.setItem('product_item_codes', JSON.stringify(data.item_codes));
+        }
+
+    } catch (error) {
+        console.error("Error fetching item codes:", error);
+    } finally {
+        fullPageLoader.classList.add("d-none");
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    const storedItemCodes = sessionStorage.getItem('product_item_codes');
+    // If data doesn't exist in sessionStorage, fetch and save it
+    if (!storedItemCodes) {
+        fetchAndReturnItemCodes();
+    }
+});
+
+function retriveItemCodes() {
+    try {
+        // Retrieve the item codes from sessionStorage
+        const storedItemCodes = sessionStorage.getItem('product_item_codes');
+
+        // Check if item codes exist in sessionStorage
+        if (!storedItemCodes) {
+            console.error("No item codes found in sessionStorage.");
+            return []; // Return an empty array if no data is found
+        }
+
+        // Parse the stored JSON data
+        const itemCodes = JSON.parse(storedItemCodes);
+
+        // Check if the parsed data is an array and has the expected structure
+        if (!Array.isArray(itemCodes)) {
+            console.error("Stored item codes are not in the expected format.");
+            return []; // Return an empty array if the format is not correct
+        }
+
+        // Assuming apiData is available and needs to be mapped
+        const formattedItemCode = itemCodes.map(item => {
+            // Validate the necessary fields
+            if (!item.PRODUCT_CODE || !item.PRODUCT_NAME) {
+                console.warn("Invalid item data found, skipping this entry:", item);
+                return null; // Return null for invalid items
+            }
+
+            return {
+                value: item.PRODUCT_CODE,
+                label: item.PRODUCT_NAME
+            };
+        }).filter(item => item !== null); // Filter out null items
+
+        // Return the formatted item codes
+        return formattedItemCode;
+    } catch (error) {
+        console.error("Error retrieving or formatting item codes:", error);
+        return []; // Return an empty array in case of an error
+    }
+}

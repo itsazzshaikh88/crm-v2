@@ -362,7 +362,7 @@ class Contacts extends Api_controller
             ]));
     }
 
-    function delete($contactID)
+    function delete($contactID, $status)
     {
         // Check if the authentication is valid
         $isAuthorized = $this->isAuthorized();
@@ -394,10 +394,10 @@ class Contacts extends Api_controller
         }
 
         // Attempt to delete the Contact
-        $result = $this->Contact_model->delete_contact_by_id($contactID);
+        $result = $this->Contact_model->update_contact_status_by_id($contactID, $status);
         if ($result) {
 
-            $action_type = 'DELETED';
+            $action_type = 'STATUS UPDATED';
             // ***** ===== Add User Activity - STARTS ===== *****
             $userForActivity = [
                 'userid' => $isAuthorized['userid'] ?? '',
@@ -412,7 +412,7 @@ class Contacts extends Api_controller
 
             $action = [
                 'ACTIVITY_TYPE' => "CONTACT {$action_type}",
-                'DESCRIPTION' => "User {$userForActivity['name']} (Role: {$userForActivity['role']}) {$action_type} contact from IP {$system['IP_ADDRESS']} using {$system['BROWSER']} on " . date('D, d M Y - H:i:s')
+                'DESCRIPTION' => "User {$userForActivity['name']} (Role: {$userForActivity['role']}) contact acccount {$action_type} from IP {$system['IP_ADDRESS']} using {$system['BROWSER']} on " . date('D, d M Y - H:i:s')
             ];
 
             $request = [

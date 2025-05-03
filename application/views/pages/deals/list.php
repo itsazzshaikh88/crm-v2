@@ -16,6 +16,7 @@
                                 <th>Exp Close Date</th>
                                 <th>Priority</th>
                                 <th>Status</th>
+                                <th>Created On</th>
                                 <th class="text-end">Action</th>
                             </tr>
                         </thead>
@@ -39,4 +40,5 @@ $this->load->view('loaders/full-page-loader');
 $this->load->view('pages/deals/modals/new-deal');
 $this->load->view('modals/activities/activity-modal');
 $this->load->view('modals/contact/associated-contact-list');
+$this->load->view('modals/activities/email-activity');
 ?>

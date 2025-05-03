@@ -230,7 +230,7 @@
                                 </div>
                             </div>
                             <div class="row g-1 mb-1">
-                                <div class="col-md-4">
+                                <!-- <div class="col-md-4">
                                     <div class="d-flex flex-column gap-1">
                                         <label for="SKU" class="text-gray-800 fw-bold">SKU Number </label>
                                         <input type="text" value="" class="form-control form-control-sm border border-blue-100 text-gray-700 " name="SKU" id="SKU">
@@ -241,7 +241,7 @@
                                         <label for="BARCODE" class="text-gray-800 fw-bold">Barcode Number </label>
                                         <input type="text" value="" class="form-control form-control-sm border border-blue-100 text-gray-700 " name="BARCODE" id="BARCODE">
                                     </div>
-                                </div>
+                                </div> -->
                                 <div class="col-md-4">
                                     <div class="d-flex flex-column gap-1">
                                         <label for="ALLOW_BACKORDERS" class="text-gray-800 fw-bold">Allow Backorders </label>

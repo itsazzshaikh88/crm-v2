@@ -5,10 +5,10 @@
 	}
 </style>
 <?php
- $username = $loggedInUser['username'] ?? 'Guest';
- $usertype = $loggedInUser['usertype'] ?? 'Guest';
- $user_id = $loggedInUser['userid'] ?? '';
- $email = $loggedInUser['email'] ?? 'user@guest.crm';
+$username = $loggedInUser['username'] ?? 'Guest';
+$usertype = $loggedInUser['usertype'] ?? 'Guest';
+$user_id = $loggedInUser['userid'] ?? '';
+$email = $loggedInUser['email'] ?? 'user@guest.crm';
 ?>
 <div id="kt_content_container" class="d-flex flex-column-fluid align-items-start container-xxl">
 	<div class="content flex-row-fluid" id="kt_content">
@@ -224,9 +224,9 @@
 			</div>
 			<!--end::PAGE CONTENT GOES FROM HERE-->
 			<div class="d-flex justify-content-end mb-10 mt-4">
-				<a href="javascript:void(0)" id="kt_ecommerce_add_product_cancel" class="btn btn-light me-5">
+				<button onclick="cancelFormAndReload()" type="button" id="kt_ecommerce_add_product_cancel" class="btn btn-light me-5">
 					Cancel
-				</a>
+				</button>
 				<button type="submit" id="submit-btn" class="btn btn-primary">
 					<span class="indicator-label">
 						Save Changes

@@ -12,10 +12,11 @@
                                 <th>Contact</th>
                                 <th>Company Name</th>
                                 <th>Job Title</th>
-                                <th>Contact Details</th>
+                                <th>Email</th>
+                                <th>Contact #</th>
                                 <th>Assigned To</th>
-                                <th>Contact Source</th>
-                                <th>Prefered Method</th>
+                                <th>Source</th>
+                                <th>Pref. Method</th>
                                 <th>Status</th>
                                 <th class="text-end">Action</th>
                             </tr>

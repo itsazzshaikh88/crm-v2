@@ -10,6 +10,7 @@ var newMomModal = new bootstrap.Modal(document.getElementById("newMomModal"), {
 });
 
 function openMomModal(action = 'new', momID = null) {
+    hideErrors();
     if (action === 'new') {
         // reset form and then open 
         momForm.reset()
@@ -113,12 +114,12 @@ async function submitMinutes(e) {
             if (data?.type == 'insert') {
                 // Data is inserted
                 showSavedMOM(data?.data);
-                fetchMOMS();
                 toasterNotification({ type: 'success', message: "Minutes of Meeting Saved Successfully" });
+                fetchMOMS();
             } else if (data?.type == 'update') {
                 // Data is updated
-                fetchMOMS();
                 toasterNotification({ type: 'success', message: "Minutes of Meeting Updated Successfully" });
+                fetchMOMS();
             } else {
                 toasterNotification({ type: 'error', message: 'Internal Server Error' });
             }

@@ -114,6 +114,14 @@ class Contact_model extends App_Model
         }
     }
 
+    public function update_contact_status_by_id($contactID, $status = 'in-active')
+    {
+        $contact_data = [
+            'STATUS' => $status
+        ];
+        return $this->db->where('CONTACT_ID', $contactID)->update($this->contact_table, $contact_data);
+    }
+
     /**
      * Get user by email
      *

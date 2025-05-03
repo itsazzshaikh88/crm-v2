@@ -163,7 +163,7 @@ $activities = DEAL_ACTIVITY_OPTIONS;
                                 </div>
                                 <div class="col-md-12 text-end d-none" id="activity-button-container">
                                     <div class="d-flex items-center justify-content-end">
-                                        <button class="btn btn-sm btn-outline btn-outline-dashed btn-outline-info btn-active-light-info me-2 mb-2" type="button"><i class="fa-solid fa-paper-plane text-info"></i> New Email</button>
+                                        <button class="btn btn-sm btn-outline btn-outline-dashed btn-outline-info btn-active-light-info me-2 mb-2" type="button" onclick="openEmailActivityModal()"><i class="fa-solid fa-paper-plane text-info"></i> New Email</button>
                                         <div class="dropdown">
                                             <button class="btn btn-sm btn-outline btn-outline-dashed btn-outline-success btn-active-light-success btn-light-success me-2 mb-2 dropdown-toggle" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false">
                                                 <i class="fa-solid fa-layer-group text-success"></i> Activities

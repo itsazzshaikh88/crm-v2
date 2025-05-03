@@ -17,13 +17,7 @@ $cpyright_years = ($start_year == $current_year) ? $current_year : "$start_year-
         <!--begin::Menu-->
         <ul class="menu menu-gray-600 menu-hover-primary fw-bold order-1">
             <li class="menu-item">
-                <a href="" target="_blank" class="menu-link px-2">About</a>
-            </li>
-            <li class="menu-item">
-                <a href="" target="_blank" class="menu-link px-2">Support</a>
-            </li>
-            <li class="menu-item">
-                <a href="" target="_blank" class="menu-link px-2">Purchase</a>
+                <a href="https://zamilplastic.com/en/about-us/" target="_blank" class="menu-link px-2">About</a>
             </li>
         </ul>
         <!--end::Menu-->
@@ -110,6 +104,30 @@ $cpyright_years = ($start_year == $current_year) ? $current_year : "$start_year-
 <script src="assets/js/pagination.js"></script>
 <script src="assets/js/skeleton/skeleton-table.js"></script>
 <script src="assets/js/skeleton/widget-skeleton.js"></script>
+
+<script>
+    function cancelFormAndReload() {
+        // SweetAlert2 confirmation dialog
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "Do you want to cancel this form and lose all changes?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, cancel it!',
+            cancelButtonText: 'No, keep it'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // If user confirms, reload the page
+                location.reload();
+            } else {
+                // If user cancels, do nothing
+                console.log('Form cancelation was aborted.');
+            }
+        });
+    }
+</script>
 <!--end::Page Custom Javascript-->
 
 <!--begin::Page Custom Javascript(Dynamic Included)-->

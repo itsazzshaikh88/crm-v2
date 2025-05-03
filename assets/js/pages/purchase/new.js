@@ -10,6 +10,8 @@ const emailAddress = document.getElementById("EMAIL_ADDRESS");
 const requestNumber = document.getElementById("REQUEST_ID");
 // -------- ********************** --------------------------------
 
+const lineTableTBODY = "purchase-line-table";
+
 let quillInstance;
 let quillOptions = {
     theme: 'snow',
@@ -93,6 +95,7 @@ function addRow() {
     // Create a new row
     const row = document.createElement('tr');
     row.innerHTML = `
+        <td></td>
        <td>
                                         <select name="PRODUCT_ID[]" id="PRODUCT_ID_${rowCount}" class="form-control form-control-sm" onclick="chooseProduct(${rowCount})">
                                             <option value="">Select</option>
@@ -135,12 +138,14 @@ function addRow() {
     `;
 
     tableBody.appendChild(row);
+    updateTableSequence(lineTableTBODY);
 }
 
 // Function to remove a specific row
 function removeRow(button) {
     const row = button.closest('tr');
     row.remove();
+    updateTableSequence(lineTableTBODY);
 }
 
 // Handle file selection
@@ -412,7 +417,7 @@ async function fetchPODetails(poUUID) {
         showClientDetails(data?.data?.header);
 
         // Show request Number
-        document.getElementById("PO_NUMBER").innerHTML = data?.data?.header?.PO_NUMBER || "PO-00000000"
+        document.getElementById("PO_NUMBER").innerHTML = ` - (${data?.data?.header?.PO_NUMBER || "PO-00000000"})`
 
         // Show uploaded files
         // Show Product Files attached
@@ -467,7 +472,9 @@ function showRequestLines(lines) {
         let desc = stripHtmlTags(line?.PRODUCT_DESC || '');
         // Create a new row
         const row = document.createElement('tr');
-        row.innerHTML = `<td>
+        row.innerHTML = `
+                        <td></td>
+                        <td>
                                 <select name="PRODUCT_ID[]" id="PRODUCT_ID_${++rowCount}" class="form-control form-control-sm" onclick="chooseProduct(${rowCount})">
                                     <option selected value="${line.PRODUCT_ID}">${line.PRODUCT_NAME}</option>
                                 </select>
@@ -509,7 +516,8 @@ function showRequestLines(lines) {
                         `;
 
         tableBody.appendChild(row);
-    })
+    });
+    updateTableSequence(lineTableTBODY);
 
 }
 

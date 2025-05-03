@@ -13,7 +13,8 @@
                                 <th>Name</th>
                                 <th>Company Name</th>
                                 <th>Role</th>
-                                <th>Contact</th>
+                                <th>Email</th>
+                                <th>Contact #</th>
                                 <th>Lead Created</th>
                                 <th>Lead Source</th>
                                 <th>Status</th>
@@ -37,4 +38,5 @@
 $this->load->view('loaders/full-page-loader');
 $this->load->view('pages/leads/modals/new-lead');
 $this->load->view('modals/activities/activity-modal');
+$this->load->view('modals/activities/email-activity');
 ?>

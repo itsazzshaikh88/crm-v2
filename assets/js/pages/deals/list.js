@@ -122,31 +122,27 @@ function showDeals(deals, tbody) {
         // show deals
         deals.forEach(deal => {
             content += `<tr data-deal-id="${deal?.DEAL_ID}" class="text-gray-800 fs-7">
-                                <td class="min-w-175px">
-                                    <div class="position-relative ps-6 pe-3 py-2">
-                                        <a href="javascript:void(0)" class="mb-1 text-gray-900 text-hover-primary fw-bold">${deal?.DEAL_NAME}</a>
-                                        <div class="fs-8 text-muted fw-normal">Created on ${formatAppDate(deal.CREATED_AT)}</div>
-                                    </div>
-                                </td>
-                                <td>
-
-                                    <div class="fs-7">${deal?.ASSOCIATED_CONTACT_ID}</div>
-                                </td>
+                                <td class="min-w-175px">${deal?.DEAL_NAME}</td>
+                                <td>${deal?.ASSOCIATED_CONTACT_ID}</td>
                                 <td>
                                     <span class="" style="color: ${dealStageColors[deal?.DEAL_STAGE]}">${capitalizeWords(deal?.DEAL_STAGE?.replace("-", " "), true)}</span>
                                 </td>
                                 <td>
                                     <span class="" style="color: ${dealTypeColors[deal?.DEAL_TYPE]}">${capitalizeWords(deal?.DEAL_TYPE?.replace("-", " "), true)}</span>
                                 </td>
-                                <td class="">
-
-                                    <div class="fs-7 fw-normal text-gray-600">${deal?.DEAL_VALUE}</div>
+                                <td class="">${deal?.DEAL_VALUE}</td>
+                                <td class="">${formatAppDate(deal?.EXPECTED_CLOSE_DATE)}</td>
+                                <td>
+                                    <span class="badge text-white" style="background-color: ${priorityColors[deal?.DEAL_PRIORITY]}">
+                                        ${capitalizeWords(deal?.DEAL_PRIORITY)}
+                                    </span>
                                 </td>
-                                <td class="">
-                                    <div class="mb-2 fw-normal text-gray-600">${formatAppDate(deal?.EXPECTED_CLOSE_DATE)}</div>
+                                <td>
+                                    <span class="badge bg-light" style="color: ${dealStatusColors[deal?.DEAL_STATUS]}">
+                                        ${capitalizeWords(deal?.DEAL_STATUS?.replaceAll("-", " "), true)}
+                                        </span>
                                 </td>
-                                <td><span class="badge text-white" style="background-color: ${priorityColors[deal?.DEAL_PRIORITY]}">${capitalizeWords(deal?.DEAL_PRIORITY)}</span></td>
-                                <td><span class="" style="color: ${dealStatusColors[deal?.DEAL_STATUS]}">${capitalizeWords(deal?.DEAL_STATUS?.replaceAll("-", " "), true)}</span></td>
+                                <td>${formatAppDate(deal.CREATED_AT)}</td>
                                 <td class="text-end">
                                     <div class="d-flex align-items-center justify-content-end gap-3">
                                         <a href="javascript:void(0)" onclick="openDealModal('edit', ${deal?.DEAL_ID})">

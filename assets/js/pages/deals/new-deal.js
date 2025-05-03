@@ -37,6 +37,7 @@ var newAssociatedContactModal = new bootstrap.Modal(document.getElementById("new
 });
 
 function openDealModal(action = 'new', dealID = null) {
+    hideErrors();
     if (action === 'new') {
         // reset form and then open 
         dealForm.reset()
@@ -209,13 +210,14 @@ async function submitDeal(e) {
                 // Data is inserted
                 setDealCreated(data?.data);
                 toasterNotification({ type: 'success', message: "Deal Created Successfully" });
+
             } else if (data?.type == 'update') {
                 // Data is updated
                 toasterNotification({ type: 'success', message: "Deal Updated Successfully" });
             } else {
                 toasterNotification({ type: 'error', message: 'Internal Server Error' });
             }
-
+            fetchDeals();
         } else {
             const errorData = await response.json();
             if (errorData.status === 422) {
