@@ -4,8 +4,6 @@ function openSuggestiveSalesForecastModal() {
     suggestiveModal.show();
 }
 
-openSuggestiveSalesForecastModal();
-
 function closeSuggestiveSalesForecastModal() {
     const tbody = document.getElementById('suggestive-forcast-table-tbody');
     tbody.innerHTML = '';

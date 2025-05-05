@@ -98,18 +98,18 @@
                                 <thead>
                                     <tr>
                                         <th colspan="8"></th>
-                                        <th colspan="2" class="text-center bg-secondary">JAN</th>
-                                        <th colspan="2" class="text-center bg-secondary">FEB</th>
-                                        <th colspan="2" class="text-center bg-secondary">MAR</th>
-                                        <th colspan="2" class="text-center bg-secondary">APR</th>
-                                        <th colspan="2" class="text-center bg-secondary">MAY</th>
-                                        <th colspan="2" class="text-center bg-secondary">JUN</th>
-                                        <th colspan="2" class="text-center bg-secondary">JUL</th>
-                                        <th colspan="2" class="text-center bg-secondary">AUG</th>
-                                        <th colspan="2" class="text-center bg-secondary">SEP</th>
-                                        <th colspan="2" class="text-center bg-secondary">OCT</th>
-                                        <th colspan="2" class="text-center bg-secondary">NOV</th>
-                                        <th colspan="2" class="text-center bg-secondary">DEC</th>
+                                        <th colspan="2" class="text-center text-white bg-success">JAN</th>
+                                        <th colspan="2" class="text-center text-white bg-danger">FEB</th>
+                                        <th colspan="2" class="text-center text-white bg-primary">MAR</th>
+                                        <th colspan="2" class="text-center text-white bg-success">APR</th>
+                                        <th colspan="2" class="text-center text-white bg-danger">MAY</th>
+                                        <th colspan="2" class="text-center text-white bg-primary">JUN</th>
+                                        <th colspan="2" class="text-center text-white bg-success">JUL</th>
+                                        <th colspan="2" class="text-center text-white bg-danger">AUG</th>
+                                        <th colspan="2" class="text-center text-white bg-primary">SEP</th>
+                                        <th colspan="2" class="text-center text-white bg-success">OCT</th>
+                                        <th colspan="2" class="text-center text-white bg-danger">NOV</th>
+                                        <th colspan="2" class="text-center text-white bg-primary">DEC</th>
                                     </tr>
                                     <tr>
                                         <th class="bg-light">#</th>
