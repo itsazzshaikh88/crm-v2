@@ -3,9 +3,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class App_Model extends CI_Model
 {
+    protected $oracleDB;
     public function __construct()
     {
         parent::__construct();
+        $this->oracleDB = $this->load->database('oracle', TRUE);
     }
 
     /**

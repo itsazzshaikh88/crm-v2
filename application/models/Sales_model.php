@@ -132,4 +132,102 @@ class Sales_model extends App_Model
         $this->db->where('VER', $version);
         return $this->db->get($this->forecast_table)->result();
     }
+
+    function sugegst_forecast($orgID, $startYear, $totalYear, $mode)
+    {
+        // Delete existing data
+        $this->oracleDB->query("DELETE from XXDB_SALES_PREDICT");
+
+        // Initialize strings
+        $pivot_str1 = ''; // for: 2020 as N20,2021 as N21,...
+        $pivot_str2 = ''; // for: N20 as 20, N21 as 21,...
+        $pivot_str3 = ''; // for: NVL(N20,0) N20,...
+        $pivot_cols = ''; // for: N20, N21,...
+
+        for ($i = 0; $i < $totalYear; $i++) {
+            $year = $startYear + $i;
+            $yearShort = substr($year, -2);
+            $col = "N$yearShort";
+
+            $pivot_str1 .= "$year as $col,";
+            $pivot_str2 .= "$col as $yearShort,";
+            $pivot_str3 .= "NVL($col,0) $col,";
+            $pivot_cols .= "$col,";
+        }
+
+        // Trim trailing commas
+        $pivot_str1 = rtrim($pivot_str1, ',');
+        $pivot_str2 = rtrim($pivot_str2, ',');
+        $pivot_str3 = rtrim($pivot_str3, ',');
+        $pivot_cols = rtrim($pivot_cols, ',');
+
+        // Now insert into your SQL
+        $insertSQL = "
+            Insert into XXDB_SALES_PREDICT (ORG_ID, CATE,  CUSTOMER_NO, CUSTOMER_NAME, ITEM, DESCRIPTION, UP, LOW_SALES, MOD_SALES, HIGH_SALES)
+            Select distinct ORG_ID, CATE,  CUSTOMER_NO, CUSTOMER_NAME, ITEM, DESCRIPTION, UP, 
+                ROUND(CASE when (NVL(AVG_QTY,0)-NVL(DEV_QTY,0)) < 0 then 0 else (NVL(AVG_QTY,0)-NVL(DEV_QTY,0)) end) LOW_SALES,
+                ROUND(DEV_QTY) MOD_SALES,
+                ROUND(NVL(AVG_QTY,0)+NVL(DEV_QTY,0)) HIGH_SALES 
+            from (
+                Select ORG_ID, CATE,  CUSTOMER_NO, CUSTOMER_NAME, ITEM, DESCRIPTION, UP, 
+                    STDDEV(QUANTITY) over (Partition BY ORG_ID, CATE, CUSTOMER_NO, CUSTOMER_NAME, ITEM, DESCRIPTION) as DEV_QTY,
+                    AVG(QUANTITY) over (Partition BY ORG_ID, CATE, CUSTOMER_NO, CUSTOMER_NAME, ITEM, DESCRIPTION) as AVG_QTY
+                from (
+                    Select ORG_ID, CATE, CUSTOMER_NO, CUSTOMER_NAME, ITEM, DESCRIPTION, 
+                        NVL((Select UNIT_SELLING_PRICE 
+                                from XXDB_SALES 
+                                where ORG_ID=$orgID and ITEM=X.ITEM and CUSTOMER_NO=X.CUSTOMER_NO 
+                                group by UNIT_SELLING_PRICE 
+                                order by MAX(TRX_DATE) desc fetch next 1 row only), 0) UP,
+                        $pivot_cols
+                    from (
+                        Select ORG_ID, CATE, CUSTOMER_NO, CUSTOMER_NAME, ITEM, DESCRIPTION, 
+                            $pivot_str3
+                        from (
+                            Select ORG_ID, YER, CATE, CUSTOMER_NO, CUSTOMER_NAME, ITEM, DESCRIPTION, QUANTITY_ORDERED 
+                            from XXDB_SALES 
+                            Where Org_id=$orgID  
+                        )
+                        Pivot (
+                            SUM(QUANTITY_ORDERED) for YER in ($pivot_str1)
+                        )
+                    ) X
+                )
+                Unpivot (
+                    quantity for YER in ($pivot_str2)
+                )
+            )
+            order by 1,2,3,5";
+
+        // Execute query
+        $this->oracleDB->query($insertSQL);
+
+        // Fetch and return suggestive forecast data
+        $results = [];
+        $querySQL = $this->_get_forecast_result_query($mode, $orgID);
+        if ($querySQL != '') {
+            $results = $this->oracleDB->query($querySQL)->result_array();
+        }
+
+        return $results;
+    }
+
+    function _get_forecast_result_query($type, $orgID)
+    {
+        $typeMap = [
+            'low'  => 'LOW_SALES',
+            'mod'  => 'MOD_SALES',
+            'high' => 'HIGH_SALES'
+        ];
+
+        $col = $typeMap[strtolower($type)] ?? null;
+        if (!$col) return '';
+
+        return "
+        SELECT DECODE($orgID,145,'IBM',442,'Z3P') DIV, CATE, CUSTOMER_NO, CUSTOMER_NAME, ITEM, DESCRIPTION, UP,
+               ROUND(NVL($col/12, 0)) MON_QTY,
+               ROUND(NVL(UP, 0) * NVL($col/12, 0)) MON_VAL
+        FROM XXDB_SALES_PREDICT
+        ORDER BY 1,2,3,5";
+    }
 }

@@ -537,4 +537,52 @@ class Sales extends Api_controller
         $writer->save('php://output');
         exit;
     }
+
+    // Suggestive forecast details
+    function sugegst_forecast()
+    {
+        // Check if the authentication is valid
+        $isAuthorized = $this->isAuthorized();
+        if (!$isAuthorized['status']) {
+            $this->output
+                ->set_status_header(401) // Set HTTP response status to 400 Bad Request
+                ->set_content_type('application/json')
+                ->set_output(json_encode(['error' => 'Unauthorized access. You do not have permission to perform this action.']))
+                ->_display();
+            exit;
+        }
+
+        // Access the parameters from GET
+        $orgID = isset($_GET['org-id']) ? $_GET['org-id'] : null;
+        $startYear = isset($_GET['start-year']) ? $_GET['start-year'] : null;
+        $mode = isset($_GET['mode']) ? $_GET['mode'] : null;
+        $totalYears = isset($_GET['total-years']) ? $_GET['total-years'] : null;
+
+        // Check for missing parameters (only if not set)
+        $missing = [];
+        if (!isset($_GET['org-id'])) $missing[] = 'org-id';
+        if (!isset($_GET['start-year'])) $missing[] = 'start-year';
+        if (!isset($_GET['mode'])) $missing[] = 'mode';
+        if (!isset($_GET['total-years'])) $missing[] = 'total-years';
+
+        if (!empty($missing)) {
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(400)
+                ->set_output(json_encode([
+                    'status' => 'error',
+                    'message' => 'Missing parameter(s): ' . implode(', ', $missing)
+                ]));
+        }
+
+        $suggestive_forecast = $this->Sales_model->sugegst_forecast($orgID, $startYear, $totalYears, $mode);
+
+        $response = [
+            'suggestive_forecast' => $suggestive_forecast,
+        ];
+        return $this->output
+            ->set_content_type('application/json')
+            ->set_status_header(200)
+            ->set_output(json_encode($response));
+    }
 }
