@@ -6,7 +6,7 @@ Track and commit:
 
 git status
 git add .
-git commit -m "Changes from 160"
+git commit -m "YOUR_COMMENT"
 git pull --rebase origin main
 git push origin main
 

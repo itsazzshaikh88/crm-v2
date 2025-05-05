@@ -99,13 +99,17 @@ class Auth extends CI_Controller
                     $auth_token = base64_encode($payload) . '.' . $token;
                     $expiry =  time() + (3 * 3600); // 3 hours in seconds
                     // Set the cookie with the hashed token
+
+                    $local_ip = ['localhost', '127.0.0.1'];
+                    $domain_host = in_array($_SERVER['HTTP_HOST'], $local_ip) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_ADDR'];
+
                     $cookie = array(
                         'name'   => 'auth_token',
                         'value'  => $auth_token,
                         'expire' => $expiry,
                         'secure' => FALSE, // Set to TRUE if using HTTPS
                         'httponly' => FALSE, // Prevent JS access
-                        'domain' => $_SERVER['HTTP_HOST'],
+                        'domain' => $domain_host,
                     );
                     // Set the cookie
                     $this->input->set_cookie($cookie);
