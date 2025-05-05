@@ -1,0 +1,31 @@
+✍️ Step 4: Make and Push Changes from 160
+Make code changes or add files.
+
+Track and commit:
+
+
+git status
+git add .
+git commit -m "Changes from 160"
+git pull --rebase origin main
+git push origin main
+
+🔄 Step 5: Sync Back to Azz
+On Azz:
+
+cd path/to/your-repo
+git pull origin main
+Now Azz is in sync with 160 and GitHub.
+
+✅ ✅ Future Workflow (Azz & 160)
+Use these rules every time before & after coding on either machine.
+
+✔️ Before you start work (on Azz or 160):
+
+git pull origin main
+✔️ After you're done coding:
+
+git add .
+git commit -m "Your changes"
+git pull --rebase origin main   # Ensures you're synced
+git push origin main
