@@ -1,13 +1,8 @@
 // productListSkeleton("invoices-list", 10, 11);
 function renderNoResponseCode(option, isAdmin = false) {
-
-    
     let l = `<tr>
-                                <td colspan="${option?.colspan}" class="text-center text-danger">
-                                    <div class="d-flex justify-content-center align-items-center flex-column">
-                                        <img src="assets/images/no-data.png" class="no-data-img-table w-80" alt="">
+                    <td colspan="${option?.colspan}" class="text-center text-danger"
                                         <h4 class="text-danger fw-normal">Invoice data not found</h4>
-                                    </div>
                                 </td>
                             </tr>`;
 
@@ -30,7 +25,7 @@ async function fetchInvoices() {
             return;
         }
         // Set loader to the screen 
-        listingSkeleton(tableId, paginate.pageLimit || 0, 'requests');
+        commonListingSkeleton(tableId, paginate.pageLimit || 0, numberOfHeaders);
         const url = `${APIUrl}/invoices/list`;
         const filters = filterCriterias([]);
 
@@ -70,14 +65,26 @@ async function fetchInvoices() {
 
 function showInvoices(Invoices, tbody) {
     let content = '';
-  // Ensure tbody is cleared before updating
-  tbody.innerHTML = '';
+    // Ensure tbody is cleared before updating
+    tbody.innerHTML = '';
 
     if (Invoices?.length > 0) {
         // show Invoices
+        let counter = 0;
         Invoices.forEach(invoice => {
-            
-            content += ``;
+            const invoice_link = `http://10.10.2.232/einvoice/invoices_pdf/${invoice?.PDF_PATH}`;
+            content += `<tr class="fs-8">
+                                <td>${++counter}</td>
+                                <td class="text-primary">${invoice?.INVOICE_NUMBER}</td>
+                                <td>${invoice?.INVOICE_DATE}</td>
+                                <td>${invoice?.CUSTOMER_REGISTRATION_NAME}</td>
+                                <td><span class="badge bg-light text-black fw-normal">${invoice?.INVOICE_TYPECODE} - ${invoice?.INVOICE_SUB_TYPECODE}</span></td>
+                                <td>${invoice?.TOTAL_TAX_AMOUNT}</td>
+                                <td>${invoice?.TAX_INCLUSIVE_AMOUNT}</td>
+                                <td>
+                                    <a href="${invoice_link}" target="_blank">View PDF</a>
+                                </td>
+                            </tr>`;
         });
         tbody.innerHTML = content;
     } else {
@@ -90,7 +97,7 @@ function showInvoices(Invoices, tbody) {
 // Global scope
 // Declare the pagination instance globally
 const paginate = new Pagination('current-page', 'total-pages', 'page-of-pages', 'range-of-records');
-paginate.pageLimit = 10; // Set your page limit here
+paginate.pageLimit = 100; // Set your page limit here
 
 // Function to handle pagination button clicks
 function handlePagination(action) {

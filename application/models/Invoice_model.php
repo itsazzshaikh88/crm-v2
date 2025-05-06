@@ -16,30 +16,20 @@ class Invoice_model extends App_Model
     {
         $offset = get_limit_offset($currentPage, $limit);
 
-        $this->db->select();
-        $this->db->from();
-        $this->db->join();
-        $this->db->join();
-        $this->db->join(); // Join with xx_crm_req_header
-
-        $this->db->order_by();
-
-        // Apply filters dynamically from the $filters array
-        if (!empty($filters) && is_array($filters)) {
-            foreach ($filters as $key => $value) {
-                $this->db->where($key, $value);
-            }
+        $sql = "SELECT 
+            i.INVOICE_NUMBER,i.INVOICE_DATE,i.INVOICE_TIME,i.CUSTOMER_REGISTRATION_NAME,i.PAYMENT_TYPE,i.INVOICE_TYPECODE,i.INVOICE_SUB_TYPECODE,
+                    i.ALLOWANCE_CHARGE_REASON,i.ALLOWANCE_AMOUNT,i.TOTAL_TAX_AMOUNT,i.TAXABLE_AMOUNT,i.TAX_EXCLUSIVE_AMOUNT,
+                    i.TAX_INCLUSIVE_AMOUNT,i.ALLOWANCE_TOTAL_AMOUNT,i.PREPAID_AMOUNT,i.PAYABLE_AMOUNT, imp.PDF_PATH
+            FROM XXEN_INVOICE_HEADER_2 i
+            JOIN XXZP.XXEINV_INV_IMPLMNT imp ON imp.INVOICE_NUMBER = i.INVOICE_NUMBER AND imp.IS_GENERATED = 1
+            ORDER BY 2 DESC 
+            ";
+        if ($type == "list") {
+            $sql .= "OFFSET $offset ROWS
+                    FETCH NEXT $limit ROWS ONLY";
         }
-
-        // Apply limit and offset only if 'list' type and offset is greater than zero
-        if ($type == 'list') {
-            if ($limit > 0) {
-                $this->db->limit($limit, ($offset > 0 ? $offset : 0));
-            }
-        }
-
         // Execute query
-        $query = $this->db->get();
+        $query = $this->oracleDB->query($sql);
 
         if ($type == 'list') {
             return $query->result_array();

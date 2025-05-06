@@ -46,12 +46,8 @@ class Invoices extends Api_controller
         $currentPage = isset($data['currentPage']) ? $data['currentPage'] : null;
         $filters = isset($data['filters']) ? $data['filters'] : [];
 
-        // $total_quotes = $this->Invoice_model->get_invoices('total', $limit, $currentPage, $filters);
-        // $quotes = $this->Invoice_model->get_invoices('list', $limit, $currentPage, $filters);
-
-
-        $total_invoices = '';
-        $invoices = [];
+        $total_invoices = $this->Invoice_model->get_invoices('total', $limit, $currentPage, $filters);
+        $invoices = $this->Invoice_model->get_invoices('list', $limit, $currentPage, $filters);
 
         $response = [
             'pagination' => [

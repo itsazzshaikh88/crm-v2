@@ -5,18 +5,17 @@
         <div class="card">
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-row-bordered gy-7" id="invoices-list">
+                    <table class="table table-row-bordered gy-3" id="invoices-list">
                         <thead>
                             <tr class="fw-bold fs-7 text-gray-900">
                                 <th>#</th>
                                 <th>Invoice #</th>
                                 <th>Invoice Date</th>
-                                <th>PO #</th>
-                                <th>Due Date</th>
-                                <th>Currency</th>
-                                <th>SOC #</th>
-                                <th>Total</th>
-                                <th>View Invoice</th>
+                                <th>Customer</th>
+                                <th>Invoice Type</th>
+                                <th>Tax Amount</th>
+                                <th>Total Amount</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody id="invoices-list-tbody">
