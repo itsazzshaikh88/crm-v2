@@ -174,8 +174,9 @@
                                     <col data-dt-column="4" style="width: 200px;">
                                 </colgroup>
                                 <thead class="border-bottom border-gray-200 fs-7 fw-bold">
-                                    <tr class="text-start text-muted text-uppercase gs-0" role="row">
-                                        <th>Product Details</th>
+                                    <tr class="" role="row">
+                                        <th>Product</th>
+                                        <th>Desc</th>
                                         <th>Quantity</th>
                                         <th>Unit Price</th>
                                         <th>Color</th>
@@ -183,7 +184,7 @@
                                         <th>Comments</th>
                                     </tr>
                                 </thead>
-                                <tbody class="fs-6 fw-semibold text-gray-600" id="quote-lines">
+                                <tbody class="fs-7 fw-semibold text-gray-600" id="quote-lines">
 
                                 </tbody>
                             </table>

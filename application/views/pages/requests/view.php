@@ -144,8 +144,7 @@
                                     <!--begin::Item-->
                                     <div class="mb-6">
                                         <div class="fw-semibold text-gray-600 fs-7">Full Name:</div>
-
-                                        <div class="fw-bold text-gray-800 fs-6" id="lbl-FULLNAME">
+                                        <div class="fw-bold text-gray-800 fs-6" id="lbl-CLIENT_NAME">
                                         </div>
                                     </div>
                                     <!--end::Item-->
@@ -177,8 +176,9 @@
                                     <col data-dt-column="4" style="width: 200px;">
                                 </colgroup>
                                 <thead class="border-bottom border-gray-200 fs-7 fw-bold">
-                                    <tr class="text-start text-muted text-uppercase gs-0" role="row">
-                                        <th>Product Details</th>
+                                    <tr class="" role="row">
+                                        <th>Product</th>
+                                        <th>Desc</th>
                                         <th>Quantity</th>
                                         <th>Required Date</th>
                                         <th>Color</th>
@@ -187,7 +187,7 @@
                                     </tr>
                                 </thead>
                                 <tbody class="fs-6 fw-semibold text-gray-600" id="request-lines">
-                                    
+
                                 </tbody>
                             </table>
                         </div>

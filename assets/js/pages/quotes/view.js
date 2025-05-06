@@ -95,7 +95,7 @@ async function fetchQuotation(quoteUUID) {
 
     } catch (error) {
         console.error(error);
-        
+
         // Show error notification
         toasterNotification({ type: 'error', message: 'Error: ' + error.message });
     } finally {
@@ -130,18 +130,17 @@ function generateLines(lines) {
         let desc = stripHtmlTags(line?.DESCRIPTION || '');
         return `<tr id="${line.LINE_ID}">
                     <td>
-                        <div>
-                            <p class="mb-0 text-info"><small>${line.PRODUCT_CODE}</small></p>
-                            <p class="fw-bold mb-1 text-black line-clamp-1">${line.PRODUCT_NAME}</p>
-                            <p class="line-clamp-2 mb-0"><small>${(desc == 'null' ? '' : desc)}</small></p>
-                        </div>
+                        <span class="line-clamp-1s">${line.PRODUCT_NAME}</span>
+                    </td>
+                    <td>
+                        <span class="line-clamp-1s">${(desc == 'null' ? '' : desc)}</span>
                     </td>
                     <td>${line.QTY || ''}</td>
                     <td>${line.UNIT_PRICE || ''}</td>
                     <td>${line.COLOR || ''}</td>
                     <td>${line.TRANSPORTATION || ''}</td>
                     <td>
-                        <p class="line-clamp-2 mb-0">${line.LINE_COMMENTS || ''}</p>
+                        <span class="line-clamp-1s mb-0">${line.LINE_COMMENTS || ''}</span>
                     </td>
                 </tr>
                 

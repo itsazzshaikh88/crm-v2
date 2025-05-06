@@ -42,8 +42,8 @@ class Purchase extends App_Controller
     {
         $data['uuid'] = $uuid;
         $data['view_path'] = 'pages/purchase/view';
-        $data['page_title'] = 'purchase Details - CRM Application';
-        $data['page_heading'] = 'purchase Details';
+        $data['page_title'] = 'Purchase Details - CRM Application';
+        $data['page_heading'] = 'Purchase Details';
         $data['navlink'] = 'requests';
         $data['css_files'] = [];
         $data['scripts'] = ['assets/js/pages/purchase/view.js'];

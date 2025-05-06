@@ -134,37 +134,18 @@ function generateLines(lines) {
         let desc = stripHtmlTags(line?.DESCRIPTION || '');
         console.log(line);
         return `<tr id="${line.LINE_ID}">
+                    <td>${line.PRODUCT_NAME}</td>
+                    <td>${line.PRODUCT_DESC}</td>
+                    <td>${line.QTY}</td>
+                    <td>${line.TOTAL || ''}</td>
                     <td>
-                 
-                        <div>
-                            <p class="mb-0 text-info"><small>${line.QTY}</small></p>
-                        
-                        </div>
-
+                        <span class="mb-0 line-clamp-2s">${line.COMMENTS || ''}</span>
                     </td>
-                   
-                   <td>
-                        <p class="mb-0 line-clamp-2">${line.TOTAL || ''}</p>
-                    </td>
-<td>
-                        <p class="mb-0 line-clamp-2">${line.COMMENTS || ''}</p>
-                    </td>
-                       <td>
-                        <p class="mb-0 line-clamp-2">${line.COLOR || ''}</p>
-                    </td>
-                    <td>
-                        <p class="mb-0 line-clamp-2">${line.TRANSPORT || ''}</p>
-                    </td>
+                    <td>${line.COLOR || ''}</td>
+                    <td>${line.TRANSPORT || ''}</td>
                     <td>${formatAppDate(line?.REQUIRED_DATE || '') ?? ''}</td>
-                   
-                
-                    
-                    
-                 
-                    
-                </tr>
-                
-    `;
+
+                </tr>`;
     }).join('');
 }
 

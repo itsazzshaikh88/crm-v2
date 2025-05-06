@@ -11,7 +11,6 @@
         <a href="requests/list" class="btn btn-sm btn-success my-2">Request List</a>
     <?php else: ?>
         <a href="requests/list" class="btn btn-sm border text-white my-2 mx-2">Request List</a>
-        <button type="button" onclick="openNewRequestModal()" class="btn btn-sm btn-success my-2 mx-2">Create New Request</button>
     <?php endif; ?>
 <?php endif; ?>
 <!--end::Button-->

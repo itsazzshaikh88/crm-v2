@@ -11,7 +11,6 @@
         <a href="quotes/list" class="btn btn-sm btn-success my-2">Quotation List</a>
     <?php else: ?>
         <a href="quotes/list" class="btn btn-sm border text-white my-2 mx-2">Quotation List</a>
-        <button type="button" onclick="openNewQuoteModal('new')" class="btn btn-sm btn-success my-2">Create New Quotation</button>
     <?php endif; ?>
 <?php endif; ?>
 <!--end::Button-->

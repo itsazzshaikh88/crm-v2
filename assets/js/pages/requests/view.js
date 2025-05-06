@@ -134,20 +134,19 @@ function generateLines(lines) {
     if (!lines && lines?.length <= 0) return ''
     return lines.map(line => {
         let desc = stripHtmlTags(line?.DESCRIPTION || '');
-        return `<tr id="${line.LINE_ID}">
+        return `<tr id="${line.LINE_ID}" class="fs-7">
                     <td>
-                        <div>
-                            <p class="mb-0 text-info"><small>${line.PRODUCT_CODE}</small></p>
-                            <p class="fw-bold mb-1 text-black line-clamp-1">${line.PRODUCT_NAME}</p>
-                            <p class="line-clamp-2 mb-0"><small>${(desc == 'null' ? '' : desc)}</small></p>
-                        </div>
+                            <span class="line-clamp-1s">${line.PRODUCT_NAME}</span>
+                    </td>
+                    <td>
+                            <span class="line-clamp-1s mb-0">${(desc == 'null' ? '' : desc)}</span>
                     </td>
                     <td>${line.QUANTITY || ''}</td>
                     <td>${formatAppDate(line?.REQUIRED_DATE || '') ?? ''}</td>
                     <td>${line.COLOR || ''}</td>
                     <td>${line.TRANSPORTATION || ''}</td>
                     <td>
-                        <p class="mb-0 line-clamp-2">${line.COMMENTS || ''}</p>
+                        <p class="mb-0 line-clamp-1s">${line.COMMENTS || ''}</p>
                     </td>
                 </tr>
                 

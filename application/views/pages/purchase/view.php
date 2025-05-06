@@ -17,6 +17,19 @@
                                 <!--begin::Row-->
                                 <div class="row mb-7">
                                     <!--begin::Label-->
+                                    <label class="col-lg-4 fw-semibold text-muted">PO # </label>
+                                    <!--end::Label-->
+
+                                    <!--begin::Col-->
+                                    <div class="col-lg-8">
+                                        <span class="fs-6 text-primary" id="lbl-PO_NUMBER"></span>
+                                    </div>
+                                    <!--end::Col-->
+                                </div>
+                                <!--end::Row-->
+                                <!--begin::Row-->
+                                <div class="row mb-7">
+                                    <!--begin::Label-->
                                     <label class="col-lg-4 fw-semibold text-muted">Email </label>
                                     <!--end::Label-->
 
@@ -30,7 +43,7 @@
                                 <!--begin::Row-->
                                 <div class="row mb-7">
                                     <!--begin::Label-->
-                                    <label class="col-lg-4 fw-semibold text-muted">number</label>
+                                    <label class="col-lg-4 fw-semibold text-muted">Number</label>
                                     <!--end::Label-->
 
                                     <!--begin::Col-->
@@ -43,7 +56,7 @@
                                 <!--begin::Row-->
                                 <div class="row mb-7">
                                     <!--begin::Label-->
-                                    <label class="col-lg-4 fw-semibold text-muted">Payment</label>
+                                    <label class="col-lg-4 fw-semibold text-muted">Payment Term</label>
                                     <!--end::Label-->
 
                                     <!--begin::Col-->
@@ -57,48 +70,48 @@
                                 <!--begin::Row-->
                                 <div class="row mb-7">
                                     <!--begin::Label-->
-                                    <label class="col-lg-4 fw-semibold text-muted">amount</label>
+                                    <label class="col-lg-4 fw-semibold text-muted">Amount</label>
                                     <!--end::Label-->
 
                                     <!--begin::Col-->
                                     <div class="col-lg-8">
                                         <span class="fs-6" id="lbl-TOTAL_AMOUNT"></span>
                                     </div>
-                                    
-                                    
+
+
                                     <!--end::Col-->
                                 </div>
                                 <!--end::Row-->
                                 <!--begin::Row-->
                                 <!-- <div class="row mb-7">
                                     begin::Label-->
-                                    <!-- <label class="col-lg-4 fw-semibold text-muted">Shipping Address</label> -->
-                                    <!--end::Label-->
+                                <!-- <label class="col-lg-4 fw-semibold text-muted">Shipping Address</label> -->
+                                <!--end::Label-->
 
-                                    <!--begin::Col-->
-                                    <!-- <div class="col-lg-8">
+                                <!--begin::Col-->
+                                <!-- <div class="col-lg-8">
                                         <span class="fs-6" id="lbl-SHIPPING_ADDRESS"></span>
                                     </div> -->
-                                    <!--end::Col-->
+                                <!--end::Col-->
                                 <!-- </div>  -->
                                 <!--end::Row-->
                                 <!--begin::Row-->
                                 <!-- <div class="row mb-7">
                                     begin::Label-->
-                                    <!-- <label class="col-lg-4 fw-semibold text-muted">Contact Number</label> -->
-                                    <!--end::Label-->
+                                <!-- <label class="col-lg-4 fw-semibold text-muted">Contact Number</label> -->
+                                <!--end::Label-->
 
-                                    <!--begin::Col-->
-                                    <!-- <div class="col-lg-2">
+                                <!--begin::Col-->
+                                <!-- <div class="col-lg-2">
                                         <span class="fs-6" id="lbl-CONTACT_NUMBER"></span>
                                     </div> -->
-                                    <!--end::Col-->
-                                    <!--begin::Label-->
-                                    <!-- <label class="col-lg-2 fw-semibold text-muted text-start">Email Address</label> -->
-                                    <!--end::Label-->
+                                <!--end::Col-->
+                                <!--begin::Label-->
+                                <!-- <label class="col-lg-2 fw-semibold text-muted text-start">Email Address</label> -->
+                                <!--end::Label-->
 
-                                    <!--begin::Col-->
-                                    <!-- <div class="col-lg-4 ">
+                                <!--begin::Col-->
+                                <!-- <div class="col-lg-4 ">
                                         <span class="fs-6" id="lbl-EMAIL_ADDRESS"></span>
                                     </div>
                                     end::Col
@@ -106,27 +119,27 @@
                                 <!--end::Row-->
                                 <!--begin::Row-->
                                 <!-- <div class="row mb-7"> -->
-                                    <!--begin::Label-->
-                                    <!-- <label class="col-lg-4 fw-semibold text-muted">Request Details</label> -->
-                                    <!--end::Label-->
+                                <!--begin::Label-->
+                                <!-- <label class="col-lg-4 fw-semibold text-muted">Request Details</label> -->
+                                <!--end::Label-->
 
-                                    <!--begin::Col-->
-                                    <!-- <div class="col-lg-8 bg-lighten rounded py-4">
+                                <!--begin::Col-->
+                                <!-- <div class="col-lg-8 bg-lighten rounded py-4">
                                         <span class="fs-6" id="lbl-REQUEST_DETAILS"></span>
                                     </div> -->
-                                    <!--end::Col-->
+                                <!--end::Col-->
                                 <!-- </div> -->
                                 <!--end::Row-->
                                 <!--begin::Row-->
                                 <!-- <div class="row mb-7"> -->
-                                    <!--begin::Label-->
-                                    <!-- <label class="col-lg-4 fw-semibold text-muted">Internal Notes</label> -->
-                                    <!--end::Label-->
-                                    <!--begin::Col-->
-                                    <!-- <div class="col-lg-8 bg-lighten rounded py-4">
+                                <!--begin::Label-->
+                                <!-- <label class="col-lg-4 fw-semibold text-muted">Internal Notes</label> -->
+                                <!--end::Label-->
+                                <!--begin::Col-->
+                                <!-- <div class="col-lg-8 bg-lighten rounded py-4">
                                         <span class="fs-6" id="lbl-INTERNAL_NOTES"></span>
                                     </div> -->
-                                    <!--end::Col-->
+                                <!--end::Col-->
                                 <!-- </div> -->
                                 <!--end::Row-->
                             </div>
@@ -145,12 +158,12 @@
                                     <!--end::Item-->
 
                                     <!--begin::Item-->
-                                    <!-- <div class="mb-6">
+                                    <div class="mb-6">
                                         <div class="fw-semibold text-gray-600 fs-7">Full Name:</div>
 
-                                        <div class="fw-bold text-gray-800 fs-6" id="lbl-FULLNAME">
+                                        <div class="fw-bold text-gray-800 fs-6" id="lbl-CLIENT_NAME">
                                         </div>
-                                    </div> -->
+                                    </div>
                                     <!--end::Item-->
 
                                 </div>
@@ -180,18 +193,19 @@
                                     <col data-dt-column="4" style="width: 200px;">
                                 </colgroup>
                                 <thead class="border-bottom border-gray-200 fs-7 fw-bold">
-                                    <tr class="text-start text-muted text-uppercase gs-0" role="row">
-                                        <!-- <th>Product Details</th> -->
-                                        <th>Quantity</th>
-                                        <th>TOTAL</th>
+                                    <tr class="" role="row">
+                                        <th>Product</th>
+                                        <th>Desc</th>
+                                        <th>Qty</th>
+                                        <th>Total</th>
                                         <th>Comments</th>
-                                         <th>Color</th>
-                                         <th>Transport</th>
-                                       
+                                        <th>Color</th>
+                                        <th>Transport</th>
+
                                     </tr>
                                 </thead>
-                                <tbody class="fs-6 fw-semibold text-gray-600" id="purchase-lines">
-                                    
+                                <tbody class="fs-7" id="purchase-lines">
+
                                 </tbody>
                             </table>
                         </div>

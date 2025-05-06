@@ -10,8 +10,7 @@
     <?php elseif ($options['action'] === 'form'): ?>
         <a href="purchase/list" class="btn btn-sm btn-success my-2">PO List</a>
     <?php else: ?>
-        <a href="purchase/list" class="btn border text-white my-2 mx-2">PO List</a>
-        <button type="button" onclick="openNewPurchaseModal('new')" class="btn btn-sm btn-success my-2">Create New PO</button>
+        <a href="purchase/list" class="btn btn-sm border text-white my-2 mx-2">PO List</a>
     <?php endif; ?>
 <?php endif; ?>
 <!--end::Button-->
