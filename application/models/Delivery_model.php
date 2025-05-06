@@ -16,30 +16,69 @@ class Delivery_model extends App_Model
     {
         $offset = get_limit_offset($currentPage, $limit);
 
-        $this->db->select();
-        $this->db->from();
-        $this->db->join();
-        $this->db->join();
-        $this->db->join(); // Join with xx_crm_req_header
+        $sql = "SELECT DISTINCT
+            delivery_detail_id,
+            delivery_no,
+            delivery_line_id,
+            source_name,
+            soc,
+            line_no,
+            item,
+            item_description,
+            customer_id,
+            requested_quantity,
+            shipped_quantity,
+            cust_po_number,
+            packing_details,
+            number_packing
+        FROM
+            wsh_delivery_detail_pack";
 
-        $this->db->order_by();
-
-        // Apply filters dynamically from the $filters array
-        if (!empty($filters) && is_array($filters)) {
-            foreach ($filters as $key => $value) {
-                $this->db->where($key, $value);
+        // ADD CONDITIONS FROM FILTER
+        // ADD CONDITIONS FROM FILTER 
+        $conditions = [];
+        foreach ($filters as $column => $value) {
+            // If value is an array, use IN clause
+            if (is_array($value)) {
+                // Escape each value for safety
+                $escapedValues = array_map(function ($v) {
+                    return "'" . addslashes($v) . "'";
+                }, $value);
+                $conditions[] = "$column IN (" . implode(", ", $escapedValues) . ")";
+            } else {
+                // Escape single value
+                $conditions[] = "$column = '" . addslashes($value) . "'";
             }
         }
 
-        // Apply limit and offset only if 'list' type and offset is greater than zero
-        if ($type == 'list') {
-            if ($limit > 0) {
-                $this->db->limit($limit, ($offset > 0 ? $offset : 0));
-            }
+        if (!empty($conditions)) {
+            $sql .= " WHERE " . implode(" AND ", $conditions);
         }
 
+
+        $sql .= " GROUP BY
+            delivery_detail_id,
+            delivery_no,
+            delivery_line_id,
+            source_name,
+            soc,
+            line_no,
+            item,
+            item_description,
+            customer_id,
+            requested_quantity,
+            shipped_quantity,
+            cust_po_number,
+            packing_details,
+            number_packing
+        ORDER BY
+            1 DESC ";
+        if ($type == "list") {
+            $sql .= "OFFSET $offset ROWS
+                    FETCH NEXT $limit ROWS ONLY";
+        }
         // Execute query
-        $query = $this->db->get();
+        $query = $this->oracleDB->query($sql);
 
         if ($type == 'list') {
             return $query->result_array();

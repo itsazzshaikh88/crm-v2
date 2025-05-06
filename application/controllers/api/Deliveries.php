@@ -9,8 +9,6 @@ class Deliveries extends Api_controller
         $this->load->model('Delivery_model');
     }
 
-
-
     function list()
     {
         // Check if the authentication is valid
@@ -46,12 +44,8 @@ class Deliveries extends Api_controller
         $currentPage = isset($data['currentPage']) ? $data['currentPage'] : null;
         $filters = isset($data['filters']) ? $data['filters'] : [];
 
-        // $total_deliveries = $this->Delivery_model->get_deliveries('total', $limit, $currentPage, $filters);
-        // $deliveries = $this->Delivery_model->get_deliveries('list', $limit, $currentPage, $filters);
-
-
-        $total_deliveries = '';
-        $deliveries = [];
+        $total_deliveries = $this->Delivery_model->get_deliveries('total', $limit, $currentPage, $filters);
+        $deliveries = $this->Delivery_model->get_deliveries('list', $limit, $currentPage, $filters);
 
         $response = [
             'pagination' => [
