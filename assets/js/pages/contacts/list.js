@@ -29,12 +29,47 @@ function renderNoResponseCode(option, isAdmin = false) {
     return noCotent;
 }
 
+function renderSkeletonCards(limit) {
+    const skeletons = Array.from({ length: limit }, () => `
+      <div class="col-sm-6 col-md-4 col-lg-3 mb-3">
+        <div class="contact-card p-3">
+          <div class="placeholder-glow">
+            <div class="d-flex mb-2">
+              <div class="placeholder rounded-circle me-2" style="width: 44px; height: 44px;"></div>
+              <div>
+                <div class="placeholder col-8 mb-1"></div>
+                <div class="placeholder col-6"></div>
+              </div>
+            </div>
+            <div class="placeholder col-10 mb-1"></div>
+            <div class="placeholder col-8 mb-1"></div>
+            <div class="placeholder col-6 mb-1"></div>
+            <div class="placeholder col-7 mb-1"></div>
+            <div class="placeholder col-5 mb-2"></div>
+            <div class="d-flex justify-content-between">
+              <div class="placeholder rounded-pill" style="width: 40px; height: 20px;"></div>
+              <div class="d-flex gap-1">
+                <div class="placeholder rounded" style="width: 24px; height: 24px;"></div>
+                <div class="placeholder rounded" style="width: 24px; height: 24px;"></div>
+                <div class="placeholder rounded" style="width: 24px; height: 24px;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `);
+    return skeletons.join('');
+}
+
+
 // Global Level Elements
 // get table id to store
-const tableId = "contact-list";
-const table = document.getElementById(tableId);
-const tbody = document.querySelector(`#${tableId} tbody`);
-const numberOfHeaders = document.querySelectorAll(`#${tableId} thead th`).length || 0;
+// const tableId = "contact-list";
+// const table = document.getElementById(tableId);
+// const tbody = document.querySelector(`#${tableId} tbody`);
+// const numberOfHeaders = document.querySelectorAll(`#${tableId} thead th`).length || 0;
+
+const contactContainer = document.getElementById("contact-list");
 
 async function fetchContacts() {
     try {
@@ -44,7 +79,7 @@ async function fetchContacts() {
             return;
         }
         // Set loader to the screen 
-        listingSkeleton(tableId, paginate.pageLimit || 0, 'contacts');
+        contactContainer.innerHTML = renderSkeletonCards(paginate.pageLimit);
         const url = `${APIUrl}/contacts/list`;
         const filters = filterCriterias([]);
 
@@ -69,13 +104,94 @@ async function fetchContacts() {
         paginate.totalPages = parseFloat(data?.pagination?.total_pages) || 0;
         paginate.totalRecords = parseFloat(data?.pagination?.total_records) || 0;
 
-        showContactList(data.contacts || [], tbody);
+        // showContactList(data.contacts || [], tbody);
+        showContactCards(data.contacts || []);
 
     } catch (error) {
         toasterNotification({ type: 'error', message: 'Request failed: ' + error.message });
         tbody.innerHTML = renderNoResponseCode();
     }
 }
+
+function setText(str) {
+    if (str == '' || str == ' ' || str == 'null' || str == null) return '';
+    else return str;
+}
+
+function showContactCards(contacts) {
+    if (!contacts) {
+        throw new Error("Contact details not found");
+    }
+    if (contacts && contacts.length > 0) {
+        const cardsHtml = contacts.map((contact) => {
+            const contactStatusIcon = contact?.STATUS?.toLowerCase() === 'in-active' ? "fas fa-toggle-off" : "fas fa-toggle-on";
+            const contactStatusIconColor = contact?.STATUS?.toLowerCase() === 'in-active' ? "danger" : "success";
+            const contactStatusIconLabel = contact?.STATUS?.toLowerCase() === 'in-active' ? "active" : "in-active";
+            return `
+        <div class="col-sm-6 col-md-4 col-lg-3 mb-3">
+          <div class="contact-card">
+            <div class="d-flex align-items-center mb-2">
+              <img src="assets/images/avatar-user.png" class="profile-img me-2" alt="User" />
+              <div class="contact-meta">
+                <div class="fw-bold"><span class="lie-clamp-1 text-primary">${setText(contact.FIRST_NAME || '')} ${setText(contact.LAST_NAME || '')}</span></div>
+                <small class="line-clamp-1">${setText(contact.JOB_TITLE || '')}, ${setText(contact.COMPANY_NAME || '')}</small>
+              </div>
+            </div>
+  
+            <div class="info-line line-clamp-1"><i class="bi bi-envelope"></i> ${setText(contact.EMAIL || '')}</div>
+            <div class="info-line line-clamp-1"><i class="bi bi-telephone"></i> ${setText(contact.PHONE || '')}</div>
+            <div class="info-line line-clamp-1"><i class="bi bi-person-badge"></i> Assigned: ${setText(contact.ASSIGNED_TO || '')}</div>
+            <div class="info-line line-clamp-1"><i class="bi bi-flag"></i> Source: ${capitalizeWords(setText(contact.CONTACT_SOURCE || ''), true)}</div>
+            <div class="info-line line-clamp-1"><i class="bi bi-chat-dots"></i> Pref. Method: ${setText(contact.PREFERRED_CONTACT_METHOD || '')}</div>
+  
+            <div class="d-flex justify-content-between align-items-center mt-2">
+              ${setContactStatus(contact.STATUS || '')}
+              <div class="d-flex align-items-center justify-content-end gap-3">
+                    <a href="javascript:void(0)" onclick="viewContactDetails('${contact?.UUID}')">
+                        <small>
+                            <i class="fs-6 fa-solid fa-file-lines text-info"></i>
+                        </small>
+                    </a>
+                    <a href="contacts/new/${contact?.UUID}?action=edit">
+                        <small>
+                            <i class="fs-6 fa-regular fa-pen-to-square text-gray-700"></i>
+                        </small>
+                    </a>
+                    <a href="javascript:void(0)" onclick="deleteContact(${contact?.CONTACT_ID}, '${contactStatusIconLabel}')">
+                        <small>
+                            <i class="fs-6 ${contactStatusIcon} text-${contactStatusIconColor}"></i>
+                        </small>
+                    </a>
+                </div>
+            </div>
+          </div>
+        </div>
+      `}).join('');
+
+        contactContainer.innerHTML = cardsHtml;
+    } else {
+        contactContainer.innerHTML = renderNoContacts();
+    }
+}
+
+function renderNoContacts() {
+    return `
+    <div class="col-12">
+      <div class="text-center p-4">
+          <div class="text-muted mb-3">
+            <i class="fas fa-address-book fa-3x mb-2"></i>
+            <h5 class="fw-semibold">No Contacts Available</h5>
+            <p class="mb-0">You haven't added any contacts yet or your search returned no results.</p>
+            <p class="text-muted small">Try adjusting your filters or create a new contact to get started.</p>
+          </div>
+          <a class="btn btn-primary mt-2" href="contacts/new">
+            <i class="fas fa-user-plus me-1"></i> Add New Contact
+          </a>
+      </div>
+    </div>
+  `;
+}
+
 
 function showContactList(contact, tbody) {
     if (!contact) {
@@ -147,7 +263,7 @@ function setContactStatus(status) {
 
 // Declare the pagination instance globally
 const paginate = new Pagination('current-page', 'total-pages', 'page-of-pages', 'range-of-records');
-paginate.pageLimit = 10; // Set your page limit here
+paginate.pageLimit = 12; // Set your page limit here
 
 // Function to handle pagination button clicks
 function handlePagination(action) {
