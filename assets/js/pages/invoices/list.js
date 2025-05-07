@@ -27,7 +27,7 @@ async function fetchInvoices() {
         // Set loader to the screen 
         commonListingSkeleton(tableId, paginate.pageLimit || 0, numberOfHeaders);
         const url = `${APIUrl}/invoices/list`;
-        const filters = filterCriterias([]);
+        const filters = filterCriterias(['ORG_ID', 'FROM_DATE', 'TO_DATE']);
 
         const response = await fetch(url, {
             method: 'POST',
@@ -38,7 +38,7 @@ async function fetchInvoices() {
             body: JSON.stringify({
                 limit: paginate.pageLimit,
                 currentPage: paginate.currentPage,
-                filters: filters
+                filters
             })
         });
 
@@ -112,6 +112,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-
+function filterInvoiceReport() {
+    paginate.currentPage = 1;
+    fetchInvoices(); // Fetch Request for the updated current page
+}
 
 

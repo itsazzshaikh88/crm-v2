@@ -17,36 +17,51 @@ class Delivery_model extends App_Model
         $offset = get_limit_offset($currentPage, $limit);
 
         $sql = "SELECT DISTINCT
-            delivery_detail_id,
-            delivery_no,
-            delivery_line_id,
-            source_name,
-            soc,
-            line_no,
-            item,
-            item_description,
-            customer_id,
-            requested_quantity,
-            shipped_quantity,
-            cust_po_number,
-            packing_details,
-            number_packing
-        FROM
-            wsh_delivery_detail_pack";
+                delivery_detail_id,
+                delivery_no,
+                delivery_line_id,
+                source_name,
+                soc,
+                line_no,
+                item,
+                item_description,
+                customer_id,
+                requested_quantity,
+                shipped_quantity,
+                cust_po_number,
+                packing_details,
+                number_packing
+            FROM
+                wsh_delivery_detail_pack";
 
-        // ADD CONDITIONS FROM FILTER
-        // ADD CONDITIONS FROM FILTER 
+        // ADD CONDITIONS FROM FILTER - CREATION_DATE
         $conditions = [];
+
+        // Date filtering logic
+        $fromDate = !empty($filters['FROM_DATE']) ? addslashes($filters['FROM_DATE']) : null;
+        $toDate = !empty($filters['TO_DATE']) ? addslashes($filters['TO_DATE']) : null;
+
+        if ($fromDate && $toDate) {
+            // Both from and to date are set
+            $conditions[] = "CREATION_DATE BETWEEN TO_DATE('$fromDate', 'YYYY-MM-DD') AND TO_DATE('$toDate', 'YYYY-MM-DD')";
+        } elseif ($fromDate) {
+            // Only from date is set
+            $conditions[] = "CREATION_DATE >= TO_DATE('$fromDate', 'YYYY-MM-DD')";
+        } elseif ($toDate) {
+            // Only to date is set
+            $conditions[] = "CREATION_DATE <= TO_DATE('$toDate', 'YYYY-MM-DD')";
+        }
+
+        // Remove FROM_DATE and TO_DATE from filters to avoid duplicate filtering
+        unset($filters['FROM_DATE'], $filters['TO_DATE']);
+
         foreach ($filters as $column => $value) {
-            // If value is an array, use IN clause
             if (is_array($value)) {
-                // Escape each value for safety
                 $escapedValues = array_map(function ($v) {
                     return "'" . addslashes($v) . "'";
                 }, $value);
                 $conditions[] = "$column IN (" . implode(", ", $escapedValues) . ")";
             } else {
-                // Escape single value
                 $conditions[] = "$column = '" . addslashes($value) . "'";
             }
         }
@@ -55,35 +70,38 @@ class Delivery_model extends App_Model
             $sql .= " WHERE " . implode(" AND ", $conditions);
         }
 
-
         $sql .= " GROUP BY
-            delivery_detail_id,
-            delivery_no,
-            delivery_line_id,
-            source_name,
-            soc,
-            line_no,
-            item,
-            item_description,
-            customer_id,
-            requested_quantity,
-            shipped_quantity,
-            cust_po_number,
-            packing_details,
-            number_packing
-        ORDER BY
-            1 DESC ";
+                delivery_detail_id,
+                delivery_no,
+                delivery_line_id,
+                source_name,
+                soc,
+                line_no,
+                item,
+                item_description,
+                customer_id,
+                requested_quantity,
+                shipped_quantity,
+                cust_po_number,
+                packing_details,
+                number_packing
+            ORDER BY
+                1 DESC ";
+
         if ($type == "list") {
-            $sql .= "OFFSET $offset ROWS
-                    FETCH NEXT $limit ROWS ONLY";
+            $sql .= " OFFSET $offset ROWS FETCH NEXT $limit ROWS ONLY";
         }
+
         // Execute query
         $query = $this->oracleDB->query($sql);
 
-        if ($type == 'list') {
-            return $query->result_array();
-        } else {
-            return $query->num_rows();
-        }
+        // Get the result based on the type
+        $result = ($type === 'list') ? $query->result_array() : $query->num_rows();
+
+        // Close the database connection
+        $this->oracleDB->close();
+
+        // Return the result
+        return $result;
     }
 }

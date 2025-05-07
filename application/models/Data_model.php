@@ -137,7 +137,13 @@ class Data_model extends App_Model
                 AND hcust.cust_account_id = hcasa.cust_account_id
             ORDER BY
                 customer_name";
-        return $this->oracleDB->query($sql)->result_array();
+        $query = $this->oracleDB->query($sql);  // Run the query
+        $result = $query->result_array();       // Fetch result as an array
+
+        $this->oracleDB->close();               // Close the connection
+
+        return $result;                         // Return the result array
+
     }
 
     function create_user_details($user_details, $client_details, $address_details)
@@ -197,7 +203,13 @@ class Data_model extends App_Model
             mtl_system_items_b msi
         WHERE
             substr(segment1, 1, 2) IN ( 'FG', 'SF' )  AND organization_id IN (242, 444)";
-        return $this->oracleDB->query($sql)->result_array();
+        $query = $this->oracleDB->query($sql);  // Run the query
+        $result = $query->result_array();       // Fetch result as an array
+
+        $this->oracleDB->close();               // Close the connection
+
+        return $result;                         // Return the result array
+
     }
 
     // add products

@@ -27,7 +27,7 @@ async function fetchDeliveries() {
         // Set loader to the screen 
         commonListingSkeleton(tableId, paginate.pageLimit || 0, numberOfHeaders);
         const url = `${APIUrl}/deliveries/list`;
-        const filters = filterCriterias(['ORG']);
+        const filters = filterCriterias(['ORG', 'FROM_DATE', 'TO_DATE']);
 
         const response = await fetch(url, {
             method: 'POST',
@@ -38,7 +38,7 @@ async function fetchDeliveries() {
             body: JSON.stringify({
                 limit: paginate.pageLimit,
                 currentPage: paginate.currentPage,
-                filters: filters
+                filters
             })
         });
 
@@ -73,14 +73,19 @@ function showDeliveries(deliveries, tbody) {
         let counter = 0;
         deliveries.forEach(invoice => {
             content += `<tr class="fs-8">
-                                <td>${++counter}</td>
+                                <td class="text-center">${++counter}</td>
                                 <td class="text-primary">${invoice?.DELIVERY_NO || ''}</td>
                                 <td>${invoice?.DELIVERY_LINE_ID || ''}</td>
                                 <td>${invoice?.SOURCE_NAME || ''}</td>
                                 <td>${invoice?.SOC || ''}</td>
                                 <td>${invoice?.LINE_NO || ''}</td>
                                 <td>${invoice?.ITEM || ''}</td>
-                                <td>${invoice?.ITEM_DESCRIPTION || ''}</td>
+                                <td class="truncate-cell" 
+                                    tabindex="0" 
+                                    onclick="toggleCellExpand(this)" 
+                                    onblur="collapseCell(this)">
+                                        ${invoice?.ITEM_DESCRIPTION || ''}
+                                </td>
                                 <td>${invoice?.CUSTOMER_ID || ''}</td>
                                 <td>${invoice?.REQUESTED_QUANTITY || ''}</td>
                                 <td>${invoice?.SHIPPED_QUANTITY || ''}</td>
@@ -112,9 +117,21 @@ function filterDeliveryReport() {
     fetchDeliveries(); // Fetch Request for the updated current page
 }
 
+document.addEventListener('DOMContentLoaded', () => {
+    // Fetch initial product data
+    fetchDeliveries();
+});
 
-
-
+function toggleCellExpand(cell) {
+    cell.classList.toggle('expanded');
+}
+function collapseCell(cell) {
+    cell.classList.remove('expanded');
+}
+function expandCell(cell) {
+    cell.classList.add('expanded');
+    cell.focus(); // Ensure blur can be triggered later
+}
 
 
 

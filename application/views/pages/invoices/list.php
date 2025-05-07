@@ -4,22 +4,49 @@
         <!--begin::PAGE CONTENT GOES FROM HERE-->
         <div class="card">
             <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-row-bordered gy-3" id="invoices-list">
+                <div class="row">
+                    <div class="col-md-2">
+                        <label for="ORG_ID">Division</label>
+                        <select id="ORG_ID" class="form-control form-control-sm">
+                            <option value="">-- Select Division --</option>
+                            <option selected value="145">IBM</option>
+                            <option value="442">Z3P</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-2">
+                        <label for="FROM_DATE">From Date</label>
+                        <input type="date" id="FROM_DATE" class="form-control form-control-sm"
+                            value="<?php echo date('Y-m-01'); ?>" />
+                    </div>
+
+                    <div class="col-md-2">
+                        <label for="TO_DATE">To Date</label>
+                        <input type="date" id="TO_DATE" class="form-control form-control-sm"
+                            value="<?php echo date('Y-m-t'); ?>" />
+                    </div>
+
+                    <div class="col-md-2 d-flex align-items-end">
+                        <button class="btn btn-sm btn-light border border-secondary" onclick="filterInvoiceReport()">Filter</button>
+                    </div>
+                </div>
+
+                <div class="table-responsive mt-3" style="max-height: 400px; overflow: auto;">
+                    <table class="table table-row-bordered gy-1" id="invoices-list" style="white-space: nowrap;">
                         <thead>
                             <tr class="fw-bold fs-7 text-gray-900">
-                                <th>#</th>
-                                <th>Invoice #</th>
-                                <th>Invoice Date</th>
-                                <th>Customer</th>
-                                <th>Invoice Type</th>
-                                <th>Tax Amount</th>
-                                <th>Total Amount</th>
-                                <th>Action</th>
+                                <th class="">#</th>
+                                <th class="">Invoice #</th>
+                                <th class="">Invoice Date</th>
+                                <th class="">Customer</th>
+                                <th class="">Invoice Type</th>
+                                <th class="">Tax Amount</th>
+                                <th class="">Total Amount</th>
+                                <th class="">Action</th>
                             </tr>
                         </thead>
                         <tbody id="invoices-list-tbody">
-                            
+
                         </tbody>
                     </table>
                 </div>
