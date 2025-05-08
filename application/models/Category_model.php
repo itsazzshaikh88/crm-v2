@@ -10,9 +10,15 @@ class Category_model extends App_Model
         $this->category_table = 'xx_crm_product_categories'; // Initialize token table
     }
     // Function to add or update product
-    function get_all_categories()
+    function get_all_categories($conditions = [])
     {
-        return $this->db->get($this->category_table)->result_array();
+        if (isset($conditions) && count($conditions) > 0) {
+            foreach ($conditions as $key => $value) {
+                $this->db->where($key, $value);
+            }
+        }
+        $categories = $this->db->get($this->category_table)->result_array();
+        return $categories;
     }
 
     // CRUD FOR API

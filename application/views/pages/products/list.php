@@ -126,14 +126,18 @@
                                     </div>
                                     <div class="my-4">
                                         <div class="d-flex align-items-center justify-content-start gap-2">
-                                            <input type="checkbox" value="444" name="type" data-column-name="DIVISION" class="getFilters">
+                                            <input type="checkbox" value="IBM" name="type" data-column-name="DIVISION" class="getFilters">
                                             <label class="mb-0 text-filter">Food</label>
                                         </div>
                                         <div class="d-flex align-items-center justify-content-start gap-2">
-                                            <input type="checkbox" value="242" name="type" data-column-name="DIVISION" class="getFilters">
+                                            <input type="checkbox" value="Z3P" name="type" data-column-name="DIVISION" class="getFilters">
                                             <label class="mb-0 text-filter">Industrial</label>
                                         </div>
                                     </div>
+                                    <div class="">
+                                        <h6 class="fw-bold mb-0">Categories</h6>
+                                    </div>
+                                    <div class="my-4" id="filter-categories-container"></div>
                                 </div>
 
                                 <div class="col-md-12 mb-0">

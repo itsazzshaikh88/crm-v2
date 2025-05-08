@@ -438,12 +438,7 @@ document.addEventListener('DOMContentLoaded', () => {
         createRangeSlider('lengthSlider', 150, 500, 100, 600);
 
         // apply on change events
-        let filtersCheckBoxes = document.querySelectorAll(".getFilters");
-        if (filtersCheckBoxes && filtersCheckBoxes?.length > 0) {
-            filtersCheckBoxes.forEach((filterCheckBox) => {
-                filterCheckBox.addEventListener("change", filterProductList);
-            })
-        }
+        applyEventOnFilter();
     } else {
         listContainer.classList.remove("d-none");
         gridContainer.classList.add("d-none");
@@ -454,62 +449,119 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchProducts();
     // fetchFilters();
 
-
-
 });
+
+// Function to run on page load
+window.addEventListener('DOMContentLoaded', async () => {
+    loadAndRenderCategories(renderCategoriesAsCheckboxes);
+});
+
+async function loadAndRenderCategories(renderCallback) {
+    let categories = [];
+
+    const storedCategories = localStorage.getItem('categories');
+
+    if (storedCategories) {
+        try {
+            categories = JSON.parse(storedCategories);
+        } catch (e) {
+            categories = await fetchCategoriesForFilter();
+        }
+    } else {
+        categories = await fetchCategoriesForFilter();
+    }
+
+    if (categories && categories.length > 0 && typeof renderCallback === 'function') {
+        renderCallback(categories);
+    }
+}
+
+
+function renderCategoriesAsDropdown(categories) {
+    const select = document.getElementById('categories-select');
+    if (!select) return;
+
+    let html = '<option value="">Select Category</option>';
+
+    categories.forEach(category => {
+        html += `<option value="${category.id}">${category.CATEGORY_CODE}</option>`;
+    });
+
+    select.innerHTML = html;
+}
+
+
+function renderCategoriesAsCheckboxes(categories) {
+    const container = document.getElementById('filter-categories-container');
+    if (!container) return;
+
+    let html = '';
+
+    categories.forEach(category => {
+        html += `
+            <div class="d-flex align-items-center justify-content-start gap-2">
+                <input type="checkbox" value="${category.ID}" name="type" data-column-name="CATEGORY_ID" class="getFilters">
+                <label class="mb-0 text-filter">${category.CATEGORY_CODE}</label>
+            </div>
+        `;
+    });
+
+    container.innerHTML = html;
+    applyEventOnFilter();
+
+}
+
+function applyEventOnFilter() {
+    let filtersCheckBoxes = document.querySelectorAll(".getFilters");
+    if (filtersCheckBoxes && filtersCheckBoxes?.length > 0) {
+        filtersCheckBoxes.forEach((filterCheckBox) => {
+            filterCheckBox.addEventListener("change", () => {
+                debouncedFilterProductList(); // Use the debounced version
+            });
+        })
+    }
+}
+
+
 
 function filterProducts() {
     paginate.currentPage = 1;
     fetchProducts();
 }
 
-// async function fetchCategoriesForFilter() {
-//     const categoryList = document.getElementById("FILTER_CATEGORY_ID");
+async function fetchCategoriesForFilter() {
 
-//     // Disable the select dropdown and show the loading label with animation
-//     categoryList.disabled = true;
+    // Retrieve the auth_token from cookies
+    const authToken = getCookie('auth_token');
+    if (!authToken) {
+        toasterNotification({ type: 'error', message: errorData.message ?? 'Internal Server Error' });
+        return;
+    }
 
-//     // Retrieve the auth_token from cookies
-//     const authToken = getCookie('auth_token');
-//     if (!authToken) {
-//         toasterNotification({ type: 'error', message: errorData.message ?? 'Internal Server Error' });
-//         return;
-//     }
+    try {
+        // Fetch categories from the API (replace 'your-api-endpoint' with the actual API URL)
+        const response = await fetch(`${APIUrl}/categories/all`, {
+            method: 'GET', // or POST, depending on the API endpoint
+            headers: {
+                'Authorization': `Bearer ${authToken}`,
+            },
+        });
 
-//     try {
-//         // Fetch categories from the API (replace 'your-api-endpoint' with the actual API URL)
-//         const response = await fetch(`${APIUrl}/categories/all`, {
-//             method: 'GET', // or POST, depending on the API endpoint
-//             headers: {
-//                 'Authorization': `Bearer ${authToken}`,
-//             },
-//         });
+        // Check if the response is okay (status code 200-299)
+        if (!response.ok) {
+            throw new Error('Failed to fetch categories');
+        }
 
-//         // Check if the response is okay (status code 200-299)
-//         if (!response.ok) {
-//             throw new Error('Failed to fetch categories');
-//         }
+        // Parse the JSON response
+        const categories = await response.json();
+        // Store categories in localStorage
+        localStorage.setItem('categories', JSON.stringify(categories));
 
-//         // Parse the JSON response
-//         const categories = await response.json();
-
-//         // Clear existing options
-//         categoryList.innerHTML = '<option value="">Choose Category</option>';
-
-//         // Populate the <select> with category options
-//         categories.forEach(category => {
-//             const option = document.createElement("option");
-//             option.value = category.ID; // Adjust to match the category ID key
-//             option.textContent = category.CATEGORY_CODE; // Adjust to match the category name key
-//             categoryList.appendChild(option);
-//         });
-//     } catch (error) {
-//         toasterNotification({ type: 'error', message: error });
-//     } finally {
-//         // Re-enable the select dropdown and hide the loading label
-//         categoryList.disabled = false;
-//     }
-// }
+        return categories || [];
+    } catch (error) {
+        toasterNotification({ type: 'error', message: error });
+    }
+}
 
 async function fetchFilters() {
 
@@ -680,9 +732,10 @@ function createRangeSlider(sliderId, startMin, startMax, min, max) {
     });
 
     slider.noUiSlider.on('change', function (values) {
-        // Call product filters options
-        filterProductList();
+        // Call product filters options with debounce
+        debouncedFilterProductList(); // Use the debounced version
     });
+
 
 }
 
@@ -692,3 +745,12 @@ function triggerOnChange(element) {
     element.dispatchEvent(event);
 
 }
+
+function debounce(func, delay) {
+    let timeout;
+    return function (...args) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(this, args), delay);
+    };
+}
+const debouncedFilterProductList = debounce(filterProductList, 500); // 300ms delay

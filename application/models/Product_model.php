@@ -157,7 +157,7 @@ class Product_model extends App_model
 
         // apply filters
         if (!empty($filters) && is_array($filters)) {
-            $fields = ['DIVISION' => 'p.DIVISION', 'VOLUME' => 'LOWER(p.VOLUME)', 'SHAPE' => 'LOWER(p.SHAPE)'];
+            $fields = ['DIVISION' => 'p.DIVISION', 'CATEGORY_ID' => 'p.CATEGORY_ID', 'VOLUME' => 'LOWER(p.VOLUME)', 'SHAPE' => 'LOWER(p.SHAPE)'];
 
             foreach ($fields as $key => $column) {
                 if (!empty($filters[$key])) {
