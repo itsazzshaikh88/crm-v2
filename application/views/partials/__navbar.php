@@ -314,7 +314,7 @@ $userid = $loggedInUser['userid'] ?? '0';
                                                         <!--begin:Menu link-->
                                                         <a href="users"
                                                             class="menu-link ">
-                                                            <span class="menu-title">Users & Accounts</span>
+                                                            <span class="menu-title">Users & Access Management</span>
                                                         </a>
                                                         <!--end:Menu link-->
                                                     </div>
