@@ -19,7 +19,16 @@
                     </div>
                     <div class="row mb-2">
                         <div class="col-md-3 d-flex align-items-center justify-content-start">
-                            <label for="FIRST_NAME" class="fs-6 fw-bold required">Cotact Name</label>
+                            <label for="ORG_ID" class="fs-6 fw-bold required">Division</label>
+                        </div>
+                        <div class="col-md-3">
+                        <?= render_org_select("ORG_ID", "ORG_ID", "form-control", "Select Division") ?>
+                            <span class="text-danger err-lbl" id="lbl-ORG_ID"></span>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-md-3 d-flex align-items-center justify-content-start">
+                            <label for="FIRST_NAME" class="fs-6 fw-bold required">Contact Name</label>
                         </div>
                         <div class="col-md-3">
                             <input type="text" name="FIRST_NAME" id="FIRST_NAME" class="form-control" placeholder="Contact First Name">
@@ -128,7 +137,7 @@
                             <label for="ADDRESS" class="fs-6 fw-bold required">Contact Address</label>
                         </div>
                         <div class="col-md-9">
-                            <input type="text" name="ADDRESS" id="ADDRESS" class="form-control" placeholder="Company Registration Name">
+                            <input type="text" name="ADDRESS" id="ADDRESS" class="form-control" placeholder="Company Registration Address">
                             <span class="text-danger err-lbl" id="lbl-ADDRESS"></span>
                         </div>
                     </div>

@@ -38,6 +38,7 @@ class Purchase extends Api_controller
             // Set validation rules
             // $this->form_validation->set_rules('quotation_number', 'Quotation Number', 'required');
             // $this->form_validation->set_rules('REQUEST_ID', 'Request Number', 'required');
+            $this->form_validation->set_rules('ORG_ID', 'Org ID', 'required');
             $this->form_validation->set_rules('COMPANY_NAME', 'Company Name', 'required');
             $this->form_validation->set_rules('COMPANY_ADDRESS', 'Company Address', 'required');
             $this->form_validation->set_rules('EMAIL_ADDRESS', 'Email Address', 'required|valid_email');

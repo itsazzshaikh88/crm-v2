@@ -33,7 +33,7 @@ class News extends Api_controller
             }
 
             // Set validation rules
-            $fields = ['TYPE',  'TITLE', 'DESCRIPTION', 'PRIORITY',  'VISIBILITY_SCOPE', 'STATUS'];
+            $fields = ['TYPE',  'TITLE', 'DESCRIPTION', 'PRIORITY',  'VISIBILITY_SCOPE', 'STATUS', 'ORG_ID'];
             foreach ($fields as $field):
                 $this->form_validation->set_rules($field, ucwords(strtolower(str_replace("_", " ", $field))), 'required');
             endforeach;
@@ -126,7 +126,7 @@ class News extends Api_controller
             }
 
             // Set validation rules
-            $fields = ['TYPE',  'TITLE', 'DESCRIPTION', 'PRIORITY', 'VISIBILITY_SCOPE', 'STATUS'];
+            $fields = ['TYPE',  'TITLE', 'DESCRIPTION', 'PRIORITY', 'VISIBILITY_SCOPE', 'STATUS', 'ORG_ID'];
             foreach ($fields as $field):
                 $this->form_validation->set_rules($field, ucwords(strtolower(str_replace("_", " ", $field))), 'required');
             endforeach;

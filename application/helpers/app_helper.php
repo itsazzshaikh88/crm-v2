@@ -232,3 +232,29 @@ function survey_ratings()
         )
     );
 }
+
+if (!function_exists('render_org_select')) {
+    /** 
+     * Renders a <select> tag for organizations
+     *
+     * @param string $name The name attribute of the select tag (default 'ORG_ID')
+     * @param string $id The id attribute of the select tag (default 'ORG_ID')
+     * @param string|null $class Optional CSS class
+     * @param string|null $defaultOption Optional default placeholder option
+     * @return string HTML <select> element
+     */
+    function render_org_select($name = 'ORG_ID', $id = 'ORG_ID', $class = "form-select form-select-sm", $defaultOption = 'Select Organization')
+    {
+        $classAttr = $class ? " class=\"$class\"" : '';
+        $html = "<select name=\"$name\" id=\"$id\"$classAttr>";
+
+        if ($defaultOption) {
+            $html .= "<option value=\"\">$defaultOption</option>";
+        }
+
+        // Options will be filled by JS after page load
+        $html .= "</select>";
+
+        return $html;
+    }
+}

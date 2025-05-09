@@ -33,7 +33,7 @@ class Deals extends Api_controller
             }
 
             // Set validation rules
-            $fields = ['DEAL_NAME',  'DEAL_STAGE', 'DEAL_TYPE', 'DEAL_VALUE', 'DEAL_PRIORITY', 'EXPECTED_CLOSE_DATE', 'ASSIGNED_TO', 'DEAL_SOURCE', 'DEAL_STATUS', 'CONTACT_NUMBER'];
+            $fields = ['DEAL_NAME',  'DEAL_STAGE', 'DEAL_TYPE', 'DEAL_VALUE', 'DEAL_PRIORITY', 'EXPECTED_CLOSE_DATE', 'ASSIGNED_TO', 'DEAL_SOURCE', 'DEAL_STATUS', 'CONTACT_NUMBER', 'ORG_ID'];
             foreach ($fields as $field):
                 $this->form_validation->set_rules($field, ucwords(strtolower(str_replace("_", " ", $field))), 'required');
             endforeach;
@@ -158,7 +158,7 @@ class Deals extends Api_controller
             }
 
             // Set validation rules
-            $fields = ['DEAL_NAME',  'DEAL_STAGE', 'DEAL_TYPE', 'DEAL_VALUE', 'DEAL_PRIORITY', 'EXPECTED_CLOSE_DATE', 'ASSIGNED_TO', 'DEAL_SOURCE', 'DEAL_STATUS', 'CONTACT_NUMBER'];
+            $fields = ['DEAL_NAME',  'DEAL_STAGE', 'DEAL_TYPE', 'DEAL_VALUE', 'DEAL_PRIORITY', 'EXPECTED_CLOSE_DATE', 'ASSIGNED_TO', 'DEAL_SOURCE', 'DEAL_STATUS', 'CONTACT_NUMBER', 'ORG_ID'];
             foreach ($fields as $field):
                 $this->form_validation->set_rules($field, ucwords(strtolower(str_replace("_", " ", $field))), 'required');
             endforeach;

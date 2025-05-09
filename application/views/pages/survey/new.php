@@ -13,9 +13,17 @@
                             <label for="" class="fs-6 fw-bold">Survey Number</label>
                         </div>
                         <div class="col-md-3">
-                            <input type="text" class="form-control" placeholder="Auto Generated"  name="SURVEY_NUMBER" id="SURVEY_NUMBER" readonly>
+                            <input type="text" class="form-control" placeholder="Auto Generated" name="SURVEY_NUMBER" id="SURVEY_NUMBER" readonly>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
 
-                        
+                        <div class="col-md-3 d-flex align-items-center justify-content-start">
+                            <label for="" class="fs-6 fw-bold">Division</label>
+                        </div>
+                        <div class="col-md-3">
+                            <?= render_org_select("ORG_ID", "ORG_ID", "form-control", "Select Division") ?>
+                            <span class="text-danger err-lbl" id="lbl-ORG_ID"></span>
                         </div>
                         <div class="col-md-3 d-flex align-items-center justify-content-start">
                             <label for="" class="fs-6 fw-bold">Survey Status</label>
@@ -71,13 +79,13 @@
                         <div class="col-md-9">
                             <textarea name="SURVEY_DESC" id="SURVEY_DESC" class="form-control" rows="5"
                                 placeholder="Write your survey description"></textarea>
-                                <span class="text-danger err-lbl" id="lbl-SURVEY_DESC"></span>
+                            <span class="text-danger err-lbl" id="lbl-SURVEY_DESC"></span>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="d-flex justify-content-end mb-10 mt-5">
-                
+
                 <button type="submit" id="submit-btn" class="btn btn-primary">
                     <span class="indicator-label">
                         Save Changes

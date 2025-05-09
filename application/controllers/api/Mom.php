@@ -33,7 +33,7 @@ class Mom extends Api_controller
             }
 
             // Set validation rules
-            $fields = ['MEETING_TITLE',  'MEETING_DATE', 'DURATION', 'LOCATION_PLATFORM', 'ORGANIZER',  'AGENDA', 'MEETING_TYPE', 'COMPANY_NAME', 'DISCUSSION_TOPICS'];
+            $fields = ['MEETING_TITLE',  'MEETING_DATE', 'DURATION', 'LOCATION_PLATFORM', 'ORGANIZER',  'AGENDA', 'MEETING_TYPE', 'COMPANY_NAME', 'DISCUSSION_TOPICS', 'ORG_ID'];
             foreach ($fields as $field):
                 $this->form_validation->set_rules($field, ucwords(strtolower(str_replace("_", " ", $field))), 'required');
             endforeach;
@@ -143,7 +143,7 @@ class Mom extends Api_controller
             }
 
             // Set validation rules
-            $fields = ['MEETING_TITLE',  'MEETING_DATE', 'DURATION', 'LOCATION_PLATFORM', 'ORGANIZER',  'AGENDA', 'MEETING_TYPE', 'COMPANY_NAME', 'DISCUSSION_TOPICS'];
+            $fields = ['MEETING_TITLE',  'MEETING_DATE', 'DURATION', 'LOCATION_PLATFORM', 'ORGANIZER',  'AGENDA', 'MEETING_TYPE', 'COMPANY_NAME', 'DISCUSSION_TOPICS', 'ORG_ID'];
             foreach ($fields as $field):
                 $this->form_validation->set_rules($field, ucwords(strtolower(str_replace("_", " ", $field))), 'required');
             endforeach;

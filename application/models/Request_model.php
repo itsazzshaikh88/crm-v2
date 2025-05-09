@@ -34,6 +34,7 @@ class Request_model extends App_model
             'EMAIL_ADDRESS' => $data['EMAIL_ADDRESS'],
             'REQUEST_DETAILS' => $data['REQUEST_DETAILS'],
             'INTERNAL_NOTES' => $data['INTERNAL_NOTES'],
+            'ORG_ID' => $data['ORG_ID'],
             'STATUS' => 'draft',
             'ACTION_BY' => $role,
             'VERSION' => '1'
@@ -119,7 +120,7 @@ class Request_model extends App_model
 
         $offset = get_limit_offset($currentPage, $limit);
 
-        $this->db->select("rh.ID, rh.REQUEST_NUMBER, rh.UUID, rh.REQUEST_TITLE, rh.REQUEST_DETAILS, rh.CONTACT_NUMBER, rh.EMAIL_ADDRESS, rh.STATUS, rh.ACTION_BY, rh.VERSION, rh.CREATED_AT,
+        $this->db->select("rh.ID, rh.REQUEST_NUMBER, rh.UUID, rh.ORG_ID, rh.REQUEST_TITLE, rh.REQUEST_DETAILS, rh.CONTACT_NUMBER, rh.EMAIL_ADDRESS, rh.STATUS, rh.ACTION_BY, rh.VERSION, rh.CREATED_AT,
         cl.COMPANY_NAME, u.FIRST_NAME, u.LAST_NAME, u.EMAIL");
         $this->db->from("xx_crm_req_header rh");
         $this->db->join("xx_crm_client_detail cl", "cl.USER_ID = rh.CLIENT_ID", "left");
@@ -161,7 +162,7 @@ class Request_model extends App_model
 
         if ($requestUUID) {
             // Fetch product details
-            $data['header'] = $this->db->select("rh.ID, rh.REQUEST_NUMBER, rh.UUID, rh.CLIENT_ID, rh.REQUEST_TITLE, rh.COMPANY_ADDRESS, rh.BILLING_ADDRESS, rh.SHIPPING_ADDRESS, rh.CONTACT_NUMBER, 
+            $data['header'] = $this->db->select("rh.ID, rh.ORG_ID, rh.REQUEST_NUMBER, rh.UUID, rh.CLIENT_ID, rh.REQUEST_TITLE, rh.COMPANY_ADDRESS, rh.BILLING_ADDRESS, rh.SHIPPING_ADDRESS, rh.CONTACT_NUMBER, 
             rh.EMAIL_ADDRESS, rh.REQUEST_DETAILS, rh.INTERNAL_NOTES, rh.ATTACHMENTS, 
             cl.COMPANY_NAME, u.FIRST_NAME, u.LAST_NAME, u.EMAIL, CONCAT(u.FIRST_NAME, ' ', u.LAST_NAME) as FULLNAME")
                 ->from('xx_crm_req_header rh')
@@ -212,7 +213,7 @@ class Request_model extends App_model
 
         if ($searchkey && $searchvalue) {
             // Fetch product details
-            $data['header'] = $this->db->select("rh.ID, rh.REQUEST_NUMBER, rh.UUID, rh.CLIENT_ID, rh.REQUEST_TITLE, rh.COMPANY_ADDRESS, rh.BILLING_ADDRESS, rh.SHIPPING_ADDRESS, rh.CONTACT_NUMBER, 
+            $data['header'] = $this->db->select("rh.ID, rh.ORG_ID, rh.REQUEST_NUMBER, rh.UUID, rh.CLIENT_ID, rh.REQUEST_TITLE, rh.COMPANY_ADDRESS, rh.BILLING_ADDRESS, rh.SHIPPING_ADDRESS, rh.CONTACT_NUMBER, 
             rh.EMAIL_ADDRESS, rh.REQUEST_DETAILS, rh.INTERNAL_NOTES, rh.ATTACHMENTS, 
             cl.COMPANY_NAME, u.FIRST_NAME, u.LAST_NAME, u.EMAIL, CONCAT(u.FIRST_NAME, ' ', u.LAST_NAME) as CLIENT_NAME")
                 ->from('xx_crm_req_header rh')

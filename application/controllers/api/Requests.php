@@ -33,6 +33,7 @@ class Requests extends Api_controller
             }
 
             // Set validation rules
+            $this->form_validation->set_rules('ORG_ID', 'Org ID', 'required');
             $this->form_validation->set_rules('REQUEST_TITLE', 'Request Title', 'required');
             $this->form_validation->set_rules('COMPANY_ADDRESS', 'Company Address', 'required|min_length[3]');
             $this->form_validation->set_rules('BILLING_ADDRESS', 'Billing Address', 'required|min_length[3]');

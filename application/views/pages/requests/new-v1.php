@@ -118,6 +118,13 @@ $loggedInUserType = strtolower($loggedInUser['usertype']);
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group row align-items-center mb-1">
+                                        <label for="ORG_ID" class="col-md-3 text-gray-800 fw-bold">Division <span class="text-danger">*</span> <span class="float-end">:</span> </label>
+                                        <div class="col-sm-9">
+                                            <?= render_org_select("ORG_ID", "ORG_ID", "form-control form-control-sm border border-blue-100 text-gray-700", "Select Division") ?>
+                                            <p class="text-danger err-lbl mb-0 fs-8" id="lbl-ORG_ID"></p>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row align-items-center mb-1">
                                         <label for="COMPANY_ADDRESS" class="col-md-3 text-gray-800 fw-bold">Company Address <span class="text-danger">*</span> <span class="float-end">:</span> </label>
                                         <div class="col-sm-9">
                                             <input type="text" class="form-control form-control-sm border border-blue-100 text-gray-700 " name="COMPANY_ADDRESS" id="COMPANY_ADDRESS"

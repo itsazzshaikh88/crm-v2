@@ -19,6 +19,7 @@ class Survey_model extends App_Model
     {
         $survey_data = [
             'UUID' => $data['UUID'],
+            'ORG_ID' => $data['ORG_ID'] ?? '',
             'SURVEY_NAME' => $data['SURVEY_NAME'],
             'SURVEY_DESC' => $data['SURVEY_DESC'],
             'START_DATE' => $data['START_DATE'],
@@ -101,7 +102,7 @@ class Survey_model extends App_Model
     {
 
 
-        $this->db->select("s.SURVEY_ID,s.UUID, s.SURVEY_NUMBER, s.SURVEY_NAME, s.SURVEY_DESC, s.START_DATE, s.END_DATE, s.CONDUCTED_BY, s.STATUS, s.CREATED_AT");
+        $this->db->select("s.SURVEY_ID,s.UUID, s.SURVEY_NUMBER, s.SURVEY_NAME, s.SURVEY_DESC, s.START_DATE, s.END_DATE, s.CONDUCTED_BY, s.STATUS, s.CREATED_AT, s.ORG_ID");
         $this->db->from("XX_CRM_SURVEY s");
         $this->db->order_by("s.SURVEY_ID", "DESC");
 
@@ -118,6 +119,7 @@ class Survey_model extends App_Model
     {
         $survey_data = [
             'UUID' => $data['UUID'],
+            'ORG_ID' => $data['ORG_ID'] ?? '',
             'SURVEY_NAME' => $data['SURVEY_NAME'],
             'SURVEY_DESC' => $data['SURVEY_DESC'],
             'START_DATE' => $data['START_DATE'],
@@ -136,7 +138,7 @@ class Survey_model extends App_Model
     {
         $offset = get_limit_offset($currentPage, $limit);
 
-        $this->db->select("s.SURVEY_ID,s.UUID, s.SURVEY_NUMBER, s.SURVEY_NAME, s.SURVEY_DESC, s.START_DATE, s.END_DATE, s.CONDUCTED_BY, s.STATUS, s.CREATED_AT");
+        $this->db->select("s.SURVEY_ID,s.UUID, s.SURVEY_NUMBER, s.SURVEY_NAME, s.SURVEY_DESC, s.START_DATE, s.END_DATE, s.CONDUCTED_BY, s.STATUS, s.CREATED_AT, s.ORG_ID");
         $this->db->from("XX_CRM_SURVEY s");
         $this->db->order_by("s.SURVEY_ID", "DESC");
 
@@ -261,7 +263,7 @@ class Survey_model extends App_Model
     {
         $data = [];
         if ($surveyUUID) {
-            $data = $this->db->select("s.SURVEY_ID, s.UUID, s.SURVEY_NUMBER,s.SURVEY_NAME ,s.SURVEY_DESC, s.START_DATE, s.END_DATE, s.CONDUCTED_BY, s.STATUS,s.SURVEY_YEAR,s.VERSION")
+            $data = $this->db->select("s.SURVEY_ID, s.ORG_ID, s.UUID, s.SURVEY_NUMBER,s.SURVEY_NAME ,s.SURVEY_DESC, s.START_DATE, s.END_DATE, s.CONDUCTED_BY, s.STATUS,s.SURVEY_YEAR,s.VERSION")
                 ->from($this->survey_table . " s")
                 ->where('s.UUID', $surveyUUID)
                 ->get()

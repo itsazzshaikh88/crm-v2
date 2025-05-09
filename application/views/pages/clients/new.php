@@ -66,6 +66,15 @@
                             <span class="text-danger err-lbl" id="lbl-EMAIL"></span>
                         </div>
                     </div>
+                    <div class="row mb-2">
+                        <div class="col-md-3 d-flex align-items-center justify-content-start">
+                            <label for="ORG_ID" class="fs-6 fw-bold required">Division</label>
+                        </div>
+                        <div class="col-md-3">
+                            <?= render_org_select("ORG_ID", "ORG_ID", "form-control", "Select Division") ?>
+                            <span class="text-danger err-lbl" id="lbl-ORG_ID"></span>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="card mb-2">

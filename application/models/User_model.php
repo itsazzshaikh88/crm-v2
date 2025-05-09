@@ -120,7 +120,7 @@ class User_model extends App_Model
     {
         $offset = get_limit_offset($currentPage, $limit);
 
-        $this->db->select("u.ID,u.UUID, u.USER_ID, u.FIRST_NAME, u.LAST_NAME, u.EMAIL,u.PHONE_NUMBER, u.STATUS, cd.COMPANY_NAME, cd.CREDIT_LIMIT, cd.TAXES, cd.ORDER_LIMIT,  ca.ADDRESS_LINE_1, ca.ADDRESS_LINE_2, ca.BILLING_ADDRESS, ca.SHIPPING_ADDRESS, ca.CITY, ca.STATE, ca.COUNTRY, ca.ZIP_CODE");
+        $this->db->select("u.ID,u.UUID, u.ORG_ID, u.USER_ID, u.FIRST_NAME, u.LAST_NAME, u.EMAIL,u.PHONE_NUMBER, u.STATUS, cd.COMPANY_NAME, cd.CREDIT_LIMIT, cd.TAXES, cd.ORDER_LIMIT,  ca.ADDRESS_LINE_1, ca.ADDRESS_LINE_2, ca.BILLING_ADDRESS, ca.SHIPPING_ADDRESS, ca.CITY, ca.STATE, ca.COUNTRY, ca.ZIP_CODE");
         $this->db->from($this->user_table . " u");
         $this->db->join($this->client_table . " cd", "cd.USER_ID = u.ID", "left");
         $this->db->join($this->client_address_table . " ca", "ca.CLIENT_ID = cd.USER_ID", "left");
@@ -158,7 +158,7 @@ class User_model extends App_Model
     {
         $offset = get_limit_offset($currentPage, $limit);
 
-        $this->db->select("u.ID, u.USER_ID, u.UUID, u.USER_TYPE, u.FIRST_NAME, u.LAST_NAME, u.EMAIL, u.PASSWORD, u.PHONE_NUMBER, u.STATUS, u.CREATED_AT, u.UPDATED_AT, u.IS_2FA_ENABLED");
+        $this->db->select("u.ID, u.USER_ID, u.UUID, u.ORG_ID, u.USER_TYPE, u.FIRST_NAME, u.LAST_NAME, u.EMAIL, u.PASSWORD, u.PHONE_NUMBER, u.STATUS, u.CREATED_AT, u.UPDATED_AT, u.IS_2FA_ENABLED");
         $this->db->from($this->user_table . " u");
         $this->db->order_by("u.ID", "DESC");
 
@@ -192,6 +192,7 @@ class User_model extends App_Model
     {
         $users_data = [
             'UUID' => $data['UUID'],
+            'ORG_ID' => $data['ORG_ID'] ?? '',
             'USER_TYPE' => 'client',
             'FIRST_NAME' => $data['FIRST_NAME'],
             'LAST_NAME' => $data['LAST_NAME'],
@@ -275,7 +276,7 @@ class User_model extends App_Model
     {
         $data = [];
         if ($clientUUID) {
-            $data = $this->db->select("u.ID, u.USER_ID, u.UUID, u.USER_TYPE, u.FIRST_NAME, u.LAST_NAME, u.EMAIL, u.PHONE_NUMBER, u.STATUS, cd.COMPANY_NAME, cd.SITE_NAME, cd.PAYMENT_TERM, cd.CREDIT_LIMIT, cd.TAXES, cd.CURRENCY, cd.ORDER_LIMIT, ca.ADDRESS_LINE_1, ca.ADDRESS_LINE_2, ca.BILLING_ADDRESS, ca.SHIPPING_ADDRESS, ca.CITY, ca.STATE, ca.COUNTRY, ca.ZIP_CODE")
+            $data = $this->db->select("u.ID, u.USER_ID, u.UUID, u.ORG_ID, u.USER_TYPE, u.FIRST_NAME, u.LAST_NAME, u.EMAIL, u.PHONE_NUMBER, u.STATUS, cd.COMPANY_NAME, cd.SITE_NAME, cd.PAYMENT_TERM, cd.CREDIT_LIMIT, cd.TAXES, cd.CURRENCY, cd.ORDER_LIMIT, ca.ADDRESS_LINE_1, ca.ADDRESS_LINE_2, ca.BILLING_ADDRESS, ca.SHIPPING_ADDRESS, ca.CITY, ca.STATE, ca.COUNTRY, ca.ZIP_CODE")
                 ->from($this->user_table . " u")
                 ->join($this->client_table . " cd", "cd.USER_ID = u.ID", "left")
                 ->join($this->client_address_table . " ca", "ca.CLIENT_ID = cd.USER_ID", "left")
@@ -354,7 +355,7 @@ class User_model extends App_Model
     public function getUserDetail($user_id, $email)
     {
         // Query to fetch user details from the 'users' table
-        $this->db->select('ID,FIRST_NAME, LAST_NAME, PHONE_NUMBER, USER_ID');
+        $this->db->select('ID,FIRST_NAME, LAST_NAME, PHONE_NUMBER, USER_ID, ORG_ID');
         $this->db->where('ID', $user_id);
         $this->db->where('EMAIL', $email);
         $query = $this->db->get('xx_crm_users');
@@ -372,6 +373,7 @@ class User_model extends App_Model
     {
         $user_data = [
             'UUID' => uuid_v4(),
+            'ORG_ID' => $data['ORG_ID'] ?? '',
             'FIRST_NAME' => $data['FIRST_NAME'],
             'LAST_NAME' => $data['LAST_NAME'],
             'EMAIL' => $data['EMAIL'],
@@ -399,6 +401,7 @@ class User_model extends App_Model
     public function update_user_details($userID, $data, $created_by)
     {
         $user_data = [
+            'ORG_ID' => $data['ORG_ID'] ?? '',
             'FIRST_NAME' => $data['FIRST_NAME'],
             'LAST_NAME' => $data['LAST_NAME'],
             'PHONE_NUMBER' => $data['PHONE_NUMBER'],

@@ -26,6 +26,7 @@ class Quotes_model extends App_Model
     {
         $header_data = [
             'UUID' => $data['UUID'],
+            'ORG_ID' => $data['ORG_ID'] ?? '',
             'CLIENT_ID' => $data['CLIENT_ID'],
             'REQUEST_ID' => $data['REQUEST_NUMBER'],
             'COMPANY_ADDRESS' => $data['COMPANY_ADDRESS'],
@@ -122,7 +123,7 @@ class Quotes_model extends App_Model
         $usertype = strtolower($user['role'] ?? 'guest');
         $offset = get_limit_offset($currentPage, $limit);
 
-        $this->db->select("qu.UUID,qu.QUOTE_ID, qu.QUOTE_NUMBER, qu.CLIENT_ID,qu.EMPLOYEE_NAME ,qu.JOB_TITLE, qu.EMAIL_ADDRESS, qu.SALES_PERSON,rh.REQUEST_NUMBER, qu.QUOTE_STATUS,qu.TOTAL_AMOUNT, qu.ACTION_BY, qu.VERSION, qu.CREATED_AT,
+        $this->db->select("qu.UUID,qu.QUOTE_ID,qu.ORG_ID, qu.QUOTE_NUMBER, qu.CLIENT_ID,qu.EMPLOYEE_NAME ,qu.JOB_TITLE, qu.EMAIL_ADDRESS, qu.SALES_PERSON,rh.REQUEST_NUMBER, qu.QUOTE_STATUS,qu.TOTAL_AMOUNT, qu.ACTION_BY, qu.VERSION, qu.CREATED_AT,
         cl.COMPANY_NAME, ");
         $this->db->from("xx_crm_quotations qu");
         $this->db->join("xx_crm_client_detail cl", "cl.USER_ID = qu.CLIENT_ID", "left");
@@ -168,7 +169,7 @@ class Quotes_model extends App_Model
 
         if ($quoteUUID) {
             // Fetch product details
-            $data['header'] = $this->db->select("qu.QUOTE_ID,qu.REQUEST_ID,qu.QUOTE_NUMBER, qu.UUID, qu.CLIENT_ID, qu.QUOTE_STATUS, qu.JOB_TITLE, qu.SALES_PERSON, qu.EMPLOYEE_NAME, qu.COMPANY_ADDRESS, qu.EMAIL_ADDRESS,  
+            $data['header'] = $this->db->select("qu.QUOTE_ID, qu.ORG_ID, qu.REQUEST_ID,qu.QUOTE_NUMBER, qu.UUID, qu.CLIENT_ID, qu.QUOTE_STATUS, qu.JOB_TITLE, qu.SALES_PERSON, qu.EMPLOYEE_NAME, qu.COMPANY_ADDRESS, qu.EMAIL_ADDRESS,  
             qu.MOBILE_NUMBER, qu.CURRENCY, qu.PAYMENT_TERM, qu.SUB_TOTAL, qu.DISCOUNT_PERCENTAGE, qu.TAX_PERCENTAGE, qu.TOTAL_AMOUNT, qu.COMMENTS, qu.INTERNAL_NOTES, qu.ATTACHMENTS, 
             cl.COMPANY_NAME, u.FIRST_NAME, u.LAST_NAME, u.EMAIL, CONCAT(u.FIRST_NAME, ' ', u.LAST_NAME) as FULLNAME")
                 ->from('xx_crm_quotations qu')
@@ -215,7 +216,7 @@ class Quotes_model extends App_Model
 
         if ($searchkey) {
             // Fetch product details
-            $data['header'] = $this->db->select("qu.QUOTE_ID,qu.REQUEST_ID,qu.QUOTE_NUMBER, qu.UUID, qu.CLIENT_ID, qu.QUOTE_STATUS, qu.JOB_TITLE, qu.SALES_PERSON, qu.EMPLOYEE_NAME, qu.COMPANY_ADDRESS, qu.EMAIL_ADDRESS,  
+            $data['header'] = $this->db->select("qu.QUOTE_ID, qu.ORG_ID, qu.REQUEST_ID,qu.QUOTE_NUMBER, qu.UUID, qu.CLIENT_ID, qu.QUOTE_STATUS, qu.JOB_TITLE, qu.SALES_PERSON, qu.EMPLOYEE_NAME, qu.COMPANY_ADDRESS, qu.EMAIL_ADDRESS,  
             qu.MOBILE_NUMBER, qu.CURRENCY, qu.PAYMENT_TERM, qu.SUB_TOTAL, qu.DISCOUNT_PERCENTAGE, qu.TAX_PERCENTAGE, qu.TOTAL_AMOUNT, qu.COMMENTS, qu.INTERNAL_NOTES, qu.ATTACHMENTS, 
             cl.COMPANY_NAME, u.FIRST_NAME, u.LAST_NAME, u.EMAIL, CONCAT(u.FIRST_NAME, ' ', u.LAST_NAME) as FULLNAME, rh.REQUEST_NUMBER")
                 ->from('xx_crm_quotations qu')
@@ -287,6 +288,7 @@ class Quotes_model extends App_Model
             $new_quote = [
                 'UUID' => uuid_v4(),
                 'CLIENT_ID' => $quote['CLIENT_ID'],
+                'ORG_ID' => $quote['ORG_ID'] ?? '',
                 'REQUEST_ID' => $quote['REQUEST_ID'],
                 'EMPLOYEE_NAME' => $quote['EMPLOYEE_NAME'],
                 'JOB_TITLE' => $quote['JOB_TITLE'],
@@ -401,6 +403,7 @@ class Quotes_model extends App_Model
             $new_quote = [
                 'UUID' => uuid_v4(),
                 'CLIENT_ID' => $request['header']['CLIENT_ID'] ?? '',
+                'ORG_ID' => $request['header']['ORG_ID'] ?? '',
                 'REQUEST_ID' => $request['header']['ID'] ?? '',
                 'COMPANY_ADDRESS' => $client_address_details['ADDRESS_LINE_1'] ?? '',
                 'EMPLOYEE_NAME' => $employee_name,

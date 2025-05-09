@@ -16,6 +16,11 @@
                 <form onsubmit="submitForm(event)" class="form d-flex flex-column " id="form" method="POST" enctype="multipart/form-data">
                     <input type="hidden" name="ID" id="ID" value="">
                     <!-- Input Fields  -->
+                    <div class="form-floating mb-2">
+                        <?= render_org_select("ORG_ID", "ORG_ID", "form-control form-control-sm border border-blue-100 text-gray-700", "Select Division") ?>
+                        <label for="ORG_ID" class="text-gray-600">Division<span class="text-danger">*</span></label>
+                        <span class="text-danger err-lbl fs-8" id="lbl-ORG_ID"></span>
+                    </div>
                     <div class="d-flex mb-2 gap-2">
                         <div class="d-inline-flex flex-column form-floating w-50">
                             <input type="text" placeholder="Enter Value" class="form-control border border-blue-100 text-gray-700 " name="FIRST_NAME" id="FIRST_NAME">

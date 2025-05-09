@@ -38,11 +38,18 @@ $activities = LEAD_ACTIVITY_OPTIONS;
                             </div>
                             <div class="row mt-5">
                                 <div class="col-md-12">
-                                    <div class="form-floating mb-2">
-                                        <input type="text" placeholder="Enter Value" class="form-control border border-blue-100 text-gray-700 " placeholder="" readonly name="LEAD_NUMBER" id="LEAD_NUMBER">
-                                        <label for="" class="text-gray-600">Lead Number</label>
-                                    </div>
 
+                                    <div class="d-flex flex-row align-items-center justify-content-between mb-2">
+                                        <div class="form-floating w-50">
+                                            <input type="text" placeholder="Enter Value" class="form-control border border-blue-100 text-gray-700 " placeholder="" readonly name="LEAD_NUMBER" id="LEAD_NUMBER">
+                                            <label for="" class="text-gray-600">Lead Number</label>
+                                        </div>
+                                        <div class="d-inline-flex flex-column form-floating w-50">
+                                            <?= render_org_select("ORG_ID", "ORG_ID", "form-control form-control-sm border border-blue-100 text-gray-700", "Select Division") ?>
+                                            <label for="ORG_ID" class="text-gray-600">Division <span class="text-danger">*</span></label>
+                                            <span class="text-danger err-lbl" id="lbl-ORG_ID"></span>
+                                        </div>
+                                    </div>
                                     <div class="d-flex flex-row align-items-center justify-content-between mb-2">
                                         <div class="d-inline-flex flex-column form-floating w-50">
                                             <input type="text" placeholder="Enter Value" class="form-control border border-blue-100 text-gray-700 " name="FIRST_NAME" id="FIRST_NAME">

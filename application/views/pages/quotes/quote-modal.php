@@ -78,8 +78,17 @@ $loggedInUserType = strtolower($loggedInUser['usertype']);
                                             <button type="submit" class="rounded-1 btn btn-sm btn-success" id="submit-btn"><i class="fa-solid fa-plus"></i> Save Quotation Details</button>
                                         </div>
                                     </div>
-
-                                    <div class="row g-3 mt-4 mb-2">
+                                    <div class="row g-3 mb-2 mt-4">
+                                        <!-- First Row -->
+                                        <div class="col-md-6">
+                                            <div class="d-flex flex-column gap-1">
+                                                <label for="ORG_ID" class="text-gray-800 fw-bold">Division</label>
+                                                <?= render_org_select("ORG_ID", "ORG_ID", "form-control form-control-sm border border-blue-100 text-gray-700", "Select Division") ?>
+                                            </div>
+                                            <p class="text-danger err-lbl mb-0 fs-8" id="lbl-ORG_ID"></p>
+                                        </div>
+                                    </div>
+                                    <div class="row g-3 mb-2">
                                         <!-- First Row -->
                                         <div class="col-md-6">
                                             <!-- Textbox Section -->

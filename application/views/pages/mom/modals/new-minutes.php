@@ -35,6 +35,11 @@
                             <div class="row mt-5">
                                 <div class="col-md-12">
                                     <div class="form-floating mb-2">
+                                        <?= render_org_select("ORG_ID", "ORG_ID", "form-control form-control-sm border border-blue-100 text-gray-700", "Select Division") ?>
+                                        <label for="ORG_ID" class="text-gray-600">Division <span class="text-danger">*</span></label>
+                                    </div>
+                                    <span class="text-danger err-lbl" id="lbl-ORG_ID"></span>
+                                    <div class="form-floating mb-2">
                                         <input type="text" placeholder="Enter Value" class="form-control border border-blue-100 text-gray-700 " placeholder="" name="MEETING_TITLE" id="MEETING_TITLE">
                                         <label for="MEETING_TITLE" class="text-gray-600">Meeting Title <span class="text-danger">*</span></label>
                                     </div>

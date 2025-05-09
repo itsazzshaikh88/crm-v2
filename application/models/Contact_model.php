@@ -16,7 +16,7 @@ class Contact_model extends App_Model
     {
         $offset = get_limit_offset($currentPage, $limit);
 
-        $this->db->select("c.CONTACT_ID, c.UUID, c.FIRST_NAME, c.LAST_NAME, c.EMAIL, c.PHONE, c.MOBILE, c.COMPANY_NAME, c.JOB_TITLE, c.DEPARTMENT, c.CONTACT_SOURCE, c.LEAD_SOURCE, c.STATUS, c.ASSIGNED_TO, c.LAST_CONTACTED, c.NOTES, c.PREFERRED_CONTACT_METHOD, c.ADDRESS");
+        $this->db->select("c.CONTACT_ID, c.UUID, c.ORG_ID, c.FIRST_NAME, c.LAST_NAME, c.EMAIL, c.PHONE, c.MOBILE, c.COMPANY_NAME, c.JOB_TITLE, c.DEPARTMENT, c.CONTACT_SOURCE, c.LEAD_SOURCE, c.STATUS, c.ASSIGNED_TO, c.LAST_CONTACTED, c.NOTES, c.PREFERRED_CONTACT_METHOD, c.ADDRESS");
         $this->db->from($this->contact_table . " c");
         $this->db->order_by("c.CONTACT_ID", "DESC");
 
@@ -50,6 +50,7 @@ class Contact_model extends App_Model
     {
         $contactData = [
             'UUID' => $data['UUID'],
+            'ORG_ID' => $data['ORG_ID'] ?? '',
             'FIRST_NAME' => $data['FIRST_NAME'],
             'LAST_NAME' => $data['LAST_NAME'],
             'EMAIL' => $data['EMAIL'],
@@ -79,6 +80,7 @@ class Contact_model extends App_Model
     {
         $contactData = [
             'UUID' => $data['UUID'],
+            'ORG_ID' => $data['ORG_ID'] ?? '',
             'FIRST_NAME' => $data['FIRST_NAME'],
             'LAST_NAME' => $data['LAST_NAME'],
             'EMAIL' => $data['EMAIL'],

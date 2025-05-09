@@ -42,6 +42,7 @@ class Leads extends Api_controller
             $this->form_validation->set_rules('COMPANY_NAME', 'Company Name', 'required');
             $this->form_validation->set_rules('LEAD_SOURCE', 'Lead Source', 'required');
             $this->form_validation->set_rules('ASSIGNED_TO', 'Sales Person Name', 'required');
+            $this->form_validation->set_rules('ORG_ID', 'Org ID', 'required');
 
 
             // Run validation
@@ -172,6 +173,7 @@ class Leads extends Api_controller
             $this->form_validation->set_rules('COMPANY_NAME', 'Company Name', 'required');
             $this->form_validation->set_rules('LEAD_SOURCE', 'Lead Source', 'required');
             $this->form_validation->set_rules('ASSIGNED_TO', 'Sales Person Name', 'required');
+            $this->form_validation->set_rules('ORG_ID', 'Org ID', 'required');
 
 
             // Run validation

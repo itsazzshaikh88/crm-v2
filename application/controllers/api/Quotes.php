@@ -34,6 +34,7 @@ class Quotes extends Api_controller
             }
 
             // Set validation rules
+            $this->form_validation->set_rules('ORG_ID', 'Org ID', 'required');
             $this->form_validation->set_rules('JOB_TITLE', 'Job Title', 'required');
             $this->form_validation->set_rules('COMPANY_ADDRESS', 'Company Address', 'required|min_length[3]');
             $this->form_validation->set_rules('SALES_PERSON', 'Sales Person', 'required');

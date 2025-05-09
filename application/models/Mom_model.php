@@ -16,6 +16,7 @@ class Mom_model extends App_Model
         $mom_data = [
             'UUID' => uuid_v4(),
             'MEETING_TITLE' => $data['MEETING_TITLE'] ?? null,
+            'ORG_ID' => $data['ORG_ID'] ?? null,
             'MEETING_DATE' => $data['MEETING_DATE'] ?? null,
             'DURATION' => $data['DURATION'] ?? null,
             'LOCATION_PLATFORM' => $data['LOCATION_PLATFORM'] ?? null,
@@ -55,6 +56,7 @@ class Mom_model extends App_Model
     public function update_mom($momID, $data, $userid)
     {
         $mom_data = [
+            'ORG_ID' => $data['ORG_ID'] ?? null,
             'MEETING_TITLE' => $data['MEETING_TITLE'] ?? null,
             'MEETING_DATE' => $data['MEETING_DATE'] ?? null,
             'DURATION' => $data['DURATION'] ?? null,
@@ -92,7 +94,7 @@ class Mom_model extends App_Model
     {
         $offset = get_limit_offset($currentPage, $limit);
 
-        $this->db->select("m.MOM_ID, m.UUID, m.MEETING_TITLE, m.MEETING_DATE, m.DURATION, m.LOCATION_PLATFORM, m.ORGANIZER, m.ATTENDEES, m.AGENDA, m.MEETING_TYPE, m.DISCUSSION_TOPICS, m.DECISIONS, m.COMPANY_NAME, m.GENERAL_NOTES, m.FOLLOW_UP_REQUIRED, m.ATTACHMENTS, m.ASSOCIATED_PROJECT_ID, m.TAGS, m.CREATED_BY, m.LAST_UPDATED_BY, m.VERSION, m.CREATED_AT, m.UPDATED_AT");
+        $this->db->select("m.MOM_ID, m.UUID, m.MEETING_TITLE, m.ORG_ID, m.MEETING_DATE, m.DURATION, m.LOCATION_PLATFORM, m.ORGANIZER, m.ATTENDEES, m.AGENDA, m.MEETING_TYPE, m.DISCUSSION_TOPICS, m.DECISIONS, m.COMPANY_NAME, m.GENERAL_NOTES, m.FOLLOW_UP_REQUIRED, m.ATTACHMENTS, m.ASSOCIATED_PROJECT_ID, m.TAGS, m.CREATED_BY, m.LAST_UPDATED_BY, m.VERSION, m.CREATED_AT, m.UPDATED_AT");
         $this->db->from($this->mom_table . " m");
         $this->db->order_by("m.MOM_ID", "DESC");
 

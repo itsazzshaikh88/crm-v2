@@ -32,6 +32,7 @@ class Users extends Api_controller
             }
 
             // Set validation rules
+            $this->form_validation->set_rules('ORG_ID', 'Org ID', 'required');
             $this->form_validation->set_rules('FIRST_NAME', 'First Name', 'required');
             $this->form_validation->set_rules('LAST_NAME', 'Last Name', 'required');
             $this->form_validation->set_rules('EMAIL', 'Email', 'required|valid_email');
@@ -170,6 +171,7 @@ class Users extends Api_controller
             }
 
             // Set validation rules
+            $this->form_validation->set_rules('ORG_ID', 'Org ID', 'required');
             $this->form_validation->set_rules('FIRST_NAME', 'First Name', 'required');
             $this->form_validation->set_rules('LAST_NAME', 'Last Name', 'required');
             $this->form_validation->set_rules('EMAIL', 'Email', 'required|valid_email');

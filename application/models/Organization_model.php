@@ -1,14 +1,14 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 require_once APPPATH . 'models/App_model.php';
-class News_model extends App_Model
+class Organization_model extends App_Model
 {
-    protected $news_table;
+    protected $org_table;
 
     public function __construct()
     {
         parent::__construct();
-        $this->news_table = 'xx_crm_news';
+        $this->org_table = 'xx_crm_org_details';
     }
     // Function to add or update product
     public function add_news($data, $userid)
@@ -16,7 +16,6 @@ class News_model extends App_Model
         $news_data = [
             'UUID' => uuid_v4(),
             'TYPE' => $data['TYPE'] ?? null,
-            'ORG_ID' => $data['ORG_ID'] ?? null,
             'TITLE' => $data['TITLE'] ?? null,
             'DESCRIPTION' => $data['DESCRIPTION'] ?? null,
             'CATEGORY' => $data['CATEGORY'] ?? null,
@@ -34,9 +33,9 @@ class News_model extends App_Model
             $news_data['ATTACHMENTS'] = json_encode($data['UPLOADED_FILES']);
 
         // Insert new minutes
-        $inserted = $this->db->insert($this->news_table, $news_data);
+        $inserted = $this->db->insert($this->org_table, $news_data);
         if ($inserted) {
-            $inserted_id = $this->get_column_value($this->news_table, 'ID', ['UUID' => $news_data['UUID']]);
+            $inserted_id = $this->get_column_value($this->org_table, 'ID', ['UUID' => $news_data['UUID']]);
             return $this->get_news_by_id($inserted_id);
         } else
             return [];
@@ -50,7 +49,6 @@ class News_model extends App_Model
             'TITLE' => $data['TITLE'] ?? null,
             'DESCRIPTION' => $data['DESCRIPTION'] ?? null,
             'CATEGORY' => $data['CATEGORY'] ?? null,
-            'ORG_ID' => $data['ORG_ID'] ?? null,
             'PRIORITY' => $data['PRIORITY'] ?? null,
             'AUDIENCE' => $data['AUDIENCE'] ?? null,
             'VISIBILITY_SCOPE' => $data['VISIBILITY_SCOPE'] ?? null,
@@ -63,7 +61,7 @@ class News_model extends App_Model
 
         // check if the data is present 
         $this->db->where('ID', $newsID);
-        $news = $this->db->get($this->news_table)->row_array();
+        $news = $this->db->get($this->org_table)->row_array();
 
         // Append newly upoaded images
         if (isset($data['UPLOADED_FILES']) && !empty($data['UPLOADED_FILES'])) {
@@ -78,7 +76,7 @@ class News_model extends App_Model
         }
 
         // update new minutes
-        $this->db->where('ID', $newsID)->update($this->news_table, $news_data);
+        $this->db->where('ID', $newsID)->update($this->org_table, $news_data);
         return $this->get_news_by_id($newsID);
     }
 
@@ -86,8 +84,8 @@ class News_model extends App_Model
     {
         $offset = get_limit_offset($currentPage, $limit);
 
-        $this->db->select("n.ID, n.ORG_ID,  n.UUID, n.TYPE, n.TITLE, n.DESCRIPTION, n.ATTACHMENTS, n.CATEGORY, n.PRIORITY, n.AUDIENCE, n.VISIBILITY_SCOPE, n.PUBLISH_DATE, n.EXPIRY_DATE, n.STATUS, n.IS_PINNED, n.NOTIFICATION_SENT, n.READ_COUNT, n.COMMENTS_ENABLED, n.TAGS, n.CREATED_BY, n.UPDATED_BY, n.CREATED_AT, n.UPDATED_AT");
-        $this->db->from($this->news_table . " n");
+        $this->db->select("n.ID, n.UUID, n.TYPE, n.TITLE, n.DESCRIPTION, n.ATTACHMENTS, n.CATEGORY, n.PRIORITY, n.AUDIENCE, n.VISIBILITY_SCOPE, n.PUBLISH_DATE, n.EXPIRY_DATE, n.STATUS, n.IS_PINNED, n.NOTIFICATION_SENT, n.READ_COUNT, n.COMMENTS_ENABLED, n.TAGS, n.CREATED_BY, n.UPDATED_BY, n.CREATED_AT, n.UPDATED_AT");
+        $this->db->from($this->org_table . " n");
         $this->db->order_by("n.ID", "DESC");
 
         // Apply filters dynamically from the $filters array
@@ -120,7 +118,7 @@ class News_model extends App_Model
     {
         $this->db->trans_start();
 
-        $this->db->delete($this->news_table, array('ID' => $newsID));
+        $this->db->delete($this->org_table, array('ID' => $newsID));
 
         $this->db->trans_complete();
 
@@ -137,7 +135,7 @@ class News_model extends App_Model
         if ($key && $value) {
             $data = $this->db
                 ->where($key, $value)
-                ->get($this->news_table)
+                ->get($this->org_table)
                 ->row_array();
         }
 
@@ -150,10 +148,15 @@ class News_model extends App_Model
         if ($newsID) {
             $data = $this->db
                 ->where('ID', $newsID)
-                ->get($this->news_table)
+                ->get($this->org_table)
                 ->row_array();
         }
 
         return $data;
+    }
+
+    function get_org_lov($filter = [])
+    {
+        return $this->db->query("select DISTINCT ORG_ID, ORG_CODE from xx_crm_org_details")->result_array();
     }
 }

@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 require_once(APPPATH . 'core/Api_controller.php');
-class Clients extends Api_controller
+class Organization extends Api_controller
 {
     public function __construct()
     {
@@ -51,7 +51,6 @@ class Clients extends Api_controller
             $this->form_validation->set_rules('CREDIT_LIMIT', 'Credit Limit', 'required');
             $this->form_validation->set_rules('CURRENCY', 'Currency Code', 'required');
             $this->form_validation->set_rules('ORDER_LIMIT', 'Order Limit', 'required');
-            $this->form_validation->set_rules('ORG_ID', 'Org ID', 'required');
 
             if ($client_id == null) {
                 $this->form_validation->set_rules('PASSWORD', 'Account Password', 'required');
@@ -77,7 +76,7 @@ class Clients extends Api_controller
 
             if ($client_id == null) {
                 // Check if the user is already registered with the existing email address
-                $client = $this->User_model->get_user_by_email($data['EMAIL']);
+                $client = $this->Organization_model->get_user_by_email($data['EMAIL']);
                 if (!empty($client)) {
                     $this->sendHTTPResponse(409, [
                         'status' => 'error',
@@ -90,8 +89,8 @@ class Clients extends Api_controller
             }
 
             // Save Data to the product table
-            $created = $this->User_model->add_client($client_id, $data, $isAuthorized['userid']);
-            $newlyCreatedClient = $this->User_model->get_client_by_uuid($data['UUID']);
+            $created = $this->Organization_model->add_client($client_id, $data, $isAuthorized['userid']);
+            $newlyCreatedClient = $this->Organization_model->get_client_by_uuid($data['UUID']);
 
             $source = $data['SOURCE_OF_DATA'] ?? '';
 
@@ -178,8 +177,8 @@ class Clients extends Api_controller
         $currentPage = isset($data['currentPage']) ? $data['currentPage'] : null;
         $filters = isset($data['filters']) ? $data['filters'] : [];
 
-        $total_clients = $this->User_model->get_clients('total', $limit, $currentPage, $filters);
-        $clients = $this->User_model->get_clients('list', $limit, $currentPage, $filters);
+        $total_clients = $this->Organization_model->get_clients('total', $limit, $currentPage, $filters);
+        $clients = $this->Organization_model->get_clients('list', $limit, $currentPage, $filters);
 
         $response = [
             'pagination' => [
@@ -229,7 +228,7 @@ class Clients extends Api_controller
 
         // Retrieve product details using the provided clientUUID
         $clientUUID = $data['clientUUID'];
-        $client = $this->User_model->get_client_by_uuid($clientUUID);
+        $client = $this->Organization_model->get_client_by_uuid($clientUUID);
 
         // Check if product data exists
         if (empty($client)) {
@@ -287,7 +286,7 @@ class Clients extends Api_controller
         }
 
         // Attempt to delete the product
-        $result = $this->User_model->delete_client_by_id($clientID);
+        $result = $this->Organization_model->delete_client_by_id($clientID);
         if ($result) {
             $this->output
                 ->set_content_type('application/json')
@@ -299,5 +298,47 @@ class Clients extends Api_controller
                 ->set_status_header(500) // 500 Internal Server Error status code
                 ->set_output(json_encode(['status' => false, 'message' => 'Failed to delete the product.']));
         }
+    }
+
+    function lov()
+    {
+        // Check if the authentication is valid
+        $isAuthorized = $this->isAuthorized();
+        if (!$isAuthorized['status']) {
+            $this->output
+                ->set_status_header(401) // Set HTTP response status to 400 Bad Request
+                ->set_content_type('application/json')
+                ->set_output(json_encode(['error' => 'Unauthorized access. You do not have permission to perform this action.']))
+                ->_display();
+            exit;
+        };
+
+        // Get the raw input data from the request
+        $input = $this->input->raw_input_stream;
+
+        // Decode the JSON data
+        $data = json_decode($input, true); // Decode as associative array
+
+        // Check if data is received
+        if (!$data) {
+            // Handle the error if no data is received
+            $this->output
+                ->set_status_header(400) // Set HTTP response status to 400 Bad Request
+                ->set_content_type('application/json')
+                ->set_output(json_encode(['error' => 'Invalid JSON input']))
+                ->_display();
+            exit;
+        }
+
+        $filters = isset($data['filters']) ? $data['filters'] : [];
+        $org_codes = $this->Organization_model->get_org_lov($filters);
+
+        $response = [
+            'data' => $org_codes,
+        ];
+        return $this->output
+            ->set_content_type('application/json')
+            ->set_status_header(200)
+            ->set_output(json_encode($response));
     }
 }

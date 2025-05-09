@@ -17,7 +17,7 @@ class Task_model extends App_Model
     {
         $offset = get_limit_offset($currentPage, $limit);
 
-        $this->db->select("ID, TASK_ID, TASK_NAME, STATUS, DEPARTMENT_ID, CONSULTANT_ID, START_DATE, TARGET_DATE, END_DATE, DURATION, CREATED_BY, UPDATED_BY, CREATED_AT, PARENT_ID");
+        $this->db->select("ID, TASK_ID, TASK_NAME, STATUS, DEPARTMENT_ID, CONSULTANT_ID, START_DATE, TARGET_DATE, END_DATE, DURATION, CREATED_BY, UPDATED_BY, CREATED_AT, PARENT_ID, ORG_ID");
         $this->db->from($this->task_table);
         $this->db->where('IS_DELETED', 0);
         $this->db->order_by("ID", "ASC");

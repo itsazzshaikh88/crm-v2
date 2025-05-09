@@ -33,7 +33,7 @@ class Contacts extends Api_controller
             }
 
             // Set validation rules
-            $fields = ['FIRST_NAME', 'LAST_NAME', 'PHONE', 'COMPANY_NAME', 'JOB_TITLE', 'DEPARTMENT', 'CONTACT_SOURCE', 'STATUS', 'ASSIGNED_TO', 'NOTES', 'PREFERRED_CONTACT_METHOD', 'ADDRESS'];
+            $fields = ['FIRST_NAME', 'LAST_NAME', 'PHONE', 'COMPANY_NAME', 'JOB_TITLE', 'DEPARTMENT', 'CONTACT_SOURCE', 'STATUS', 'ASSIGNED_TO', 'NOTES', 'PREFERRED_CONTACT_METHOD', 'ADDRESS', 'ORG_ID'];
             foreach ($fields as $field):
                 $this->form_validation->set_rules($field, ucwords(str_replace("_", "", $field)), 'required');
             endforeach;
@@ -158,7 +158,7 @@ class Contacts extends Api_controller
             }
 
             // Set validation rules
-            $fields = ['FIRST_NAME', 'LAST_NAME', 'PHONE', 'COMPANY_NAME', 'JOB_TITLE', 'DEPARTMENT', 'CONTACT_SOURCE', 'STATUS', 'ASSIGNED_TO', 'NOTES', 'PREFERRED_CONTACT_METHOD', 'ADDRESS'];
+            $fields = ['FIRST_NAME', 'LAST_NAME', 'PHONE', 'COMPANY_NAME', 'JOB_TITLE', 'DEPARTMENT', 'CONTACT_SOURCE', 'STATUS', 'ASSIGNED_TO', 'NOTES', 'PREFERRED_CONTACT_METHOD', 'ADDRESS', 'ORG_ID'];
             foreach ($fields as $field):
                 $this->form_validation->set_rules($field, ucwords(str_replace("_", "", $field)), 'required');
             endforeach;

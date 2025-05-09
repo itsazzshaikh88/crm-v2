@@ -50,10 +50,17 @@ $activities = DEAL_ACTIVITY_OPTIONS;
                                         </div>
                                         <span class="text-danger err-lbl" id="lbl-DEAL_STATUS"></span>
                                     </div>
-                                    <div class="form-floating mb-2">
-                                        <input type="text" placeholder="Enter Value" class="form-control border border-blue-100 text-gray-700 " name="ASSOCIATED_CONTACT" id="ASSOCIATED_CONTACT" readonly onclick="openAssociatedContactModal()">
-                                        <input type="hidden" name="ASSOCIATED_CONTACT_ID" id="ASSOCIATED_CONTACT_ID">
-                                        <label for="ASSOCIATED_CONTACT" class="text-gray-600">Associated Contact </label>
+                                    <div class="d-flex flex-row align-items-center justify-content-between mb-2">
+                                        <div class="form-floating w-50 ">
+                                            <input type="text" placeholder="Enter Value" class="form-control border border-blue-100 text-gray-700 " name="ASSOCIATED_CONTACT" id="ASSOCIATED_CONTACT" readonly onclick="openAssociatedContactModal()">
+                                            <input type="hidden" name="ASSOCIATED_CONTACT_ID" id="ASSOCIATED_CONTACT_ID">
+                                            <label for="ASSOCIATED_CONTACT" class="text-gray-600">Associated Contact </label>
+                                        </div>
+                                        <div class="form-floating w-50 ">
+                                            <?= render_org_select("ORG_ID", "ORG_ID", "form-control form-control-sm border border-blue-100 text-gray-700", "Select Division") ?>
+                                            <label for="ORG_ID" class="text-gray-600">Division <span class="text-danger">*</span> </label>
+                                        </div>
+                                        <span class="text-danger err-lbl" id="lbl-ORG_ID"></span>
                                     </div>
                                     <div class="form-floating w-100 mb-2">
                                         <input type="text" placeholder="Enter Value" class="form-control border border-blue-100 text-gray-700 " name="DEAL_NAME" id="DEAL_NAME">

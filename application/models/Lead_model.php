@@ -14,12 +14,13 @@ class Lead_model extends App_Model
         $this->lead_table = 'xx_crm_leads'; // Initialize token table
         $this->contact_table = 'xx_crm_contacts'; // Initialize token table
     }
-    
+
     // Function to add or update product
     public function add_lead($data, $userid)
     {
         $lead_data = [
             'UUID' => $data['UUID'],
+            'ORG_ID' => $data['ORG_ID'] ?? "",
             'FIRST_NAME' => $data['FIRST_NAME'],
             'LAST_NAME' => $data['LAST_NAME'],
             'EMAIL' => $data['EMAIL'],
@@ -50,6 +51,7 @@ class Lead_model extends App_Model
     public function update_lead($leadID, $data, $userid)
     {
         $lead_data = [
+            'ORG_ID' => $data['ORG_ID'],
             'FIRST_NAME' => $data['FIRST_NAME'],
             'LAST_NAME' => $data['LAST_NAME'],
             'EMAIL' => $data['EMAIL'],
@@ -70,7 +72,7 @@ class Lead_model extends App_Model
     {
         $offset = get_limit_offset($currentPage, $limit);
 
-        $this->db->select("l.LEAD_ID, l.LEAD_NUMBER, l.FIRST_NAME, l.LAST_NAME, l.EMAIL, l.PHONE, l.COMPANY_NAME, l.JOB_TITLE, l.LEAD_SOURCE, l.STATUS, l.ASSIGNED_TO, l.LEAD_SCORE, l.NOTES, l.CREATED_AT");
+        $this->db->select("l.LEAD_ID, l.ORG_ID, l.LEAD_NUMBER, l.FIRST_NAME, l.LAST_NAME, l.EMAIL, l.PHONE, l.COMPANY_NAME, l.JOB_TITLE, l.LEAD_SOURCE, l.STATUS, l.ASSIGNED_TO, l.LEAD_SCORE, l.NOTES, l.CREATED_AT");
         $this->db->from("xx_crm_leads l");
         $this->db->order_by("l.LEAD_ID", "DESC");
 
@@ -248,6 +250,7 @@ class Lead_model extends App_Model
             $contact = [
                 'UUID' => uuid_v4(),
                 'FIRST_NAME' => $lead['FIRST_NAME'],
+                'ORG_ID' => $lead['ORG_ID'] ?? '',
                 'LAST_NAME' => $lead['LAST_NAME'],
                 'EMAIL' => $lead['EMAIL'],
                 'PHONE' => $lead['PHONE'],

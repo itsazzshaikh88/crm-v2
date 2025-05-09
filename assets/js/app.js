@@ -68,4 +68,104 @@ async function logoutAction() {
     // If user cancels the logout, no need to do anything; the alert box will close.
 }
 
+// Load org list on page load if not already in localStorage
+// Load org list on page load if not already in localStorage and populate ORG_ID if exists
+async function loadOrgsList() {
+    let shouldFetch = false;
 
+    try {
+        const data = JSON.parse(localStorage.getItem('orgsList'));
+        if (!Array.isArray(data) || data.length === 0) {
+            shouldFetch = true;
+        }
+    } catch {
+        shouldFetch = true;
+    }
+
+    if (shouldFetch) {
+        await fetchOrgsList();
+    }
+
+    // After ensuring data is in localStorage, populate the select if it exists
+    if (document.getElementById('ORG_ID')) {
+        populateSelectWithOrgs('ORG_ID');
+    }
+}
+
+// Populate a <select> element by ID
+function populateSelectWithOrgs(selectId) {
+    const selectElement = document.getElementById(selectId);
+    if (!selectElement) {
+        console.warn(`Select element with ID "${selectId}" not found`);
+        return;
+    }
+
+    selectElement.innerHTML = getOrgOptions();
+}
+
+
+// Fetch org list from API and store in localStorage
+async function fetchOrgsList() {
+    try {
+        const authToken = getCookie('auth_token');
+        if (!authToken) {
+            toasterNotification({
+                type: 'error',
+                message: "Authorization token is missing. Please login again to make API request."
+            });
+            return;
+        }
+
+        const url = `${APIUrl}/organization/lov`;
+        const filters = filterCriterias([]);
+
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${authToken}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ filters })
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch organization list');
+        }
+
+        const data = await response.json();
+
+        localStorage.setItem('orgsList', JSON.stringify(data.data || []));
+
+
+    } catch (error) {
+        console.error('Error fetching organizations:', error);
+    }
+}
+
+// Returns <option> tag string from localStorage data
+function getOrgOptions() {
+    try {
+        const data = JSON.parse(localStorage.getItem('orgsList'));
+        if (!Array.isArray(data)) return '';
+
+        return data.map(org => `<option value="${org.ORG_ID}">${org.ORG_CODE}</option>`).join('');
+    } catch {
+        return '';
+    }
+}
+
+// Populates a <select> element by its ID
+function populateOrgSelect(selectId) {
+    const selectElement = document.getElementById(selectId);
+    if (!selectElement) {
+        console.warn(`Select element with ID "${selectId}" not found`);
+        return;
+    }
+
+    selectElement.innerHTML = getOrgOptions();
+}
+
+// Run on page load
+window.addEventListener('DOMContentLoaded', () => {
+    loadOrgsList();
+});
