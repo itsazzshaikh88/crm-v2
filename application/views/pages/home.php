@@ -53,16 +53,24 @@ $stats_cards = $usertype === 'admin' ? $admin_stats_cards : $client_stats_cards;
 			<div class="col-md-8">
 				<div class="card">
 					<div class="card-body">
-						<h2 class="fw-semibold text-gray-800 text-start">Open Orders</h2>
+						<div class="border-bottom mb-2 py-2 d-flex align-items-center justify-content-between bg-light px-2">
+							<h6 class="fw-semibold text-gray-800 text-start border-end border-secondary flex-grow-1 me-3 mb-0">Track Orders</h6>
+							<div class="d-flex align-items-center justify-content-between gap-2">
+								<?= render_org_select("ORG_ID", "ORG_ID", "form-control form-control-sm border border-blue-100 text-gray-700", "Select Division") ?>
+								<button type="button" class="btn btn-sm btn-secondary flex-1" onclick="loadOrdersToTrack()"> <i class="fa fa-search"></i></button>
+							</div>
+						</div>
+
 						<div class="table-responsive">
 							<table class="table table-sm table-row-bordered" id="open-orders-list">
 								<thead>
 									<tr class="fw-bold fs-7 text-gray-900">
-										<th>PO</th>
-										<th>Address</th>
-										<th>Total</th>
-										<th>Status</th>
-										<th>Date</th>
+										<th>Client PO</th>
+										<th>Customer</th>
+										<th>Product</th>
+										<th>Order Qty</th>
+										<th>Ship Qty</th>
+										<th>Bal Qty</th>
 										<th>Track</th>
 									</tr>
 								</thead>
@@ -86,72 +94,12 @@ $stats_cards = $usertype === 'admin' ? $admin_stats_cards : $client_stats_cards;
 							<!--end::Title-->
 							<!--begin::Illustration-->
 							<div class="py-10 text-center" id="track-idle-container">
-								<img src="assets/images/track-order.png" class="theme-light-show w-250px" alt="">
+								<img src="assets/images/track-order.png" class="theme-light-show w-250px" alt="" id="card-delivery-img">
 							</div>
 							<!--end::Illustration-->
 
 							<div class="d-none" id="track-processing-container">
-								<div class="timeline timeline-border-dashed">
-									<!--begin::Timeline item-->
-									<div class="timeline-item pb-5">
-										<!--begin::Timeline line-->
-										<div class="timeline-line"></div>
-										<!--end::Timeline line-->
 
-										<!--begin::Timeline icon-->
-										<div class="timeline-icon">
-											<i class="ki-duotone ki-cd fs-2 text-success"><span class="path1"></span><span class="path2"></span></i>
-										</div>
-										<!--end::Timeline icon-->
-
-										<!--begin::Timeline content-->
-										<div class="timeline-content m-0">
-											<!--begin::Label-->
-											<span class="fs-8 fw-bolder text-success text-uppercase">Sender</span>
-											<!--begin::Label-->
-
-											<!--begin::Title-->
-											<a href="#" class="fs-6 text-gray-800 fw-bold d-block text-hover-primary">Albert Flores</a>
-											<!--end::Title-->
-
-											<!--begin::Title-->
-											<span class="fw-semibold text-gray-500">3517 W. Gray St. Utica, Pennsylvania 57867</span>
-											<!--end::Title-->
-										</div>
-										<!--end::Timeline content-->
-									</div>
-									<!--end::Timeline item-->
-
-									<!--begin::Timeline item-->
-									<div class="timeline-item">
-										<!--begin::Timeline line-->
-										<div class="timeline-line"></div>
-										<!--end::Timeline line-->
-
-										<!--begin::Timeline icon-->
-										<div class="timeline-icon">
-											<i class="ki-duotone ki-geolocation fs-2 text-info"><span class="path1"></span><span class="path2"></span></i>
-										</div>
-										<!--end::Timeline icon-->
-
-										<!--begin::Timeline content-->
-										<div class="timeline-content m-0">
-											<!--begin::Label-->
-											<span class="fs-8 fw-bolder text-info text-uppercase">Receiver</span>
-											<!--begin::Label-->
-
-											<!--begin::Title-->
-											<a href="#" class="fs-6 text-gray-800 fw-bold d-block text-hover-primary">Jessie Clarcson</a>
-											<!--end::Title-->
-
-											<!--begin::Title-->
-											<span class="fw-semibold text-gray-500">Total 2,356 Items in the Stock</span>
-											<!--end::Title-->
-										</div>
-										<!--end::Timeline content-->
-									</div>
-									<!--end::Timeline item-->
-								</div>
 							</div>
 						</div>
 						<!--end::Heading-->
@@ -165,3 +113,8 @@ $stats_cards = $usertype === 'admin' ? $admin_stats_cards : $client_stats_cards;
 	</div>
 </div>
 <!--end::PAGE CONTAINER-->
+<style>
+	.msm-4 {
+		margin-left: -5px !important;
+	}
+</style>

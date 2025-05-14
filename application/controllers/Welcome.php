@@ -16,7 +16,7 @@ class Welcome extends App_Controller
 		$data['page_title'] = 'Home - Zamil CRM';
 		$data['page_heading'] = 'Dashboard';
 		$data['navlink'] = HOME_ACTIVE_LINK;
-		$data['scripts'] = ['assets/js/pages/dashboard/stats.js'];
+		$data['scripts'] = ['assets/js/pages/dashboard/stats.js', 'assets/js/pages/dashboard/tracker.js'];
 		$this->load->view('layout', $data);
 	}
 

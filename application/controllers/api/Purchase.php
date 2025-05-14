@@ -408,8 +408,8 @@ class Purchase extends Api_controller
         $currentPage = isset($data['currentPage']) ? $data['currentPage'] : null;
         $filters = isset($data['filters']) ? $data['filters'] : [];
 
-        $total_open_pos = $this->Purchase_model->get_open_po_list('total', $limit, $currentPage, $filters, $isAuthorized['userid'], $isAuthorized['role']);
-        $open_pos = $this->Purchase_model->get_open_po_list('list', $limit, $currentPage, $filters, $isAuthorized['userid'], $isAuthorized['role']);
+        $total_open_pos = $this->Purchase_model->get_po_for_tracking('total', $limit, $currentPage, $filters, $isAuthorized['userid'], $isAuthorized['role']);
+        $open_pos = $this->Purchase_model->get_po_for_tracking('list', $limit, $currentPage, $filters, $isAuthorized['userid'], $isAuthorized['role']);
 
         $response = [
             'pagination' => [
@@ -424,5 +424,59 @@ class Purchase extends Api_controller
             ->set_content_type('application/json')
             ->set_status_header(200)
             ->set_output(json_encode($response));
+    }
+
+    public function po_track_detail()
+    {
+        // Check if the authentication is valid
+        $isAuthorized = $this->isAuthorized();
+        if (!$isAuthorized['status']) {
+            $this->output
+                ->set_status_header(401) // Set HTTP response status to 400 Bad Request
+                ->set_content_type('application/json')
+                ->set_output(json_encode(['error' => 'Unauthorized access. You do not have permission to perform this action.']))
+                ->_display();
+            exit;
+        };
+
+        $po_num = $this->input->get('po');
+        $product = $this->input->get('product');
+
+        // Validate required input values
+        if (empty($po_num) || empty($product)) {
+            return $this->output
+                ->set_status_header(400)
+                ->set_content_type('application/json')
+                ->set_output(json_encode([
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'Both PO number and product code are required'
+                ]));
+        }
+
+        $trackerData = $this->Purchase_model->get_po_tracker_details($po_num, $product);
+
+        // Check if Request data exists
+        if (empty($trackerData)) {
+            return $this->output
+                ->set_status_header(404)
+                ->set_content_type('application/json')
+                ->set_output(json_encode([
+                    'status' => 'error',
+                    'code' => 404,
+                    'message' => 'Request not found'
+                ]));
+        }
+
+        // Successful response with Request data
+        return $this->output
+            ->set_status_header(200)
+            ->set_content_type('application/json')
+            ->set_output(json_encode([
+                'status' => 'success',
+                'code' => 200,
+                'message' => 'Tracker details retrieved successfully',
+                'data' => $trackerData
+            ]));
     }
 }

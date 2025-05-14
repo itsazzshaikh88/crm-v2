@@ -51,7 +51,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 <!--end::Head-->
 <!--begin::Body-->
 
-<body id="kt_body" style="background-image: url(assets/media/patterns/header-bg.png)" class="header-fixed header-tablet-and-mobile-fixed toolbar-enabled">
+<body id="kt_body" style="background-image: url(assets/images/green-banner.jpg)" class="header-fixed header-tablet-and-mobile-fixed toolbar-enabled">
     <!--begin::Main-->
     <!--begin::Root-->
     <div class="d-flex flex-column flex-root">

@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
-
-class Purchase_model extends CI_Model
+require_once APPPATH . 'models/App_model.php';
+class Purchase_model extends App_Model
 {
 
     protected $xx_crm_po_header; // Holds the name of the user table
@@ -386,5 +386,184 @@ class Purchase_model extends CI_Model
         } else {
             return $query->num_rows();
         }
+    }
+
+    public function get_po_for_tracking($type = 'list', $limit = 10, $currentPage = 1, $filters = [], $userid = '', $role = '')
+    {
+        $offset = get_limit_offset($currentPage, $limit);
+
+        // Start base SQL
+        $sql = "SELECT DISTINCT CLIENT_PO_NUMBER FROM xx_crm_po_header";
+
+        // Array to hold WHERE conditions
+        $where = [];
+
+        // Array to hold binding parameters
+        $params = [];
+
+        // Process filters
+        if (!empty($filters)) {
+            foreach ($filters as $key => $value) {
+                $where[] = "$key = ?";
+                $params[] = $value;
+            }
+        }
+
+        if (strtolower($role) != 'admin') {
+            $where[] = "CLIENT_ID = ?";
+            $params[] = $userid;
+        }
+
+        // Append WHERE clause if any conditions exist
+        if (!empty($where)) {
+            $sql .= " WHERE " . implode(' AND ', $where);
+        }
+        $query = $this->db->query($sql, $params);
+
+        $client_po_list =  $query->result_array();
+
+        $client_po_numbers = array_column($client_po_list, 'CLIENT_PO_NUMBER');
+        $quoted_po_numbers = array_map(function ($po) {
+            return "'" . $po . "'";
+        }, $client_po_numbers);
+
+        $po_in_clause = implode(',', $quoted_po_numbers);
+
+        // 
+        $oracleSQl = "SELECT
+                        po#                    client_po,
+                        customer,
+                        product,
+                        ord_qty,
+                        ship_qty,
+                        ( ord_qty - ship_qty ) bal_qty,
+                        (
+                            CASE
+                                WHEN ord_qty >= 0 THEN
+                                    'SOC Created'
+                                ELSE
+                                    'NO SOC'
+                            END
+                        )                      soc_status,
+                        (
+                            CASE
+                                WHEN ( ord_qty - ship_qty ) > 0 THEN
+                                    'PARTIALLY DELIVERED'
+                                ELSE
+                                    'DELIVERED'
+                            END
+                        )                      del
+                    FROM
+                        (
+                            SELECT
+                                oel.cust_po_number                 po#,
+                                ar.customer_name                   customer,
+                                oel.ordered_item                   product,
+                                SUM(nvl(oel.ordered_quantity, 0))  ord_qty,
+                                SUM(nvl(oel.shipping_quantity, 0)) ship_qty
+                            FROM
+                                oe_order_lines_all   oel,
+                                oe_order_headers_all oeh,
+                                ar_customers         ar
+                            WHERE
+                                    oel.header_id = oeh.header_id
+                                AND oel.sold_to_org_id = ar.customer_id
+                                AND TO_DATE(oel.request_date, 'DD-MON-YY') > '30-APR-25'
+                                -- AND oel.sold_from_org_id = decode(:org, 'IBM', 145, 'Z3P', 442)
+                                ";
+        if ($po_in_clause != '') {
+            $oracleSQl .= " AND oel.cust_po_number in ($po_in_clause) ";
+        }
+        $oracleSQl .=  "GROUP BY
+                                oel.cust_po_number,
+                                oel.ordered_item,
+                                ar.customer_name
+                        )
+                    ORDER BY
+                        1 DESC,
+                        3";
+
+        if ($type == "list") {
+            $oracleSQl .= " OFFSET $offset ROWS FETCH NEXT $limit ROWS ONLY";
+        }
+
+        // Execute query
+        $query = $this->oracleDB->query($oracleSQl);
+
+        // Get the result based on the type
+        $result = ($type === 'list') ? $query->result_array() : $query->num_rows();
+
+        // Close the database connection
+        $this->oracleDB->close();
+
+        // Return the result
+        return $result;
+    }
+
+    public function get_po_tracker_details($po_num, $product)
+    {
+        $oracleSQl = "SELECT * FROM (SELECT
+                        po#                    client_po,
+                        customer,
+                        product,
+                        ord_qty,
+                        ship_qty,
+                        ( ord_qty - ship_qty ) bal_qty,
+                        (
+                            CASE
+                                WHEN ord_qty >= 0 THEN
+                                    'SOC Created'
+                                ELSE
+                                    'NO SOC'
+                            END
+                        )                      soc_status,
+                        (
+                            CASE
+                                WHEN ( ord_qty - ship_qty ) > 0 THEN
+                                    'PARTIALLY DELIVERED'
+                                ELSE
+                                    'DELIVERED'
+                            END
+                        )                      del
+                    FROM
+                        (
+                            SELECT
+                                oel.cust_po_number                 po#,
+                                ar.customer_name                   customer,
+                                oel.ordered_item                   product,
+                                SUM(nvl(oel.ordered_quantity, 0))  ord_qty,
+                                SUM(nvl(oel.shipping_quantity, 0)) ship_qty
+                            FROM
+                                oe_order_lines_all   oel,
+                                oe_order_headers_all oeh,
+                                ar_customers         ar
+                            WHERE
+                                    oel.header_id = oeh.header_id
+                                AND oel.sold_to_org_id = ar.customer_id
+                                AND TO_DATE(oel.request_date, 'DD-MON-YY') > '30-APR-25'
+                                -- AND oel.sold_from_org_id = decode(:org, 'IBM', 145, 'Z3P', 442)
+                                GROUP BY
+                                oel.cust_po_number,
+                                oel.ordered_item,
+                                ar.customer_name
+                        )
+                    ORDER BY
+                        1 DESC,
+                        3) WHERE client_po = '$po_num' AND product = '$product'";
+
+        // Execute query
+        $query = $this->oracleDB->query($oracleSQl);
+
+        // Close the database connection
+        $this->oracleDB->close();
+
+        $track_details = $query->row_array();
+
+        $crm_po_details = $this->db->query("select PO_STATUS from xx_crm_po_header WHERE CLIENT_PO_NUMBER = '$po_num'")->row_array();
+
+        $track_details['CRM_PO_STATUS'] = $crm_po_details['PO_STATUS'] ?? '';
+
+        // Return the result
+        return $track_details;
     }
 }
