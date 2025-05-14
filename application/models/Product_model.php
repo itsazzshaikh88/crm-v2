@@ -142,7 +142,7 @@ class Product_model extends App_model
         }
     }
 
-    function get_products_filters($type = 'list', $limit = 10, $currentPage = 1, $filters = [], $search = [])
+    function get_products_filters($type = 'list', $limit = 10, $currentPage = 1, $filters = [], $search = null)
     {
         $offset = get_limit_offset($currentPage, $limit);
 
@@ -231,13 +231,11 @@ class Product_model extends App_model
         // }
 
 
-        if (!empty($search) && is_array($search)) {
-            if (isset($search['product'])) {
-                $this->db->group_start(); // Begin group for OR conditions
-                $this->db->like('p.PRODUCT_NAME', $search['product'], 'both', false);
-                $this->db->or_like('p.PRODUCT_CODE', $search['product'], 'both', false);
-                $this->db->group_end(); // End group for OR conditions
-            }
+        if (isset($search) && $search != null) {
+            $this->db->group_start(); // Begin group for OR conditions
+            $this->db->like('p.PRODUCT_NAME', $search, 'both', false);
+            $this->db->or_like('p.PRODUCT_CODE', $search, 'both', false);
+            $this->db->group_end(); // End group for OR conditions
         }
 
 

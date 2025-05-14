@@ -86,7 +86,7 @@ let fetchedProducts = [];
 
 
 
-async function fetchProductListForModal() {
+async function fetchProductListForModal(userSearchTerm = null) {
     try {
         const authToken = getCookie('auth_token');
         if (!authToken) {
@@ -109,7 +109,8 @@ async function fetchProductListForModal() {
             body: JSON.stringify({
                 limit: prodModalListpaginate.pageLimit,
                 currentPage: prodModalListpaginate.currentPage,
-                filters: productFilters
+                filters: productFilters,
+                search: userSearchTerm
             })
         });
 
@@ -318,10 +319,10 @@ function renderNoResponseCodeForGridProdModalList() {
 // Global scope
 // Declare the pagination instance globally
 const prodModalListpaginate = new Pagination('prod-modal-current-page', 'prod-modal-total-pages', 'prod-modal-page-of-pages', 'prod-modal-range-of-records');
-prodModalListpaginate.pageLimit = 15;
+prodModalListpaginate.pageLimit = 20;
 
 // Function to handle pagination button clicks
-function handlePagination(action) {
+function handleProductListModalPagination(action) {
     prodModalListpaginate.paginate(action); // Update current page based on the action
     fetchProductListForModal(); // Fetch products for the updated current page
 }
@@ -578,4 +579,17 @@ document.addEventListener('DOMContentLoaded', () => {
         })
     }
 });
+
+
+function searchProductListFromModal(element) {
+    const userSearchTerm = element.value.trim();
+
+    if (userSearchTerm) {
+        fetchProductListForModal(userSearchTerm);
+    }
+}
+
+
+// Create a debounced version of the function
+const debouncedSearchProductListFromModal = debounce(searchProductListFromModal, 300); // 300ms delay
 

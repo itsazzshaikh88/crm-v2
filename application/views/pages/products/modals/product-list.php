@@ -91,17 +91,20 @@
                 <div class="row grid-product-listing" id="prod-listing-modal-grid">
                     <div class="col-md-3 col-lg-2 py-4">
                         <div class="row">
+                            <div class="col-md-12">
+                                <input type="text" oninput="debouncedSearchProductListFromModal(this)" class="form-control form-control-sm rounded mb-4" placeholder="Search Product ..">
+                            </div>
                             <div class="col-md-12 mb-0">
                                 <div class="">
                                     <h6 class="fw-bold mb-0">Type</h6>
                                 </div>
                                 <div class="my-4">
                                     <div class="d-flex align-items-center justify-content-start gap-2">
-                                        <input type="checkbox" value="444" name="type" data-column-name="DIVISION" class="getFilters">
+                                        <input type="checkbox" value="Z3P" name="type" data-column-name="DIVISION" class="getFilters">
                                         <label class="mb-0 text-filter">Food</label>
                                     </div>
                                     <div class="d-flex align-items-center justify-content-start gap-2">
-                                        <input type="checkbox" value="242" name="type" data-column-name="DIVISION" class="getFilters">
+                                        <input type="checkbox" value="IBM" name="type" data-column-name="DIVISION" class="getFilters">
                                         <label class="mb-0 text-filter">Industrial</label>
                                     </div>
                                 </div>
@@ -209,7 +212,7 @@
                 </div>
             </div>
             <div class="modal-footer py-2 pt-0">
-                <?= renderPaginate('prod-modal-current-page', 'prod-modal-total-pages', 'prod-modal-page-of-pages', 'prod-modal-range-of-records') ?>
+                <?= renderPaginate('prod-modal-current-page', 'prod-modal-total-pages', 'prod-modal-page-of-pages', 'prod-modal-range-of-records', 'handleProductListModalPagination') ?>
             </div>
         </div>
     </div>
