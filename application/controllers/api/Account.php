@@ -229,8 +229,9 @@ class Account extends Api_controller
             if (empty($multifactor_details) && $action == 'enable') {
                 // Generate Secret key and QR Code data
                 $secret = $this->tfa->createSecret();
-                $clientID = $user['USER_ID'] ?? 'ZMLCRM-' . time();
-                $qrCodeUrl = $this->tfa->getQRCodeImageAsDataUri("$clientID.loc", $secret);
+                $clientID = $user['EMAIL'] ?? 'ZMLCRM-' . time() . 'loc';
+                // $clientID = $user['USER_ID'] ?? 'ZMLCRM-' . time();
+                $qrCodeUrl = $this->tfa->getQRCodeImageAsDataUri($clientID, $secret);
 
                 $mfa_data = [
                     'USER_ID' => $isAuthorized['userid'],
@@ -342,7 +343,7 @@ class Account extends Api_controller
             $codes[] = ['code' => strtoupper(bin2hex(random_bytes(4))), 'is_used' => 'no'];  // Generates a random 8-character code
         }
         $json_codes = json_encode($codes);
-        return $json_codes || null;
+        return $json_codes ?? null;
     }
 
 
@@ -393,7 +394,7 @@ class Account extends Api_controller
             $cleaned_input = $this->security->xss_clean($input);
 
             $otp = $cleaned_input['TOTP_CODE'];
-            $user_id = $isAuthorized['userid'] || 0;
+            $user_id = $isAuthorized['userid'] ?? 0;
 
             $user = $this->User_model->get_user_by_id($user_id);
 
