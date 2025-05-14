@@ -518,16 +518,9 @@ class Purchase_model extends App_Model
                                     'SOC Created'
                                 ELSE
                                     'NO SOC'
-                            END
+                            END 
                         )                      soc_status,
-                        (
-                            CASE
-                                WHEN ( ord_qty - ship_qty ) > 0 THEN
-                                    'PARTIALLY DELIVERED'
-                                ELSE
-                                    'DELIVERED'
-                            END
-                        )                      del
+                        (CASE when (ORD_QTY - SHIP_QTY) = ORD_QTY then 'NOT DELIVERED'  WHEN (ORD_QTY - SHIP_QTY) > 0 then 'PARTIALLY DELIVERED' ELSE 'DELIVERED' end) DEL
                     FROM
                         (
                             SELECT
