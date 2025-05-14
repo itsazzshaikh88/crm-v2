@@ -14,7 +14,7 @@ const containerID = "modal-client-list";
 const listContainer = document.getElementById(containerID);
 let fetchedClients;
 
-async function fetchClients() {
+async function fetchClients(userSearchTerm = null) {
     try {
         const authToken = getCookie('auth_token');
         if (!authToken) {
@@ -34,7 +34,8 @@ async function fetchClients() {
             body: JSON.stringify({
                 limit: clientListPaginate.pageLimit,
                 currentPage: clientListPaginate.currentPage,
-                filters: { STATUS: 'active' }
+                filters: { STATUS: 'active' },
+                search: userSearchTerm
             })
         });
 
@@ -71,7 +72,7 @@ function showClients(clients, listContainer) {
                             <!--end::Input-->
                             <!--begin::Label-->
                             <label class="form-check-label" for="kt_modal_update_role_option_0">
-                                <div class="fw-bold text-primary">${client.FIRST_NAME} ${client.LAST_NAME}</div>
+                                <span class="fw-bold text-primary">${client.COMPANY_NAME}</span>
                                 <div class="text-gray-600">${client.EMAIL} | ${client.COUNTRY}</div>
                             </label>
                             <!--end::Label-->
@@ -90,11 +91,11 @@ function showClients(clients, listContainer) {
 
 // Global scope
 // Declare the pagination instance globally
-const clientListPaginate = new Pagination('current-page', 'total-pages', 'page-of-pages', 'range-of-records');
+const clientListPaginate = new Pagination('cml-current-page', 'cml-total-pages', 'cml-page-of-pages', 'cml-range-of-records');
 clientListPaginate.pageLimit = 10; // Set your page limit here
 
 // Function to handle pagination button clicks
-function handlePagination(action) {
+function handleClientListPagination(action) {
     clientListPaginate.paginate(action); // Update current page based on the action
     fetchClients(); // Fetch products for the updated current page
 }
@@ -137,3 +138,14 @@ function resetNewClientForm() {
     form.reset()
 }
 
+function searchClientListFromModal(element) {
+    const userSearchTerm = element.value.trim();
+
+    if (userSearchTerm) {
+        fetchClients(userSearchTerm);
+    }
+}
+
+
+// Create a debounced version of the function
+const debouncedSearchClientListFromModal = debounce(searchClientListFromModal, 300); // 300ms delay

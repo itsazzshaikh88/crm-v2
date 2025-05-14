@@ -487,12 +487,15 @@ class Purchase_model extends App_Model
             $oracleSQl .= " OFFSET $offset ROWS FETCH NEXT $limit ROWS ONLY";
         }
 
-        // Execute query
-        $query = $this->oracleDB->query($oracleSQl);
+        if ($po_in_clause != '') {
+            // Execute query
+            $query = $this->oracleDB->query($oracleSQl);
 
-        // Get the result based on the type
-        $result = ($type === 'list') ? $query->result_array() : $query->num_rows();
-
+            // Get the result based on the type
+            $result = ($type === 'list') ? $query->result_array() : $query->num_rows();
+        } else {
+            $result = ($type === 'list') ? 0 : 0;
+        }
         // Close the database connection
         $this->oracleDB->close();
 

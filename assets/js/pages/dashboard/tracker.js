@@ -3,7 +3,7 @@
 function renderNoResponseCode(option, isAdmin = false) {
     let noCotent = `<tr>
                                 <td colspan="${option?.colspan}" class="text-center">
-                                    <p class="mt-4 mb-0">No Open Purchase Orders Found</p>
+                                    <p class="mt-4 mb-0">No Purchase Orders Found</p>
                                 </td>
                             </tr>`;
 

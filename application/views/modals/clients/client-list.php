@@ -16,7 +16,7 @@
                     </p>
                     <div class="d-flex align-items-center justify-content-between">
                         <div class="d-flex align-items-center justify-content-center flex-grow">
-                            <input type="text" class="form-control form-control-sm" placeholder="Search Customer ..">
+                            <input type="text" class="form-control form-control-sm" placeholder="Search Customer .." oninput="debouncedSearchClientListFromModal(this)">
                         </div>
                         <div class="d-flex align-items-center justify-content-center fw-bold">OR</div>
                         <div class="d-flex align-items-center justify-content-center">
@@ -36,7 +36,7 @@
                 </div>
             </div>
             <div class="modal-footer d-flex align-items-center justify-content-between w-100">
-                <?= renderPaginate('current-page', 'total-pages', 'page-of-pages', 'range-of-records') ?>
+                <?= renderPaginate('cml-current-page', 'cml-total-pages', 'cml-page-of-pages', 'cml-range-of-records', 'handleClientListPagination') ?>
             </div>
         </div>
     </div>

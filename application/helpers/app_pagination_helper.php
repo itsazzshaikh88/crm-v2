@@ -10,25 +10,25 @@ defined('BASEPATH') or exit('No direct script access allowed');
  * @return string The HTML string for the pagination controls.
  */
 if (!function_exists('renderPaginate')) {
-    function renderPaginate($currentPageId = 'current-page', $totalPagesId = 'total-pages',  $pageOfPageId = 'page-of-pages', $rangeOfRecordsId = 'range-of-records')
+    function renderPaginate($currentPageId = 'current-page', $totalPagesId = 'total-pages',  $pageOfPageId = 'page-of-pages', $rangeOfRecordsId = 'range-of-records', $handleFunction = "handlePagination")
     {
         return '
         <div class="mt-5 w-100">
             <div class="d-flex align-items-center justify-content-between gap-2">
                 <div class="d-flex align-items-center gap-2">
                     <div class="pagination-button-group">
-                        <button class="btn paginate-border-left" onclick="handlePagination(\'first\')">
+                        <button class="btn paginate-border-left" onclick="' . $handleFunction . '(\'first\')">
                             <i class="bi bi-chevron-double-left"></i>
                         </button>
-                        <button class="btn paginate-border-left" onclick="handlePagination(\'prev\')">
+                        <button class="btn paginate-border-left" onclick="' . $handleFunction . '(\'prev\')">
                             <i class="bi bi-chevron-left"></i>
                         </button>
                         <input type="text" class="input-field" readonly value="0" id="' . htmlspecialchars($currentPageId, ENT_QUOTES) . '" />
                         <input type="hidden" class="input-field" readonly value="0" id="' . htmlspecialchars($totalPagesId, ENT_QUOTES) . '" />
-                        <button class="btn paginate-border-right" onclick="handlePagination(\'next\')">
+                        <button class="btn paginate-border-right" onclick="' . $handleFunction . '(\'next\')">
                             <i class="bi bi-chevron-right"></i>
                         </button>
-                        <button class="btn paginate-border-right" onclick="handlePagination(\'last\')">
+                        <button class="btn paginate-border-right" onclick="' . $handleFunction . '(\'last\')">
                             <i class="bi bi-chevron-double-right"></i>
                         </button>
                     </div>

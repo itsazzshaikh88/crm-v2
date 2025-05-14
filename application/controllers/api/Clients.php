@@ -177,9 +177,10 @@ class Clients extends Api_controller
         $limit = isset($data['limit']) ? $data['limit'] : null;
         $currentPage = isset($data['currentPage']) ? $data['currentPage'] : null;
         $filters = isset($data['filters']) ? $data['filters'] : [];
+        $search = isset($data['search']) ? $data['search'] : null;
 
-        $total_clients = $this->User_model->get_clients('total', $limit, $currentPage, $filters);
-        $clients = $this->User_model->get_clients('list', $limit, $currentPage, $filters);
+        $total_clients = $this->User_model->get_clients('total', $limit, $currentPage, $filters, $search);
+        $clients = $this->User_model->get_clients('list', $limit, $currentPage, $filters, $search);
 
         $response = [
             'pagination' => [
