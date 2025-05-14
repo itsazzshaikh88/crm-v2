@@ -259,7 +259,7 @@ function showGridProductsForModalListing(products, container) {
                                 <div class="card-body p-0 rounded">
                                     <!-- Header -->
                                     <div class="px-4 py-4 bg-header text-center rounded-top">
-                                        <a href="products/view/${product.UUID}">
+                                        <a href="javascript:void(0)">
                                             <h5 class="card-title mb-0 text-white fw-normal">${product?.PRODUCT_NAME}</h5>
                                         </a>
                                     </div>
