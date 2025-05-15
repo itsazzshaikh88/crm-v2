@@ -12,7 +12,7 @@ class Delivery_model extends App_Model
     }
     // Function to add or update product
 
-    function get_deliveries($type = 'list', $limit = 10, $currentPage = 1, $filters = [])
+    function get_deliveries($type = 'list', $limit = 10, $currentPage = 1, $filters = [], $search = null)
     {
         $offset = get_limit_offset($currentPage, $limit);
 
@@ -65,6 +65,25 @@ class Delivery_model extends App_Model
                 $conditions[] = "$column = '" . addslashes($value) . "'";
             }
         }
+
+        // Search logic
+        if (!empty($search)) {
+            $search = addslashes($search);
+            $searchConditions = [
+                "LOWER(TO_CHAR(delivery_detail_id)) LIKE LOWER('%$search%')",
+                "LOWER(delivery_no) LIKE LOWER('%$search%')",
+                "LOWER(TO_CHAR(delivery_line_id)) LIKE LOWER('%$search%')",
+                "LOWER(source_name) LIKE LOWER('%$search%')",
+                "LOWER(soc) LIKE LOWER('%$search%')",
+                "LOWER(line_no) LIKE LOWER('%$search%')",
+                "LOWER(item) LIKE LOWER('%$search%')",
+                "LOWER(item_description) LIKE LOWER('%$search%')",
+                "LOWER(TO_CHAR(customer_id)) LIKE LOWER('%$search%')",
+                "LOWER(cust_po_number) LIKE LOWER('%$search%')"
+            ];
+            $conditions[] = "(" . implode(" OR ", $searchConditions) . ")";
+        }
+
 
         if (!empty($conditions)) {
             $sql .= " WHERE " . implode(" AND ", $conditions);

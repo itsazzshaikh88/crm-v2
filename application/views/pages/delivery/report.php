@@ -15,7 +15,6 @@
         max-width: none;
         background-color: #f8f9fa;
     }
-
 </style>
 <!--begin::PAGE CONTAINER -->
 <div id="kt_content_container" class="d-flex flex-column-fluid align-items-start container-xxl">
@@ -43,8 +42,15 @@
                         <input type="date" id="TO_DATE" class="form-control form-control-sm"
                             value="<?php echo date('Y-m-t'); ?>" />
                     </div>
+                    <div class="col-md-2">
+                        <label for="TO_DATE"><small>Search By Column data</small></label>
+                        <input type="text" oninput="debouncedSearchDeliveryData(this)" class="form-control form-control-sm" id="searchInputElement" placeholder="Search by column ..">
+                    </div>
                     <div class="col-md-2 d-flex align-items-end">
                         <button class="btn btn-sm btn-light border border-secondary" onclick="filterDeliveryReport()">Filter</button>
+                    </div>
+                    <div class="col-md-2 d-flex align-items-center justify-content-end">
+                        <button id="exportCsvBtn" onclick="exportDeliveryData('csv')" class="btn btn-primary btn-sm">Export CSV</button>
                     </div>
                 </div>
                 <div class="table-responsive mt-3" style="max-height: 400px; overflow: auto;">

@@ -43,9 +43,9 @@ class Deliveries extends Api_controller
         $limit = isset($data['limit']) ? $data['limit'] : null;
         $currentPage = isset($data['currentPage']) ? $data['currentPage'] : null;
         $filters = isset($data['filters']) ? $data['filters'] : [];
-
-        $total_deliveries = $this->Delivery_model->get_deliveries('total', $limit, $currentPage, $filters);
-        $deliveries = $this->Delivery_model->get_deliveries('list', $limit, $currentPage, $filters);
+        $search = isset($data['search']) ? $data['search'] : null;
+        $total_deliveries = $this->Delivery_model->get_deliveries('total', $limit, $currentPage, $filters, $search);
+        $deliveries = $this->Delivery_model->get_deliveries('list', $limit, $currentPage, $filters, $search);
 
         $response = [
             'pagination' => [
@@ -60,5 +60,38 @@ class Deliveries extends Api_controller
             ->set_content_type('application/json')
             ->set_status_header(200)
             ->set_output(json_encode($response));
+    }
+
+    public function export_csv()
+    {
+        // Parse filters and search from GET params
+        $filtersJson = $this->input->get('filters');
+        $search = $this->input->get('search');
+
+        $filters = json_decode($filtersJson, true) ?: [];
+
+        // Fetch ALL matching records, no pagination
+        $data = $this->Delivery_model->get_deliveries('list', 9999999999999, 1, $filters, $search);
+
+        // Set headers for download
+        header('Content-Type: text/csv');
+        header('Content-Disposition: attachment;filename="deliveries_export_' . date('Ymd_His') . '.csv"');
+
+        $output = fopen('php://output', 'w');
+
+        if (!empty($data)) {
+            // Output CSV headers
+            fputcsv($output, array_keys($data[0]));
+
+            // Output data rows
+            foreach ($data as $row) {
+                fputcsv($output, $row);
+            }
+        } else {
+            fputcsv($output, ['No records found.']);
+        }
+
+        fclose($output);
+        exit;
     }
 }

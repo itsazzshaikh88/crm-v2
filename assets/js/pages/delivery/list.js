@@ -17,7 +17,10 @@ const tbody = document.querySelector(`#${tableId} tbody`);
 
 const numberOfHeaders = document.querySelectorAll(`#${tableId} thead th`).length || 0;
 
-async function fetchDeliveries() {
+async function fetchDeliveries(userSearchTerm = null) {
+    if (!userSearchTerm) {
+        userSearchTerm = document.getElementById("searchInputElement").value.trim() || null
+    }
     try {
         const authToken = getCookie('auth_token');
         if (!authToken) {
@@ -38,7 +41,8 @@ async function fetchDeliveries() {
             body: JSON.stringify({
                 limit: paginate.pageLimit,
                 currentPage: paginate.currentPage,
-                filters
+                filters,
+                search: userSearchTerm
             })
         });
 
@@ -135,3 +139,36 @@ function expandCell(cell) {
 
 
 
+function searchDeliveryListData(element) {
+    const userSearchTerm = element.value.trim();
+
+    fetchDeliveries(userSearchTerm);
+}
+
+
+// Create a debounced version of the function
+const debouncedSearchDeliveryData = debounce(searchDeliveryListData, 300); // 300ms delay
+
+
+/// export data
+function exportDeliveryData(type = null) {
+    const org = document.getElementById("ORG").value;
+    const fromDate = document.getElementById("FROM_DATE").value;
+    const toDate = document.getElementById("TO_DATE").value;
+    const search = document.getElementById("searchInputElement").value.trim();
+
+    const filters = {
+        ORG: org,
+        FROM_DATE: fromDate,
+        TO_DATE: toDate
+    };
+
+    // Encode filters and search as query parameters
+    const queryParams = new URLSearchParams({
+        filters: JSON.stringify(filters),
+        search: search
+    });
+
+    // Trigger download
+    window.location.href = `${APIUrl}/deliveries/export_csv?${queryParams.toString()}`;
+}
