@@ -202,7 +202,12 @@
                         </div>
                         <div class="col-md-12">
                             <div class="card-body">
-                                <h2 class="mb-4">Product Details</h2>
+                                <div class="mb-2 d-flex align-items-center justify-content-between">
+                                    <h2 class="mb-4">Product Details</h2>
+                                    <button class="btn btn-sm btn-success" type="button" onclick="addRow()">
+                                        <i class="las la-plus fs-6 cursor-pointer text-white m-0 p-0"></i>
+                                    </button>
+                                </div>
                                 <div class="table-responsive">
                                     <!--begin::Table-->
                                     <table class="table table-row-bordered align-middle gy-4 gs-9" id="purchase-line-table">
@@ -221,9 +226,7 @@
                                                 <th class="min-w-150px">Rec Qty</th>
                                                 <th class="min-w-150px">Bal Qty</th>
                                                 <th>
-                                                    <button class="btn btn-sm btn-success" type="button" onclick="addRow()">
-                                                        <i class="las la-plus fs-4 cursor-pointer text-white m-0 p-0"></i>
-                                                    </button>
+
                                                 </th>
                                             </tr>
                                         </thead>
