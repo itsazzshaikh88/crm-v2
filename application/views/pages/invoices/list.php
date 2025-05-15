@@ -25,6 +25,10 @@
                         <input type="date" id="TO_DATE" class="form-control form-control-sm"
                             value="<?php echo date('Y-m-t'); ?>" />
                     </div>
+                    <div class="col-md-2">
+                        <label for="TO_DATE"><small>Search By Column data</small></label>
+                        <input type="text" oninput="debouncedSearchInvoiceData(this)" class="form-control form-control-sm" id="searchInputElement" placeholder="Search by column ..">
+                    </div>
 
                     <div class="col-md-2 d-flex align-items-end">
                         <button class="btn btn-sm btn-light border border-secondary" onclick="filterInvoiceReport()">Filter</button>

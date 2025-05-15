@@ -45,9 +45,9 @@ class Invoices extends Api_controller
         $limit = isset($data['limit']) ? $data['limit'] : null;
         $currentPage = isset($data['currentPage']) ? $data['currentPage'] : null;
         $filters = isset($data['filters']) ? $data['filters'] : [];
-
-        $total_invoices = $this->Invoice_model->get_invoices('total', $limit, $currentPage, $filters);
-        $invoices = $this->Invoice_model->get_invoices('list', $limit, $currentPage, $filters);
+        $search = isset($data['search']) ? $data['search'] : null;
+        $total_invoices = $this->Invoice_model->get_invoices('total', $limit, $currentPage, $filters, $search);
+        $invoices = $this->Invoice_model->get_invoices('list', $limit, $currentPage, $filters, $search);
 
         $response = [
             'pagination' => [

@@ -17,7 +17,10 @@ const tbody = document.querySelector(`#${tableId} tbody`);
 
 const numberOfHeaders = document.querySelectorAll(`#${tableId} thead th`).length || 0;
 
-async function fetchInvoices() {
+async function fetchInvoices(userSearchTerm = null) {
+    if (!userSearchTerm) {
+        userSearchTerm = document.getElementById("searchInputElement").value.trim() || null
+    }
     try {
         const authToken = getCookie('auth_token');
         if (!authToken) {
@@ -38,7 +41,8 @@ async function fetchInvoices() {
             body: JSON.stringify({
                 limit: paginate.pageLimit,
                 currentPage: paginate.currentPage,
-                filters
+                filters,
+                search: userSearchTerm
             })
         });
 
@@ -118,3 +122,12 @@ function filterInvoiceReport() {
 }
 
 
+function searchInvoiceListData(element) {
+    const userSearchTerm = element.value.trim();
+
+    fetchInvoices(userSearchTerm);
+}
+
+
+// Create a debounced version of the function
+const debouncedSearchInvoiceData = debounce(searchInvoiceListData, 300); // 300ms delay
