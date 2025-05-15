@@ -94,6 +94,11 @@
                 <div>
                     <div class="row d-none" id="list-style-listing">
                         <div class="col-md-12">
+                            <div class="row mb-2">
+                                <div class="col-md-2">
+                                    <input type="text" oninput="debouncedSearchProductListFromInput(this)" class="form-control form-control-sm rounded" placeholder="Search Product .." id="searchInputElementList">
+                                </div>
+                            </div>
                             <div class="table-responsive">
                                 <table class="table align-middle fs-7 gy-3 table-row-bordered " id="product-list">
                                     <thead>
@@ -120,6 +125,9 @@
                     <div class="row d-none grid-product-listing" id="grid-style-listing">
                         <div class="col-md-3 col-lg-2 py-4">
                             <div class="row">
+                                <div class="col-md-12">
+                                    <input type="text" oninput="debouncedSearchProductListFromInput(this)" class="form-control form-control-sm rounded mb-4" placeholder="Search Product .." id="searchInputElement">
+                                </div>
                                 <div class="col-md-12 mb-0">
                                     <div class="">
                                         <h6 class="fw-bold mb-0">Type</h6>

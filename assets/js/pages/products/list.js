@@ -44,7 +44,13 @@ const listViewBtn = document.getElementById("listViewBtn");
 const savedView = localStorage.getItem("viewMode") || "grid";
 
 
-async function fetchProducts() {
+async function fetchProducts(userSearchTerm = null) {
+    if (!userSearchTerm) {
+        if (savedView == 'list')
+            userSearchTerm = document.getElementById("searchInputElementList").value.trim() || null
+        else
+            userSearchTerm = document.getElementById("searchInputElement").value.trim() || null
+    }
     try {
         const authToken = getCookie('auth_token');
         if (!authToken) {
@@ -54,7 +60,7 @@ async function fetchProducts() {
 
         if (savedView == 'list') {
             // Set loader to the screen 
-            listingSkeleton(tableId, paginate.pageLimit || 0, 'products');
+            commonListingSkeleton(tableId, paginate.pageLimit || 0, numberOfHeaders);
         } else {
             gridListContainer.innerHTML = '';
             appendHTMLContentToElement("grid-style-listing-container", generateSkeletonHTML("product-list-grid"), 4);
@@ -71,7 +77,8 @@ async function fetchProducts() {
             body: JSON.stringify({
                 limit: paginate.pageLimit,
                 currentPage: paginate.currentPage,
-                filters: productFilters
+                filters: productFilters,
+                search: userSearchTerm
             })
         });
 
@@ -340,7 +347,7 @@ function showGridProducts(products, container) {
     }
 }
 
-function filterProductList() {
+function filterProductList(userSearchTerm = null) {
     productFilters = {}; // Initialize an empty filter object
 
     // Select all checkboxes with class "getFilters"
@@ -389,7 +396,7 @@ function filterProductList() {
         }
     });
 
-    fetchProducts(); // Call the function to apply filters
+    fetchProducts(userSearchTerm); // Call the function to apply filters
 }
 
 
@@ -754,3 +761,13 @@ function debounce(func, delay) {
     };
 }
 const debouncedFilterProductList = debounce(filterProductList, 500); // 300ms delay
+
+
+function searchProductListFromInput(element) {
+    const userSearchTerm = element.value.trim();
+    filterProductList(userSearchTerm);
+}
+
+
+// Create a debounced version of the function
+const debouncedSearchProductListFromInput = debounce(searchProductListFromInput, 300); // 300ms delay
