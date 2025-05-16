@@ -75,14 +75,12 @@ function showPODetails(po, tbody) {
 
             content += `<tr data-request-id="${request.PO_ID}" class="text-gray-800 fs-7">
                                 <td class="text-center">${++counter}</td> <!-- # -->
-                                 <td>${request?.PO_NUMBER || ''}</td>
-                                <td>
-                                    <div class="d-flex">
-                                        <div class="">
-                                            <a href="purchase/view/${request.UUID}" class="text-gray-800 text-hover-primary fw-normal mb-1 line-clamp-1" data-kt-ecommerce-category-filter="category_name">${request?.COMPANY_NAME || ''}</a>
-                                        </div>
-                                    </div>
-                                </td> <!-- Company -->
+                                 <td>
+                                    <a href="purchase/view/${request.UUID}" class="text-gray-800 text-hover-primary">
+                                        ${request?.PO_NUMBER || ''}
+                                    </a>
+                                </td>
+                                <td><span class="line-clamp-1">${request?.COMPANY_NAME || ''}</span></td>
                                 <td>${request?.EMAIL_ADDRESS || ''}</td> <!-- Email -->
                                 <td ><span class="line-clamp-1">${request?.COMPANY_ADDRESS || ''}</span></td> <!-- Company_address -->
                                 <td>${request?.CONTACT_NUMBER || ''}</td> <!-- number -->

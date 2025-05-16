@@ -75,6 +75,7 @@ function renderOpenOrders(pos, tbody) {
         if (pos.length > 0) {
             pos.forEach((po) => {
                 content += `<tr class="text-gray-800 fs-7">
+								<td>${po?.CRM_PO_NUM}</td>
 								<td>${po?.CLIENT_PO}</td>
 								<td>${po?.CUSTOMER}</td>
 								<td>${po?.PRODUCT}</td>
@@ -183,7 +184,11 @@ function showTracker(details) {
                 <table class="table table-striped table-sm table-borderless small mb-0">
                     <tbody>
                         <tr>
-                            <th scope="row" class="px-2 px-1 mb-0">PO Number:</th>
+                            <th scope="row" class="px-2 px-1 mb-0">CRM PO Number:</th>
+                            <td class="px-2 px-1 mb-0">${details?.CRM_PO_NUMBER || ''}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row" class="px-2 px-1 mb-0">Client PO Number:</th>
                             <td class="px-2 px-1 mb-0">${details?.CLIENT_PO || ''}</td>
                         </tr>
                         <tr>

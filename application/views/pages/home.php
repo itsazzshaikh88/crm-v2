@@ -62,9 +62,10 @@ $stats_cards = $usertype === 'admin' ? $admin_stats_cards : $client_stats_cards;
 						</div>
 
 						<div class="table-responsive">
-							<table class="table table-sm table-row-bordered" id="open-orders-list">
+							<table class="table table-sm table-row-bordered" id="open-orders-list" style="white-space: nowrap;">
 								<thead>
 									<tr class="fw-bold fs-7 text-gray-900">
+										<th>PO #</th>
 										<th>Client PO</th>
 										<th>Customer</th>
 										<th>Product</th>

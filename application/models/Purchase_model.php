@@ -393,7 +393,7 @@ class Purchase_model extends App_Model
         $offset = get_limit_offset($currentPage, $limit);
 
         // Start base SQL
-        $sql = "SELECT DISTINCT CLIENT_PO_NUMBER FROM xx_crm_po_header";
+        $sql = "SELECT DISTINCT CLIENT_PO_NUMBER, PO_NUMBER FROM xx_crm_po_header";
 
         // Array to hold WHERE conditions
         $where = [];
@@ -492,7 +492,25 @@ class Purchase_model extends App_Model
             $query = $this->oracleDB->query($oracleSQl);
 
             // Get the result based on the type
-            $result = ($type === 'list') ? $query->result_array() : $query->num_rows();
+            if ($type === 'list') {
+                $oracle_results = $query->result_array();
+
+                // Build index of CLIENT_PO_NUMBER => PO_NUMBER
+                $po_map = [];
+                foreach ($client_po_list as $row) {
+                    $po_map[$row['CLIENT_PO_NUMBER']] = $row['PO_NUMBER'];
+                }
+
+                // Attach PO_NUMBER to each Oracle record
+                foreach ($oracle_results as &$row) {
+                    $clientPo = $row['CLIENT_PO'];
+                    $row['CRM_PO_NUM'] = isset($po_map[$clientPo]) ? $po_map[$clientPo] : null;
+                }
+
+                $result = $oracle_results;
+            } else {
+                $result = $query->num_rows();
+            }
         } else {
             $result = ($type === 'list') ? 0 : 0;
         }
@@ -555,9 +573,10 @@ class Purchase_model extends App_Model
 
         $track_details = $query->row_array();
 
-        $crm_po_details = $this->db->query("select PO_STATUS from xx_crm_po_header WHERE CLIENT_PO_NUMBER = '$po_num'")->row_array();
+        $crm_po_details = $this->db->query("select PO_STATUS, PO_NUMBER from xx_crm_po_header WHERE CLIENT_PO_NUMBER = '$po_num'")->row_array();
 
         $track_details['CRM_PO_STATUS'] = $crm_po_details['PO_STATUS'] ?? '';
+        $track_details['CRM_PO_NUMBER'] = $crm_po_details['PO_NUMBER'] ?? '';
 
         // Return the result
         return $track_details;
