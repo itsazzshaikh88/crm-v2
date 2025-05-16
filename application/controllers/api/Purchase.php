@@ -439,8 +439,8 @@ class Purchase extends Api_controller
             exit;
         };
 
-        $po_num = $this->input->get('po');
-        $product = $this->input->get('product');
+        $po_num = $this->input->get('po', TRUE); // TRUE enables XSS filtering
+        $product = $this->input->get('product', TRUE);
 
         // Validate required input values
         if (empty($po_num) || empty($product)) {

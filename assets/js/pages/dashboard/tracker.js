@@ -113,7 +113,10 @@ function handlePagination(action) {
 
 async function trackPODetails(btnElement, po, product) {
 
-    const apiUrl = `${APIUrl}/purchase/po_track_detail?po=${po}&product=${product}`;
+    const encodedPo = encodeURIComponent(po);
+    const encodedProduct = encodeURIComponent(product);
+
+    const apiUrl = `${APIUrl}/purchase/po_track_detail?po=${encodedPo}&product=${encodedProduct}`;
     const authToken = getCookie('auth_token');
 
     trackIdleContainer.classList.remove("d-none");
@@ -202,8 +205,8 @@ function showTracker(details) {
                                 class="path2"></span></i>
                     </div>
                     <div class="timeline-content m-0">
-                        <span class="fs-8 fw-bolder text-primary text-uppercase badge bg-light mb-2">${details?.CRM_PO_STATUS || ""}</span>
-                        <a href="#" class="fs-7 text-gray-800 fw-normal d-block text-hover-primary">Purchase Order</a>
+                        <span class="fs-8 fw-bolder text-success text-uppercase badge bg-light mb-2">PO Created</span>
+                        <a href="#" class="fs-7 text-gray-800 fw-normal d-block text-hover-success">Purchase Order</a>
                     </div>
                 </div>
                 <div class="timeline-item pb-5 mb-2">
