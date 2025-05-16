@@ -101,6 +101,19 @@
                             <textarea class="form-control form-control-sm" id="DESCRIPTION" name="DESCRIPTION" rows="3" placeholder="Describe the task..."></textarea>
                             <p class="text-danger err-lbl mb-0" id="lbl-DESCRIPTION"></p>
                         </div>
+                        <!-- CONSULTANT -->
+                        <div class="col-12 col-md-6">
+                            <label for="CONSULTANT" class="form-label fw-bold text-secondary small required-field">Consultant</label>
+                            <input type="text" class="form-control form-control-sm" id="CONSULTANT" name="CONSULTANT" placeholder="Consultant name here">
+                            <p class="text-danger err-lbl mb-0" id="lbl-CONSULTANT"></p>
+                        </div>
+
+                        <!-- DEPARTMENT -->
+                        <div class="col-12 col-md-6">
+                            <label for="DEPARTMENT" class="form-label fw-bold text-secondary small required-field">Department</label>
+                            <input type="text" class="form-control form-control-sm" id="DEPARTMENT" name="DEPARTMENT" placeholder="Add department">
+                            <p class="text-danger err-lbl mb-0" id="lbl-DEPARTMENT"></p>
+                        </div>
 
                         <!-- STATUS -->
                         <div class="col-12 col-md-6">

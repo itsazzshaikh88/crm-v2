@@ -141,8 +141,8 @@ function renderTaskRow(task, container, depth, uniqueId, serial) {
             </a>
         </td>
         <td><span class="${projectStatusTextColors[task.STATUS] || 'text-muted'} fw-semibold">${capitalizeWords(task.STATUS) || ''}</span></td>
-        <td>${task.DEPARTMENT_ID || ''}</td>
-        <td>${task.CONSULTANT_ID || ''}</td>
+        <td>${task.DEPARTMENT || ''}</td>
+        <td>${task.CONSULTANT || ''}</td>
         <td>${formatDate(task.START_DATE) || ''}</td>
         <td>${formatDate(task.TARGET_DATE) || ''}</td>
         <td>${formatDate(task.END_DATE) || ''}</td>

@@ -36,7 +36,7 @@ class Tasks extends Api_controller
                 return;
             }
 
-            $fields = ['TASK_NAME', 'STATUS', 'START_DATE'];
+            $fields = ['TASK_NAME', 'STATUS', 'START_DATE', 'DEPARTMENT', 'CONSULTANT'];
 
             foreach ($fields as $field) {
                 $label = ucwords(strtolower(str_replace("_", " ", $field)));
@@ -148,7 +148,7 @@ class Tasks extends Api_controller
                 return;
             }
 
-            $fields = ['TASK_NAME', 'STATUS', 'START_DATE'];
+            $fields = ['TASK_NAME', 'STATUS', 'START_DATE', 'DEPARTMENT', 'CONSULTANT'];
 
 
             foreach ($fields as $field) {
