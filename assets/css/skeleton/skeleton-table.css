@@ -1,0 +1,57 @@
+/* Basic styling for skeleton cells */
+.skeleton-cell {
+    height: 10px !important;
+    position: relative;
+    overflow: hidden;
+    background: #f0f0f0;
+    /* Light gray as base color */
+}
+
+/* Skeleton cell loading animation */
+.skeleton-cell::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 200%;
+    height: 100%;
+    background: linear-gradient(90deg,
+            rgba(255, 255, 255, 0) 0%,
+            rgba(224, 224, 224, 0.5) 50%,
+            rgba(238, 238, 238, 0.267) 100%);
+    animation: skeleton-loading 2.5s ease-in-out infinite;
+}
+
+/* Keyframes for loading shimmer effect */
+@keyframes skeleton-loading {
+    0% {
+        transform: translateX(-100%);
+    }
+
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+
+/* New Skeleton animation  */
+.skeleton-box {
+    background-color: #e0e0e0;
+    border-radius: 4px;
+    display: inline-block;
+    animation: skeleton-loading 1.2s infinite linear;
+}
+
+@keyframes skeleton-loading {
+    0% {
+        background-color: #e0e0e0;
+    }
+
+    50% {
+        background-color: #f0f0f0;
+    }
+
+    100% {
+        background-color: #e0e0e0;
+    }
+}
