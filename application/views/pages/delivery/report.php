@@ -50,7 +50,15 @@
                         <button class="btn btn-sm btn-light border border-secondary" onclick="filterDeliveryReport()">Filter</button>
                     </div>
                     <div class="col-md-2 d-flex align-items-center justify-content-end">
-                        <button id="exportCsvBtn" onclick="exportDeliveryData('csv')" class="btn btn-primary btn-sm">Export CSV</button>
+                        <!-- Export CSV button with download icon -->
+                        <button id="exportCsvBtn" onclick="exportDeliveryData('csv')" class="btn btn-primary btn-sm me-2">
+                            <i class="fas fa-file-csv"></i>
+                        </button>
+
+                        <!-- Print button with print icon -->
+                        <button onclick="printTable()" class="btn btn-secondary btn-sm">
+                            <i class="fas fa-print"></i>
+                        </button>
                     </div>
                 </div>
                 <div class="table-responsive mt-3" style="max-height: 400px; overflow: auto;">

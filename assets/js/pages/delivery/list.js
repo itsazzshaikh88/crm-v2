@@ -172,3 +172,37 @@ function exportDeliveryData(type = null) {
     // Trigger download
     window.location.href = `${APIUrl}/deliveries/export_csv?${queryParams.toString()}`;
 }
+
+function printTable() {
+    var table = document.getElementById("delivery-list");
+    var newWin = window.open("");
+    newWin.document.write(`
+        <html>
+            <head>
+                <title>Print Table</title>
+                <style>
+                    table {
+                        width: 100%;
+                        border-collapse: collapse;
+                    }
+                    th, td {
+                        border: 1px solid #000;
+                        padding: 5px;
+                        text-align: left;
+                        font-size: 12px;
+                    }
+                    thead {
+                        background-color: #f0f0f0;
+                    }
+                </style>
+            </head>
+            <body>
+                ${table.outerHTML}
+            </body>
+        </html>
+    `);
+    newWin.document.close();
+    newWin.focus();
+    newWin.print();
+    newWin.close();
+}
