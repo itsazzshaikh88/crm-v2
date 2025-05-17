@@ -50,8 +50,16 @@ defined('BASEPATH') or exit('No direct script access allowed');
 </head>
 <!--end::Head-->
 <!--begin::Body-->
+<?php
+// Determine database based on URI
+$uri = $_SERVER['REQUEST_URI'];
+$bg_img_name = "assets/media/patterns/header-bg.png";
+if (strpos($uri, '/crm-v2/') !== false) {
+    $bg_img_name = "assets/images/green-banner.jpg";
+}
+?>
 
-<body id="kt_body" style="background-image: url(assets/images/green-banner.jpg)" class="header-fixed header-tablet-and-mobile-fixed toolbar-enabled">
+<body id="kt_body" style="background-image: url(<?= $bg_img_name ?>)" class="header-fixed header-tablet-and-mobile-fixed toolbar-enabled">
     <!--begin::Main-->
     <!--begin::Root-->
     <div class="d-flex flex-column flex-root">
