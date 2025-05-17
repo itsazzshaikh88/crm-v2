@@ -120,7 +120,7 @@ class User_model extends App_Model
     {
         $offset = get_limit_offset($currentPage, $limit);
 
-        $this->db->select("u.ID,u.UUID, u.ORG_ID, u.USER_ID, u.FIRST_NAME, u.LAST_NAME, u.EMAIL,u.PHONE_NUMBER, u.STATUS, cd.COMPANY_NAME, cd.CREDIT_LIMIT, cd.TAXES, cd.ORDER_LIMIT,  ca.ADDRESS_LINE_1, ca.ADDRESS_LINE_2, ca.BILLING_ADDRESS, ca.SHIPPING_ADDRESS, ca.CITY, ca.STATE, ca.COUNTRY, ca.ZIP_CODE");
+        $this->db->select("u.ID,u.UUID, u.ORG_ID, u.USER_ID, u.FIRST_NAME, u.LAST_NAME, u.EMAIL,u.PHONE_NUMBER, u.STATUS, cd.COMPANY_NAME, cd.CREDIT_LIMIT, cd.TAXES, cd.ORDER_LIMIT,  ca.ADDRESS_LINE_1, ca.ADDRESS_LINE_2, ca.BILLING_ADDRESS, ca.SHIPPING_ADDRESS, ca.CITY, ca.STATE, ca.COUNTRY, ca.ZIP_CODE, cd.PAYMENT_TERM, cd.CURRENCY");
         $this->db->from($this->user_table . " u");
         $this->db->join($this->client_table . " cd", "cd.USER_ID = u.ID", "left");
         $this->db->join($this->client_address_table . " ca", "ca.CLIENT_ID = cd.USER_ID", "left");
