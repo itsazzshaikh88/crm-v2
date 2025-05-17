@@ -9,6 +9,7 @@
                             <tr class="fw-bold fs-7 text-gray-900">
                                 <th>#</th>
                                 <th>PO #</th>
+                                <th>Client PO</th>
                                 <th>Company</th>
                                 <th>Email</th>
                                 <th>Company Address</th>

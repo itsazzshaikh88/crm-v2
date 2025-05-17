@@ -30,6 +30,19 @@
                                 <!--begin::Row-->
                                 <div class="row mb-7">
                                     <!--begin::Label-->
+                                    <label class="col-lg-4 fw-semibold text-muted">Client PO</label>
+                                    <!--end::Label-->
+
+                                    <!--begin::Col-->
+                                    <div class="col-lg-8">
+                                        <span class="fs-6" id="lbl-CLIENT_PO_NUMBER"></span>
+                                    </div>
+                                    <!--end::Col-->
+                                </div>
+                                <!--end::Row-->
+                                <!--begin::Row-->
+                                <div class="row mb-7">
+                                    <!--begin::Label-->
                                     <label class="col-lg-4 fw-semibold text-muted">Email </label>
                                     <!--end::Label-->
 

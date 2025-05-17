@@ -8,6 +8,10 @@ const companyName = document.getElementById("COMPANY_NAME");
 const contactNumber = document.getElementById("CONTACT_NUMBER");
 const emailAddress = document.getElementById("EMAIL_ADDRESS");
 const requestNumber = document.getElementById("REQUEST_ID");
+
+const currencyInput = document.getElementById("CURRENCY");
+const paymentTermInput = document.getElementById("PAYMENT_TERM");
+const taxInput = document.getElementById("TAX_PERCENTAGE");
 // -------- ********************** --------------------------------
 
 const lineTableTBODY = "purchase-line-table";
@@ -131,7 +135,7 @@ function addRow() {
                                     <td>
                                         <input type="text" name="BAL_QTY[]" id="BAL_QTY_${rowCount}" class="form-control form-control-sm">
                                     </td>    
-                                    <td>  <button class="btn btn-sm border border-danger" type="button" onclick="removeRow(this)">
+                                    <td>  <button class="px-2 py-1 btn btn-sm border border-danger" type="button" onclick="removeRow(this)">
                 <i class="las la-times fs-4 cursor-pointer text-danger m-0 p-0"></i>
             </button>
         </td>
@@ -509,7 +513,7 @@ function showRequestLines(lines) {
                                 <input type="text" class="form-control form-control-sm" name="BAL_QTY[]" id="BAL_QTY_${rowCount}" value="${line.BAL_QTY}">
                             </td>
                             <td>
-                                <button class="btn btn-sm border border-danger" type="button" onclick="removeRow(this)">
+                                <button class="px-2 py-1 btn btn-sm border border-danger" type="button" onclick="removeRow(this)">
                                     <i class="las la-times fs-4 cursor-pointer text-danger m-0 p-0"></i>
                                 </button>
                             </td>
@@ -643,7 +647,7 @@ function showQuoteLines(lines) {
                                 <input type="text" class="form-control form-control-sm" name="BAL_QTY[]" id="BAL_QTY_${rowCount}" value="">
                             </td>
                             <td>
-                                <button class="btn btn-sm border border-danger" type="button" onclick="removeRow(this)">
+                                <button class="px-2 py-1 btn btn-sm border border-danger" type="button" onclick="removeRow(this)">
                                     <i class="las la-times fs-4 cursor-pointer text-danger m-0 p-0"></i>
                                 </button>
                             </td>
@@ -666,6 +670,9 @@ function setClient(clientid) {
     companyName.value = ''
     contactNumber.value = ''
     emailAddress.value = ''
+    currencyInput.value = '';
+    paymentTermInput.value = '';
+    taxInput.value = '';
     if (client) {
         clientID.value = client?.ID || 0
         clientName.value = `${client?.FIRST_NAME || ''} ${client?.LAST_NAME || ''}`
@@ -673,6 +680,15 @@ function setClient(clientid) {
         companyName.value = `${client?.COMPANY_NAME || ''}`
         contactNumber.value = `${client?.PHONE_NUMBER || ''}`
         emailAddress.value = `${client?.EMAIL || ''}`
+        currencyInput.value = `${client?.CURRENCY || ''}`
+        paymentTermInput.value = `${client?.PAYMENT_TERM || ''}`
+        const country = client?.COUNTRY?.toUpperCase(); // Normalize to uppercase for comparison
+
+        if (country === 'SA' || country === 'KSA' || country === 'SAUDI ARABIA') {
+            taxInput.value = '15';
+        } else {
+            taxInput.value = '0';
+        }
     }
     myModal.hide();
 

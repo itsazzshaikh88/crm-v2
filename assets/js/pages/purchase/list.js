@@ -27,7 +27,7 @@ async function fetcPOList() {
             return;
         }
         // Set loader to the screen 
-        listingSkeleton(tableId, paginateList.pageLimit || 0, 'purchase');
+        commonListingSkeleton(tableId, paginateList.pageLimit || 0, numberOfHeaders);
         const url = `${APIUrl}/purchase/list`;
         const filters = filterCriterias([]);
 
@@ -80,6 +80,7 @@ function showPODetails(po, tbody) {
                                         ${request?.PO_NUMBER || ''}
                                     </a>
                                 </td>
+                                <td>${request?.CLIENT_PO_NUMBER || ''}</td>
                                 <td><span class="line-clamp-1">${request?.COMPANY_NAME || ''}</span></td>
                                 <td>${request?.EMAIL_ADDRESS || ''}</td> <!-- Email -->
                                 <td ><span class="line-clamp-1">${request?.COMPANY_ADDRESS || ''}</span></td> <!-- Company_address -->

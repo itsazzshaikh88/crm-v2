@@ -99,10 +99,10 @@
                                         <!-- First Row -->
                                         <div class="col-md-6">
                                             <div class="d-flex flex-column gap-1">
-                                                <label for="CLIENT_NAME" class="text-gray-800 fw-bold">Client Name<span class="text-danger">*</span></label>
-                                                <input type="text" value="" readonly class="form-control form-control-sm border border-blue-100 text-gray-700" name="CLIENT_NAME" id="CLIENT_NAME" onclick="openClientListModalFromPurchase()">
+                                                <label for="COMPANY_NAME" class="text-gray-800 fw-bold">Company Name<span class="text-danger">*</span></label>
+                                                <input type="text" value="" class="form-control form-control-sm border border-blue-100 text-gray-700" name="COMPANY_NAME" id="COMPANY_NAME" onclick="openClientListModalFromPurchase()">
                                             </div>
-                                            <p class="text-danger err-lbl mb-0 fs-8" id="lbl-CLIENT_NAME"></p>
+                                            <p class="text-danger err-lbl mb-0 fs-8" id="lbl-COMPANY_NAME"></p>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="d-flex flex-column gap-1">
@@ -135,11 +135,10 @@
                                         <!-- Second Row -->
                                         <div class="col-md-6">
                                             <div class="d-flex flex-column gap-1">
-                                                <label for="COMPANY_NAME" class="text-gray-800 fw-bold">Company Name<span class="text-danger">*</span></label>
-                                                <input type="text" value="" class="form-control form-control-sm border border-blue-100 text-gray-700" name="COMPANY_NAME" id="COMPANY_NAME">
-
+                                                <label for="CLIENT_NAME" class="text-gray-800 fw-bold">Client Name<span class="text-danger">*</span></label>
+                                                <input type="text" value="" class="form-control form-control-sm border border-blue-100 text-gray-700" name="CLIENT_NAME" id="CLIENT_NAME">
                                             </div>
-                                            <p class="text-danger err-lbl mb-0 fs-8" id="lbl-COMPANY_NAME"></p>
+                                            <p class="text-danger err-lbl mb-0 fs-8" id="lbl-CLIENT_NAME"></p>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="d-flex flex-column gap-1">
@@ -204,7 +203,7 @@
                             <div class="card-body">
                                 <div class="mb-2 d-flex align-items-center justify-content-between">
                                     <h2 class="mb-4">Product Details</h2>
-                                    <button class="btn btn-sm btn-success" type="button" onclick="addRow()">
+                                    <button class="px-2 py-1 btn btn-sm btn-success" type="button" onclick="addRow()">
                                         <i class="las la-plus fs-6 cursor-pointer text-white m-0 p-0"></i>
                                     </button>
                                 </div>
@@ -214,17 +213,17 @@
                                         <thead class="border-bottom border-gray-200 fs-6 text-gray-600 fw-bold bg-light bg-opacity-75">
                                             <tr>
                                                 <th>#</th>
-                                                <th class="min-w-150px">Product</th>
+                                                <th class="">Product</th>
                                                 <th class="min-w-250px">Product Desc</th>
-                                                <th class="min-w-250px">Sup Prod Code</th>
-                                                <th class="min-w-150px">Qty</th>
-                                                <th class="min-w-150px">Unit Price</th>
-                                                <th class="min-w-150px">Total</th>
-                                                <th class="min-w-150px">Color</th>
-                                                <th class="min-w-150px">Transport</th>
-                                                <th class="min-w-150px">SOC #</th>
-                                                <th class="min-w-150px">Rec Qty</th>
-                                                <th class="min-w-150px">Bal Qty</th>
+                                                <th class="">Sup Prod Code</th>
+                                                <th class="">Qty</th>
+                                                <th class="">Unit Price</th>
+                                                <th class="">Total</th>
+                                                <th class="">Color</th>
+                                                <th class="">Transport</th>
+                                                <th class="">SOC #</th>
+                                                <th class="">Rec Qty</th>
+                                                <th class="">Bal Qty</th>
                                                 <th>
 
                                                 </th>
@@ -269,7 +268,7 @@
                                                     <input type="text" name="BAL_QTY[]" id="BAL_QTY_1" class="form-control form-control-sm">
                                                 </td>
                                                 <td>
-                                                    <button type="button" class="btn btn-sm border border-danger" onclick="removeRow(this)">
+                                                    <button type="button" class="px-2 py-1 btn btn-sm border border-danger" onclick="removeRow(this)">
                                                         <i class="las la-times fs-4 cursor-pointer text-danger m-0 p-0"></i>
                                                     </button>
                                                 </td>
