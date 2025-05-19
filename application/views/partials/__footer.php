@@ -67,6 +67,7 @@ $cpyright_years = ($start_year == $current_year) ? $current_year : "$start_year-
     var hostUrl = "assets/";
     const PRODUCT_IMAGES_URL = `${baseUrl}uploads/products/`;
     const REQUEST_DOCS_URL = `${baseUrl}uploads/requests/`;
+    const PURCHASE_DOCS_URL = `${baseUrl}uploads/purchase/`;
 
     const loginUserType = "<?= $loggedInUser['usertype'] ?? 'Guest' ?>";
     const loginUserID = "<?= $loggedInUser['userid'] ?? '0' ?>";

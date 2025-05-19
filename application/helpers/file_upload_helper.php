@@ -10,7 +10,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
  * @param int $maxSize - The maximum size of the files in KB.
  * @return array|null - An array of uploaded filenames or null if no files were uploaded.
  */
-function upload_multiple_files($files, $uploadPath, $allowedTypes = [], $maxSize = 1024)
+function upload_multiple_files($files, $uploadPath, $allowedTypes = [], $maxSize = 51200)
 {
     // Load the CodeIgniter instance
     $CI = &get_instance();

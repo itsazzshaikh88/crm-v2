@@ -124,8 +124,8 @@ class Data extends App_Controller
 
     public function importSalesForecastOTOM($year = null)
     {
-        // echo "Services is Stopped by developers.";
-        // die;
+        echo "Services is Stopped by developers.";
+        die;
         set_time_limit(0); // Set to 300 seconds (5 minutes), or 0 for unlimited
 
         $sales = $this->Data_model->getSalesForecastData($year);
@@ -193,6 +193,4 @@ class Data extends App_Controller
 
         echo "Sales Forecast - Data Imported From Oracle to MYSQL for year " . $year;
     }
-
-    // Updated file in the Data controller to test git is working
 }

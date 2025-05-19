@@ -61,7 +61,8 @@ class Purchase extends Api_controller
 
             // Directory to upload files
             $uploadPath = './uploads/purchase/';
-            $allowedTypes = ['jpg', 'jpeg', 'png', 'gif', 'pdf', 'doc', 'docx', 'txt'];
+            $allowedTypes = ['jpg', 'JPG', 'jpeg', 'JPEG', 'png', 'PNG', 'gif', 'GIF', 'pdf', 'PDF', 'doc', 'DOC', 'docx', 'DOCX', 'xls', 'XLS', 'xlsx', 'XLSX', 'ppt', 'PPT', 'pptx', 'PPTX', 'txt', 'TXT', 'odt', 'ODT', 'rtf', 'RTF', 'csv', 'CSV'];
+
             $uploadedFiles = null;
 
             // Check if files are attached

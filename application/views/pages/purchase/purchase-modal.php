@@ -173,8 +173,13 @@
 
                                 <div class="col-md-6 ">
                                     <div class="row g-1 mt-12 ">
-                                        <h4 class="text-label-heading fw-normal my-2">Product Images</h4>
-                                        <div class="col-md-12 ">
+                                        <h4 class="text-label-heading fw-normal my-2">Attachment(s)</h4>
+                                        <small class="text-danger">
+                                            Supported file types: jpg, jpeg, png, gif, pdf, doc, docx, xls, xlsx, ppt, pptx, txt, odt, rtf, csv. Maximum file size: 50 MB.
+                                        </small>
+
+
+                                        <div class="col-md-12 my-4">
                                             <div id="upload-box" class="upload-box d-flex align-items-center justify-content-center btn-outline btn-outline-dashed btn btn-active-light-primary bg-white py-6" onclick="document.getElementById('file-input').click();">
                                                 <i class="fas fa-cloud-upload-alt upload-icon fs-2x my-2 text-primary"></i>
                                                 <p class="mb-0">Click to upload files</p>

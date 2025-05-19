@@ -254,17 +254,10 @@ async function submitForm(e) {
         if (response.ok) {
             const data = await response.json();
             toasterNotification({ type: 'success', message: "PO Details Saved Successfully!" });
-            if (data?.type === 'insert') {
-                newPurchaseModal.hide();
-                removeClientName();
-                fetcPOList();
-
-            } else if (data?.type == 'update') {
-                // setTimeout(() => window.location = 'quotes/list', 1500)
-                fetcPOList();
-                newPurchaseModal.hide()
-                removeClientName();
-            }
+            newPurchaseModal.hide();
+            removeClientName();
+            fetcPOList();
+            closePurchaseModal();
 
             selectedFiles = [];
         } else {

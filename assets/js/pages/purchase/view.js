@@ -32,7 +32,7 @@ function generateFilesUI(files) {
     return files.map(fileName => {
         const extension = fileName.split('.').pop().toLowerCase();
         const { icon, color } = iconMap[extension] || iconMap.default;
-        let linkOfFile = `${REQUEST_DOCS_URL}${fileName}`;
+        let linkOfFile = `${PURCHASE_DOCS_URL}${fileName}`;
         return `
                 <a target="_blank" href="${linkOfFile}" class="py-1 px-4 border-secondary border border-dashed rounded">
                     <i class="fa ${icon} me-2 ${color}"></i> <span class="${color}">${fileName}</span>
