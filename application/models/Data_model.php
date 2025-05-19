@@ -244,4 +244,18 @@ class Data_model extends App_Model
         $inventory_data['PRODUCT_ID'] = $inserted_id;
         $this->db->insert("xx_crm_product_inventory", $inventory_data);
     }
+
+    // Fetch sales forecast data
+    function getSalesForecastData($year)
+    {
+        $sql = "select ORG_ID, YER, CUSTOMER_NUMBER, CUSTOMER_NAME, ITEM_C, ITEM_DESC, PRODUCT_WEIGHT, UOM, SALES_MAN, SALES_MAN_ID, REGION, ORGANIZATION_ID, Q1, U1, Q2, U2, Q3, U3, Q4, U4, Q5, U5, Q6, U6, Q7, U7, Q8, U8, Q9, U9, Q10, U10, Q11, U11, Q12, U12, CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_LOGIN, LAST_UPDATE_DATE, ATTRIBUTE1, ATTRIBUTE2, ATTRIBUTE3, ATTRIBUTE4, ATTRIBUTE5, ATTRIBUTE6, ATTRIBUTE7, ATTRIBUTE8, ATTRIBUTE9, ATTRIBUTE10, ATTRIBUTE11, ATTRIBUTE12, ATTRIBUTE13, ATTRIBUTE14, ATTRIBUTE15, UNIT1, UNIT2, UNIT3, UNIT4, UNIT5, UNIT6, UNIT7, UNIT8, UNIT9, UNIT10, UNIT11, UNIT12, VER, STATUS, KEY, HEADER_ID, WF_STATUS from ZPIL_SALES_FORECAST_CUST WHERE YER = $year";
+        return $this->oracleDB->query($sql)->result_array();
+    }
+
+    // add sales forecast to mysql from oracle
+    function create_forecast_details($forecast_data)
+    {
+        $forecast_data['UUID'] = uuid_v4();
+        $this->db->insert("xx_crm_sales_forecast", $forecast_data);
+    }
 }
