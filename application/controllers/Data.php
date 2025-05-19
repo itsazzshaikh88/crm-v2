@@ -12,32 +12,36 @@ class Data extends App_Controller
     {
         echo "Services is Stopped by developers.";
         die;
-        set_time_limit(0); // Set to 300 seconds (5 minutes), or 0 for unlimited
-
+        set_time_limit(0);
         $clients = $this->Data_model->getOracleClientDetails();
 
         $counter = 1;
         foreach ($clients as $client) {
             $user_details = [
                 'USER_TYPE' => 'client',
-                'FIRST_NAME' => 'Client',
-                'LAST_NAME' => 'Name',
+                'FIRST_NAME' => $client['NAME'] ?? null,
+                'LAST_NAME' => '',
                 'EMAIL' => $client['EMAIL_ADDRESS'] ?? "client" . $counter . "@crm.live",
                 'PASSWORD' => password_hash("User#123$", PASSWORD_ARGON2ID),
                 'PHONE_NUMBER' => $client['PH_NO'] ?? "0000000000",
                 'STATUS' => 'active',
                 'IS_2FA_ENABLED' => 0
             ];
+            $country = isset($client['COUNTRY']) ? strtoupper(trim($client['COUNTRY'])) : '';
+            $taxes = in_array($country, ['KSA', 'SA', 'SAUDI ARABIA']) ? 15 : 0;
 
             $client_details = [
                 'DIVISION' => $client['DIVISION'],
                 'COMPANY_NAME' => $client['COMPANY_NAME'],
                 'SITE_NAME' => $client['SITE_ID'],
-                'PAYMENT_TERM' => '',
+                'PAYMENT_TERM' => $client["PAYMENT_TERM"],
                 'CREDIT_LIMIT' => $client['CREDIT_LMT'],
-                'TAXES' => '',
-                'CURRENCY' => '',
-                'ORDER_LIMIT' => $client['ORDER_LMT']
+                'TAXES' => $taxes,
+                'CURRENCY' => $client['CURRENCY'],
+                'ORDER_LIMIT' => $client['ORDER_LMT'],
+                'SALES_PERSON' => $client['SALES_PER'],
+                'ORA_CLIENT_ID' => $client['CLIENT_ID'],
+
             ];
             $client_address = [
                 'ADDRESS_LINE_1' => $client['ADDRESS1'],

@@ -113,7 +113,20 @@ class Data_model extends App_Model
                         ra_salesreps_all a
                     WHERE
                         hcsua.primary_salesrep_id = a.salesrep_id
-                )                                            AS sales_per
+                )                                            AS sales_per,
+                (
+                    CASE
+                        WHEN ra.county = 'Saudi Arabia' THEN
+                            'SAR'
+                        WHEN ra.county = 'SAUDI ARABIA' THEN
+                            'SAR'
+                        WHEN ra.county IS NULL THEN
+                            'SAR'
+                        ELSE
+                            'USD'
+                    END
+                )                                            currency,
+                rt.name                                      payment_term
             FROM
                 ar_customers              rc,
                 hz_cust_accounts_all      hcust 
@@ -121,7 +134,8 @@ class Data_model extends App_Model
                 ,
                 hz_parties                ra,
                 ar.hz_cust_acct_sites_all hcasa,
-                hz_cust_site_uses_all     hcsua
+                hz_cust_site_uses_all     hcsua,
+                ra_terms_tl               rt
             WHERE
                     rc.customer_id = hcust.cust_account_id
             --AND    A.CUSTOMER_ID = HCUST.CUST_ACCOUNT_ID
@@ -129,12 +143,14 @@ class Data_model extends App_Model
             --AND  HCSUA.CUST_ACCT_SITE_ID(+)= HCUST.cust_account_id   
                 AND hcsua.cust_acct_site_id (+) = hcasa.cust_acct_site_id
             --AND    A.ORG_ID = DECODE(:P_DIV,'IBM',145,'Z3P',442)
-            -- AND  hcasa.org_id = DECODE(:P_DIV,'IBM',145,'Z3P',442)
-                AND hcasa.org_id IN ( 145, 442 )
+            --    AND hcasa.org_id = decode(:p_div, 'IBM', 145, 'Z3P', 442)
+            AND  hcasa.org_id in (145,442)
                 AND hcsua.site_use_code = 'BILL_TO'
             --AND    HCUST.status =Decode(:P_Status,'Active','A','InActive','I',hcust.Status)
                 AND rc.status = 'A'
                 AND hcust.cust_account_id = hcasa.cust_account_id
+                AND hcsua.payment_term_id = rt.term_id
+                AND rt.language = 'US'
             ORDER BY
                 customer_name";
         $query = $this->oracleDB->query($sql);  // Run the query
