@@ -9,7 +9,7 @@
                         <thead>
                             <tr class="fw-bold fs-7 text-gray-900">
                                 <th>#</th>
-                                <th>Client</th>
+                                <th>Client #</th>
                                 <th>Company</th>
                                 <th>Email</th>
                                 <th>Mobile</th>

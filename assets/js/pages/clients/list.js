@@ -72,23 +72,15 @@ function showClients(products, tbody) {
         products.forEach(client => {
             content += `<tr class="fs-7 text-gray-800">
                                 <td>${++counter}</td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <div class="d-flex justify-content-start flex-column">
-                                            <p class="fw-bold text-hover-primary mb-0">${client.FIRST_NAME} ${client.LAST_NAME}</p>
-                                            <span class="text-muted fw-semibold d-block fs-9">${client.USER_ID}</span>
-                                        </div>
-                                    </div>
-                                </td>
-
-                                <td class="pe-0 dt-type-numeric">${client.COMPANY_NAME || ''}</td>
-                                <td class="pe-0 dt-type-numeric text-primary">${client.EMAIL}</td>
-                                <td class="pe-0 dt-type-numeric">${client.PHONE_NUMBER}</td>
-                                <td class="pe-0 dt-type-numeric">${client.CREDIT_LIMIT || 0}</td>
-                                <td class="pe-0 dt-type-numeric">${client.ORDER_LIMIT || 0}</td>
-                                <td class="pe-0 dt-type-numeric">${client.COUNTRY || ''}</td>
-                                <td class="pe-0 dt-type-numeric">${client.TAXES || '0'}%</td>
-                                <td class="pe-0 dt-type-numeric">${showClientStatus(client.STATUS || '')}</td>
+                                <td>${client.USER_ID}</td>
+                                <td class="">${client.COMPANY_NAME || ''}</td>
+                                <td class=" text-primary">${client.EMAIL}</td>
+                                <td class="">${client.PHONE_NUMBER}</td>
+                                <td class="">${client.CREDIT_LIMIT || 0}</td>
+                                <td class="">${client.ORDER_LIMIT || 0}</td>
+                                <td class="">${client.COUNTRY || ''}</td>
+                                <td class="">${client.TAXES || '0'}%</td>
+                                <td class="">${showClientStatus(client.STATUS || '')}</td>
                                 <td class="text-end">
                                     <div class="d-flex align-items-center justify-content-end gap-3">
                                         <a href="clients/view/${client.UUID}">
