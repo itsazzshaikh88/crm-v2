@@ -20,7 +20,7 @@ if (strpos($uri, '/crm-v2/') !== false) {
 		'HOST' => 'localhost',
 		'USERNAME' => 'root',
 		'PASSWORD' => '',
-		'DATABASE' => 'crm-test-db'
+		'DATABASE' => 'crm_test'
 	];
 } else {
 	$db_details = [
