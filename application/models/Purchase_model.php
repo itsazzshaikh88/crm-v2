@@ -392,16 +392,11 @@ class Purchase_model extends App_Model
     {
         $offset = get_limit_offset($currentPage, $limit);
 
-        // Start base SQL
-        $sql = "SELECT DISTINCT CLIENT_PO_NUMBER, PO_NUMBER FROM xx_crm_po_header";
-
-        // Array to hold WHERE conditions
+        // Step 1: Fetch all POs from MySQL (CRM)
+        $sql = "SELECT CLIENT_PO_NUMBER, PO_NUMBER FROM xx_crm_po_header";
         $where = [];
-
-        // Array to hold binding parameters
         $params = [];
 
-        // Process filters
         if (!empty($filters)) {
             foreach ($filters as $key => $value) {
                 $where[] = "$key = ?";
@@ -414,112 +409,108 @@ class Purchase_model extends App_Model
             $params[] = $userid;
         }
 
-        // Append WHERE clause if any conditions exist
         if (!empty($where)) {
             $sql .= " WHERE " . implode(' AND ', $where);
         }
-        $query = $this->db->query($sql, $params);
 
-        $client_po_list =  $query->result_array();
+        $client_po_result = $this->db->query($sql, $params)->result_array();
+        if (empty($client_po_result)) {
+            return ($type === 'list') ? [] : 0;
+        }
 
-        $client_po_numbers = array_column($client_po_list, 'CLIENT_PO_NUMBER');
+        // Step 2: Prepare PO list for Oracle IN clause
+        $client_po_numbers = array_column($client_po_result, 'CLIENT_PO_NUMBER');
         $quoted_po_numbers = array_map(function ($po) {
-            return "'" . $po . "'";
+            return "'" . str_replace("'", "''", $po) . "'";
         }, $client_po_numbers);
-
         $po_in_clause = implode(',', $quoted_po_numbers);
 
-        // 
-        $oracleSQl = "SELECT
-                        po#                    client_po,
-                        customer,
-                        product,
-                        ord_qty,
-                        ship_qty,
-                        ( ord_qty - ship_qty ) bal_qty,
-                        (
-                            CASE
-                                WHEN ord_qty >= 0 THEN
-                                    'SOC Created'
-                                ELSE
-                                    'NO SOC'
-                            END
-                        )                      soc_status,
-                        (
-                            CASE
-                                WHEN ( ord_qty - ship_qty ) > 0 THEN
-                                    'PARTIALLY DELIVERED'
-                                ELSE
-                                    'DELIVERED'
-                            END
-                        )                      del
-                    FROM
-                        (
-                            SELECT
-                                oel.cust_po_number                 po#,
-                                ar.customer_name                   customer,
-                                oel.ordered_item                   product,
-                                SUM(nvl(oel.ordered_quantity, 0))  ord_qty,
-                                SUM(nvl(oel.shipping_quantity, 0)) ship_qty
-                            FROM
-                                oe_order_lines_all   oel,
-                                oe_order_headers_all oeh,
-                                ar_customers         ar
-                            WHERE
-                                    oel.header_id = oeh.header_id
-                                AND oel.sold_to_org_id = ar.customer_id
-                                AND TO_DATE(oel.request_date, 'DD-MON-YY') > '30-APR-25'
-                                -- AND oel.sold_from_org_id = decode(:org, 'IBM', 145, 'Z3P', 442)
-                                ";
-        if ($po_in_clause != '') {
-            $oracleSQl .= " AND oel.cust_po_number in ($po_in_clause) ";
-        }
-        $oracleSQl .=  "GROUP BY
-                                oel.cust_po_number,
-                                oel.ordered_item,
-                                ar.customer_name
-                        )
-                    ORDER BY
-                        1 DESC,
-                        3";
+        // Step 3: Fetch related Oracle data
+        $oracle_results = [];
+        if (!empty($po_in_clause)) {
+            $oracleSQL = "
+            SELECT
+                oel.cust_po_number AS CLIENT_PO,
+                ar.customer_name AS CUSTOMER,
+                oel.ordered_item AS PRODUCT,
+                SUM(NVL(oel.ordered_quantity, 0)) AS ORD_QTY,
+                SUM(NVL(oel.shipping_quantity, 0)) AS SHIP_QTY,
+                (SUM(NVL(oel.ordered_quantity, 0)) - SUM(NVL(oel.shipping_quantity, 0))) AS BAL_QTY,
+                CASE 
+                    WHEN SUM(NVL(oel.ordered_quantity, 0)) >= 0 THEN 'SOC Created'
+                    ELSE 'NO SOC'
+                END AS SOC_STATUS,
+                CASE 
+                    WHEN (SUM(NVL(oel.ordered_quantity, 0)) - SUM(NVL(oel.shipping_quantity, 0))) > 0 THEN 'PARTIALLY DELIVERED'
+                    ELSE 'DELIVERED'
+                END AS DEL
+            FROM
+                oe_order_lines_all oel
+                JOIN oe_order_headers_all oeh ON oel.header_id = oeh.header_id
+                JOIN ar_customers ar ON oel.sold_to_org_id = ar.customer_id
+            WHERE
+                TO_DATE(oel.request_date, 'DD-MON-YY') > '30-APR-25'
+                AND oel.cust_po_number IN ($po_in_clause)
+            GROUP BY
+                oel.cust_po_number, ar.customer_name, oel.ordered_item
+            ORDER BY
+                oel.cust_po_number DESC, oel.ordered_item
+        ";
 
-        if ($type == "list") {
-            $oracleSQl .= " OFFSET $offset ROWS FETCH NEXT $limit ROWS ONLY";
+            $oracle_query = $this->oracleDB->query($oracleSQL);
+            $oracle_results = $oracle_query->result_array();
         }
 
-        if ($po_in_clause != '') {
-            // Execute query
-            $query = $this->oracleDB->query($oracleSQl);
+        // Step 4: Map PO numbers for CRM_PO reference
+        $po_map = [];
+        foreach ($client_po_result as $row) {
+            $po_map[$row['CLIENT_PO_NUMBER']] = $row['PO_NUMBER'];
+        }
 
-            // Get the result based on the type
-            if ($type === 'list') {
-                $oracle_results = $query->result_array();
+        // Step 5: Map Oracle data by CLIENT_PO
+        $oracle_grouped = [];
+        foreach ($oracle_results as $row) {
+            $oracle_grouped[$row['CLIENT_PO']][] = $row;
+        }
 
-                // Build index of CLIENT_PO_NUMBER => PO_NUMBER
-                $po_map = [];
-                foreach ($client_po_list as $row) {
-                    $po_map[$row['CLIENT_PO_NUMBER']] = $row['PO_NUMBER'];
+        // Step 6: Merge all data (POs with or without SOC)
+        $final_result = [];
+        foreach ($client_po_result as $row) {
+            $client_po = $row['CLIENT_PO_NUMBER'];
+            $crm_po = $row['PO_NUMBER'];
+
+            if (isset($oracle_grouped[$client_po])) {
+                foreach ($oracle_grouped[$client_po] as $oracle_row) {
+                    $oracle_row['CRM_PO_NUM'] = $crm_po;
+                    $final_result[] = $oracle_row;
                 }
-
-                // Attach PO_NUMBER to each Oracle record
-                foreach ($oracle_results as &$row) {
-                    $clientPo = $row['CLIENT_PO'];
-                    $row['CRM_PO_NUM'] = isset($po_map[$clientPo]) ? $po_map[$clientPo] : null;
-                }
-
-                $result = $oracle_results;
             } else {
-                $result = $query->num_rows();
+                $final_result[] = [
+                    'CLIENT_PO'  => $client_po,
+                    'CRM_PO_NUM' => $crm_po,
+                    'CUSTOMER'   => null,
+                    'PRODUCT'    => null,
+                    'ORD_QTY'    => 0,
+                    'SHIP_QTY'   => 0,
+                    'BAL_QTY'    => 0,
+                    'SOC_STATUS' => 'NO SOC',
+                    'DEL'        => 'NOT DELIVERED'
+                ];
             }
-        } else {
-            $result = ($type === 'list') ? 0 : 0;
         }
-        // Close the database connection
+
+        // Step 7: Return result based on type
         $this->oracleDB->close();
 
-        // Return the result
-        return $result;
+        if ($type === 'list') {
+            // Apply pagination after merge
+            $paginated = array_slice($final_result, $offset, $limit);
+            return $paginated;
+        } else {
+            return count($final_result);
+        }
     }
+
 
     public function get_po_tracker_details($po_num, $product)
     {

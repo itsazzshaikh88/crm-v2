@@ -32,7 +32,7 @@ async function fetchOpenOrders() {
             return;
         }
         // Set loader to the screen 
-        listingSkeleton(tableId, openOrderTrackingPaginate.pageLimit || 0, 'open-order-list-tracking');
+        commonListingSkeleton(tableId, openOrderTrackingPaginate.pageLimit || 0, numberOfHeaders);
 
         const url = `${APIUrl}/purchase/open_orders`;
         const filters = filterCriterias(['ORG_ID']);
@@ -75,13 +75,13 @@ function renderOpenOrders(pos, tbody) {
         if (pos.length > 0) {
             pos.forEach((po) => {
                 content += `<tr class="text-gray-800 fs-7">
-								<td>${po?.CRM_PO_NUM}</td>
-								<td>${po?.CLIENT_PO}</td>
-								<td>${po?.CUSTOMER}</td>
-								<td>${po?.PRODUCT}</td>
-								<td>${po?.ORD_QTY}</td>
-								<td>${po?.SHIP_QTY}</td>
-								<td>${po?.BAL_QTY}</td>
+								<td>${po?.CRM_PO_NUM || ''}</td>
+								<td>${po?.CLIENT_PO || ''}</td>
+								<td>${po?.CUSTOMER || ''}</td>
+								<td>${po?.PRODUCT || ''}</td>
+								<td>${po?.ORD_QTY || ''}</td>
+								<td>${po?.SHIP_QTY || ''}</td>
+								<td>${po?.BAL_QTY || ''}</td>
                                 <td>
                                     <button class="btn btn-sm btn-secondary p-0 px-4 py-1" type="button" onclick="trackPODetails(this, '${po?.CLIENT_PO}','${po?.PRODUCT}')"> <i class="fa-solid fa-location-arrow"></i> Track</button>
                                 </td>
