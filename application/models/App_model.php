@@ -7,7 +7,7 @@ class App_Model extends CI_Model
     public function __construct()
     {
         parent::__construct();
-        $this->oracleDB = $this->load->database('oracle', TRUE); 
+        // $this->oracleDB = $this->load->database('oracle', TRUE); 
     }
 
     /**

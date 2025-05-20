@@ -34,4 +34,13 @@ class Email extends App_Controller
 
         beautify_array($result);
     }
+
+    function view()
+    {
+        $emailViewConfig = [
+            'content_view' => 'task-assigned',
+            'heading' => "Your Zamil CRM Account is created.",
+        ];
+        $this->load->view('email-templates/layout', ['emailViewConfig' => $emailViewConfig]);
+    }
 }

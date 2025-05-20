@@ -10,7 +10,7 @@ class Tasks extends App_Controller
         $data['page_heading'] = 'Zamil Task Manager';
         $data['navlink'] = ['main-link' => ADMIN_ACTIVE_LINK, 'sub-link' => 'tasks'];
         $data['css_files'] = [];
-        $data['scripts'] = ['assets/js/pages/tasks/common.js', 'assets/js/pages/tasks/list.js', 'assets/js/pages/tasks/new.js'];
+        $data['scripts'] = ['assets/js/pages/salespersons/modals/list.js', 'assets/js/pages/tasks/common.js', 'assets/js/pages/tasks/list.js', 'assets/js/pages/tasks/new.js'];
         $data['toolbar'] = ['name' => 'task-manager', 'action' => 'list'];
         $this->load->view('layout', $data);
     }

@@ -44,6 +44,7 @@ class Task_model extends App_Model
     {
         $taskData = $data;
         $taskData['UUID'] = uuid_v4();
+        $taskData['CREATED_BY'] = $userid;
 
         // Insert new lead
         $inserted = $this->db->insert($this->task_table, $taskData);
@@ -62,7 +63,7 @@ class Task_model extends App_Model
     public function update_task($taskID, $data, $userid)
     {
         $taskData = $data;
-
+        $taskData['UPDATED_BY'] = $userid;
         // unset some columns that will not get updated
         unset($taskData['ID']);
         // update record
@@ -119,10 +120,11 @@ class Task_model extends App_Model
     {
         $data = [];
         if ($taskID) {
-            $data = $this->db
-                ->where('ID', $taskID)
-                ->get($this->task_table)
-                ->row_array();
+            $this->db->select('t.*, CONCAT(u.FIRST_NAME, " ", u.LAST_NAME) AS ASSIGNED_BY_USER');
+            $this->db->from('xx_crm_tasks t');
+            $this->db->join('xx_crm_users u', 't.CREATED_BY = u.ID', 'left');
+            $this->db->where('t.ID', $taskID);
+            $data = $this->db->get()->row_array();
         }
 
         return $data;

@@ -194,4 +194,5 @@
 <?php
 $this->load->view('loaders/full-page-loader');
 $this->load->view('pages/tasks/new');
+$this->load->view('pages/salespersons/modals/list');
 ?>

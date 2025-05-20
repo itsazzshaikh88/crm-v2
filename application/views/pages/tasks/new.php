@@ -102,9 +102,27 @@
                             <p class="text-danger err-lbl mb-0" id="lbl-DESCRIPTION"></p>
                         </div>
                         <!-- CONSULTANT -->
-                        <div class="col-12 col-md-6">
+                        <div class="col-12 col-md-6 position-relative">
                             <label for="CONSULTANT" class="form-label fw-bold text-secondary small required-field">Consultant</label>
-                            <input type="text" class="form-control form-control-sm" id="CONSULTANT" name="CONSULTANT" placeholder="Consultant name here">
+                            <input
+                                type="text"
+                                class="form-control form-control-sm"
+                                id="CONSULTANT"
+                                name="CONSULTANT"
+                                placeholder="Consultant name here"
+                                readonly
+                                autocomplete="off"
+                                onclick="opensalesPersonListModal()">
+
+                            <input type="hidden" id="CONSULTANT_ID" name="CONSULTANT_ID" />
+
+                            <!-- X icon - initially hidden -->
+                            <span
+                                id="clearConsultant"
+                                style="display:none; position:absolute; top:50%; right:10px; cursor:pointer; font-weight:bold; font-size:18px; color:red;"
+                                title="Clear consultant"
+                                onclick="clearConsultantDetails()">&times;</span>
+
                             <p class="text-danger err-lbl mb-0" id="lbl-CONSULTANT"></p>
                         </div>
 

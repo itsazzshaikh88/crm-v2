@@ -110,3 +110,33 @@ function displayTaskInfo(data) {
         populateFormFields(data);
     }
 }
+
+// New: Set consultant data and show clear icon
+function setSalesPerson(index) {
+    const person = fetchedSalesPersons?.[index];
+    if (!person) return;
+
+    const name = `${person.FIRST_NAME || ''} ${person.LAST_NAME || ''}`.trim();
+    document.getElementById("CONSULTANT").value = name;
+    document.getElementById("CONSULTANT_ID").value = person.ID || '';
+
+    salesPersonListModal?.hide?.();
+    toggleClearIcon('CONSULTANT', 'clearConsultant');
+}
+
+function clearConsultantDetails() {
+    document.getElementById("CONSULTANT").value = '';
+    document.getElementById("CONSULTANT_ID").value = '';
+    toggleClearIcon('CONSULTANT', 'clearConsultant');
+}
+
+// Utility to toggle clear icon visibility based on input value
+function toggleClearIcon(inputId, clearIconId) {
+    const inputVal = document.getElementById(inputId).value;
+    const icon = document.getElementById(clearIconId);
+    if (inputVal && inputVal.trim() !== '') {
+        icon.style.display = 'inline';
+    } else {
+        icon.style.display = 'none';
+    }
+}

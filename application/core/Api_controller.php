@@ -192,4 +192,83 @@ class Api_controller extends CI_Controller
     {
         return isset($_SERVER['REQUEST_URI']) ? base_url($_SERVER['REQUEST_URI']) : '';
     }
+
+    public function app_mailer($params = [])
+    {
+        // Load PHPMailer
+        $mail = $this->phpmailer_lib->load();
+
+        // Basic validations
+        if (empty($params['to']) || !filter_var($params['to'], FILTER_VALIDATE_EMAIL)) {
+            return [
+                'success' => false,
+                'error'   => 'Invalid recipient email address.'
+            ];
+        }
+
+        if (empty($params['subject'])) {
+            return [
+                'success' => false,
+                'error'   => 'Email subject is required.'
+            ];
+        }
+
+        if (empty($params['message'])) {
+            return [
+                'success' => false,
+                'error'   => 'Email message is required.'
+            ];
+        }
+
+        try {
+            // SMTP configuration
+            $mail->isSMTP();
+            $mail->Host       = 'smtp.office365.com';
+            $mail->SMTPAuth   = true;
+            $mail->Username   = 'workflowmailer@zamilplastic.com';
+            $mail->Password   = 'Abc$1234';
+            $mail->SMTPSecure = 'tls';
+            $mail->Port       = 587;
+
+            // Email headers
+            $from_email = $params['from'] ?? 'workflowmailer@zamilplastic.com';
+            $from_name  = $params['from_name'] ?? 'WorkFlow Mailer';
+
+            $reply_to_email = $params['reply_to'] ?? $from_email;
+            $reply_to_name  = $params['reply_to_name'] ?? $from_name;
+
+            $mail->setFrom($from_email, $from_name);
+            $mail->addReplyTo($reply_to_email, $reply_to_name);
+            $mail->addAddress($params['to']);
+
+            // Subject and Body
+            $mail->Subject = $params['subject'];
+            $mail->isHTML(true);
+            $mail->Body    = $params['message'];
+            $mail->AltBody = strip_tags($params['message']); // Plain text fallback
+
+            // Send Email
+            if (!$mail->send()) {
+                return [
+                    'success' => false,
+                    'error'   => $mail->ErrorInfo
+                ];
+            }
+
+            return [
+                'success' => true,
+                'details' => [
+                    'to'      => $params['to'],
+                    'subject' => $params['subject'],
+                    'from'    => $from_email,
+                    'time'    => date('Y-m-d H:i:s')
+                ]
+            ];
+        } catch (Exception $e) {
+            return [
+                'success' => false,
+                'error'   => 'Mailer Exception: ' . $e->getMessage()
+            ];
+        }
+    }
 }

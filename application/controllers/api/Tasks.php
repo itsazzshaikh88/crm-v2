@@ -66,7 +66,33 @@ class Tasks extends Api_controller
             $newlyCreatedTask = $this->Task_model->add_task($data, $isAuthorized['userid']);
 
             if ($newlyCreatedTask) {
+                $consultant_id = $data['CONSULTANT_ID'] ?? 0;
+                // Send an email after assigning the task
+                $consultant_details = $this->User_model->get_user_by_id($consultant_id);
+                if ($consultant_details) {
+                    $emailViewConfig = [
+                        'content_view' => 'task-assigned',
+                        'heading' => "$data[TASK_NAME] – New Task Assignment",
+                    ];
+                    $taskDetailsForEmailContent = [
+                        'user' => "$consultant_details[FIRST_NAME] $consultant_details[LAST_NAME]",
+                        'title' => $newlyCreatedTask['TASK_NAME'],
+                        'target_date' => $newlyCreatedTask['TARGET_DATE'],
+                        'link' => base_url("tasks/details/" . $newlyCreatedTask['ID']),
+                        'assigned_by' => $newlyCreatedTask['ASSIGNED_BY_USER']
+                    ];
+                    $mailContent = $this->load->view('email-templates/layout', ['emailViewConfig' => $emailViewConfig, 'task' => $taskDetailsForEmailContent], true);
 
+                    $consultant_email_address = $consultant_details['EMAIL'] ?? 'IT@zamilplastic.com';
+
+                    $this->app_mailer([
+                        'to'        => $consultant_email_address,
+                        'subject'   => "$data[TASK_NAME] – New Task Assignment",
+                        'message'   => $mailContent,
+                        'from'      => 'workflowmailer@zamilplastic.com',   // Optional
+                        'from_name' => 'WorkFlow Mailer',                   // Optional
+                    ]);
+                }
                 $action_type = 'CREATED';
                 // ***** ===== Add User Activity - STARTS ===== *****
                 $userForActivity = [
