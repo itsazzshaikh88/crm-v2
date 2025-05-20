@@ -17,7 +17,19 @@ async function fetchTasks() {
             toasterNotification({ type: 'error', message: "Authorization token is missing. Please Login again." });
             return;
         }
+        commonListingSkeleton(taskTableId, paginate.pageLimit || 0, numberOfTaskHeaders);
+        const rawFilters = filterCriterias([
+            'FILTER_TASK_NAME',
+            'FILTER_STATUS',
+            'FILTER_START_DATE',
+            'FILTER_TARGET_DATE'
+        ]);
 
+        const filters = Object.fromEntries(
+            Object.entries(rawFilters)
+                .filter(([_, value]) => value != null && value !== '') // skip empty/null/undefined
+                .map(([key, value]) => [key.replace(/^FILTER_/, ''), value])
+        );
         const response = await fetch(`${APIUrl}/tasks/list`, {
             method: 'POST',
             headers: {
@@ -27,7 +39,7 @@ async function fetchTasks() {
             body: JSON.stringify({
                 limit: paginate.pageLimit,
                 currentPage: paginate.currentPage,
-                filters: []
+                filters
             })
         });
 
@@ -357,4 +369,9 @@ async function reloadTaskData() {
         toasterNotification({ type: 'error', message: 'Task failed: ' + error.message });
         Swal.close();
     }
+}
+
+function filterTaskListBasedOnParams() {
+    paginate.currentPage = 1;
+    fetchTasks();
 }

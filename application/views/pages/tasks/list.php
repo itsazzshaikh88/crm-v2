@@ -82,7 +82,6 @@
         <!--begin::PAGE CONTENT GOES FROM HERE-->
         <div class="card">
             <div class="card-body">
-
                 <div class="row mb-2">
                     <div class="col-12 px-0">
                         <!-- Button Container: All buttons in one line -->
@@ -111,8 +110,8 @@
                 <div class="row g-1 mb-2 align-items-end small">
                     <!-- Task Name -->
                     <div class="col-md-2">
-                        <label for="TASK_NAME" class="form-label mb-1 small">Task Name</label>
-                        <select name="TASK_NAME" id="TASK_NAME" class="form-select form-select-sm">
+                        <label for="FILTER_TASK_NAME" class="form-label mb-1 small">Task Name</label>
+                        <select name="FILTER_TASK_NAME" id="FILTER_TASK_NAME" class="form-select form-select-sm">
                             <option value="">All</option>
                             <!-- Add options dynamically -->
                         </select>
@@ -120,8 +119,8 @@
 
                     <!-- Status -->
                     <div class="col-md-2">
-                        <label for="STATUS" class="form-label mb-1 small">Status</label>
-                        <select name="STATUS" id="STATUS" class="form-select form-select-sm">
+                        <label for="FILTER_STATUS" class="form-label mb-1 small">Status</label>
+                        <select name="FILTER_STATUS" id="FILTER_STATUS" class="form-select form-select-sm">
                             <option value="">All</option>
                             <option value="Pending">Pending</option>
                             <option value="In Progress">In Progress</option>
@@ -133,19 +132,19 @@
 
                     <!-- From Date -->
                     <div class="col-md-2">
-                        <label for="START_DATE" class="form-label mb-1 small">From Date</label>
-                        <input type="date" name="START_DATE" id="START_DATE" class="form-control form-control-sm">
+                        <label for="FILTER_START_DATE" class="form-label mb-1 small">From Date</label>
+                        <input type="date" name="FILTER_START_DATE" id="FILTER_START_DATE" class="form-control form-control-sm">
                     </div>
 
                     <!-- To Date -->
                     <div class="col-md-2">
-                        <label for="TARGET_DATE" class="form-label mb-1 small">To Date</label>
-                        <input type="date" name="TARGET_DATE" id="TARGET_DATE" class="form-control form-control-sm">
+                        <label for="FILTER_TARGET_DATE" class="form-label mb-1 small">To Date</label>
+                        <input type="date" name="FILTER_TARGET_DATE" id="FILTER_TARGET_DATE" class="form-control form-control-sm">
                     </div>
 
                     <!-- View Button -->
                     <div class="col-md-2">
-                        <button id="filterTasksBtn" class="btn btn-sm btn-primary mt-1">View</button>
+                        <button id="filterTasksBtn" class="btn btn-sm btn-primary mt-1" onclick="filterTaskListBasedOnParams()">View</button>
                     </div>
                 </div>
 
