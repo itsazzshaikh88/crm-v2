@@ -7,6 +7,7 @@ class Api_controller extends CI_Controller
     {
         parent::__construct();
         $this->load->library('phpmailer_lib');
+        set_time_limit(0);
     }
 
     protected function isAuthorized()
@@ -221,6 +222,7 @@ class Api_controller extends CI_Controller
         }
 
         try {
+            $mail->CharSet = 'UTF-8';
             // SMTP configuration
             $mail->isSMTP();
             $mail->Host       = 'smtp.office365.com';

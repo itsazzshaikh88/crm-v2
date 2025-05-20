@@ -9,6 +9,7 @@ class App_Controller extends CI_Controller
     public function __construct()
     {
         parent::__construct();
+        set_time_limit(0);
         $this->secret_key = APP_SECRET_KEY;
         $this->isAuthenticated();
         $this->userDetails = $this->getUserDetails();
