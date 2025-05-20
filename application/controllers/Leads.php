@@ -9,7 +9,7 @@ class Leads extends App_Controller
         $data['page_title'] = 'Leads - Zamil CRM';
         $data['page_heading'] = 'Leads';
         $data['navlink'] = ['main-link' => ADMIN_ACTIVE_LINK, 'sub-link' => 'leads'];
-        $data['scripts'] = ['assets/js/pages/leads/list.js', 'assets/js/pages/leads/new-lead.js', 'assets/js/pages/activities/add-activities.js', 'assets/js/pages/activities/email-activitiy.js'];
+        $data['scripts'] = ['assets/js/pages/salespersons/modals/list.js', 'assets/js/pages/leads/list.js', 'assets/js/pages/leads/new-lead.js', 'assets/js/pages/activities/add-activities.js', 'assets/js/pages/activities/email-activitiy.js'];
         $data['toolbar'] = ['name' => 'lead', 'action' => 'list'];
         $this->load->view('layout', $data);
     }

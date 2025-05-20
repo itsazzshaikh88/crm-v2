@@ -30,6 +30,7 @@ class Lead_model extends App_Model
             'LEAD_SOURCE' => $data['LEAD_SOURCE'],
             'STATUS' => $data['STATUS'],
             'ASSIGNED_TO' => $data['ASSIGNED_TO'],
+            'ASSIGNED_TO_ID' => $data['ASSIGNED_TO_ID'],
             'CREATED_AT' => date('Y-m-d'),
         ];
 
@@ -61,6 +62,7 @@ class Lead_model extends App_Model
             'LEAD_SOURCE' => $data['LEAD_SOURCE'],
             'STATUS' => $data['STATUS'],
             'ASSIGNED_TO' => $data['ASSIGNED_TO'],
+            'ASSIGNED_TO_ID' => $data['ASSIGNED_TO_ID'],
             'UPDATED_AT' => date('Y-m-d'),
         ];
 
@@ -72,7 +74,7 @@ class Lead_model extends App_Model
     {
         $offset = get_limit_offset($currentPage, $limit);
 
-        $this->db->select("l.LEAD_ID, l.ORG_ID, l.LEAD_NUMBER, l.FIRST_NAME, l.LAST_NAME, l.EMAIL, l.PHONE, l.COMPANY_NAME, l.JOB_TITLE, l.LEAD_SOURCE, l.STATUS, l.ASSIGNED_TO, l.LEAD_SCORE, l.NOTES, l.CREATED_AT");
+        $this->db->select("l.LEAD_ID, l.ORG_ID, l.LEAD_NUMBER, l.FIRST_NAME, l.LAST_NAME, l.EMAIL, l.PHONE, l.COMPANY_NAME, l.JOB_TITLE, l.LEAD_SOURCE, l.STATUS, l.ASSIGNED_TO, l.ASSIGNED_TO_ID, l.LEAD_SCORE, l.NOTES, l.CREATED_AT");
         $this->db->from("xx_crm_leads l");
         $this->db->order_by("l.LEAD_ID", "DESC");
 

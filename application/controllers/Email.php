@@ -38,8 +38,8 @@ class Email extends App_Controller
     function view()
     {
         $emailViewConfig = [
-            'content_view' => 'task-assigned',
-            'heading' => "Your Zamil CRM Account is created.",
+            'content_view' => 'lead-created',
+            'heading' => "New Lead Assigned: ",
         ];
         $this->load->view('email-templates/layout', ['emailViewConfig' => $emailViewConfig]);
     }

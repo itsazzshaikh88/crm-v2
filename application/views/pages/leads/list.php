@@ -39,4 +39,5 @@ $this->load->view('loaders/full-page-loader');
 $this->load->view('pages/leads/modals/new-lead');
 $this->load->view('modals/activities/activity-modal');
 $this->load->view('modals/activities/email-activity');
+$this->load->view('pages/salespersons/modals/list');
 ?>

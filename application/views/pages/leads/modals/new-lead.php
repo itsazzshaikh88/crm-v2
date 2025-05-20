@@ -101,10 +101,31 @@ $activities = LEAD_ACTIVITY_OPTIONS;
                                         <label for="STATUS">Status <span class="text-danger">*</span></label>
                                     </div>
                                     <span class="text-danger err-lbl" id="lbl-STATUS"></span>
-                                    <div class="form-floating mb-2">
-                                        <input type="text" placeholder="Enter Value" class="form-control border border-blue-100 text-gray-700 " name="ASSIGNED_TO" id="ASSIGNED_TO">
+                                    <!-- ASSIGNED TO -->
+                                    <div class="form-floating mb-2 position-relative">
+                                        <input
+                                            type="text"
+                                            placeholder="Enter Value"
+                                            class="form-control border border-blue-100 text-gray-700"
+                                            name="ASSIGNED_TO"
+                                            id="ASSIGNED_TO"
+                                            readonly
+                                            autocomplete="off"
+                                            onclick="opensalesPersonListModal()"
+                                            >
                                         <label for="ASSIGNED_TO" class="text-gray-600">Assigned To <span class="text-danger">*</span></label>
+
+                                        <!-- Hidden ID field -->
+                                        <input type="hidden" id="ASSIGNED_TO_ID" name="ASSIGNED_TO_ID" />
+
+                                        <!-- X Icon for clearing -->
+                                        <span
+                                            id="clearSalesPerson"
+                                            style="display:none; position:absolute; top:50%; transform:translateY(-50%); right:10px; cursor:pointer; font-weight:bold; font-size:18px; color:red;"
+                                            title="Clear Assigned To"
+                                            onclick="clearSalesPersonDetails()">&times;</span>
                                     </div>
+
                                     <span class="text-danger err-lbl" id="lbl-ASSIGNED_TO"></span>
                                 </div>
                             </div>
