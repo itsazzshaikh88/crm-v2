@@ -37,6 +37,14 @@
     .fs-12 {
         font-size: 12px !important;
     }
+    #sales-forecast-list thead tr th,
+    #sales-forecast-list tbody tr td {
+        padding: 5px !important;
+        font-size: 12px !important;
+    }
+    #sales-forecast-list tbody tr td i {
+        font-size: 10px !important;
+    }
 </style>
 
 

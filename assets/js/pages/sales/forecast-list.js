@@ -54,7 +54,7 @@ async function fetchSalesForecastData(mode = 'replace') {
             document.getElementById(tableId).innerHTML = '';
         }
 
-        showSalesForecastData(forecasts, tableId);
+        showSalesForecastDataFromList(forecasts, tableId);
 
         // Toggle download button visibility
         const downloadContainer = document.getElementById('download-buttons-container');
@@ -81,7 +81,7 @@ async function fetchSalesForecastData(mode = 'replace') {
 
 
 // Render rows to table
-function showSalesForecastData(forecasts, tableId) {
+function showSalesForecastDataFromList(forecasts, tableId) {    
     const tbody = document.getElementById(tableId);
 
     forecasts.forEach((forecast, index) => {
