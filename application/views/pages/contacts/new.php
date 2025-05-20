@@ -22,7 +22,7 @@
                             <label for="ORG_ID" class="fs-6 fw-bold required">Division</label>
                         </div>
                         <div class="col-md-3">
-                        <?= render_org_select("ORG_ID", "ORG_ID", "form-control", "Select Division") ?>
+                            <?= render_org_select("ORG_ID", "ORG_ID", "form-control", "Select Division") ?>
                             <span class="text-danger err-lbl" id="lbl-ORG_ID"></span>
                         </div>
                     </div>
@@ -111,9 +111,18 @@
                             <label for="ASSIGNED_TO" class="fs-6 fw-bold required">Assigned To</label>
                         </div>
                         <div class="col-md-3">
-                            <input type="text" name="ASSIGNED_TO" id="ASSIGNED_TO" class="form-control" placeholder="Contact Assigned To">
+                            <div class="d-flex align-items-center gap-2 justify-content-between">
+                                <input type="text" name="ASSIGNED_TO" id="ASSIGNED_TO" class="form-control"
+                                    placeholder="Contact Assigned To" onclick="opensalesPersonListModal()" readonly>
+                                <button type="button" class="btn btn-sm p-0"
+                                    onclick="clearSalesPersonDetails()" aria-label="Clear">
+                                    <i class="fa-solid fa-xmark me-0 text-danger"></i>
+                                </button>
+                            </div>
+                            <input type="hidden" name="ASSIGNED_TO_ID" id="ASSIGNED_TO_ID" readonly>
                             <span class="text-danger err-lbl" id="lbl-ASSIGNED_TO"></span>
                         </div>
+
                         <div class="col-md-3 d-flex align-items-center justify-content-start">
                             <label for="PREFERRED_CONTACT_METHOD" class="fs-6 fw-bold required">Prefered Contact Method</label>
                         </div>
@@ -169,4 +178,5 @@
 <!--end::PAGE CONTAINER-->
 <?php
 $this->load->view('loaders/full-page-loader');
+$this->load->view('pages/salespersons/modals/list');
 ?>

@@ -25,8 +25,9 @@ class Contacts extends App_Controller
         $data['navlink'] = ['main-link' => ADMIN_ACTIVE_LINK, 'sub-link' => 'contacts'];
         $data['css_files'] = ['assets/css/pages/requests/new.css'];
         $data['scripts'] = [
+            'assets/js/pages/salespersons/modals/list.js',
             'assets/js/pages/contacts/new-contact.js',
-            'assets/js/pages/activities/contact-activities.js'
+            'assets/js/pages/activities/contact-activities.js',
         ];
         $data['toolbar'] = ['name' => 'new-contact', 'action' => 'form'];
         $this->load->view('layout', $data);

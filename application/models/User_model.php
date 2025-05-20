@@ -167,7 +167,7 @@ class User_model extends App_Model
     }
 
     // Functions to create clients
-    function get_users($type = 'list', $limit = 10, $currentPage = 1, $filters = [])
+    function get_users($type = 'list', $limit = 10, $currentPage = 1, $filters = [], $search = null)
     {
         $offset = get_limit_offset($currentPage, $limit);
 
@@ -181,6 +181,14 @@ class User_model extends App_Model
             foreach ($filters as $key => $value) {
                 $this->db->where($key, $value);
             }
+        }
+
+        if (isset($search) && $search != null) {
+            $this->db->group_start(); // Begin group for OR conditions
+            $this->db->like('u.USER_ID', $search, 'both', false);
+            $this->db->or_like('CONCAT(u.FIRST_NAME, " ", u.LAST_NAME)', $search, 'both', false);
+            $this->db->or_like('u.EMAIL', $search, 'both', false);
+            $this->db->group_end(); // End group for OR conditions
         }
 
         // Apply limit and offset only if 'list' type and offset is greater than zero

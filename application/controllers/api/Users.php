@@ -635,4 +635,59 @@ class Users extends Api_controller
                 'user' => $user
             ]));
     }
+
+    // All users with usertype
+    function listofusers()
+    {
+        // Check if the authentication is valid
+        $isAuthorized = $this->isAuthorized();
+        if (!$isAuthorized['status']) {
+            $this->output
+                ->set_status_header(401) // Set HTTP response status to 400 Bad Request
+                ->set_content_type('application/json')
+                ->set_output(json_encode(['error' => 'Unauthorized access. You do not have permission to perform this action.']))
+                ->_display();
+            exit;
+        };
+
+        // Get the raw input data from the request
+        $input = $this->input->raw_input_stream;
+
+        // Decode the JSON data
+        $data = json_decode($input, true); // Decode as associative array
+
+        // Check if data is received
+        if (!$data) {
+            // Handle the error if no data is received
+            $this->output
+                ->set_status_header(400) // Set HTTP response status to 400 Bad Request
+                ->set_content_type('application/json')
+                ->set_output(json_encode(['error' => 'Invalid JSON input']))
+                ->_display();
+            exit;
+        }
+
+        // Access the parameters
+        $limit = isset($data['limit']) ? $data['limit'] : null;
+        $currentPage = isset($data['currentPage']) ? $data['currentPage'] : null;
+        $filters = isset($data['filters']) ? $data['filters'] : [];
+        $search = isset($data['search']) ? $data['search'] : null;
+
+        $total_users = $this->User_model->get_users('total', $limit, $currentPage, $filters, $search);
+        $users = $this->User_model->get_users('list', $limit, $currentPage, $filters, $search);
+
+        $response = [
+            'pagination' => [
+                'total_records' => $total_users,
+                'total_pages' => generatePages($total_users, $limit),
+                'current_page' => $currentPage,
+                'limit' => $limit
+            ],
+            'users' => $users,
+        ];
+        return $this->output
+            ->set_content_type('application/json')
+            ->set_status_header(200)
+            ->set_output(json_encode($response));
+    }
 }

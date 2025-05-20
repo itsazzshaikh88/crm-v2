@@ -129,3 +129,18 @@ document.addEventListener('DOMContentLoaded', () => {
     // Fetch categories
 });
 
+function setSalesPerson(index) {
+    const person = fetchedSalesPersons?.[index];
+    if (!person) return;
+
+    const name = `${person.FIRST_NAME || ''} ${person.LAST_NAME || ''}`.trim();
+    document.getElementById("ASSIGNED_TO").value = name;
+    document.getElementById("ASSIGNED_TO_ID").value = person.ID || '';
+
+    salesPersonListModal?.hide?.();
+}
+
+function clearSalesPersonDetails() {
+    document.getElementById("ASSIGNED_TO").value = '';
+    document.getElementById("ASSIGNED_TO_ID").value = '';
+}
