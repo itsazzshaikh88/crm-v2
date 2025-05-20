@@ -12,4 +12,10 @@ class Delivery extends App_Controller
         $data['scripts'] = ['assets/js/pages/delivery/list.js'];
         $this->load->view('layout', $data);
     }
+
+    public function receipt()
+    {
+        $data['scripts'] = ['assets/js/pages/delivery/list.js'];
+        $this->load->view('pages/delivery/receipt', $data);
+    }
 }

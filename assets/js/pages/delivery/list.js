@@ -1,3 +1,4 @@
+let currentFetchController = null;
 // productListSkeleton("deliveries-list", 10, 11);
 function renderNoResponseCode(option, isAdmin = false) {
     let l = `<tr>
@@ -21,6 +22,13 @@ async function fetchDeliveries(userSearchTerm = null) {
     if (!userSearchTerm) {
         userSearchTerm = document.getElementById("searchInputElement").value.trim() || null
     }
+    // Abort any previous request still pending
+    if (currentFetchController) {
+        currentFetchController.abort();
+    }
+    const controller = new AbortController();
+    const signal = controller.signal;
+    currentFetchController = controller;
     try {
         const authToken = getCookie('auth_token');
         if (!authToken) {
@@ -43,7 +51,8 @@ async function fetchDeliveries(userSearchTerm = null) {
                 currentPage: paginate.currentPage,
                 filters,
                 search: userSearchTerm
-            })
+            }),
+            signal
         });
 
         if (!response.ok) {
@@ -57,6 +66,10 @@ async function fetchDeliveries(userSearchTerm = null) {
         showDeliveries(data.deliveries || [], tbody);
 
     } catch (error) {
+        if (error.name === 'AbortError') {
+            console.warn('Fetch aborted due to navigation or reload.');
+            return; // No UI update needed
+        }
         toasterNotification({ type: 'error', message: 'Request failed: ' + error.message });
         tbody.innerHTML = renderNoResponseCode({ colspan: numberOfHeaders });
     }
@@ -76,9 +89,15 @@ function showDeliveries(deliveries, tbody) {
         // show deliveries
         let counter = 0;
         deliveries.forEach(invoice => {
+            const deliveryNo = invoice?.DELIVERY_NO;
+
+            const deliveryNoCell = deliveryNo
+                ? `<a target="_blank" href="delivery/receipt?delivery-no=${encodeURIComponent(deliveryNo)}">${deliveryNo}</a>`
+                : `<span class="text-danger"></span>`;
+
             content += `<tr class="fs-8">
                                 <td class="text-center">${++counter}</td>
-                                <td class="text-primary">${invoice?.DELIVERY_NO || ''}</td>
+                                <td class="text-primary">${deliveryNoCell}</td>
                                 <td>${invoice?.DELIVERY_LINE_ID || ''}</td>
                                 <td>${invoice?.SOURCE_NAME || ''}</td>
                                 <td>${invoice?.SOC || ''}</td>
@@ -206,3 +225,9 @@ function printTable() {
     newWin.print();
     newWin.close();
 }
+
+window.addEventListener('beforeunload', () => {
+    if (currentFetchController) {
+        currentFetchController.abort();
+    }
+});

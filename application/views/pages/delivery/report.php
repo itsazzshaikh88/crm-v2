@@ -56,9 +56,9 @@
                         </button>
 
                         <!-- Print button with print icon -->
-                        <button onclick="printTable()" class="btn btn-secondary btn-sm">
+                        <!-- <button onclick="printTable()" class="btn btn-secondary btn-sm">
                             <i class="fas fa-print"></i>
-                        </button>
+                        </button> -->
                     </div>
                 </div>
                 <div class="table-responsive mt-3" style="max-height: 400px; overflow: auto;">
