@@ -35,7 +35,6 @@ class Purchase_model extends App_Model
             'TAX_PERCENTAGE' => $data['TAX_PERCENTAGE'] ?? 0,
             'TOTAL_AMOUNT' => $data['TOTAL_AMOUNT'] ?? 0,
             'COMMENTS' => $data['COMMENTS'] ?? 0,
-            'ATTACHMENTS' => isset($data['ATTACHMENTS']) ? json_encode($data['ATTACHMENTS']) : null,
             'CREATED_BY' => $user_id,
             'CREATED_AT' => date('Y-m-d H:i:s'),
         ];

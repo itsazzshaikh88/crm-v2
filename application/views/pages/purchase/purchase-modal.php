@@ -100,7 +100,7 @@
                                         <div class="col-md-6">
                                             <div class="d-flex flex-column gap-1">
                                                 <label for="COMPANY_NAME" class="text-gray-800 fw-bold">Company Name<span class="text-danger">*</span></label>
-                                                <input type="text" value="" class="form-control form-control-sm border border-blue-100 text-gray-700" name="COMPANY_NAME" id="COMPANY_NAME" onclick="openClientListModalFromPurchase()">
+                                                <input type="text" value="" class="form-control form-control-sm border border-blue-100 text-gray-700" name="COMPANY_NAME" id="COMPANY_NAME" readonly>
                                             </div>
                                             <p class="text-danger err-lbl mb-0 fs-8" id="lbl-COMPANY_NAME"></p>
                                         </div>
@@ -136,7 +136,7 @@
                                         <div class="col-md-6">
                                             <div class="d-flex flex-column gap-1">
                                                 <label for="CLIENT_NAME" class="text-gray-800 fw-bold">Client Name<span class="text-danger">*</span></label>
-                                                <input type="text" value="" class="form-control form-control-sm border border-blue-100 text-gray-700" name="CLIENT_NAME" id="CLIENT_NAME">
+                                                <input type="text" value="" class="form-control form-control-sm border border-blue-100 text-gray-700" name="CLIENT_NAME" id="CLIENT_NAME" readonly>
                                             </div>
                                             <p class="text-danger err-lbl mb-0 fs-8" id="lbl-CLIENT_NAME"></p>
                                         </div>

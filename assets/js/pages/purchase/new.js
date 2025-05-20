@@ -448,6 +448,10 @@ function displayPOInfo(data) {
     if (quotes && quotes.length > 0) {
         showSelectedClientQuotes(quotes, header?.QUOTE_ID || 0);
     }
+
+    // ✅ Remove event listener
+    const companyNameElem = document.getElementById("COMPANY_NAME");
+    companyNameElem?.removeEventListener("click", openClientListModalFromPurchase);
 }
 
 function showSelectedClientQuotes(quotes, selectedRequestID) {
@@ -856,4 +860,14 @@ function clearClientDetails() {
     contactNumber.value = ''
     emailAddress.value = ''
     document.getElementById("REQUEST_NUMBER").innerHTML = '<option value="">Select Requests</option>';
+
+    const companyNameElem = document.getElementById("COMPANY_NAME");
+    companyNameElem?.addEventListener("click", openClientListModalFromPurchase);
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+    const companyNameElem = document.getElementById("COMPANY_NAME");
+    if (companyNameElem) {
+        companyNameElem.addEventListener("click", openClientListModalFromPurchase);
+    }
+});
