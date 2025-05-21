@@ -5,14 +5,8 @@ function renderNoResponseCode(option, isAdmin = false) {
                                     <div class="d-flex justify-content-center align-items-center flex-column">
                                         <img src="assets/images/users.png" class="no-data-img-table" alt="">
                                         <h4 class="fw-normal text-danger">
-                                            Oops! No users have been added yet.
+                                            Oops! No users found.
                                         </h4>
-                                        <p class="text-muted mb-3">
-                                            It looks a little empty here. Start building your users by adding new user now!
-                                        </p>
-                                        <a href="javascript:void(0)" class="btn btn-primary">
-                                            Add New Client
-                                        </a>
                                     </div>
                                 </td>
                             </tr>`;
@@ -59,7 +53,10 @@ function setListActions(actionID) {
 }
 
 
-async function fetchUsers() {
+async function fetchUsers(userSearchTerm = null) {
+    if (!userSearchTerm) {
+        userSearchTerm = document.getElementById("searchInputElement").value.trim() || null
+    }
     try {
         const authToken = getCookie('auth_token');
         if (!authToken) {
@@ -70,7 +67,13 @@ async function fetchUsers() {
         // Set loader to the screen 
         listingSkeleton(tableId, paginate.pageLimit || 0, 'users');
         const url = `${APIUrl}/users/list`;
-        const filters = filterCriterias([]);
+        const rawFilters = filterCriterias(['FILTER_USER_TYPE', 'FILTER_STATUS']);
+
+        const filters = Object.fromEntries(
+            Object.entries(rawFilters)
+                .filter(([_, value]) => value != null && value !== '') // skip empty/null/undefined
+                .map(([key, value]) => [key.replace(/^FILTER_/, ''), value])
+        );
 
         const response = await fetch(url, {
             method: 'POST',
@@ -81,7 +84,8 @@ async function fetchUsers() {
             body: JSON.stringify({
                 limit: paginate.pageLimit,
                 currentPage: paginate.currentPage,
-                filters: filters
+                filters: filters,
+                search: userSearchTerm
             })
         });
 
@@ -127,8 +131,8 @@ function showUsers(products, tbody) {
                                 <td class="text-center">${++counter}</td>
                                 <td class="">
                                     <div>
-                                        <p class="mb-0 fw-bold">${user?.FIRST_NAME} ${user?.LAST_NAME}</p>
-                                        <small class="text-gray-600">${user?.USER_ID}</small>
+                                        <p class="mb-0 fw-bold">${user?.FIRST_NAME || ''} ${user?.LAST_NAME || ''}</p>
+                                        <small class="text-gray-600">${user?.USER_ID || ''}</small>
                                     </div>
                                 </td>
                                 <td class=" "><span class="badge bg-light fw-normal text-gray-700">${capitalizeWords(user?.USER_TYPE)}</span></td>
@@ -230,3 +234,35 @@ async function deleteUser(userID) {
     }
 }
 
+
+function searchUsersListData(element) {
+    const userSearchTerm = element.value.trim();
+
+    fetchUsers(userSearchTerm);
+}
+
+
+// Create a debounced version of the function
+const debouncedSearchUsersListData = debounce(searchUsersListData, 300); // 300ms delay
+
+
+/// export data
+function exportUserData(type = null) {
+
+    const search = document.getElementById("searchInputElement").value.trim();
+
+
+
+    // Encode filters and search as query parameters
+    const queryParams = new URLSearchParams({
+        search: search
+    });
+
+    // Trigger download
+    window.location.href = `${APIUrl}/users/export_csv?${queryParams.toString()}`;
+}
+
+function filterUserReport() {
+    paginate.currentPage = 1;
+    fetchUsers(); // Fetch Request for the updated current page
+}

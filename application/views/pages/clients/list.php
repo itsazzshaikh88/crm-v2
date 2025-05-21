@@ -4,6 +4,28 @@
         <!--begin::PAGE CONTENT GOES FROM HERE-->
         <div class="card">
             <div class="card-body">
+                <!-- Filter/Search/Export Row -->
+                <div class="row align-items-end justify-content-between mb-4">
+                    <!-- Left side: Search + Filter -->
+                    <div class="col-md-6 d-flex gap-2">
+                        <div>
+                            <label for="searchInputElement" class="mb-1">
+                                <small class="text-muted"> <i class="fa-solid fa-circle-info fs-9"> </i> Search by Column Data</small>
+                            </label>
+                            <input type="text" oninput="debouncedSearchClientListData(this)" class="form-control form-control-sm" id="searchInputElement" placeholder="Search...">
+                        </div>
+                        <div class="align-self-end">
+                            <button class="btn btn-sm btn-light border border-secondary" onclick="filterClientReport()">Filter</button>
+                        </div>
+                    </div>
+
+                    <!-- Right side: Export -->
+                    <div class="col-md-3 text-end">
+                        <button id="exportCsvBtn" onclick="exportclientData('csv')" class="btn btn-primary btn-sm">
+                            <i class="fas fa-file-csv"></i>
+                        </button>
+                    </div>
+                </div>
                 <div class="table-responsive">
                     <table class="table table-row-bordered gy-3" id="client-list">
                         <thead>

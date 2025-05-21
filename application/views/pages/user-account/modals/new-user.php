@@ -47,11 +47,15 @@
                         <div class="d-inline-flex form-floating w-50">
                             <select class="form-control border border-blue-100 text-gray-700 " name="USER_TYPE" id="USER_TYPE">
                                 <option value="">Choose</option>
-                                <option selected value="admin">Admin</option>
-                                <option value="subadmin">Sub Admin</option>
+                                <option value="admin">Admin</option>
                                 <option value="client">Client</option>
                                 <option value="employee">Employee</option>
                                 <option value="vendor">Vendor</option>
+                                <option value="subadmin">Subadmin</option>
+                                <option value="co-admin">Co-Admin</option>
+                                <option value="salesperson">Salesperson</option>
+                                <option value="guest">Guest</option>
+                                <option value="super-admin">Super Admin</option>
                             </select>
                             <label for="USER_TYPE" class="text-gray-600">User Type <span class="text-danger">*</span></label>
                             <span class="text-danger err-lbl fs-8" id="lbl-USER_TYPE"></span>

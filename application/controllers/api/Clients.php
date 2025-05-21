@@ -301,4 +301,34 @@ class Clients extends Api_controller
                 ->set_output(json_encode(['status' => false, 'message' => 'Failed to delete the product.']));
         }
     }
+    public function export_csv()
+    {
+        $search = $this->input->get('search');
+
+        $data = $this->User_model->get_clients('list', 9999999999999, 1, [], [], $search, 'export');
+
+
+
+
+        // Set headers for download
+        header('Content-Type: text/csv');
+        header('Content-Disposition: attachment;filename="client_export_' . date('Ymd_His') . '.csv"');
+
+        $output = fopen('php://output', 'w');
+
+        if (!empty($data)) {
+            // Output CSV headers
+            fputcsv($output, array_keys($data[0]));
+
+            // Output data rows
+            foreach ($data as $row) {
+                fputcsv($output, $row);
+            }
+        } else {
+            fputcsv($output, ['No records found.']);
+        }
+
+        fclose($output);
+        exit;
+    }
 }

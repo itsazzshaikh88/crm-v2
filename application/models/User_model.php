@@ -188,6 +188,7 @@ class User_model extends App_Model
             $this->db->like('u.USER_ID', $search, 'both', false);
             $this->db->or_like('CONCAT(u.FIRST_NAME, " ", u.LAST_NAME)', $search, 'both', false);
             $this->db->or_like('u.EMAIL', $search, 'both', false);
+            $this->db->or_like('LOWER(u.USER_ID)', $search);
             $this->db->group_end(); // End group for OR conditions
         }
 

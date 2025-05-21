@@ -297,9 +297,10 @@ class Users extends Api_controller
         $limit = isset($data['limit']) ? $data['limit'] : null;
         $currentPage = isset($data['currentPage']) ? $data['currentPage'] : null;
         $filters = isset($data['filters']) ? $data['filters'] : [];
-
-        $total_users = $this->User_model->get_users('total', $limit, $currentPage, $filters);
-        $users = $this->User_model->get_users('list', $limit, $currentPage, $filters);
+        
+        $search = isset($data['search']) ? $data['search'] : null;
+        $total_users = $this->User_model->get_users('total', $limit, $currentPage, $filters, $search);
+        $users = $this->User_model->get_users('list', $limit, $currentPage, $filters, $search);
 
         $response = [
             'pagination' => [
@@ -689,5 +690,34 @@ class Users extends Api_controller
             ->set_content_type('application/json')
             ->set_status_header(200)
             ->set_output(json_encode($response));
+    }
+
+    public function export_csv()
+    {
+        $search = $this->input->get('search');
+
+        $data = $this->User_model->get_users('list', 9999999999999, 1, [], [], $search, 'export');
+
+
+        // Set headers for download
+        header('Content-Type: text/csv');
+        header('Content-Disposition: attachment;filename="user_export_' . date('Ymd_His') . '.csv"');
+
+        $output = fopen('php://output', 'w');
+
+        if (!empty($data)) {
+            // Output CSV headers
+            fputcsv($output, array_keys($data[0]));
+
+            // Output data rows
+            foreach ($data as $row) {
+                fputcsv($output, $row);
+            }
+        } else {
+            fputcsv($output, ['No records found.']);
+        }
+
+        fclose($output);
+        exit;
     }
 }
