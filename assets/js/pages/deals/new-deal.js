@@ -492,3 +492,45 @@ function startNewDeal() {
     dealForm.reset()
     document.getElementById("DEAL_STATUS").value = 'new'
 }
+
+// New: Set consultant data and show clear icon
+function setSalesPerson(index) {
+    const person = fetchedSalesPersons?.[index];
+    if (!person) return;
+
+    const name = `${person.FIRST_NAME || ''} ${person.LAST_NAME || ''}`.trim();
+    document.getElementById("ASSIGNED_TO").value = name;
+    document.getElementById("ASSIGNED_TO_ID").value = person.ID || '';
+
+    salesPersonListModal?.hide?.();
+    toggleClearIcon('ASSIGNED_TO', 'clearSalesPerson');
+}
+
+function clearSalesPersonDetails() {
+    document.getElementById("ASSIGNED_TO").value = '';
+    document.getElementById("ASSIGNED_TO_ID").value = '';
+    toggleClearIcon('ASSIGNED_TO', 'clearSalesPerson');
+}
+
+// Utility to toggle clear icon visibility based on input value
+function toggleClearIcon(inputId, clearIconId) {
+    const inputVal = document.getElementById(inputId).value;
+    const icon = document.getElementById(clearIconId);
+    if (inputVal && inputVal.trim() !== '') {
+        icon.style.display = 'inline';
+    } else {
+        icon.style.display = 'none';
+    }
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    const params = new URLSearchParams(window.location.search);
+
+    const source = params.get("u_source");
+    const mode = params.get("mode");
+    const dealID = params.get("lead-id");
+
+    if (source === "email" && mode === "deal-assigned" && dealID) {
+        openDealModal("edit", dealID);
+    }
+});

@@ -75,7 +75,36 @@ class Deals extends Api_controller
             $newlyCreatedDeal = $this->Deal_model->get_deal_by_uuid($data['UUID']);
 
             if ($created) {
+                // send email to consultant
+                $consultant_id = $data['ASSIGNED_TO_ID'] ?? 0;
+                // Send an email after assigning the task
+                $consultant_details = $this->User_model->get_user_by_id($consultant_id);
+                if ($consultant_details) {
+                    $emailViewConfig = [
+                        'content_view' => 'deal-created',
+                        'heading' => "New Deal Assigned: " . $newlyCreatedDeal['DEAL_NAME'],
+                    ];
+                    $dealDetailsForEmailContent = [
+                        'user' => "$consultant_details[FIRST_NAME] $consultant_details[LAST_NAME]",
+                        'deal_name' => "$newlyCreatedDeal[DEAL_NAME]",
+                        'deal_stage' => $newlyCreatedDeal['DEAL_STAGE'],
+                        'deal_value' => $newlyCreatedDeal['DEAL_VALUE'],
+                        'deal_status' => $newlyCreatedDeal['DEAL_STATUS'],
+                        'assigned_on' => date('d-M-Y'),
+                        'link' => base_url("deals?u_source=email&mode=deal-assigned&deal-id=" . $newlyCreatedDeal['DEAL_ID'])
+                    ];
+                    $mailContent = $this->load->view('email-templates/layout', ['emailViewConfig' => $emailViewConfig, 'dealDetails' => $dealDetailsForEmailContent], true);
 
+                    $consultant_email_address = $consultant_details['EMAIL'] ?? 'IT@zamilplastic.com';
+
+                    $this->app_mailer([
+                        'to'        => $consultant_email_address,
+                        'subject'   => "New Deal Assigned: " . $newlyCreatedDeal['DEAL_NAME'],
+                        'message'   => $mailContent,
+                        'from'      => 'workflowmailer@zamilplastic.com',   // Optional
+                        'from_name' => 'WorkFlow Mailer',                   // Optional
+                    ]);
+                }
                 $action_type = 'CREATED';
                 // ***** ===== Add User Activity - STARTS ===== *****
                 $userForActivity = [

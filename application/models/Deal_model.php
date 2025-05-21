@@ -32,6 +32,7 @@ class Deal_model extends App_Model
             'ACTUAL_CLOSE_DATE' => $data['ACTUAL_CLOSE_DATE'] ?? null,
             'PROBABILITY' => $data['PROBABILITY'] ?? null,
             'ASSIGNED_TO' => $data['ASSIGNED_TO'] ?? null,
+            'ASSIGNED_TO_ID' => $data['ASSIGNED_TO_ID'] ?? null,
             'DEAL_SOURCE' => $data['DEAL_SOURCE'] ?? null,
             'DEAL_STATUS' => $data['DEAL_STATUS'] ?? null,
             'DEAL_DESCRIPTION' => $data['DEAL_DESCRIPTION'] ?? null,
@@ -72,6 +73,7 @@ class Deal_model extends App_Model
             'ACTUAL_CLOSE_DATE' => $data['ACTUAL_CLOSE_DATE'] ?? null,
             'PROBABILITY' => $data['PROBABILITY'] ?? null,
             'ASSIGNED_TO' => $data['ASSIGNED_TO'] ?? null,
+            'ASSIGNED_TO_ID' => $data['ASSIGNED_TO_ID'] ?? null,
             'DEAL_SOURCE' => $data['DEAL_SOURCE'] ?? null,
             'DEAL_STATUS' => $data['DEAL_STATUS'] ?? null,
             'DEAL_DESCRIPTION' => $data['DEAL_DESCRIPTION'] ?? null,
@@ -89,7 +91,7 @@ class Deal_model extends App_Model
     {
         $offset = get_limit_offset($currentPage, $limit);
 
-        $this->db->select("d.DEAL_ID, d.UUID, d.ORG_ID, d.DEAL_NAME, d.ASSOCIATED_CONTACT_ID, d.DEAL_STAGE, d.DEAL_TYPE, d.DEAL_VALUE, d.DEAL_PRIORITY, d.EXPECTED_CLOSE_DATE, d.ACTUAL_CLOSE_DATE, d.PROBABILITY, d.ASSIGNED_TO, d.DEAL_SOURCE, d.DEAL_STATUS, d.DEAL_DESCRIPTION, d.CREATED_AT, d.UPDATED_AT, d.LAST_ACTIVITY_DATE, d.NOTES, d.CONTRACT_TERMS, d.CLOSE_REASON");
+        $this->db->select("d.DEAL_ID, d.UUID, d.ORG_ID, d.DEAL_NAME, d.ASSOCIATED_CONTACT_ID, d.DEAL_STAGE, d.DEAL_TYPE, d.DEAL_VALUE, d.DEAL_PRIORITY, d.EXPECTED_CLOSE_DATE, d.ACTUAL_CLOSE_DATE, d.PROBABILITY, d.ASSIGNED_TO,d.ASSIGNED_TO_ID, d.DEAL_SOURCE, d.DEAL_STATUS, d.DEAL_DESCRIPTION, d.CREATED_AT, d.UPDATED_AT, d.LAST_ACTIVITY_DATE, d.NOTES, d.CONTRACT_TERMS, d.CLOSE_REASON");
         $this->db->from($this->deal_table . " d");
         $this->db->order_by("d.DEAL_ID", "DESC");
 

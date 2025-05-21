@@ -41,4 +41,5 @@ $this->load->view('pages/deals/modals/new-deal');
 $this->load->view('modals/activities/activity-modal');
 $this->load->view('modals/contact/associated-contact-list');
 $this->load->view('modals/activities/email-activity');
+$this->load->view('pages/salespersons/modals/list');
 ?>

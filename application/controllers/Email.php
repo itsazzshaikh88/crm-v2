@@ -38,8 +38,8 @@ class Email extends App_Controller
     function view()
     {
         $emailViewConfig = [
-            'content_view' => 'lead-created',
-            'heading' => "New Lead Assigned: ",
+            'content_view' => 'deal-created',
+            'heading' => "New Deal Assigned: ",
         ];
         $this->load->view('email-templates/layout', ['emailViewConfig' => $emailViewConfig]);
     }
