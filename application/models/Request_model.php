@@ -113,7 +113,7 @@ class Request_model extends App_model
         }
     }
 
-    function get_requests($type = 'list', $limit = 10, $currentPage = 1, $filters = [], $user = [])
+    function get_requests($type = 'list', $limit = 10, $currentPage = 1, $filters = [], $user = [], $search = null, $mode = null)
     {
         $userid = $user['userid'] ?? 0;
         $usertype = strtolower($user['role'] ?? 'guest');
@@ -133,9 +133,18 @@ class Request_model extends App_model
                 $this->db->where($key, $value);
             }
         }
-
+        // Search condition
+        if (!empty($search)) {
+            $search = strtolower($search);
+            $this->db->group_start();
+            $this->db->like('LOWER(rh.REQUEST_NUMBER)', $search);
+            $this->db->or_like('LOWER(rh.REQUEST_TITLE)', $search);
+            $this->db->or_like('LOWER(cl.COMPANY_NAME)', $search);
+            $this->db->or_like('LOWER(rh.EMAIL_ADDRESS)', $search);
+            $this->db->group_end();
+        }
         // Check if user is not an admin then get him his requests only
-        if ($usertype != 'admin') {
+        if ($usertype != 'admin' && $mode != 'export') {
             $this->db->where('rh.CLIENT_ID', $userid);
         }
 

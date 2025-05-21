@@ -17,7 +17,11 @@ const tbody = document.querySelector(`#${tableId} tbody`);
 
 const numberOfHeaders = document.querySelectorAll(`#${tableId} thead th`).length || 0;
 
-async function fetchRequests() {
+async function fetchRequests(userSearchTerm = null) {
+
+    if (!userSearchTerm) {
+        userSearchTerm = document.getElementById("searchInputElement").value.trim() || null
+    }
     try {
         const authToken = getCookie('auth_token');
         if (!authToken) {
@@ -38,7 +42,8 @@ async function fetchRequests() {
             body: JSON.stringify({
                 limit: paginate.pageLimit,
                 currentPage: paginate.currentPage,
-                filters: filters
+                filters: filters,
+                search: userSearchTerm
             })
         });
 
@@ -316,4 +321,33 @@ async function convertToQuotation(requestID) {
     } catch (error) {
         toasterNotification({ type: 'error', message: 'quote failed: ' + error.message });
     }
+}
+
+function searchRequestListData(element) {
+    const userSearchTerm = element.value.trim();
+
+    fetchRequests(userSearchTerm);
+}
+
+
+// Create a debounced version of the function
+const debouncedSearchRequestListData = debounce(searchRequestListData, 300); // 300ms delay
+
+
+/// export data
+function exportRequestData(type = null) {
+    const search = document.getElementById("searchInputElement").value.trim();
+
+    // Encode filters and search as query parameters
+    const queryParams = new URLSearchParams({
+        search: search
+    });
+
+    // Trigger download
+    window.location.href = `${APIUrl}/requests/export_csv?${queryParams.toString()}`;
+}
+
+function filterRequestReport() {
+    paginate.currentPage = 1;
+    fetchRequests(); // Fetch Request for the updated current page
 }

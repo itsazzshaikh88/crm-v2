@@ -88,7 +88,8 @@ let fetchedProducts = [];
 
 async function fetchProductListForModal(userSearchTerm = null) {
     if (!userSearchTerm) {
-        userSearchTerm = document.getElementById("searchInputElement").value.trim() || null
+        if (document.getElementById("searchInputElement"))
+            userSearchTerm = document.getElementById("searchInputElement").value.trim() || null
     }
     try {
         const authToken = getCookie('auth_token');

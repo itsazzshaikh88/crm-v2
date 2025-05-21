@@ -159,8 +159,10 @@ class Requests extends Api_controller
         $currentPage = isset($data['currentPage']) ? $data['currentPage'] : null;
         $filters = isset($data['filters']) ? $data['filters'] : [];
 
-        $total_requests = $this->Request_model->get_requests('total', $limit, $currentPage, $filters, $isAuthorized);
-        $requests = $this->Request_model->get_requests('list', $limit, $currentPage, $filters, $isAuthorized);
+        $search = isset($data['search']) ? $data['search'] : null;
+
+        $total_requests = $this->Request_model->get_requests('total', $limit, $currentPage, $filters, $isAuthorized, $search);
+        $requests = $this->Request_model->get_requests('list', $limit, $currentPage, $filters, $isAuthorized, $search);
 
         $response = [
             'pagination' => [
@@ -321,5 +323,34 @@ class Requests extends Api_controller
                 ->set_status_header(500) // 500 Internal Server Error status code
                 ->set_output(json_encode(['status' => false, 'message' => 'Failed to delete the Request.']));
         }
+    }
+
+    public function export_csv()
+    {
+        $search = $this->input->get('search');
+
+        $data = $this->Request_model->get_requests('list', 9999999999999, 1, [], [], $search, 'export');
+
+
+        // Set headers for download
+        header('Content-Type: text/csv');
+        header('Content-Disposition: attachment;filename="request_export_' . date('Ymd_His') . '.csv"');
+
+        $output = fopen('php://output', 'w');
+
+        if (!empty($data)) {
+            // Output CSV headers
+            fputcsv($output, array_keys($data[0]));
+
+            // Output data rows
+            foreach ($data as $row) {
+                fputcsv($output, $row);
+            }
+        } else {
+            fputcsv($output, ['No records found.']);
+        }
+
+        fclose($output);
+        exit;
     }
 }
