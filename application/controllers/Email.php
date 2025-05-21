@@ -38,8 +38,8 @@ class Email extends App_Controller
     function view()
     {
         $emailViewConfig = [
-            'content_view' => 'deal-created',
-            'heading' => "New Deal Assigned: ",
+            'content_view' => 'task-comment',
+            'heading' => "Task Manager - New Comment added",
         ];
         $this->load->view('email-templates/layout', ['emailViewConfig' => $emailViewConfig]);
     }

@@ -620,6 +620,7 @@ class Tasks extends Api_controller
 
             if ($newlyCreatedComment) {
 
+                $this->_sendTaskCommentEmail($newlyCreatedComment, $isAuthorized['userid']);
                 $action_type = 'CREATED';
                 // ***** ===== Add User Activity - STARTS ===== *****
                 $userForActivity = [
@@ -886,5 +887,93 @@ class Tasks extends Api_controller
                 ->set_status_header(500) // 500 Internal Server Error status code
                 ->set_output(json_encode(['status' => false, 'message' => 'Failed to delete the Task.']));
         }
+    }
+
+    function _sendTaskCommentEmail($commentDetails, $userId)
+    {
+        $userId = (int) $userId;
+        // ✅ Basic validation
+        if (
+            empty($commentDetails) ||
+            empty($commentDetails['TASK_ID']) ||
+            !is_numeric($userId)
+        ) {
+            log_message('error', 'Invalid input to _sendTaskCommentEmail');
+            return false;
+        }
+
+
+
+        $taskID = (int) $commentDetails['TASK_ID'];
+
+        // ✅ Load task details
+        $taskDetails = $this->Task_model->get_task_by_id($taskID);
+
+        if (empty($taskDetails)) {
+            log_message('error', "Task not found: ID $taskID");
+            return false;
+        }
+
+        $assignerId = (int) $taskDetails['CREATED_BY'];
+        $assigneeId = (int) $taskDetails['CONSULTANT_ID'];
+
+        // ✅ Decide who should be notified
+        $sendToId = null;
+
+
+        if ($userId === $assignerId && $assignerId !== $assigneeId) {
+            $sendToId = $assigneeId; // Assigner commented → notify assignee
+        } elseif ($userId === $assigneeId && $assignerId !== $assigneeId) {
+            $sendToId = $assignerId; // Assignee commented → notify assigner
+        } else {
+            return false;
+        }
+
+        // ✅ Get recipient and commenter info
+        $recipient = $this->User_model->get_user_by_id($sendToId);
+        $commenter = $this->User_model->get_user_by_id($userId);
+
+        if (empty($recipient) || empty($recipient['EMAIL']) || empty($commenter)) {
+            log_message('error', 'Recipient or commenter missing for task comment email');
+            return false;
+        }
+
+        // ✅ Sanitize output
+        $recipientName = htmlspecialchars($recipient['FIRST_NAME'] . ' ' . $recipient['LAST_NAME'], ENT_QUOTES, 'UTF-8');
+        $commenterName = htmlspecialchars($commenter['FIRST_NAME'] . ' ' . $commenter['LAST_NAME'], ENT_QUOTES, 'UTF-8');
+
+        $emailViewConfig = [
+            'content_view' => 'task-comment',
+            'heading' => "Task Manager - New Comment by $commenterName",
+        ];
+
+        $commentDetailsForContent = [
+            'user'         => $recipientName,
+            'task_name'    => htmlspecialchars($taskDetails['TASK_NAME'] ?? '', ENT_QUOTES, 'UTF-8'),
+            'commented_by' => $commenterName,
+            'comment_text' => htmlspecialchars($commentDetails['COMMENT_TEXT'] ?? '', ENT_QUOTES, 'UTF-8'),
+            'link'         => base_url("tasks/details/$taskID?u_source=email&mode=new-comment&comment-id=" . urlencode($commentDetails['ID'] ?? ''))
+        ];
+
+        // ✅ Render email body
+        $mailContent = $this->load->view(
+            'email-templates/layout',
+            [
+                'emailViewConfig' => $emailViewConfig,
+                'commentDetails'  => $commentDetailsForContent
+            ],
+            true
+        );
+
+        // ✅ Send email
+        $this->app_mailer([
+            'to'        => $recipient['EMAIL'],
+            'subject'   => "Task Manager - New Comment by $commenterName",
+            'message'   => $mailContent,
+            'from'      => 'workflowmailer@zamilplastic.com',
+            'from_name' => 'WorkFlow Mailer',
+        ]);
+
+        return true;
     }
 }
