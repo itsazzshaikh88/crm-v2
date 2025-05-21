@@ -3,11 +3,17 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class App_Model extends CI_Model
 {
-    protected $oracleDB; 
+    protected $oracleDB;
     public function __construct()
     {
         parent::__construct();
-        $this->oracleDB = $this->load->database('oracle', TRUE);  
+        $uri = $_SERVER['REQUEST_URI'];
+
+        if (strpos($uri, '/crm-v2/') !== false) {
+            $this->oracleDB = $this->load->database('oracle', TRUE);
+        } else {
+            // $this->oracleDB = $this->load->database('oracle', TRUE);
+        }
     }
 
     /**
