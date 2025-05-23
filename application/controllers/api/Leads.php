@@ -324,8 +324,9 @@ class Leads extends Api_controller
         $currentPage = isset($data['currentPage']) ? $data['currentPage'] : null;
         $filters = isset($data['filters']) ? $data['filters'] : [];
 
-        $total_leads = $this->Lead_model->get_leads('total', $limit, $currentPage, $filters);
-        $leads = $this->Lead_model->get_leads('list', $limit, $currentPage, $filters);
+        $search = isset($data['search']) ? $data['search'] : null;
+        $total_leads = $this->Lead_model->get_leads('total', $limit, $currentPage, $filters, $search);
+        $leads = $this->Lead_model->get_leads('list', $limit, $currentPage, $filters, $search);
 
         $response = [
             'pagination' => [
@@ -556,5 +557,32 @@ class Leads extends Api_controller
                 ->set_status_header(500) // 500 Internal Server Error status code
                 ->set_output(json_encode(['status' => false, 'message' => 'Failed to convert lead to contact.']));
         }
+    }
+
+    public function export_csv()
+    {
+        $search = $this->input->get('search');
+        $data = $this->Lead_model->get_leads('list', 9999999999999, 1, [], [], $search, 'export');
+
+        // Set headers for download
+        header('Content-Type: text/csv');
+        header('Content-Disposition: attachment;filename="leads_export_' . date('Ymd_His') . '.csv"');
+
+        $output = fopen('php://output', 'w');
+
+        if (!empty($data)) {
+            // Output CSV headers
+            fputcsv($output, array_keys($data[0]));
+
+            // Output data rows
+            foreach ($data as $row) {
+                fputcsv($output, $row);
+            }
+        } else {
+            fputcsv($output, ['No records found.']);
+        }
+
+        fclose($output);
+        exit;
     }
 }

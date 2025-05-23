@@ -162,8 +162,10 @@ class Quotes extends Api_controller
         $currentPage = isset($data['currentPage']) ? $data['currentPage'] : null;
         $filters = isset($data['filters']) ? $data['filters'] : [];
 
-        $total_quotes = $this->Quotes_model->get_quotes('total', $limit, $currentPage, $filters, $isAuthorized);
-        $quotes = $this->Quotes_model->get_quotes('list', $limit, $currentPage, $filters, $isAuthorized);
+        $search = isset($data['search']) ? $data['search'] : null;
+
+        $total_quotes = $this->Quotes_model->get_quotes('total', $limit, $currentPage, $filters, $isAuthorized, $search);
+        $quotes = $this->Quotes_model->get_quotes('list', $limit, $currentPage, $filters, $isAuthorized, $search);
 
         $response = [
             'pagination' => [
@@ -567,5 +569,31 @@ class Quotes extends Api_controller
                 ->set_status_header(500) // 500 Internal Server Error status code
                 ->set_output(json_encode(['status' => false, 'message' => 'Failed to create quote from request']));
         }
+    }
+
+    public function export_csv()
+    {
+        $search = $this->input->get('search');
+        $data = $this->Quotes_model->get_quotes('list', 9999999999999, 1, [], [], $search, 'export');
+        // Set headers for download
+        header('Content-Type: text/csv');
+        header('Content-Disposition: attachment;filename="quotation_export_' . date('Ymd_His') . '.csv"');
+
+        $output = fopen('php://output', 'w');
+
+        if (!empty($data)) {
+            // Output CSV headers
+            fputcsv($output, array_keys($data[0]));
+
+            // Output data rows
+            foreach ($data as $row) {
+                fputcsv($output, $row);
+            }
+        } else {
+            fputcsv($output, ['No records found.']);
+        }
+
+        fclose($output);
+        exit;
     }
 }

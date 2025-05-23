@@ -57,7 +57,7 @@ class Category_model extends App_Model
         }
     }
 
-    function get_categories($type = 'list', $limit = 10, $currentPage = 1, $filters = [], $search = [])
+    function get_categories($type = 'list', $limit = 10, $currentPage = 1, $filters = [], $search = null, $mode = null)
     {
         $offset = get_limit_offset($currentPage, $limit);
 
@@ -71,7 +71,14 @@ class Category_model extends App_Model
                 $this->db->where($key, $value);
             }
         }
-
+        // Apply search dynamically from the $search array
+        if (!empty($search)) {
+            $this->db->group_start();
+            $this->db->like('LOWER(c.ID)', $search);
+            $this->db->or_like('LOWER(c.CATEGORY_CODE)', $search);
+            $this->db->or_like('LOWER(c.CATEGORY_NAME)', $search);
+            $this->db->group_end();
+        }
 
         // Apply limit and offset only if 'list' type and offset is greater than zero
         if ($type == 'list') {

@@ -53,7 +53,7 @@ class UOM_model extends App_Model
         }
     }
 
-    function get_uom($type = 'list', $limit = 10, $currentPage = 1, $filters = [], $search = [])
+    function get_uom($type = 'list', $limit = 10, $currentPage = 1, $filters = [], $search = null, $mode = null)
     {
         $offset = get_limit_offset($currentPage, $limit);
 
@@ -67,7 +67,13 @@ class UOM_model extends App_Model
                 $this->db->where($key, $value);
             }
         }
-
+        if (!empty($search)) {
+            $this->db->group_start();
+            $this->db->like('LOWER(u.UOM_ID)', $search);
+            $this->db->or_like('LOWER(u.UOM_CODE)', $search);
+            $this->db->or_like('LOWER(u.UOM_TYPE)', $search);
+            $this->db->group_end();
+        }
 
         // Apply limit and offset only if 'list' type and offset is greater than zero
         if ($type == 'list') {

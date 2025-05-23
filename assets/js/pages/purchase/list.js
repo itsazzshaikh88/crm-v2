@@ -19,7 +19,10 @@ const tbody = document.querySelector(`#${tableId} tbody`);
 
 const numberOfHeaders = document.querySelectorAll(`#${tableId} thead th`).length || 0;
 
-async function fetcPOList() {
+async function fetcPOList(userSearchTerm = null) {
+    if (!userSearchTerm) {
+        userSearchTerm = document.getElementById("searchInputElement").value.trim() || null
+    }
     try {
         const authToken = getCookie('auth_token');
         if (!authToken) {
@@ -29,7 +32,13 @@ async function fetcPOList() {
         // Set loader to the screen 
         commonListingSkeleton(tableId, paginateList.pageLimit || 0, numberOfHeaders);
         const url = `${APIUrl}/purchase/list`;
-        const filters = filterCriterias([]);
+        const rawFilters = filterCriterias(['FILTER_PO_STATUS']);
+
+        const filters = Object.fromEntries(
+            Object.entries(rawFilters)
+                .filter(([_, value]) => value != null && value !== '') // skip empty/null/undefined
+                .map(([key, value]) => [key.replace(/^FILTER_/, ''), value])
+        );
 
         const response = await fetch(url, {
             method: 'POST',
@@ -40,7 +49,8 @@ async function fetcPOList() {
             body: JSON.stringify({
                 limit: paginateList.pageLimit,
                 currentPage: paginateList.currentPage,
-                filters: filters
+                filters: filters,
+                search: userSearchTerm
             })
         });
 
@@ -272,5 +282,35 @@ async function deletePO(poUUID) {
         toasterNotification({ type: 'error', message: 'Request failed: ' + error.message });
         Swal.close();
     }
+}
+
+
+function searchPurchaseListData(element) {
+    const userSearchTerm = element.value.trim();
+
+    fetcPOList(userSearchTerm);
+}
+
+
+// Create a debounced version of the function
+const debouncedSearchPurchaseListData = debounce(searchPurchaseListData, 300); // 300ms delay
+
+
+/// export data
+function exportPurchaseData(type = null) {
+
+    const search = document.getElementById("searchInputElement").value.trim();
+    // Encode filters and search as query parameters
+    const queryParams = new URLSearchParams({
+        search: search
+    });
+
+    // Trigger download
+    window.location.href = `${APIUrl}/purchase/export_csv?${queryParams.toString()}`;
+}
+
+function filterPurchseReport() {
+    paginateList.currentPage = 1;
+    fetcPOList(); // Fetch Request for the updated current page
 }
 

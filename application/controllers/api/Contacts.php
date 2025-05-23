@@ -284,9 +284,9 @@ class Contacts extends Api_controller
         $limit = isset($data['limit']) ? $data['limit'] : null;
         $currentPage = isset($data['currentPage']) ? $data['currentPage'] : null;
         $filters = isset($data['filters']) ? $data['filters'] : [];
-
-        $total_contacts = $this->Contact_model->get_contacts('total', $limit, $currentPage, $filters);
-        $contacts = $this->Contact_model->get_contacts('list', $limit, $currentPage, $filters);
+        $search = isset($data['search']) ? $data['search'] : null;
+        $total_contacts = $this->Contact_model->get_contacts('total', $limit, $currentPage, $filters, $search);
+        $contacts = $this->Contact_model->get_contacts('list', $limit, $currentPage, $filters, $search);
 
         $response = [
             'pagination' => [
@@ -435,5 +435,33 @@ class Contacts extends Api_controller
                 ->set_status_header(500) // 500 Internal Server Error status code
                 ->set_output(json_encode(['status' => false, 'message' => 'Failed to delete the Contact.']));
         }
+    }
+
+    public function export_csv()
+    {
+        $search = $this->input->get('search');
+
+        $data = $this->Contact_model->get_contacts('list', 9999999999999, 1, [], [], $search, 'export');
+
+        // Set headers for download
+        header('Content-Type: text/csv');
+        header('Content-Disposition: attachment;filename="contacts_export_' . date('Ymd_His') . '.csv"');
+
+        $output = fopen('php://output', 'w');
+
+        if (!empty($data)) {
+            // Output CSV headers
+            fputcsv($output, array_keys($data[0]));
+
+            // Output data rows
+            foreach ($data as $row) {
+                fputcsv($output, $row);
+            }
+        } else {
+            fputcsv($output, ['No records found.']);
+        }
+
+        fclose($output);
+        exit;
     }
 }

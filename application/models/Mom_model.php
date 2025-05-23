@@ -90,7 +90,7 @@ class Mom_model extends App_Model
         return $this->get_mom_by_id($momID);
     }
 
-    function get_moms($type = 'list', $limit = 10, $currentPage = 1, $filters = [], $search = [])
+    function get_moms($type = 'list', $limit = 10, $currentPage = 1, $filters = [], $search = [], $mode = null)
     {
         $offset = get_limit_offset($currentPage, $limit);
 
@@ -105,6 +105,15 @@ class Mom_model extends App_Model
             }
         }
 
+        if (!empty($search)) {
+            $this->db->group_start();
+            $this->db->like('LOWER(m.MEETING_TITLE)', $search);
+            $this->db->or_like('LOWER(m.AGENDA)', $search);
+            $this->db->or_like('LOWER(m.DISCUSSION_TOPICS)', $search);
+            $this->db->or_like('LOWER(m.DECISIONS)', $search);
+            $this->db->or_like('LOWER(m.GENERAL_NOTES)', $search);
+            $this->db->group_end();
+        }
 
         // Apply limit and offset only if 'list' type and offset is greater than zero
         if ($type == 'list') {

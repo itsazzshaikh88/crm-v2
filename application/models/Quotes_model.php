@@ -117,7 +117,7 @@ class Quotes_model extends App_Model
         }
     }
 
-    function get_quotes($type = 'list', $limit = 10, $currentPage = 1, $filters = [], $user = [])
+    function get_quotes($type = 'list', $limit = 10, $currentPage = 1, $filters = [], $user = [], $search = null, $mode = null)
     {
         $userid = $user['userid'] ?? 0;
         $usertype = strtolower($user['role'] ?? 'guest');
@@ -139,8 +139,19 @@ class Quotes_model extends App_Model
             }
         }
 
-        // Check if user is not an admin then get him his quotes only
-        if ($usertype != 'admin') {
+        // Search condition
+        if (!empty($search)) {
+            $search = strtolower($search);
+            $this->db->group_start();
+            $this->db->like('LOWER(qu.QUOTE_NUMBER)', $search);
+            $this->db->or_like('LOWER(cl.COMPANY_NAME)', $search);
+            $this->db->or_like('LOWER(qu.EMPLOYEE_NAME)', $search);
+            $this->db->or_like('LOWER(qu.EMAIL_ADDRESS)', $search);
+            $this->db->group_end();
+        }
+
+        // Restrict to user's quotes if not admin
+        if ($usertype != 'admin' && $mode != 'export') {
             $this->db->where('qu.CLIENT_ID', $userid);
         }
 

@@ -4,6 +4,23 @@
         <!--begin::PAGE CONTENT GOES FROM HERE-->
         <div class="card">
             <div class="card-body pt-8">
+                <div class="row align-items-end justify-content-between mb-4">
+                    <div class="col-md-6 d-flex gap-2">
+                        <div>
+                            <label for="searchInputElement" class="mb-1">
+                                <small class="text-muted">
+                                    <i class="fa-solid fa-circle-info fs-9"></i> Search by Column Data
+                                </small>
+                            </label> <input type="text" oninput="debouncedSearchMOMsListData(this)" class="form-control form-control-sm" id="searchInputElement" placeholder="Search by column ..">
+                        </div>
+
+                    </div>
+                    <!-- Right side: Export -->
+                    <div class="col-md-3 text-end">
+                        <button id="exportCsvBtn" onclick="exportMOMsData('csv')" class="btn btn-primary btn-sm me-2"> <i class="fas fa-file-csv"></i>
+                        </button>
+                    </div>
+                </div>
                 <div class="table-responsive">
                     <table class="table align-middle table-row-dashed fs-7 gy-3 dataTable table-row-bordered " id="mom-list">
                         <thead>

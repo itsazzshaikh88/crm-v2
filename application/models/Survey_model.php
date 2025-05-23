@@ -134,7 +134,7 @@ class Survey_model extends App_Model
         return $this->db->where('SURVEY_ID', $surveyID)->update($this->survey_table, $survey_data);
     }
 
-    function get_survey($type = 'list', $limit = 10, $currentPage = 1, $filters = [], $search = [])
+    function get_survey($type = 'list', $limit = 10, $currentPage = 1, $filters = [], $search = null, $mode = null)
     {
         $offset = get_limit_offset($currentPage, $limit);
 
@@ -149,7 +149,16 @@ class Survey_model extends App_Model
             }
         }
 
-
+        // Apply search across relevant fields
+        if (!empty($search)) {
+            $search = strtolower($search);
+            $this->db->group_start(); // Open bracket for OR conditions
+            $this->db->like('LOWER(s.SURVEY_NUMBER)', $search);
+            $this->db->or_like('LOWER(s.SURVEY_NAME)', $search);
+            $this->db->or_like('LOWER(s.SURVEY_DESC)', $search);
+            $this->db->or_like('LOWER(s.CONDUCTED_BY)', $search);
+            $this->db->group_end(); // Close bracket
+        }
         // Apply limit and offset only if 'list' type and offset is greater than zero
         if ($type == 'list') {
             if ($limit > 0) {

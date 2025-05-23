@@ -313,9 +313,10 @@ class Deals extends Api_controller
         $limit = isset($data['limit']) ? $data['limit'] : null;
         $currentPage = isset($data['currentPage']) ? $data['currentPage'] : null;
         $filters = isset($data['filters']) ? $data['filters'] : [];
+        $search = isset($data['search']) ? $data['search'] : null;
 
-        $total_deals = $this->Deal_model->get_deals('total', $limit, $currentPage, $filters);
-        $deals = $this->Deal_model->get_deals('list', $limit, $currentPage, $filters);
+        $total_deals = $this->Deal_model->get_deals('total', $limit, $currentPage, $filters, $search);
+        $deals = $this->Deal_model->get_deals('list', $limit, $currentPage, $filters, $search);
 
         $response = [
             'pagination' => [
@@ -464,5 +465,34 @@ class Deals extends Api_controller
                 ->set_status_header(500) // 500 Internal Server Error status code
                 ->set_output(json_encode(['status' => false, 'message' => 'Failed to delete the Deal.']));
         }
+    }
+
+    public function export_csv()
+    {
+        $search = $this->input->get('search');
+
+        $data = $this->Deal_model->get_deals('list', 9999999999999, 1, [], [], $search, 'export');
+
+
+        // Set headers for download
+        header('Content-Type: text/csv');
+        header('Content-Disposition: attachment;filename="deals_export_' . date('Ymd_His') . '.csv"');
+
+        $output = fopen('php://output', 'w');
+
+        if (!empty($data)) {
+            // Output CSV headers
+            fputcsv($output, array_keys($data[0]));
+
+            // Output data rows
+            foreach ($data as $row) {
+                fputcsv($output, $row);
+            }
+        } else {
+            fputcsv($output, ['No records found.']);
+        }
+
+        fclose($output);
+        exit;
     }
 }

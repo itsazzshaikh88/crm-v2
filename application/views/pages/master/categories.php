@@ -38,6 +38,24 @@
                     </div>
                     <div class="col-md-7">
                         <h6 class="text-primary my-4">Categories List</h6>
+                        <div class="d-flex flex-wrap gap-3 mb-3 align-items-end">
+
+
+                            <div>
+                                <label for="searchInputElement" class="mb-1">
+                                    <small class="text-muted">
+                                        <i class="fa-solid fa-circle-info fs-9"></i> Search by Column Data
+                                    </small>
+                                </label>
+                                <input type="text" oninput="debouncedSearchCategoryListData(this)" class="form-control form-control-sm" id="searchInputElement" placeholder="Search...">
+                            </div>
+                            <div class="ms-auto d-flex gap-2 mt-2">
+                                <button onclick="exportCategoryData('csv')" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-file-csv"></i>
+                                </button>
+
+                            </div>
+                        </div>
                         <table class="table align-middle table-row-bordered fs-7 gy-3 dataTable table-row-bordered" id="category-list">
                             <thead>
                                 <tr class="fw-bold fs-7 text-gray-900">

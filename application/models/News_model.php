@@ -82,7 +82,7 @@ class News_model extends App_Model
         return $this->get_news_by_id($newsID);
     }
 
-    function get_news($type = 'list', $limit = 10, $currentPage = 1, $filters = [], $search = [])
+    function get_news($type = 'list', $limit = 10, $currentPage = 1, $filters = [], $search = [], $mode = null)
     {
         $offset = get_limit_offset($currentPage, $limit);
 
@@ -95,6 +95,16 @@ class News_model extends App_Model
             foreach ($filters as $key => $value) {
                 $this->db->where($key, $value);
             }
+        }
+
+        if (!empty($search)) {
+            $this->db->group_start();
+            $this->db->like('LOWER(n.ORG_ID)', $search);
+            $this->db->or_like('LOWER(n.TYPE)', $search);
+            $this->db->or_like('LOWER(n.TITLE)', $search);
+            $this->db->or_like('LOWER(n.PRIORITY)', $search);
+            $this->db->or_like('LOWER(n.TYPE)', $search);
+            $this->db->group_end();
         }
 
 

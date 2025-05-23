@@ -17,7 +17,11 @@ const tbody = document.querySelector(`#${tableId} tbody`);
 
 const numberOfHeaders = document.querySelectorAll(`#${tableId} thead th`).length || 0;
 
-async function fetchCategories() {
+async function fetchCategories(userSearchTerm = null) {
+
+    if (!userSearchTerm) {
+        userSearchTerm = document.getElementById("searchInputElement").value.trim() || null
+    }
     try {
         const authToken = getCookie('auth_token');
         if (!authToken) {
@@ -38,7 +42,8 @@ async function fetchCategories() {
             body: JSON.stringify({
                 limit: paginate.pageLimit,
                 currentPage: paginate.currentPage,
-                filters: filters
+                filters,
+                search: userSearchTerm
             })
         });
 
@@ -187,4 +192,36 @@ async function deleteCategory(categoryID) {
         toasterNotification({ type: 'error', message: 'Request failed: ' + error.message });
         Swal.close();
     }
+}
+
+
+function searchCategoryListData(element) {
+    const userSearchTerm = element.value.trim();
+
+    fetchCategories(userSearchTerm);
+}
+
+
+// Create a debounced version of the function
+const debouncedSearchCategoryListData = debounce(searchCategoryListData, 300); // 300ms delay
+
+
+/// export data
+function exportCategoryData(type = null) {
+
+    const search = document.getElementById("searchInputElement").value.trim();
+
+
+    // Encode filters and search as query parameters
+    const queryParams = new URLSearchParams({
+        search: search
+    });
+
+    // Trigger download
+    window.location.href = `${APIUrl}/categories/export_csv?${queryParams.toString()}`;
+}
+
+function filterCategoryReport() {
+    paginate.currentPage = 1;
+    fetchCategories(); // Fetch Request for the updated current page
 }

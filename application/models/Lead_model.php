@@ -70,7 +70,7 @@ class Lead_model extends App_Model
         return $this->db->where('LEAD_ID', $leadID)->update($this->lead_table, $lead_data);
     }
 
-    function get_leads($type = 'list', $limit = 10, $currentPage = 1, $filters = [], $search = [])
+    function get_leads($type = 'list', $limit = 10, $currentPage = 1, $filters = [], $search = null, $mode = null)
     {
         $offset = get_limit_offset($currentPage, $limit);
 
@@ -85,7 +85,18 @@ class Lead_model extends App_Model
             }
         }
 
-
+        // Apply search across relevant fields
+        if (!empty($search)) {
+            $search = strtolower($search);
+            $this->db->group_start(); // Open bracket for OR conditions
+            $this->db->like('LOWER(l.LEAD_NUMBER)', $search);
+            $this->db->or_like('LOWER(l.FIRST_NAME)', $search);
+            $this->db->or_like('LOWER(l.LAST_NAME)', $search);
+            $this->db->or_like('LOWER(l.EMAIL)', $search);
+            $this->db->or_like('LOWER(l.COMPANY_NAME)', $search);
+            $this->db->group_end(); // Close bracket
+        }
+        
         // Apply limit and offset only if 'list' type and offset is greater than zero
         if ($type == 'list') {
             if ($limit > 0) {

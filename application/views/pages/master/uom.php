@@ -66,6 +66,38 @@
                     </div>
                     <div class="col-md-7">
                         <h6 class="text-primary my-4">UOM List</h6>
+                        <div class="d-flex flex-wrap gap-3 mb-3 align-items-end">
+
+                            <div>
+                                <label for="FILTER_IS_ACTIVE" class="mb-1">
+                                    <small class="text-muted">Status</small>
+                                </label>
+                                <select class="form-select form-select-sm" id="FILTER_IS_ACTIVE" name="FILTER_IS_ACTIVE">
+                                    <option value="">All</option>
+                                    <option value="1">Active</option>
+                                    <option value="0">In Active</option>
+
+                                </select>
+                            </div>
+                            <div>
+                                <label for="searchInputElement" class="mb-1">
+                                    <small class="text-muted">
+                                        <i class="fa-solid fa-circle-info fs-9"></i> Search by Column Data
+                                    </small>
+                                </label>
+                                <input type="text" oninput="debouncedSearchUOMListData(this)" class="form-control form-control-sm" id="searchInputElement" placeholder="Search...">
+                            </div>
+
+                            <div>
+                                <button class="btn btn-sm btn-light border border-secondary mt-2" onclick="filterUOMReport()">Filter</button>
+                            </div>
+
+                            <div class="ms-auto d-flex gap-2 mt-2">
+                                <button onclick="exportUOMData('csv')" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-file-csv"></i>
+                                </button>
+                            </div>
+                        </div>
                         <table class="table align-middle table-row-bordered fs-7 gy-3 dataTable table-row-bordered" id="uom-list">
                             <thead>
                                 <tr class="fw-bold fs-7 text-gray-900">

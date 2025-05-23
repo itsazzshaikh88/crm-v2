@@ -71,7 +71,11 @@ function renderSkeletonCards(limit) {
 
 const contactContainer = document.getElementById("contact-list");
 
-async function fetchContacts() {
+async function fetchContacts(userSearchTerm = null) {
+
+    if (!userSearchTerm) {
+        userSearchTerm = document.getElementById("searchInputElement").value.trim() || null
+    }
     try {
         const authToken = getCookie('auth_token');
         if (!authToken) {
@@ -81,7 +85,7 @@ async function fetchContacts() {
         // Set loader to the screen 
         contactContainer.innerHTML = renderSkeletonCards(paginate.pageLimit);
         const url = `${APIUrl}/contacts/list`;
-        const filters = filterCriterias([]);
+        const filters = filterCriterias(['STATUS', 'PREFERRED_CONTACT_METHOD']);
 
         const response = await fetch(url, {
             method: 'POST',
@@ -92,7 +96,8 @@ async function fetchContacts() {
             body: JSON.stringify({
                 limit: paginate.pageLimit,
                 currentPage: paginate.currentPage,
-                filters: filters
+                filters: filters,
+                search: userSearchTerm
             })
         });
 
@@ -129,7 +134,7 @@ function showContactCards(contacts) {
             const contactStatusIconLabel = contact?.STATUS?.toLowerCase() === 'in-active' ? "active" : "in-active";
             return `
         <div class="col-sm-6 col-md-4 col-lg-3 mb-3">
-          <div class="contact-card">
+          <div class="contact-card border-top border-top-5 border-secondary">
             <div class="d-flex align-items-center mb-2">
               <img src="assets/images/avatar-user.png" class="profile-img me-2" alt="User" />
               <div class="contact-meta">
@@ -144,7 +149,7 @@ function showContactCards(contacts) {
             <div class="info-line line-clamp-1"><i class="bi bi-flag"></i> Source: ${capitalizeWords(setText(contact.CONTACT_SOURCE || ''), true)}</div>
             <div class="info-line line-clamp-1"><i class="bi bi-chat-dots"></i> Pref. Method: ${setText(contact.PREFERRED_CONTACT_METHOD || '')}</div>
   
-            <div class="d-flex justify-content-between align-items-center mt-2">
+            <div class="d-flex justify-content-between align-items-center mt-2 bg-light p-2 rounded border">
               ${setContactStatus(contact.STATUS || '')}
               <div class="d-flex align-items-center justify-content-end gap-3">
                     <a href="javascript:void(0)" onclick="viewContactDetails('${contact?.UUID}')">
@@ -258,7 +263,7 @@ function setContactStatus(status) {
         'in-active': "#607D8B", // slate blue-gray for inactive
         'active': "#4CAF50", // slate blue-gray for inactive
     };
-    return `<span class="bg-light badge" style="color: ${statusBackgroundColors[status]}">${capitalizeWords(status)}</span>`
+    return `<span class="bg-white border border-secondary badge" style="color: ${statusBackgroundColors[status]}">${capitalizeWords(status)}</span>`
 }
 
 // Declare the pagination instance globally
@@ -506,4 +511,44 @@ function showContactDetails(contactDetail, container) {
                     </div>`
     }
 
+}
+
+
+function searchContactListData(element) {
+    const userSearchTerm = element.value.trim();
+
+    fetchContacts(userSearchTerm);
+}
+
+
+// Create a debounced version of the function
+const debouncedSearchContactListData = debounce(searchContactListData, 300); // 300ms delay
+
+
+/// export data
+function exportcontactData(type = null) {
+    // const org = document.getElementById("ORG").value;
+    // const fromDate = document.getElementById("FROM_DATE").value;
+    // const toDate = document.getElementById("TO_DATE").value;
+    const search = document.getElementById("searchInputElement").value.trim();
+
+    // const filters = {
+    //     ORG: org,
+    //     FROM_DATE: fromDate,
+    //     TO_DATE: toDate
+    // };
+
+    // Encode filters and search as query parameters
+    const queryParams = new URLSearchParams({
+        // filters: JSON.stringify(filters),
+        search: search
+    });
+
+    // Trigger download
+    window.location.href = `${APIUrl}/contacts/export_csv?${queryParams.toString()}`;
+}
+
+function filterContactReport() {
+    paginate.currentPage = 1;
+    fetchContacts(); // Fetch Request for the updated current page
 }

@@ -28,7 +28,11 @@ const tbody = document.querySelector(`#${tableId} tbody`);
 
 const numberOfHeaders = document.querySelectorAll(`#${tableId} thead th`).length || 0;
 
-async function fetchLeads() {
+async function fetchLeads(userSearchTerm = null) {
+
+    if (!userSearchTerm) {
+        userSearchTerm = document.getElementById("searchInputElement").value.trim() || null
+    }
     try {
         const authToken = getCookie('auth_token');
         if (!authToken) {
@@ -38,7 +42,13 @@ async function fetchLeads() {
         // Set loader to the screen 
         listingSkeleton(tableId, paginate.pageLimit || 0, 'leads');
         const url = `${APIUrl}/leads/list`;
-        const filters = filterCriterias([]);
+        const rawFilters = filterCriterias(['FILTER_STATUS']);
+
+        const filters = Object.fromEntries(
+            Object.entries(rawFilters)
+                .filter(([_, value]) => value != null && value !== '') // skip empty/null/undefined
+                .map(([key, value]) => [key.replace(/^FILTER_/, ''), value])
+        );
 
         const response = await fetch(url, {
             method: 'POST',
@@ -49,7 +59,8 @@ async function fetchLeads() {
             body: JSON.stringify({
                 limit: paginate.pageLimit,
                 currentPage: paginate.currentPage,
-                filters: filters
+                filters: filters,
+                search: userSearchTerm,
             })
         });
 
@@ -271,4 +282,36 @@ async function deleteLead(leadID) {
         toasterNotification({ type: 'error', message: 'Request failed: ' + error.message });
         Swal.close();
     }
+}
+
+
+function searchLeadListData(element) {
+    const userSearchTerm = element.value.trim();
+
+    fetchLeads(userSearchTerm);
+}
+
+
+// Create a debounced version of the function
+const debouncedSearchLeadListData = debounce(searchLeadListData, 300); // 300ms delay
+
+
+/// export data
+function exportleadData(type = null) {
+
+    const search = document.getElementById("searchInputElement").value.trim();
+
+
+    // Encode filters and search as query parameters
+    const queryParams = new URLSearchParams({
+        search: search
+    });
+
+    // Trigger download
+    window.location.href = `${APIUrl}/leads/export_csv?${queryParams.toString()}`;
+}
+
+function filterLeadReport() {
+    paginate.currentPage = 1;
+    fetchLeads(); // Fetch Request for the updated current page
 }

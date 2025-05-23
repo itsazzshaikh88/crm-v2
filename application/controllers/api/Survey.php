@@ -298,7 +298,7 @@ class Survey extends Api_controller
         $limit = isset($data['limit']) ? $data['limit'] : null;
         $currentPage = isset($data['currentPage']) ? $data['currentPage'] : null;
         $filters = isset($data['filters']) ? $data['filters'] : [];
-        $search = isset($data['search']) ? $data['search'] : [];
+        $search = isset($data['search']) ? $data['search'] : null;
 
         $total_surveys = $this->Survey_model->get_survey('total', $limit, $currentPage, $filters, $search);
         $surveys = $this->Survey_model->get_survey('list', $limit, $currentPage, $filters, $search);
@@ -634,5 +634,33 @@ class Survey extends Api_controller
                 ->set_status_header(500) // 500 Internal Server Error status code
                 ->set_output(json_encode(['status' => false, 'message' => 'Failed to delete the Survey.']));
         }
+    }
+
+    public function export_csv()
+    {
+        $search = $this->input->get('search');
+
+        $data = $this->Survey_model->get_survey('list', 9999999999999, 1, [], [], $search, 'export');
+
+        // Set headers for download
+        header('Content-Type: text/csv');
+        header('Content-Disposition: attachment;filename="survey_export_' . date('Ymd_His') . '.csv"');
+
+        $output = fopen('php://output', 'w');
+
+        if (!empty($data)) {
+            // Output CSV headers
+            fputcsv($output, array_keys($data[0]));
+
+            // Output data rows
+            foreach ($data as $row) {
+                fputcsv($output, $row);
+            }
+        } else {
+            fputcsv($output, ['No records found.']);
+        }
+
+        fclose($output);
+        exit;
     }
 }

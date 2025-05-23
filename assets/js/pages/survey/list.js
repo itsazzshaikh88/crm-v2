@@ -30,7 +30,11 @@ const tbody = document.querySelector(`#${tableId} tbody`);
 
 const numberOfHeaders = document.querySelectorAll(`#${tableId} thead th`).length || 0;
 
-async function fetctSurvey() {
+async function fetctSurvey(userSearchTerm = null) {
+
+    if (!userSearchTerm) {
+        userSearchTerm = document.getElementById("searchInputElement").value.trim() || null
+    }
     try {
         const authToken = getCookie('auth_token');
         if (!authToken) {
@@ -41,7 +45,7 @@ async function fetctSurvey() {
         // Set loader to the screen 
         listingSkeleton(tableId, paginate.pageLimit || 0, 'requests');
         const url = `${APIUrl}/survey/list`;
-        const filters = filterCriterias([]);
+        const filters = filterCriterias(['STATUS']);
 
         const response = await fetch(url, {
             method: 'POST',
@@ -52,7 +56,8 @@ async function fetctSurvey() {
             body: JSON.stringify({
                 limit: paginate.pageLimit,
                 currentPage: paginate.currentPage,
-                filters: filters
+                filters: filters,
+                search: userSearchTerm,
             })
         });
 
@@ -206,4 +211,36 @@ async function deleteSurvey(surveyID) {
     } catch (error) {
         toasterNotification({ type: 'error', message: 'Request failed: ' + error.message });
     }
+}
+
+
+function searchSurveyListData(element) {
+    const userSearchTerm = element.value.trim();
+
+    fetctSurvey(userSearchTerm);
+}
+
+
+// Create a debounced version of the function
+const debouncedSearchSurveyListData = debounce(searchSurveyListData, 300); // 300ms delay
+
+
+/// export data
+function exportsurveyData(type = null) {
+    const search = document.getElementById("searchInputElement").value.trim();
+
+
+
+    // Encode filters and search as query parameters
+    const queryParams = new URLSearchParams({
+        search: search
+    });
+
+    // Trigger download
+    window.location.href = `${APIUrl}/survey/export_csv?${queryParams.toString()}`;
+}
+
+function filterSurveyReport() {
+    paginate.currentPage = 1;
+    fetctSurvey(); // Fetch Request for the updated current page
 }

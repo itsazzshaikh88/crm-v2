@@ -19,7 +19,11 @@ const tbody = document.querySelector(`#${tableId} tbody`);
 
 const numberOfHeaders = document.querySelectorAll(`#${tableId} thead th`).length || 0;
 
-async function fetchRequests() {
+async function fetchRequests(userSearchTerm = null) {
+
+    if (!userSearchTerm) {
+        userSearchTerm = document.getElementById("searchInputElement").value.trim() || null
+    }
     try {
         const authToken = getCookie('auth_token');
         if (!authToken) {
@@ -29,7 +33,13 @@ async function fetchRequests() {
         // Set loader to the screen 
         listingSkeleton(tableId, paginateList.pageLimit || 0, 'requests');
         const url = `${APIUrl}/quotes/list`;
-        const filters = filterCriterias([]);
+        const rawFilters = filterCriterias(['FILTER_QUOTE_STATUS']);
+
+        const filters = Object.fromEntries(
+            Object.entries(rawFilters)
+                .filter(([_, value]) => value != null && value !== '') // skip empty/null/undefined
+                .map(([key, value]) => [key.replace(/^FILTER_/, ''), value])
+        );
 
         const response = await fetch(url, {
             method: 'POST',
@@ -40,7 +50,8 @@ async function fetchRequests() {
             body: JSON.stringify({
                 limit: paginateList.pageLimit,
                 currentPage: paginateList.currentPage,
-                filters: filters
+                filters,
+                search: userSearchTerm
             })
         });
 
@@ -489,3 +500,30 @@ async function convertToPO(quoteID) {
 //         prodListContainer.innerHTML = renderNoResponseCode({ colspan: numberOfHeaders });
 //     }
 // }
+
+
+function searchQuotationListData(element) {
+    const userSearchTerm = element.value.trim();
+
+    fetchRequests(userSearchTerm);
+}
+// Create a debounced version of the function
+const debouncedSearchQuotationListData = debounce(searchQuotationListData, 300); // 300ms delay
+
+function exportquoteData(type = null) {
+
+    const search = document.getElementById("searchInputElement").value.trim();
+
+    // Encode filters and search as query parameters
+    const queryParams = new URLSearchParams({
+        search: search
+    });
+
+    // Trigger download
+    window.location.href = `${APIUrl}/quotes/export_csv?${queryParams.toString()}`;
+}
+
+function filterQuotesReport() {
+    paginateList.currentPage = 1;
+    fetchRequests(); // Fetch Request for the updated current page
+}

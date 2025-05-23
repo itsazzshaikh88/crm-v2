@@ -63,7 +63,12 @@ const tbody = document.querySelector(`#${tableId} tbody`);
 
 const numberOfHeaders = document.querySelectorAll(`#${tableId} thead th`).length || 0;
 
-async function fetchDeals() {
+async function fetchDeals(userSearchTerm = null) {
+
+
+    if (!userSearchTerm) {
+        userSearchTerm = document.getElementById("searchInputElement").value.trim() || null
+    }
     try {
         const authToken = getCookie('auth_token');
         if (!authToken) {
@@ -73,7 +78,13 @@ async function fetchDeals() {
         // Set loader to the screen 
         listingSkeleton(tableId, paginate.pageLimit || 0, 'deals');
         const url = `${APIUrl}/deals/list`;
-        const filters = filterCriterias([]);
+        const rawFilters = filterCriterias(['FILTER_DEAL_STATUS']);
+
+        const filters = Object.fromEntries(
+            Object.entries(rawFilters)
+                .filter(([_, value]) => value != null && value !== '') // skip empty/null/undefined
+                .map(([key, value]) => [key.replace(/^FILTER_/, ''), value])
+        );
 
         const response = await fetch(url, {
             method: 'POST',
@@ -84,7 +95,8 @@ async function fetchDeals() {
             body: JSON.stringify({
                 limit: paginate.pageLimit,
                 currentPage: paginate.currentPage,
-                filters: filters
+                filters: filters,
+                search: userSearchTerm,
             })
         });
 
@@ -269,3 +281,32 @@ async function deleteDeal(dealID) {
         Swal.close();
     }
 }
+
+
+function searchDealsListData(element) {
+    const userSearchTerm = element.value.trim();
+
+    fetchDeals(userSearchTerm);
+}
+
+// Create a debounced version of the function
+const debouncedSearchDealsListData = debounce(searchDealsListData, 300); // 300ms delay
+
+/// export data
+function exportdealsData(type = null) {
+    const search = document.getElementById("searchInputElement").value.trim();
+
+    // Encode filters and search as query parameters
+    const queryParams = new URLSearchParams({
+        search: search
+    });
+
+    // Trigger download
+    window.location.href = `${APIUrl}/deals/export_csv?${queryParams.toString()}`;
+}
+
+function filterDealsReport() {
+    paginate.currentPage = 1;
+    fetchDeals(); // Fetch Request for the updated current page
+}
+

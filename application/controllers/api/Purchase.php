@@ -163,8 +163,10 @@ class Purchase extends Api_controller
         $currentPage = isset($data['currentPage']) ? $data['currentPage'] : null;
         $filters = isset($data['filters']) ? $data['filters'] : [];
 
-        $total_po = $this->Purchase_model->get_req('total', $limit, $currentPage, $filters, $isAuthorized);
-        $po_list = $this->Purchase_model->get_req('list', $limit, $currentPage, $filters, $isAuthorized);
+        $search = isset($data['search']) ? $data['search'] : null;
+
+        $total_po = $this->Purchase_model->get_req('total', $limit, $currentPage, $filters, $isAuthorized, $search);
+        $po_list = $this->Purchase_model->get_req('list', $limit, $currentPage, $filters, $isAuthorized, $search);
 
         $response = [
             'pagination' => [
@@ -479,5 +481,35 @@ class Purchase extends Api_controller
                 'message' => 'Tracker details retrieved successfully',
                 'data' => $trackerData
             ]));
+    }
+
+    public function export_csv()
+    {
+        $search = $this->input->get('search');
+
+        $data = $this->Purchase_model->get_req('list', 9999999999999, 1, [], [], $search, 'export');
+
+
+
+        // Set headers for download
+        header('Content-Type: text/csv');
+        header('Content-Disposition: attachment;filename="purchase_export_' . date('Ymd_His') . '.csv"');
+
+        $output = fopen('php://output', 'w');
+
+        if (!empty($data)) {
+            // Output CSV headers
+            fputcsv($output, array_keys($data[0]));
+
+            // Output data rows
+            foreach ($data as $row) {
+                fputcsv($output, $row);
+            }
+        } else {
+            fputcsv($output, ['No records found.']);
+        }
+
+        fclose($output);
+        exit;
     }
 }

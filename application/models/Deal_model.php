@@ -87,7 +87,7 @@ class Deal_model extends App_Model
         return $this->db->where('DEAL_ID', $dealID)->update($this->deal_table, $deal_data);
     }
 
-    function get_deals($type = 'list', $limit = 10, $currentPage = 1, $filters = [], $search = [])
+    function get_deals($type = 'list', $limit = 10, $currentPage = 1, $filters = [], $search = null, $mode = null)
     {
         $offset = get_limit_offset($currentPage, $limit);
 
@@ -101,7 +101,20 @@ class Deal_model extends App_Model
                 $this->db->where($key, $value);
             }
         }
-
+        // Apply search filter if provided
+        if (!empty($search)) {
+            $search = strtolower($search);
+            $this->db->group_start();
+            $this->db->like('LOWER(d.DEAL_NAME)', $search);
+            $this->db->or_like('LOWER(d.EMAIL)', $search);
+            $this->db->or_like('LOWER(d.CONTACT_NUMBER)', $search);
+            $this->db->or_like('LOWER(d.DEAL_TYPE)', $search);
+            $this->db->or_like('LOWER(d.DEAL_STAGE)', $search);
+            $this->db->or_like('LOWER(d.DEAL_VALUE)', $search);
+            $this->db->or_like('LOWER(d.DEAL_PRIORITY)', $search);
+            $this->db->or_like('LOWER(d.PROBABILITY)', $search);
+            $this->db->group_end();
+        }
 
         // Apply limit and offset only if 'list' type and offset is greater than zero
         if ($type == 'list') {

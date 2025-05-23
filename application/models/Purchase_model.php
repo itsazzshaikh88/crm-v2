@@ -115,7 +115,7 @@ class Purchase_model extends App_Model
             $this->db->insert($this->xx_crm_po_lines, $line);
         }
     }
-    public function get_req($type = 'list', $limit = 10, $currentPage = 1, $filters = [], $user = [])
+    public function get_req($type = 'list', $limit = 10, $currentPage = 1, $filters = [], $user = [], $search = null, $mode = null)
     {
         $userid = $user['userid'] ?? 0;
         $usertype = strtolower($user['role'] ?? 'guest');
@@ -134,8 +134,19 @@ class Purchase_model extends App_Model
             }
         }
 
-        // Check if user is not an admin then get him his quotes only
-        if ($usertype != 'admin') {
+        // Add search condition (if search term provided)
+        if (!empty($search)) {
+            $search = strtolower($search);
+            $this->db->group_start();
+            $this->db->like('LOWER(PO.PO_NUMBER)', $search);
+            $this->db->or_like('LOWER(PO.COMPANY_NAME)', $search);
+            $this->db->or_like('LOWER(PO.CLIENT_PO_NUMBER)', $search);
+            $this->db->or_like('LOWER(PO.EMAIL_ADDRESS)', $search);
+            $this->db->group_end();
+        }
+
+        // Check if user is not admin then get only his requests
+        if ($usertype != 'admin' && $mode != 'export') {
             $this->db->where('PO.CLIENT_ID', $userid);
         }
         // Apply limit and offset only if 'list' type

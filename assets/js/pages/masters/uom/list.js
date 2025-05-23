@@ -17,7 +17,10 @@ const tbody = document.querySelector(`#${tableId} tbody`);
 
 const numberOfHeaders = document.querySelectorAll(`#${tableId} thead th`).length || 0;
 
-async function fetchUOM() {
+async function fetchUOM(userSearchTerm = null) {
+    if (!userSearchTerm) {
+        userSearchTerm = document.getElementById("searchInputElement").value.trim() || null
+    }
     try {
         const authToken = getCookie('auth_token');
         if (!authToken) {
@@ -27,7 +30,13 @@ async function fetchUOM() {
         // Set loader to the screen 
         commonListingSkeleton(tableId, paginate.pageLimit || 0, numberOfHeaders);
         const url = `${APIUrl}/uom/list`;
-        const filters = filterCriterias([]);
+        const rawFilters = filterCriterias(['FILTER_IS_ACTIVE']);
+
+        const filters = Object.fromEntries(
+            Object.entries(rawFilters)
+                .filter(([_, value]) => value != null && value !== '') // skip empty/null/undefined
+                .map(([key, value]) => [key.replace(/^FILTER_/, ''), value])
+        );
 
         const response = await fetch(url, {
             method: 'POST',
@@ -38,7 +47,8 @@ async function fetchUOM() {
             body: JSON.stringify({
                 limit: paginate.pageLimit,
                 currentPage: paginate.currentPage,
-                filters: filters
+                filters,
+                search: userSearchTerm
             })
         });
 
@@ -194,3 +204,34 @@ async function deleteUOM(uomID) {
         Swal.close();
     }
 }
+
+
+function searchUOMListData(element) {
+    const userSearchTerm = element.value.trim();
+
+    fetchUOM(userSearchTerm);
+}
+
+
+// Create a debounced version of the function
+const debouncedSearchUOMListData = debounce(searchUOMListData, 300); // 300ms delay
+
+/// export data
+function exportUOMData(type = null) {
+
+    const search = document.getElementById("searchInputElement").value.trim();
+
+    // Encode filters and search as query parameters
+    const queryParams = new URLSearchParams({
+        search: search
+    });
+
+    // Trigger download
+    window.location.href = `${APIUrl}/uom/export_csv?${queryParams.toString()}`;
+}
+
+function filterUOMReport() {
+    paginate.currentPage = 1;
+    fetchUOM(); // Fetch Request for the updated current page
+}
+

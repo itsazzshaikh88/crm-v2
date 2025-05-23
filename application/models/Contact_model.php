@@ -12,7 +12,7 @@ class Contact_model extends App_Model
         $this->contact_table = 'xx_crm_contacts'; // Initialize token table
     }
 
-    function get_contacts($type = 'list', $limit = 10, $currentPage = 1, $filters = [], $search = [])
+    function get_contacts($type = 'list', $limit = 10, $currentPage = 1, $filters = [], $search = null, $mode = null)
     {
         $offset = get_limit_offset($currentPage, $limit);
 
@@ -26,7 +26,17 @@ class Contact_model extends App_Model
                 $this->db->where($key, $value);
             }
         }
-
+        // Apply search filter if provided
+        if (!empty($search)) {
+            $this->db->group_start();
+            $this->db->like('c.FIRST_NAME', $search);
+            $this->db->or_like('c.LAST_NAME', $search);
+            $this->db->or_like('c.EMAIL', $search);
+            $this->db->or_like('c.PHONE', $search);
+            $this->db->or_like('c.COMPANY_NAME', $search);
+            $this->db->or_like('c.JOB_TITLE', $search);
+            $this->db->group_end();
+        }
 
         // Apply limit and offset only if 'list' type and offset is greater than zero
         if ($type == 'list') {
