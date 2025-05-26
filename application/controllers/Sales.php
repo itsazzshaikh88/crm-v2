@@ -14,4 +14,16 @@ class Sales extends App_Controller
         $data['toolbar'] = ['name' => 'sales-forecast', 'action' => 'list'];
         $this->load->view('layout', $data);
     }
+
+    public function salesperson()
+    {
+        $data['view_path'] = 'pages/sales/salesperson';
+        $data['page_title'] = 'Sales Persons - CRM Application';
+        $data['page_heading'] = 'Zamil Sales Persons';
+        $data['navlink'] = 'sales';
+        $data['css_files'] = [];
+        $data['scripts'] = ['assets/js/pages/sales/new-salesperson.js', 'assets/js/pages/sales/salesperson-list.js'];
+        $data['toolbar'] = ['name' => 'sales-person', 'action' => 'list'];
+        $this->load->view('layout', $data);
+    }
 }

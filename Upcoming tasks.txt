@@ -1,0 +1,6 @@
+1. Sales Person form
+2. Workflow form
+    a. Static 
+    b. Dynamic
+3. User Access Management
+4. Process for auto updation of the PO status

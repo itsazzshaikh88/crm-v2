@@ -50,11 +50,30 @@ $userid = $loggedInUser['userid'] ?? '0';
                         <?php
                         if ($usertype == 'admin'):
                         ?>
-                            <a href="sales/forecast" class="menu-item me-lg-1 <?= setNavigationLinkActive($navlink, "sales", 'here show') ?>">
+                            <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="bottom-start" class="menu-item menu-lg-down-accordion me-lg-1">
                                 <span class="menu-link py-3">
-                                    <span class="menu-title text-sales">Sales</span>
+                                    <span class="menu-title">Sales</span>
+                                    <span class="menu-arrow d-lg-none"></span>
                                 </span>
-                            </a>
+                                <div class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown menu-rounded-0 py-lg-4 w-lg-225px">
+                                    <div class="menu-item">
+                                        <a class="menu-link py-3" href="sales/forecast" title="" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right">
+                                            <span class="menu-icon">
+                                                <i class="las la-book fs-3"></i>
+                                            </span>
+                                            <span class="menu-title">Sales Forecast</span>
+                                        </a>
+                                    </div>
+                                    <div class="menu-item">
+                                        <a class="menu-link py-3" href="sales/salesperson" title="" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right">
+                                            <span class="menu-icon">
+                                                <i class="las la-user-tie fs-3"></i>
+                                            </span>
+                                            <span class="menu-title">Sales Persons</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
                         <?php endif; ?>
                         <!-- Custom Navlinks  -->
                         <a href="products/list" class="menu-item me-lg-1 <?= setNavigationLinkActive($navlink, PRODUCT_ACTIVE_LINK, 'here show') ?>">

@@ -230,4 +230,146 @@ class Sales_model extends App_Model
         FROM XXDB_SALES_PREDICT
         ORDER BY 1,2,3,5";
     }
+
+
+    // ############### SALES PERSON ######################
+    function get_salespersons($type = 'list', $limit = 10, $currentPage = 1, $filters = [], $search = null)
+    {
+        $offset = get_limit_offset($currentPage, $limit);
+
+        $this->db->select("sp.ID, sp.UUID, sp.SALES_PER_ID, sp.FIRST_NAME, sp.LAST_NAME, sp.EMAIL, sp.PHONE, sp.EMPLOYEE_ID, sp.DEPARTMENT, sp.DESIGNATION, sp.DATE_OF_JOINING, sp.SUPERVISOR_ID, sp.USER_ID, sp.ASSIGNED_TERRITORY, sp.CRM_ROLE, sp.LOGIN_ACCESS, sp.STATUS, sp.CREATED_AT, sp.CREATED_BY, sp.UPDATED_AT, sp.UPDATED_BY");
+        $this->db->from("xx_crm_salesperson sp");
+        $this->db->order_by("sp.ID", "DESC");
+
+        // Apply filters dynamically from the $filters array
+        if (!empty($filters) && is_array($filters)) {
+            foreach ($filters as $key => $value) {
+                $this->db->where($key, $value);
+            }
+        }
+
+        if (!empty($search)) {
+            $search = strtolower($search);
+            $this->db->group_start(); // Open bracket for OR conditions
+            $this->db->like('LOWER(CONCAT(sp.FIRST_NAME, " ", sp.LAST_NAME))', $search);
+            $this->db->or_like('LOWER(sp.EMAIL)', $search);
+            $this->db->or_like('LOWER(sp.DEPARTMENT)', $search);
+            $this->db->or_like('LOWER(sp.DESIGNATION)', $search);
+            $this->db->group_end(); // Close bracket
+        }
+
+        // Apply limit and offset only if 'list' type and offset is greater than zero
+        if ($type == 'list') {
+            if ($limit > 0) {
+                $this->db->limit($limit, ($offset > 0 ? $offset : 0));
+            }
+        }
+
+        // Execute query
+        $query = $this->db->get();
+
+        if ($type == 'list') {
+            return $query->result_array();
+        } else {
+            return $query->num_rows();
+        }
+    }
+
+    // Function to add or update product
+    public function add_sales_person($data, $userid)
+    {
+        $salesPersonData = $data;
+        $salesPersonData['UUID'] = uuid_v4();
+        $salesPersonData['CREATED_BY'] = $userid;
+
+        // Insert details into user tabel and then insert into sales person table
+        $user_data = [
+            'UUID' => uuid_v4(),
+            'ORG_ID' => $data['ORG_ID'] ?? '',
+            'FIRST_NAME' => $data['FIRST_NAME'],
+            'LAST_NAME' => $data['LAST_NAME'],
+            'EMAIL' => $data['EMAIL'],
+            'PHONE_NUMBER' => $data['PHONE'],
+            'USER_TYPE' => 'salesperson',
+            'STATUS' => 'active',
+            'IS_2FA_ENABLED' => 0,
+            'PASSWORD' => password_hash("User@ZPIL$", PASSWORD_ARGON2ID)
+        ];
+
+        // Insert new lead
+        $userCreated = $this->db->insert("xx_crm_users", $user_data);
+        if ($userCreated) {
+            $inserted_id = $this->get_column_value("xx_crm_users", 'ID', ['UUID' => $user_data['UUID']]);
+            // Create product_code in the required format
+            $user_gen_id = "U-" . str_pad($inserted_id, 6, '0', STR_PAD_LEFT);
+            // Update the user_gen_id field for the newly inserted product
+            $this->db->where('ID', $inserted_id);
+            $this->db->update("xx_crm_users", ['USER_ID' => $user_gen_id]);
+
+            // INSERT INTO SALES PERSONS
+            $inserted = $this->db->insert("xx_crm_salesperson", $salesPersonData);
+            if ($inserted) {
+                $salesPersonNewID = $this->get_column_value("xx_crm_salesperson", 'ID', ['UUID' => $salesPersonData['UUID']]);
+                // Update sales person detauils
+                $salesPersonGenID = "SP-" . str_pad($salesPersonNewID, 6, '0', STR_PAD_LEFT);
+                // Update the salesPersonGenID field for the newly inserted product
+                $this->db->where('ID', $salesPersonNewID);
+                $this->db->update("xx_crm_salesperson", ['SALES_PER_ID' => $salesPersonGenID]);
+
+
+                return $this->get_sales_person_by_id($salesPersonNewID);
+            } else
+                return false;
+        } else
+            return false;
+    }
+
+    // Function to add or update product
+    public function update_sales_person($salesPersonID, $data, $userid)
+    {
+        $salesPersonData = $data;
+
+        // unset some columns that will not get updated
+        unset($salesPersonData['ID']);
+        // update record
+        if ($this->db->where('ID', $salesPersonID)->update("xx_crm_salesperson", $salesPersonData)) {
+            return $this->get_sales_person_by_id($salesPersonID);
+        } else
+            return false;
+    }
+
+
+    public function delete_sales_person_by_id($salesPersonID)
+    {
+        $salesPersonDetails = $this->get_sales_person_by_id($salesPersonID);
+        $userID = $salesPersonDetails['USER_ID'] ?? 0;
+        $this->db->trans_start();
+
+        $this->db->delete("xx_crm_users", array('ID' => $userID));
+        $this->db->delete("xx_crm_salesperson", array('ID' => $salesPersonID));
+
+        $this->db->trans_complete();
+
+        if ($this->db->trans_status() === FALSE) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public function get_sales_person_by_uuid($salesPersonUUID)
+    {
+        return $this->db
+            ->where('UUID', $salesPersonUUID)
+            ->get("xx_crm_salesperson")
+            ->row_array();
+    }
+
+    public function get_sales_person_by_id($salesPersonID)
+    {
+        return $this->db
+            ->where('ID', $salesPersonID)
+            ->get("xx_crm_salesperson")
+            ->row_array();
+    }
 }
