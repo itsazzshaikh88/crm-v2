@@ -9,7 +9,7 @@ class App_Model extends CI_Model
         parent::__construct();
         $uri = $_SERVER['REQUEST_URI'];
 
-        if (strpos($uri, '/crm-v2/') !== false) {
+        if (strpos($uri, '/crm-v2/') !== false || strpos($uri, '/crm-test/') !== false) {
             $this->oracleDB = $this->load->database('oracle', TRUE);
         } else {
             // $this->oracleDB = $this->load->database('oracle', TRUE);

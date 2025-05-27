@@ -525,7 +525,7 @@ class Purchase_model extends App_Model
     public function get_po_tracker_details($po_num, $product)
     {
         $oracleSQl = "SELECT * FROM (SELECT
-                        po#                    client_po,
+                        soc_num,po#                    client_po,
                         customer,
                         product,
                         ord_qty,
@@ -543,6 +543,7 @@ class Purchase_model extends App_Model
                     FROM
                         (
                             SELECT
+                                oeh.ORDER_NUMBER    soc_num,
                                 oel.cust_po_number                 po#,
                                 ar.customer_name                   customer,
                                 oel.ordered_item                   product,
@@ -558,6 +559,7 @@ class Purchase_model extends App_Model
                                 AND TO_DATE(oel.request_date, 'DD-MON-YY') > '30-APR-25'
                                 -- AND oel.sold_from_org_id = decode(:org, 'IBM', 145, 'Z3P', 442)
                                 GROUP BY
+                                oeh.ORDER_NUMBER,
                                 oel.cust_po_number,
                                 oel.ordered_item,
                                 ar.customer_name
@@ -581,5 +583,40 @@ class Purchase_model extends App_Model
 
         // Return the result
         return $track_details;
+    }
+
+
+
+    // PO DETAILS SERVICE
+    function getClientPODetailsFromMYSQLToUpdate()
+    {
+        $sql = "SELECT PO_ID, PO_NUMBER, UUID, CLIENT_ID, CLIENT_PO_NUMBER, QUOTE_ID, REQUEST_ID, COMPANY_NAME, EMAIL_ADDRESS, COMPANY_ADDRESS, 
+            CONTACT_NUMBER, CURRENCY, PAYMENT_TERM, PO_STATUS, SUBTOTAL, DISCOUNT_PERCENTAGE, TAX_PERCENTAGE, TOTAL_AMOUNT, 
+            COMMENTS, ATTACHMENTS, ACTION_BY, VERSION, IS_CONVERTED, CONVERTED_FROM, CREATED_AT, CREATED_BY, UPDATED_AT, UPDATED_BY, ORG_ID
+            FROM xx_crm_po_header WHERE PO_STATUS NOT IN ('Approved', 'Rejected', 'Closed')";
+        return $this->db->query($sql)->result_array();
+    }
+
+    function fetchPOLinesFromMYSQL($po_id)
+    {
+        $sql =  "SELECT l.LINE_ID, l.PO_ID, l.PRODUCT_ID, l.PRODUCT_DESC, l.QTY, l.UNIT_PRICE, l.TOTAL, l.COLOR, l.TRANSPORT, l.SOC, l.REC_QTY, l. BAL_QTY, l.CUST_PROD_CODE, l.SUPP_PROD_CODE, l.ORG_ID, prd.PRODUCT_CODE, prd.PRODUCT_NAME
+        FROM xx_crm_po_lines l LEFT JOIN xx_crm_products prd ON prd.PRODUCT_ID = l.PRODUCT_ID WHERE PO_ID = $po_id";
+        return $this->db->query($sql)->result_array();
+    }
+
+    function updatePOStatusFromService($poId, $poData)
+    {
+        return $this->db->where('PO_ID', $poId)->update('xx_crm_po_header', $poData);
+    }
+    function updatePOLineDetailsFromService($line_id, $poId, $line_data)
+    {
+        if (!$line_id || !$poId || empty($line_data)) {
+            return false;
+        }
+
+        return $this->db
+            ->where('LINE_ID', $line_id)
+            ->where('PO_ID', $poId)
+            ->update('xx_crm_po_lines', $line_data); // assuming this is the correct table
     }
 }

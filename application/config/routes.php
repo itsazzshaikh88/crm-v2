@@ -7,3 +7,6 @@ $route['translate_uri_dashes'] = FALSE;
 
 // USER DEFINED ROUTES 
 $route['updates/news-and-announcements'] = "portal/news_and_announcements";
+
+// Public Crone Job Routes
+$route['public/cron/purchase-orders/sync-status'] = "public/cron/purchase_order_status_service";
