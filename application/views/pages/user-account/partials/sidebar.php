@@ -32,7 +32,7 @@ function setActiveLink($selected, $current)
 
             <!--begin::Menu-->
             <ul class="menu menu-column menu-pill menu-title-gray-700 menu-bullet-gray-300 menu-state-bg menu-state-bullet-primary fw-bold fs-5 mb-10">
-
+                <h6 class="fs-7 text-muted mt-4 ">Users Management</h6>
                 <!--begin::Menu item-->
                 <li class="menu-item mb-1">
                     <!--begin::Menu link-->
@@ -56,7 +56,7 @@ function setActiveLink($selected, $current)
                 </li>
                 <!--end::Menu item-->
                 <!--begin::Menu item-->
-                <li class="menu-item mb-1">
+                <li class="menu-item mb-1 border-bottom">
                     <!--begin::Menu link-->
                     <a class="menu-link px-6 py-4 <?= setActiveLink($navlink['sub-link'] ?? '', "security"); ?>" href="users/manage_2fa">
                         <span class="menu-bullet"><span class="bullet"></span></span>
@@ -65,6 +65,7 @@ function setActiveLink($selected, $current)
                     </a>
                     <!--end::Menu link-->
                 </li>
+                <h6 class="fs-7 text-muted mt-4 ">Access Management</h6>
                 <!--end::Menu item-->
                 <!--begin::Menu item-->
                 <li class="menu-item mb-1">
