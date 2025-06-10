@@ -188,6 +188,8 @@ class Permission_model extends App_Model
         R.ID AS RESOURCE_ID,
         R.RESOURCE_TYPE,
         R.RESOURCE_NAME,
+        R.RESOURCE_PATH,
+        R.REDIRECT_TARGET,
         H.ID AS PERMISSION_HEADER_ID,
         H.ROLE_ID AS ASSIGNED_ROLE_ID,
         L.CAN_VIEW,

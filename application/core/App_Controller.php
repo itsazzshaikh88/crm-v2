@@ -6,6 +6,7 @@ class App_Controller extends CI_Controller
     protected $secret_key;
     protected $userDetails;
     protected $userFullDetails;
+    protected $assignedPermissions;
     public function __construct()
     {
         parent::__construct();
@@ -14,9 +15,36 @@ class App_Controller extends CI_Controller
         $this->isAuthenticated();
         $this->userDetails = $this->getUserDetails();
         $this->userFullDetails = $this->User_model->get_logged_in_user($this->userDetails);;
+        $this->load->model('Permission_model');
+        $this->assignedPermissions = $this->permission_cached_data($this->userDetails);
         // Share user details with all views
-        $this->load->vars(['loggedInUser' => $this->userDetails, 'loggedInUserFullDetails' => $this->userFullDetails]);
+        $this->load->vars(['loggedInUser' => $this->userDetails, 'loggedInUserFullDetails' => $this->userFullDetails, 'assignedPermissions' => $this->assignedPermissions]);
     }
+
+    public function permission_cached_data($user)
+    {
+        $cache_key = 'permission_caches';
+        $cache_ttl = 3600; // 1 hour
+
+        // Check if cache exists
+        $cached_data = $this->cache->file->get($cache_key);
+
+        if ($cached_data !== false) {
+            return $cached_data;
+        }
+
+        // Cache miss - get data from DB or logic
+        $data = $this->Permission_model->get_role_resource_permissions();
+
+        // Validate data before caching
+        if (!empty($data) && is_array($data)) {
+            // Save to cache
+            $this->cache->file->save($cache_key, $data, $cache_ttl);
+        }
+
+        return $data;
+    }
+
 
     /**
      * Retrieves user details from the auth_token cookie.
