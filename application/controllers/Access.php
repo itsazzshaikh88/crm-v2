@@ -24,4 +24,15 @@ class Access extends App_Controller
         $data['scripts'] = ['assets/js/pages/access-management/resource-list.js', 'assets/js/pages/access-management/new-resource.js'];
         $this->load->view('layout', $data);
     }
+
+    public function permissions()
+    {
+        $data['view_path'] = 'pages/user-account/layout';
+        $data['sub_view_path'] = 'pages/access-management/permissions';
+        $data['page_title'] = 'User Resource Permissions - Zamil CRM';
+        $data['page_heading'] = 'User Resource Permissions';
+        $data['navlink'] = ['main-link' => 'account', 'sub-link' => 'permission'];
+        $data['scripts'] = ['assets/js/pages/access-management/permissions-list.js', 'assets/js/pages/access-management/new-permission.js'];
+        $this->load->view('layout', $data);
+    }
 }
