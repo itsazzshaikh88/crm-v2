@@ -30,7 +30,7 @@ function setActiveLink($selected, $current)
 
                 <!--begin::Actions-->
                 <?php
-                $usertype = $loggedInUser['usertype'] ?? 'guest';
+                $usertype = $loggedInUser['userrole'] ?? 'guest';
                 ?>
                 <div class="d-flex flex-center">
                     <a href="javascript:void(0)" class="btn btn-sm btn-light-<?= $usertype === 'admin' ? "primary" : "info" ?> py-2 px-4 fw-bold me-2" data-kt-drawer-show="true" data-kt-drawer-target="#kt_drawer_chat"><?= ucfirst($usertype) ?></a>

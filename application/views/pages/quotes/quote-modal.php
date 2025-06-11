@@ -176,7 +176,7 @@ $loggedInUserType = strtolower($loggedInUser['usertype']);
                                             <div class="d-flex flex-column gap-1">
                                                 <label for="COMPANY_ADDRESS" class="text-gray-800 fw-bold">Company Address<span class="text-danger">*</span></label>
                                                 <input type="text" class="form-control form-control-sm border border-blue-100 text-gray-700" name="COMPANY_ADDRESS" id="COMPANY_ADDRESS"
-                                                    value="<?= $loggedInUserType != 'admin' ? $loggedInUserFullDetails['address']['ADDRESS_LINE_1'] : '' ?>">
+                                                    value="<?= $loggedInUserType != 'admin' ? $loggedInUserFullDetails['address']['ADDRESS_LINE_1'] ?? '' : '' ?>">
                                             </div>
                                             <p class="text-danger err-lbl mb-0 fs-8" id="lbl-COMPANY_ADDRESS"></p>
                                         </div>

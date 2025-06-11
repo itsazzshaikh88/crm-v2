@@ -89,6 +89,7 @@ class Auth extends CI_Controller
                     $payload = json_encode(array(
                         'userid' => $user['ID'],
                         'usertype' => $user['USER_TYPE'],
+                        'userrole' => strtolower($user['ROLE_NAME']),
                         'email' => $user['EMAIL'],
                         'username' => "$user[FIRST_NAME] $user[LAST_NAME]",
                         'timestamp' => time(),

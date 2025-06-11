@@ -67,7 +67,7 @@
 					</div>
 				</div>
 				<!--end::Col-->
-				<?php $usertype = $loggedInUser['usertype'] ?? 'Guest';
+				<?php $usertype = $loggedInUser['userrole'] ?? 'Guest';
 				$user_id = $loggedInUser['userid'];
 				?>
 				<input type="hidden" id="USER_TYPE" value="<?= $usertype ?>">

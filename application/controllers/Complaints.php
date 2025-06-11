@@ -21,7 +21,7 @@ class Complaints extends App_Controller
 		$data['page_heading'] = 'Customer Complaints';
 		$data['scripts'] = ['assets/js/pages/complaints/home.js'];
 		$data['navlink'] = 'feedback';
-		$usertype = $loggedInUser['usertype'] ?? 'Guest';
+		$usertype = $loggedInUser['userrole'] ?? 'Guest';
 		$data['toolbar'] = ['name' => 'new-complaints', 'action' => 'form'];
 		$this->load->view('layout', $data);
 	}

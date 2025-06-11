@@ -7,6 +7,7 @@ class App_Controller extends CI_Controller
     protected $userDetails;
     protected $userFullDetails;
     protected $assignedPermissions;
+    protected $groupedPermission;
     public function __construct()
     {
         parent::__construct();
@@ -17,13 +18,49 @@ class App_Controller extends CI_Controller
         $this->userFullDetails = $this->User_model->get_logged_in_user($this->userDetails);;
         $this->load->model('Permission_model');
         $this->assignedPermissions = $this->permission_cached_data($this->userDetails);
+        $this->groupedPermission = $this->_group_in_module($this->assignedPermissions);
+
         // Share user details with all views
-        $this->load->vars(['loggedInUser' => $this->userDetails, 'loggedInUserFullDetails' => $this->userFullDetails, 'assignedPermissions' => $this->assignedPermissions]);
+        $this->load->vars(['loggedInUser' => $this->userDetails, 'loggedInUserFullDetails' => $this->userFullDetails, 'assignedPermissions' => $this->assignedPermissions, 'assignedNavlinks' => $this->groupedPermission]);
     }
+
+    function _group_in_module($resources)
+    {
+        $grouped = [];
+
+        foreach ($resources as &$resource) {
+            // Skip if not a menu item or cannot be viewed
+            if (
+                empty($resource['IS_MENU_ITEM']) || $resource['IS_MENU_ITEM'] != 1 ||
+                empty($resource['CAN_VIEW']) || $resource['CAN_VIEW'] != 1
+            ) {
+                continue;
+            }
+
+            $module = trim($resource['MODULE']);
+            if ($module === '') {
+                $module = 'Others'; // Fallback group
+            }
+
+            if (!isset($grouped[$module])) {
+                $grouped[$module] = [
+                    'module' => $module,
+                    'links' => []
+                ];
+            }
+
+            $grouped[$module]['links'][] = $resource;
+        }
+
+        return array_values($grouped); // Optional: return as indexed array
+    }
+
+
+
 
     public function permission_cached_data($user)
     {
-        $cache_key = 'permission_caches';
+        $cache_key = '__asgnprmsn_' . $user['userid'];
         $cache_ttl = 3600; // 1 hour
 
         // Check if cache exists
@@ -34,7 +71,7 @@ class App_Controller extends CI_Controller
         }
 
         // Cache miss - get data from DB or logic
-        $data = $this->Permission_model->get_role_resource_permissions();
+        $data = $this->Permission_model->get_role_resource_permissions($user['usertype']);
 
         // Validate data before caching
         if (!empty($data) && is_array($data)) {

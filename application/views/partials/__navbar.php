@@ -40,370 +40,42 @@ $userid = $loggedInUser['userid'] ?? '0';
             <div class="d-flex align-items-stretch" id="kt_header_nav">
                 <!--begin::Menu wrapper-->
                 <div class="header-menu align-items-stretch" data-kt-drawer="true" data-kt-drawer-name="header-menu" data-kt-drawer-activate="{default: true, lg: false}" data-kt-drawer-overlay="true" data-kt-drawer-width="{default:'200px', '300px': '250px'}" data-kt-drawer-direction="start" data-kt-drawer-toggle="#kt_header_menu_mobile_toggle" data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_body', lg: '#kt_header_nav'}">
-                    <!--begin::Menu-->
                     <div class="menu menu-lg-rounded menu-column menu-lg-row menu-state-bg menu-title-gray-700 menu-state-icon-primary menu-state-bullet-primary menu-arrow-gray-400 fw-bold my-5 my-lg-0 align-items-stretch" id="#kt_header_menu" data-kt-menu="true">
-                        <a href="<?= base_url() ?>" class="menu-item me-lg-1 <?= setNavigationLinkActive($navlink, HOME_ACTIVE_LINK, 'here show') ?>">
-                            <span class="menu-link py-3">
-                                <span class="menu-title">Dashboard</span>
-                            </span>
-                        </a>
-                        <?php
-                        if ($usertype == 'admin'):
-                        ?>
-                            <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="bottom-start" class="menu-item menu-lg-down-accordion me-lg-1">
-                                <span class="menu-link py-3">
-                                    <span class="menu-title">Sales</span>
-                                    <span class="menu-arrow d-lg-none"></span>
-                                </span>
-                                <div class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown menu-rounded-0 py-lg-4 w-lg-225px">
-                                    <div class="menu-item">
-                                        <a class="menu-link py-3" href="sales/forecast" title="" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right">
-                                            <span class="menu-icon">
-                                                <i class="las la-book fs-3"></i>
-                                            </span>
-                                            <span class="menu-title">Sales Forecast</span>
-                                        </a>
-                                    </div>
-                                    <div class="menu-item">
-                                        <a class="menu-link py-3" href="sales/salesperson" title="" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right">
-                                            <span class="menu-icon">
-                                                <i class="las la-user-tie fs-3"></i>
-                                            </span>
-                                            <span class="menu-title">Sales Persons</span>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        <?php endif; ?>
-                        <!-- Custom Navlinks  -->
-                        <a href="products/list" class="menu-item me-lg-1 <?= setNavigationLinkActive($navlink, PRODUCT_ACTIVE_LINK, 'here show') ?>">
-                            <span class="menu-link py-3">
-                                <span class="menu-title">Products</span>
-                            </span>
-                        </a>
-                        <a href="requests/list" class="menu-item me-lg-1">
-                            <span class="menu-link py-3">
-                                <span class="menu-title">Requests</span>
-                            </span>
-                        </a>
-                        <a href="quotes/list" class="menu-item me-lg-1">
-                            <span class="menu-link py-3">
-                                <span class="menu-title">Quotations</span>
-                            </span>
-                        </a>
-                        <a href="purchase/list" class="menu-item me-lg-1">
-                            <span class="menu-link py-3">
-                                <span class="menu-title">Purchase</span>
-                            </span>
-                        </a>
-                        <a href="invoices/list" class="menu-item me-lg-1">
-                            <span class="menu-link py-3">
-                                <span class="menu-title">Invoices</span>
-                            </span>
-                        </a>
-                        <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="bottom-start" class="menu-item menu-lg-down-accordion me-lg-1">
-                            <span class="menu-link py-3">
-                                <span class="menu-title">Delivery</span>
-                                <span class="menu-arrow d-lg-none"></span>
-                            </span>
-                            <div class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown menu-rounded-0 py-lg-4 w-lg-225px">
-                                <div class="menu-item">
-                                    <a class="menu-link py-3" href="delivery/report" title="" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right">
-                                        <span class="menu-icon">
-                                            <i class="las la-stream fs-3"></i>
-                                        </span>
-                                        <span class="menu-title">Delivery Report</span>
-                                    </a>
-                                </div>
-                                <!-- <div class="menu-item">
-                                    <a class="menu-link py-3" href="delivery/asn" title="" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right">
-                                        <span class="menu-icon">
-                                            <i class="las la-file-alt fs-3"></i>
-                                        </span>
-                                        <span class="menu-title">Create ASN</span>
-                                    </a>
-                                </div>
-                                <div class="menu-item">
-                                    <a class="menu-link py-3" href="delivery/asn_report" title="" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right">
-                                        <span class="menu-icon">
-                                            <i class="las la-bars fs-3"></i>
-                                        </span>
-                                        <span class="menu-title">ASN Report</span>
-                                    </a>
-                                </div> -->
-                            </div>
-                        </div>
-                        <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="bottom-start" class="menu-item menu-lg-down-accordion me-lg-1">
-                            <span class="menu-link py-3">
-                                <span class="menu-title">Feedback</span>
-                                <span class="menu-arrow d-lg-none"></span>
-                            </span>
-                            <div class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown menu-rounded-0 py-lg-4 w-lg-225px">
-                                <a href="complaints" class="menu-item menu-lg-down-accordion">
+                        <?php foreach ($assignedNavlinks as $moduleItem): ?>
+                            <?php
+                            $moduleName = $moduleItem['module'];
+                            $links = $moduleItem['links'];
+                            ?>
+                            <?php if (count($links) === 1): ?>
+                                <?php $res = $links[0]; ?>
+                                <a href="<?= base_url($res['REDIRECT_TARGET']) ?>" class="menu-item me-lg-1 <?= setNavigationLinkActive($navlink, $res['REDIRECT_TARGET'], 'here show') ?>">
                                     <span class="menu-link py-3">
-                                        <span class="menu-icon">
-                                            <i class="las la-chalkboard-teacher fs-3"></i>
-                                        </span>
-                                        <span class="menu-title">Customer Complaints</span>
+                                        <span class="menu-title"><?= htmlspecialchars($res['RESOURCE_NAME']) ?></span>
                                     </span>
                                 </a>
-                                <!-- <div data-kt-menu-trigger="{default:'click', lg: 'hover'}" data-kt-menu-placement="right-start" class="menu-item menu-lg-down-accordion">
-                                        <span class="menu-link py-3">
-                                            <span class="menu-icon">
-                                                <i class="las la-star-half-alt fs-3"></i>
-                                            </span>
-                                            <span class="menu-title">Customer Survey</span>
-                                            <span class="menu-arrow"></span>
-                                        </span>
-                                        <div class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown menu-active-bg py-lg-4 w-lg-225px">
+                            <?php else: ?>
+                                <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="bottom-start" class="menu-item menu-lg-down-accordion me-lg-1">
+                                    <span class="menu-link py-3">
+                                        <span class="menu-title"><?= htmlspecialchars(ucwords($moduleName)) ?></span>
+                                        <span class="menu-arrow d-lg-none"></span>
+                                    </span>
+                                    <div class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown menu-rounded-0 py-lg-4 w-lg-225px">
+                                        <?php foreach ($links as $res): ?>
                                             <div class="menu-item">
-                                                <a class="menu-link py-3" href="survey" data-kt-page="pro">
-                                                    <span class="menu-bullet">
-                                                        <span class="bullet bullet-dot"></span>
+                                                <a class="menu-link py-3" href="<?= base_url($res['REDIRECT_TARGET']) ?>" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right">
+                                                    <span class="menu-icon">
+                                                        <i class="las la-circle fs-3"></i> <!-- Default icon -->
                                                     </span>
-                                                    <span class="menu-title">Survey</span>
+                                                    <span class="menu-title"><?= htmlspecialchars(ucwords($res['RESOURCE_NAME'])) ?></span>
                                                 </a>
                                             </div>
-                                            <div class="menu-item">
-                                                <a class="menu-link py-3" href="survey/response" data-kt-page="pro">
-                                                    <span class="menu-bullet">
-                                                        <span class="bullet bullet-dot"></span>
-                                                    </span>
-                                                    <span class="menu-title">Survey Response</span>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div> -->
-                                <a href="survey" class="menu-item menu-lg-down-accordion">
-                                    <span class="menu-link py-3">
-                                        <span class="menu-icon">
-                                            <i class="las la-chalkboard-teacher fs-3"></i>
-                                        </span>
-                                        <span class="menu-title">Surveys</span>
-                                    </span>
-                                </a>
-                            </div>
-                        </div>
-                        <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="bottom-start" class="menu-item menu-lg-down-accordion me-lg-1">
-                            <span class="menu-link py-3">
-                                <span class="menu-title">Financials</span>
-                                <span class="menu-arrow d-lg-none"></span>
-                            </span>
-                            <div class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown menu-rounded-0 py-lg-4 w-lg-225px">
-                                <a href="financial" class="menu-item menu-lg-down-accordion">
-                                    <span class="menu-link py-3">
-                                        <span class="menu-icon">
-                                            <i class="las la-money-bill fs-3"></i>
-                                        </span>
-                                        <span class="menu-title">Financials</span>
-                                    </span>
-                                </a>
-                                <a href="financial/outstandings" class="menu-item menu-lg-down-accordion">
-                                    <span class="menu-link py-3">
-                                        <span class="menu-icon">
-                                            <i class="las la-receipt fs-3"></i>
-                                        </span>
-                                        <span class="menu-title">Customer Outstandings</span>
-                                    </span>
-                                </a>
-                                <a href="financial/statements" class="menu-item menu-lg-down-accordion">
-                                    <span class="menu-link py-3">
-                                        <span class="menu-icon">
-                                            <i class="las la-file-invoice fs-3"></i>
-                                        </span>
-                                        <span class="menu-title">Customer Statements</span>
-                                    </span>
-                                </a>
-                                <a href="financial/credit_report" class="menu-item menu-lg-down-accordion">
-                                    <span class="menu-link py-3">
-                                        <span class="menu-icon">
-                                            <i class="las la-chart-line fs-3"></i>
-                                        </span>
-                                        <span class="menu-title">Credit Report</span>
-                                    </span>
-                                </a>
-                                <a href="financial/balance_cofirmation" class="menu-item menu-lg-down-accordion">
-                                    <span class="menu-link py-3">
-                                        <span class="menu-icon">
-                                            <i class="las la-file-invoice-dollar fs-3"></i>
-                                        </span>
-                                        <span class="menu-title">Balance Confirmation</span>
-                                    </span>
-                                </a>
-                                <a href="financial/credit_application" class="menu-item menu-lg-down-accordion">
-                                    <span class="menu-link py-3">
-                                        <span class="menu-icon">
-                                            <i class="las la-credit-card fs-3"></i>
-                                        </span>
-                                        <span class="menu-title">Credit Application</span>
-                                    </span>
-                                </a>
-                            </div>
-                        </div>
-
-                        <?php
-                        if ($usertype == 'admin'):
-                        ?>
-                            <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}"
-                                data-kt-menu-placement="bottom-start"
-                                class="menu-item menu-lg-down-accordion me-lg-1 <?= setNavigationLinkActive($navlink['main-link'] ?? '', ADMIN_ACTIVE_LINK, 'here show') ?>"><!--begin:Menu link-->
-                                <span class="menu-link py-3">
-                                    <span class="menu-title text-warning">Admin Suite</span>
-                                    <span class="menu-arrow d-lg-none"></span>
-                                </span>
-                                <div
-                                    class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown p-0 w-lg-600px">
-                                    <!--begin:Pages menu-->
-                                    <div class="menu-state-bg p-4 p-lg-8">
-                                        <!--begin:Row-->
-                                        <div class="row">
-                                            <!--begin:Col-->
-                                            <div class="col-lg-4 mb-6 mb-lg-0">
-                                                <!--begin:Menu section-->
-                                                <div class="mb-0">
-                                                    <!--begin:Menu heading-->
-                                                    <h4 class="fs-6 fs-lg-4 fw-bold mb-3 ms-4">CRM Core</h4>
-                                                    <!--end:Menu heading-->
-
-                                                    <!--begin:Menu item-->
-                                                    <div class="menu-item p-0 m-0">
-                                                        <!--begin:Menu link-->
-                                                        <a href="clients"
-                                                            class="menu-link ">
-                                                            <span class="menu-title">Clients</span>
-                                                        </a>
-                                                        <!--end:Menu link-->
-                                                    </div>
-                                                    <!--end:Menu item-->
-                                                    <!--begin:Menu item-->
-                                                    <div class="menu-item p-0 m-0 <?= setNavigationLinkActive($navlink['sub-link'] ?? '', 'leads', 'here show') ?>">
-                                                        <!--begin:Menu link-->
-                                                        <a href="leads"
-                                                            class="menu-link ">
-                                                            <span class="menu-title">Leads</span>
-                                                        </a>
-                                                        <!--end:Menu link-->
-                                                    </div>
-                                                    <!--end:Menu item-->
-                                                    <!--begin:Menu item-->
-                                                    <div class="menu-item p-0 m-0">
-                                                        <!--begin:Menu link-->
-                                                        <a href="contacts"
-                                                            class="menu-link ">
-                                                            <span class="menu-title">Contacts</span>
-                                                        </a>
-                                                        <!--end:Menu link-->
-                                                    </div>
-                                                    <!--end:Menu item-->
-                                                    <!--begin:Menu item-->
-                                                    <div class="menu-item p-0 m-0">
-                                                        <!--begin:Menu link-->
-                                                        <a href="deals"
-                                                            class="menu-link ">
-                                                            <span class="menu-title">Deals</span>
-                                                        </a>
-                                                        <!--end:Menu link-->
-                                                    </div>
-                                                    <!--end:Menu item-->
-                                                    <!--begin:Menu item-->
-                                                    <div class="menu-item p-0 m-0">
-                                                        <!--begin:Menu link-->
-                                                        <a href="mom"
-                                                            class="menu-link ">
-                                                            <span class="menu-title">Minutes of Meetings</span>
-                                                        </a>
-                                                        <!--end:Menu link-->
-                                                    </div>
-                                                    <!--end:Menu item-->
-                                                </div>
-                                                <!--end:Menu section-->
-                                            </div>
-                                            <!--end:Col-->
-
-                                            <!--begin:Col-->
-                                            <div class="col-lg-4 mb-6 mb-lg-0">
-                                                <!--begin:Menu section-->
-                                                <div class="mb-0">
-                                                    <!--begin:Menu heading-->
-                                                    <h4 class="fs-6 fs-lg-4 fw-bold mb-3 ms-4">Master Vault</h4>
-                                                    <!--end:Menu heading-->
-
-                                                    <!--begin:Menu item-->
-                                                    <div class="menu-item p-0 m-0">
-                                                        <!--begin:Menu link-->
-                                                        <a href="users"
-                                                            class="menu-link ">
-                                                            <span class="menu-title">Users & Access Management</span>
-                                                        </a>
-                                                        <!--end:Menu link-->
-                                                    </div>
-                                                    <!--end:Menu item-->
-                                                    <!--begin:Menu item-->
-                                                    <div class="menu-item p-0 m-0">
-                                                        <!--begin:Menu link-->
-                                                        <a href="master/categories"
-                                                            class="menu-link ">
-                                                            <span class="menu-title">Categories</span>
-                                                        </a>
-                                                        <!--end:Menu link-->
-                                                    </div>
-                                                    <!--end:Menu item-->
-                                                    <!--begin:Menu item-->
-                                                    <div class="menu-item p-0 m-0">
-                                                        <!--begin:Menu link-->
-                                                        <a href="master/uom"
-                                                            class="menu-link ">
-                                                            <span class="menu-title">UOM</span>
-                                                        </a>
-                                                        <!--end:Menu link-->
-                                                    </div>
-                                                    <!--end:Menu item-->
-                                                </div>
-                                                <!--end:Menu section-->
-                                            </div>
-                                            <!--end:Col-->
-
-                                            <!--begin:Col-->
-                                            <div class="col-lg-4 mb-6 mb-lg-0">
-                                                <!--begin:Menu section-->
-                                                <div class="mb-0">
-                                                    <!--begin:Menu heading-->
-                                                    <h4 class="fs-6 fs-lg-4 fw-bold mb-3 ms-4">Updates Hub</h4>
-                                                    <!--end:Menu heading-->
-
-                                                    <!--begin:Menu item-->
-                                                    <div class="menu-item p-0 m-0">
-                                                        <!--begin:Menu link-->
-                                                        <a href="news"
-                                                            class="menu-link ">
-                                                            <span class="menu-title">News</span>
-                                                        </a>
-                                                        <!--end:Menu link-->
-                                                    </div>
-                                                    <!--end:Menu item-->
-                                                    <!--begin:Menu item-->
-                                                    <div class="menu-item p-0 m-0">
-                                                        <!--begin:Menu link-->
-                                                        <a href="tasks"
-                                                            class="menu-link text-primary">
-                                                            <span class="menu-title text-primary">Task Manager</span>
-                                                        </a>
-                                                        <!--end:Menu link-->
-                                                    </div>
-                                                    <!--end:Menu item-->
-                                                </div>
-                                                <!--end:Menu section-->
-                                            </div>
-                                            <!--end:Col-->
-                                        </div>
-                                        <!--end:Row-->
+                                        <?php endforeach; ?>
                                     </div>
-                                    <!--end:Pages menu-->
-                                </div><!--end:Menu sub-->
-                            </div>
-                        <?php endif; ?>
+                                </div>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
                     </div>
-                    <!--end::Menu-->
+
                 </div>
                 <!--end::Menu wrapper-->
             </div>

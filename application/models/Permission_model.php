@@ -190,6 +190,8 @@ class Permission_model extends App_Model
         R.RESOURCE_NAME,
         R.RESOURCE_PATH,
         R.REDIRECT_TARGET,
+        R.IS_MENU_ITEM,
+        R.MODULE,
         H.ID AS PERMISSION_HEADER_ID,
         H.ROLE_ID AS ASSIGNED_ROLE_ID,
         L.CAN_VIEW,
@@ -199,8 +201,7 @@ class Permission_model extends App_Model
         L.CAN_EXPORT,
         L.CAN_PRINT,
         L.CAN_ASSIGN,
-        L.CAN_SHARE
-    ");
+        L.CAN_SHARE");
         $this->db->from('xx_crm_app_resources R');
         $this->db->join('xx_crm_permission_header H', 'H.ROLE_ID = ' . $this->db->escape($roleId) . ' AND H.STATUS = "ACTIVE"', 'left');
         $this->db->join('xx_crm_permission_lines L', 'L.PERMISSION_HEADER_ID = H.ID AND L.RESOURCE_ID = R.ID AND L.STATUS = "ACTIVE"', 'left');

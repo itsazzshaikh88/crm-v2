@@ -37,9 +37,15 @@ class Auth_model extends CI_Model
      */
     public function get_user_by_email(string $email): ?array
     {
-        $query = $this->db->get_where($this->user_table, ['EMAIL' => $email]);
-        return $query->row_array(); // Return user data or null
+        $this->db->select('u.*, r.ROLE_NAME');
+        $this->db->from($this->user_table . ' u');
+        $this->db->join('xx_crm_access_roles r', 'r.ID = u.USER_TYPE', 'left');
+        $this->db->where('u.EMAIL', $email);
+
+        $query = $this->db->get();
+        return $query->row_array(); // Returns user details with ROLE_NAME
     }
+
 
     /**
      * Create a new token for the user
