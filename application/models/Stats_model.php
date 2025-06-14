@@ -6,8 +6,13 @@ class Stats_model extends CI_Model
     public function dashboardCardStats($user_type, $client_id = null)
     {
         // Initialize an array for the counts
+        $this->db->from('xx_crm_users');
+        $this->db->join('xx_crm_access_roles', 'xx_crm_users.USER_TYPE = xx_crm_access_roles.ID');
+        $this->db->where('xx_crm_access_roles.ROLE_NAME', 'client');
+        $clientTotal = $this->db->count_all_results();
+
         $data = [
-            'total_clients' => $this->db->where('USER_TYPE', 'client')->count_all_results('xx_crm_users'),
+            'total_clients' => $clientTotal,
             'purchase_orders' => 0,
             'deliveries' => 0,
             'invoices' => 0,
