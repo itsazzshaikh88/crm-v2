@@ -44,7 +44,7 @@
 </style>
 <?php
 $loggedInUserID = $loggedInUser['userid'];
-$loggedInUserType = strtolower($loggedInUser['usertype']);
+$loggedInUserType = strtolower($loggedInUser['userrole']);
 ?>
 <div class="modal bg-body fade " tabindex="-1" id="newRequestModal">
     <div class="modal-dialog bg-light modal-fullscreen">

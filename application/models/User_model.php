@@ -120,12 +120,13 @@ class User_model extends App_Model
     {
         $offset = get_limit_offset($currentPage, $limit);
 
-        $this->db->select("u.ID,u.UUID, u.ORG_ID, u.USER_ID, u.FIRST_NAME, u.LAST_NAME, u.EMAIL,u.PHONE_NUMBER, u.STATUS, cd.COMPANY_NAME, cd.CREDIT_LIMIT, cd.TAXES, cd.ORDER_LIMIT,  ca.ADDRESS_LINE_1, ca.ADDRESS_LINE_2, ca.BILLING_ADDRESS, ca.SHIPPING_ADDRESS, ca.CITY, ca.STATE, ca.COUNTRY, ca.ZIP_CODE, cd.PAYMENT_TERM, cd.CURRENCY");
+        $this->db->select("u.ID,u.UUID, u.ORG_ID, u.USER_ID, u.FIRST_NAME, u.LAST_NAME, u.EMAIL,u.PHONE_NUMBER, u.STATUS, cd.COMPANY_NAME, cd.CREDIT_LIMIT, cd.TAXES, cd.ORDER_LIMIT,  ca.ADDRESS_LINE_1, ca.ADDRESS_LINE_2, ca.BILLING_ADDRESS, ca.SHIPPING_ADDRESS, ca.CITY, ca.STATE, ca.COUNTRY, ca.ZIP_CODE, cd.PAYMENT_TERM, cd.CURRENCY, r.ROLE_NAME");
         $this->db->from($this->user_table . " u");
+        $this->db->join("xx_crm_access_roles r", "r.ID = u.USER_TYPE", "left");
         $this->db->join($this->client_table . " cd", "cd.USER_ID = u.ID", "left");
         $this->db->join($this->client_address_table . " ca", "ca.CLIENT_ID = cd.USER_ID", "left");
         // Add the WHERE condition
-        $this->db->where("u.USER_TYPE", 'client');
+        $this->db->where("lower(r.ROLE_NAME)", 'client');
         $this->db->order_by("u.ID", "DESC");
 
 
@@ -171,8 +172,9 @@ class User_model extends App_Model
     {
         $offset = get_limit_offset($currentPage, $limit);
 
-        $this->db->select("u.ID, u.USER_ID, u.UUID, u.ORG_ID, u.USER_TYPE, u.FIRST_NAME, u.LAST_NAME, u.EMAIL, u.PASSWORD, u.PHONE_NUMBER, u.STATUS, u.CREATED_AT, u.UPDATED_AT, u.IS_2FA_ENABLED");
+        $this->db->select("u.ID, u.USER_ID, u.UUID, u.ORG_ID, u.USER_TYPE, u.FIRST_NAME, u.LAST_NAME, u.EMAIL, u.PASSWORD, u.PHONE_NUMBER, u.STATUS, u.CREATED_AT, u.UPDATED_AT, u.IS_2FA_ENABLED, rl.ROLE_NAME");
         $this->db->from($this->user_table . " u");
+        $this->db->join("xx_crm_access_roles rl", "rl.ID = u.USER_TYPE", "left");
         $this->db->order_by("u.ID", "DESC");
 
 

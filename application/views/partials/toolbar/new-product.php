@@ -6,7 +6,7 @@
 <!--begin::Button-->
 <?php
 $currentUser = $loggedInUser['username'] ?? 'Guest';
-$currentUserType = $loggedInUser['usertype'] ?? 'guest';
+$currentUserType = $loggedInUser['userrole'] ?? 'guest';
 if (isset($options) && is_array($options)):
 ?>
     <?php if ($options['action'] === 'list'):

@@ -39,7 +39,7 @@ function showRatingEmoji($selected, $current)
 	return null;
 }
 
-$user_type = $loggedInUser['usertype'] ?? 'Guest';
+$user_type = $loggedInUser['userrole'] ?? 'Guest';
 $is_admin = $user_type == 'admin' ? true : false;
 $is_client = $user_type == 'client' ? true : false;
 

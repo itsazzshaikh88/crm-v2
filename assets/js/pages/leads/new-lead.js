@@ -45,6 +45,9 @@ function openLeadModal(action = 'new', leadID = null) {
     // Show NEw Lead modal 
     newLeadModal.show()
 }
+
+openLeadModal();
+
 function closeLeadModal() {
     document.getElementById("UUID").value = '';
     document.getElementById("LEAD_ID").value = '';

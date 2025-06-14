@@ -6,7 +6,7 @@
 <!--begin::Button-->
 
 <?php
-$usertype = $loggedInUser['usertype'] ?? 'Guest';
+$usertype = $loggedInUser['userrole'] ?? 'Guest';
 
 if (isset($options) && is_array($options)) {
 	if ($usertype == 'client' && $options['action'] === 'form') {

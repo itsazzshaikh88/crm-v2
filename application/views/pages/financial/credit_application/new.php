@@ -1,6 +1,6 @@
 <?php 
  $username = $loggedInUser['username'] ?? 'Guest'; 
-$usertype = $loggedInUser['usertype'] ?? 'Guest';
+$usertype = $loggedInUser['userrole'] ?? 'Guest';
  $user_id = $loggedInUser['userid'] ?? ''; 
 //  $email = $loggedInUser['email'] ?? 'user@guest.crm'; 
  ?> 

@@ -4,7 +4,7 @@ $firstCard = 'Total';
 $secondCard = 'Active';
 $thirdCard = 'Closed/Resolved';
 $fourthCard = 'Draft';
-$usertype = $loggedInUser['usertype'] ?? 'Guest';
+$usertype = $loggedInUser['userrole'] ?? 'Guest';
 $user_id = $loggedInUser['userid'];
 ?>
 <input type="hidden" id="USER_TYPE" value="<?= $usertype ?>">

@@ -1,5 +1,5 @@
 <?php
-$usertype = $loggedInUser['usertype'] ?? 'guest';
+$usertype = $loggedInUser['userrole'] ?? 'guest';
 $userid = $loggedInUser['userid'] ?? '0';
 ?>
 
@@ -220,7 +220,7 @@ $userid = $loggedInUser['userid'] ?? '0';
                     <!--end::Quick links-->
                     <?php
                     $username = $loggedInUser['username'] ?? 'Guest';
-                    $usertype = $loggedInUser['usertype'] ?? 'Guest';
+                    $usertype = $loggedInUser['userrole'] ?? 'Guest';
                     $email = $loggedInUser['email'] ?? 'user@guest.crm';
                     ?>
                     <!--begin::User-->
