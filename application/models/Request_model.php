@@ -35,6 +35,11 @@ class Request_model extends App_model
             'REQUEST_DETAILS' => $data['REQUEST_DETAILS'],
             'INTERNAL_NOTES' => $data['INTERNAL_NOTES'],
             'ORG_ID' => $data['ORG_ID'],
+            'REVIEW_DATE' => $data['REVIEW_DATE'] ?? '',
+            'NEXT_REVIEW_DATE' => $data['NEXT_REVIEW_DATE'] ?? '',
+            'RESPONSIBLE_USER_ID' => $data['RESPONSIBLE_USER_ID'] ?? '',
+            'REVIEW_STATUS' => $data['REVIEW_STATUS'] ?? '',
+            'REVIEW_NOTES' => $data['REVIEW_NOTES'] ?? '',
             'STATUS' => 'draft',
             'ACTION_BY' => $role,
             'VERSION' => '1'
@@ -121,7 +126,7 @@ class Request_model extends App_model
         $offset = get_limit_offset($currentPage, $limit);
 
         $this->db->select("rh.ID, rh.REQUEST_NUMBER, rh.UUID, rh.ORG_ID, rh.REQUEST_TITLE, rh.REQUEST_DETAILS, rh.CONTACT_NUMBER, rh.EMAIL_ADDRESS, rh.STATUS, rh.ACTION_BY, rh.VERSION, rh.CREATED_AT,
-        cl.COMPANY_NAME, u.FIRST_NAME, u.LAST_NAME, u.EMAIL");
+        cl.COMPANY_NAME, u.FIRST_NAME, u.LAST_NAME, u.EMAIL, rh.REVIEW_DATE,rh.NEXT_REVIEW_DATE,rh.RESPONSIBLE_USER_ID,rh.REVIEW_STATUS,rh.REVIEW_NOTES");
         $this->db->from("xx_crm_req_header rh");
         $this->db->join("xx_crm_client_detail cl", "cl.USER_ID = rh.CLIENT_ID", "left");
         $this->db->join("xx_crm_users u", "u.ID = rh.CLIENT_ID", "left");
@@ -173,7 +178,7 @@ class Request_model extends App_model
             // Fetch product details
             $data['header'] = $this->db->select("rh.ID, rh.ORG_ID, rh.REQUEST_NUMBER, rh.UUID, rh.CLIENT_ID, rh.REQUEST_TITLE, rh.COMPANY_ADDRESS, rh.BILLING_ADDRESS, rh.SHIPPING_ADDRESS, rh.CONTACT_NUMBER, 
             rh.EMAIL_ADDRESS, rh.REQUEST_DETAILS, rh.INTERNAL_NOTES, rh.ATTACHMENTS, 
-            cl.COMPANY_NAME, u.FIRST_NAME, u.LAST_NAME, u.EMAIL, CONCAT(u.FIRST_NAME, ' ', u.LAST_NAME) as FULLNAME")
+            cl.COMPANY_NAME, u.FIRST_NAME, u.LAST_NAME, u.EMAIL, CONCAT(u.FIRST_NAME, ' ', u.LAST_NAME) as FULLNAME, rh.REVIEW_DATE,rh.NEXT_REVIEW_DATE,rh.RESPONSIBLE_USER_ID,rh.REVIEW_STATUS,rh.REVIEW_NOTES")
                 ->from('xx_crm_req_header rh')
                 ->join('xx_crm_client_detail cl', 'cl.USER_ID = rh.CLIENT_ID', 'inner')
                 ->join('xx_crm_users u', 'u.ID = rh.CLIENT_ID', 'inner')
@@ -224,7 +229,7 @@ class Request_model extends App_model
             // Fetch product details
             $data['header'] = $this->db->select("rh.ID, rh.ORG_ID, rh.REQUEST_NUMBER, rh.UUID, rh.CLIENT_ID, rh.REQUEST_TITLE, rh.COMPANY_ADDRESS, rh.BILLING_ADDRESS, rh.SHIPPING_ADDRESS, rh.CONTACT_NUMBER, 
             rh.EMAIL_ADDRESS, rh.REQUEST_DETAILS, rh.INTERNAL_NOTES, rh.ATTACHMENTS, 
-            cl.COMPANY_NAME, u.FIRST_NAME, u.LAST_NAME, u.EMAIL, CONCAT(u.FIRST_NAME, ' ', u.LAST_NAME) as CLIENT_NAME")
+            cl.COMPANY_NAME, u.FIRST_NAME, u.LAST_NAME, u.EMAIL, CONCAT(u.FIRST_NAME, ' ', u.LAST_NAME) as CLIENT_NAME, rh.REVIEW_DATE,rh.NEXT_REVIEW_DATE,rh.RESPONSIBLE_USER_ID,rh.REVIEW_STATUS,rh.REVIEW_NOTES")
                 ->from('xx_crm_req_header rh')
                 ->join('xx_crm_client_detail cl', 'cl.USER_ID = rh.CLIENT_ID', 'LEFT')
                 ->join('xx_crm_users u', 'u.ID = rh.CLIENT_ID', 'LEFT')

@@ -254,6 +254,44 @@ $loggedInUserType = strtolower($loggedInUser['userrole']);
                             </div>
                         </div>
                     </div>
+
+                    <div class="row mb-2 border border-secondary bg-white pb-2 rounded">
+                        <div class="col-md-12">
+                            <h4 class="text-label-heading text-dark fw-bold mt-4">RFQ Review Details</h4>
+                        </div>
+
+                        <div class="col-md-2">
+                            <label for="REVIEW_DATE" class="text-gray-800 fw-bold mb-1">Review Date</label>
+                            <input type="date" name="REVIEW_DATE" id="REVIEW_DATE" class="form-control form-control-sm border border-blue-100 text-gray-700">
+                        </div>
+
+                        <div class="col-md-2">
+                            <label for="NEXT_REVIEW_DATE" class="text-gray-800 fw-bold mb-1">Next Review Date</label>
+                            <input type="date" name="NEXT_REVIEW_DATE" id="NEXT_REVIEW_DATE" class="form-control form-control-sm border border-blue-100 text-gray-700">
+                        </div>
+
+                        <div class="col-md-2">
+                            <label for="RESPONSIBLE_USER_ID" class="text-gray-800 fw-bold mb-1">Responsible User</label>
+                            <input type="text" name="RESPONSIBLE_USER_ID" id="RESPONSIBLE_USER_ID" class="form-control form-control-sm border border-blue-100 text-gray-700">
+                        </div>
+
+                        <div class="col-md-2">
+                            <label for="REVIEW_STATUS" class="text-gray-800 fw-bold mb-1">Review Status</label>
+                            <select name="REVIEW_STATUS" id="REVIEW_STATUS" class="form-control form-control-sm border border-blue-100 text-gray-700">
+                                <option value="">Select Status</option>
+                                <option value="Pending">Pending</option>
+                                <option value="Reviewed">Reviewed</option>
+                                <option value="In Progress">In Progress</option>
+                                <option value="Completed">Completed</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="REVIEW_NOTES" class="text-gray-800 fw-bold mb-1">Review Notes</label>
+                            <textarea rows="4" name="REVIEW_NOTES" id="REVIEW_NOTES" placeholder="Write review notes here..." class="form-control form-control-sm border border-blue-100 text-gray-700"></textarea>
+                        </div>
+                    </div>
+
                 </div>
             </form>
         </div>
