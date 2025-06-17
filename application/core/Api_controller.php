@@ -54,9 +54,10 @@ class Api_controller extends CI_Controller
         }
 
         // Query the database to check for the token and get USER_TYPE from xx_crm_users
-        $this->db->select("t.TOKEN, t.EXPIRY, t.USER_ID, u.USER_TYPE, CONCAT(u.FIRST_NAME , ' ', u.LAST_NAME) AS UNAME");
+        $this->db->select("t.TOKEN, t.EXPIRY, t.USER_ID, u.USER_TYPE, CONCAT(u.FIRST_NAME , ' ', u.LAST_NAME) AS UNAME, r.ROLE_NAME");
         $this->db->from('xx_crm_authtokens t');
         $this->db->join('xx_crm_users u', 't.USER_ID = u.ID');
+        $this->db->join('xx_crm_access_roles r', 'r.ID = u.USER_TYPE', "left");
         $this->db->where('t.TOKEN', $token);
         $this->db->where('t.TOKEN_TYPE', 'auth');
         $query = $this->db->get();
@@ -82,7 +83,7 @@ class Api_controller extends CI_Controller
             return ['status' => false];
         }
 
-        return ['status' => true, 'userid' => $row->USER_ID, 'role' => $row->USER_TYPE, 'name' => $row->UNAME];
+        return ['status' => true, 'userid' => $row->USER_ID, 'role' => strtolower($row->ROLE_NAME), 'name' => $row->UNAME];
     }
 
 
