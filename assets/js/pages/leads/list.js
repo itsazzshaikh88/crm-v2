@@ -111,17 +111,17 @@ function showLeads(leads, tbody) {
                                 </td>
                                 <td class="text-end">
                                     <div class="d-flex align-items-center justify-content-end gap-3">
-                                        <a href="javascript:void(0)" onclick="openLeadModal('view', ${lead?.LEAD_ID})">
+                                        <a title="View Lead" href="javascript:void(0)" onclick="openLeadModal('view', ${lead?.LEAD_ID})">
                                             <small>
                                                 <i class="fs-8 fa-solid fa-file-lines text-info"></i>
                                             </small>
                                         </a>
-                                        <a href="javascript:void(0)" onclick="openLeadModal('edit', ${lead?.LEAD_ID})">
+                                        <a title="Edit Lead" href="javascript:void(0)" onclick="openLeadModal('edit', ${lead?.LEAD_ID})">
                                             <small>
                                                 <i class="fs-8 fa-regular fa-pen-to-square text-gray-700"></i>
                                             </small>
                                         </a>
-                                        <a href="javascript:void(0)" onclick="deleteLead(${lead?.LEAD_ID})">
+                                        <a title="Delete Lead" href="javascript:void(0)" onclick="deleteLead(${lead?.LEAD_ID})">
                                             <small>
                                                 <i class="fs-8 fa-solid fa-trash-can text-danger"></i>
                                             </small>

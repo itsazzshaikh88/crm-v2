@@ -135,7 +135,7 @@ function showProducts(products, tbody) {
                                 <td class=""><span class="badge bg-light text-gray-800">${product.CATEGORY_CODE || ''}</span></td>
                                 <td class="text-end">
                                     <div class="d-flex align-items-center justify-content-end gap-3">
-                                        <a href="products/view/${product.UUID}">
+                                        <a title="View Product" href="products/view/${product.UUID}">
                                             <small>
                                                 <i class="fs-8 fa-solid fa-up-right-from-square text-gray-800"></i>
                                             </small>
@@ -143,12 +143,12 @@ function showProducts(products, tbody) {
                                         `;
             if (isAdmin) {
                 content += `
-                <a href="javascript:void(0)" onclick="openNewProductModal('edit', ${product.PRODUCT_ID})">
+                <a title="Edit Product" href="javascript:void(0)" onclick="openNewProductModal('edit', ${product.PRODUCT_ID})">
                                             <small>
                                                 <i class="fs-8 fa-solid fa-pen text-primary"></i>
                                             </small>
                                         </a>
-                <a href="javascript:void(0)" onclick="deleteProduct(${product.PRODUCT_ID})">
+                <a title="Delete Product" href="javascript:void(0)" onclick="deleteProduct(${product.PRODUCT_ID})">
                 <small>
                     <i class="fs-8 fa-solid fa-trash-can text-danger"></i>
                 </small>

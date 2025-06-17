@@ -76,12 +76,12 @@ function showPermissions(permissions, tbody) {
                                 <td class="">${formatAppDate(permission.CREATED_DATE || '')}</td>
                                 <td class="text-end">
                                     <div class="d-flex align-items-center justify-content-end gap-3">
-                                        <a href="javascript:void(0)" onclick="openPermissionModal('edit', ${permission?.ID})">
+                                        <a title="Edit Permission" href="javascript:void(0)" onclick="openPermissionModal('edit', ${permission?.ID})">
                                             <small>
                                                 <i class="fs-8 fa-regular fa-pen-to-square text-primary"></i>
                                             </small>
                                         </a>
-                                        <a href="javascript:void(0)" onclick="deletePermission(${permission?.ID})">
+                                        <a title="Delete Permission" href="javascript:void(0)" onclick="deletePermission(${permission?.ID})">
                                             <small>
                                                 <i class="fs-8 fa-solid fa-trash-can text-danger"></i>
                                             </small>

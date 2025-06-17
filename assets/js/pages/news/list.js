@@ -126,18 +126,18 @@ function showNews(news, tbody) {
                                         </button>
                                         <ul class="dropdown-menu dropdown-menu-end px-0 py-2 shadow-lg border" aria-labelledby="optionsMenu">
                                             <li class="mb-1 fs-8">
-                                                <a class="dropdown-item" href="news/view/${news.ID}/${news.UUID}" title="View News">
+                                                <a title="View News" class="dropdown-item" href="news/view/${news.ID}/${news.UUID}" title="View News">
                                                     <i class="fs-8 me-2 fa-solid fa-file-lines text-success"></i> View News
                                                 </a>
                                             </li>
                                             <li class="mb-1 fs-8">
-                                                <a class="dropdown-item" href="javascript:void(0)"
+                                                <a title="Edit News" class="dropdown-item" href="javascript:void(0)"
                                                     onclick="openNewNewsModal('edit', ${news.ID})" title="Edit News">
                                                     <i class="fs-8 me-2 fa-regular fa-pen-to-square text-gray-700"></i> Edit News
                                                 </a>
                                             </li>
                                             <li class="mb-1 fs-8">
-                                                <a class="dropdown-item" href="javascript:void(0)" onclick="deleteNews(${news.ID})"
+                                                <a title="Delete News" class="dropdown-item" href="javascript:void(0)" onclick="deleteNews(${news.ID})"
                                                     title="Delete News">
                                                     <i class="fs-8 me-2 fa-solid fa-trash-can text-danger"></i> Delete news
                                                 </a>

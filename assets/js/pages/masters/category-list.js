@@ -76,12 +76,12 @@ function showCategories(categories, tbody) {
                                 <td><p class="line-clamp-1">${category?.DESCRIPTION || ''}</p></td>                                
                                 <td class="text-end">
                                     <div class="d-flex align-items-center justify-content-end gap-3">
-                                        <a href="javascript:void(0)" onclick="fetchCategoryDetailsToEdit(${category?.ID})">
+                                        <a href="javascript:void(0)" title="Edit Record" onclick="fetchCategoryDetailsToEdit(${category?.ID})">
                                             <small>
                                                 <i class="fs-8 fa-regular fa-pen-to-square text-gray-700"></i>
                                             </small>
                                         </a>
-                                        <a href="javascript:void(0)" onclick="deleteCategory(${category?.ID})">
+                                        <a href="javascript:void(0)" title="Delete Record" onclick="deleteCategory(${category?.ID})">
                                             <small>
                                                 <i class="fs-8 fa-solid fa-trash-can text-danger"></i>
                                             </small>

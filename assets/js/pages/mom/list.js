@@ -95,12 +95,12 @@ function showMinutes(minutes, tbody) {
                                 <td class=""><small class="d-flex align-items-center justify-content-start gap-1  flex-wrap text-gray-700 ">${showAttendees(minute?.ATTENDEES || {})}</small></td>
                                 <td class="text-end">
                                     <div class="d-flex align-items-center justify-content-end gap-3">
-                                        <a href="javascript:void(0)" onclick="openMomModal('edit', ${minute?.MOM_ID})">
+                                        <a title="Edit MoM" href="javascript:void(0)" onclick="openMomModal('edit', ${minute?.MOM_ID})">
                                             <small>
                                                 <i class="fs-8 fa-regular fa-pen-to-square text-primary"></i>
                                             </small>
                                         </a>
-                                        <a href="javascript:void(0)" onclick="deleteMinute(${minute?.MOM_ID})">
+                                        <a title="Delete MoM" href="javascript:void(0)" onclick="deleteMinute(${minute?.MOM_ID})">
                                             <small>
                                                 <i class="fs-8 fa-solid fa-trash-can text-danger"></i>
                                             </small>

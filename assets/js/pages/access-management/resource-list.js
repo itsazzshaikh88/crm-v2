@@ -77,12 +77,12 @@ function showResources(resources, tbody) {
                                 <td class="">${formatAppDate(resource.CREATED_DATE || '')}</td>
                                 <td class="text-end">
                                     <div class="d-flex align-items-center justify-content-end gap-3">
-                                        <a href="javascript:void(0)" onclick="openResourceModal('edit', ${resource?.ID})">
+                                        <a title="Edit Resource" href="javascript:void(0)" onclick="openResourceModal('edit', ${resource?.ID})">
                                             <small>
                                                 <i class="fs-8 fa-regular fa-pen-to-square text-primary"></i>
                                             </small>
                                         </a>
-                                        <a href="javascript:void(0)" onclick="deleteResource(${resource?.ID})">
+                                        <a title="Delete Resource" href="javascript:void(0)" onclick="deleteResource(${resource?.ID})">
                                             <small>
                                                 <i class="fs-8 fa-solid fa-trash-can text-danger"></i>
                                             </small>

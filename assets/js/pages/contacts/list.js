@@ -152,17 +152,17 @@ function showContactCards(contacts) {
             <div class="d-flex justify-content-between align-items-center mt-2 bg-light p-2 rounded border">
               ${setContactStatus(contact.STATUS || '')}
               <div class="d-flex align-items-center justify-content-end gap-3">
-                    <a href="javascript:void(0)" onclick="viewContactDetails('${contact?.UUID}')">
+                    <a title="View Contact" href="javascript:void(0)" onclick="viewContactDetails('${contact?.UUID}')">
                         <small>
                             <i class="fs-6 fa-solid fa-file-lines text-info"></i>
                         </small>
                     </a>
-                    <a href="contacts/new/${contact?.UUID}?action=edit">
+                    <a title="Edit Contact" href="contacts/new/${contact?.UUID}?action=edit">
                         <small>
                             <i class="fs-6 fa-regular fa-pen-to-square text-gray-700"></i>
                         </small>
                     </a>
-                    <a href="javascript:void(0)" onclick="deleteContact(${contact?.CONTACT_ID}, '${contactStatusIconLabel}')">
+                    <a title="Active/Inactive Contact" href="javascript:void(0)" onclick="deleteContact(${contact?.CONTACT_ID}, '${contactStatusIconLabel}')">
                         <small>
                             <i class="fs-6 ${contactStatusIcon} text-${contactStatusIconColor}"></i>
                         </small>

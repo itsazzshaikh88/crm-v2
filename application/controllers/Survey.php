@@ -6,7 +6,7 @@ class Survey extends App_Controller
     public function index()
     {
 
-        $user_type = $this->userDetails['usertype'] ?? 'Guest';
+        $user_type = $this->userDetails['userrole'] ?? 'Guest';
         $is_admin = $user_type == 'admin' ? true : false;
         $is_client = $user_type == 'client' ? true : false;
 

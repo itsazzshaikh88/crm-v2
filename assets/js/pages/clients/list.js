@@ -88,17 +88,17 @@ function showClients(products, tbody) {
                                 <td class="">${showClientStatus(client.STATUS || '')}</td>
                                 <td class="text-end">
                                     <div class="d-flex align-items-center justify-content-end gap-3">
-                                        <a href="clients/view/${client.UUID}">
+                                        <a title="View Client" href="clients/view/${client.UUID}">
                                             <small>
                                                 <i class="fs-8 fa-solid fa-file-lines text-success"></i>
                                             </small>
                                         </a>
-                                        <a href="clients/new/${client.UUID}?action=edit">
+                                        <a title="Edit Client" href="clients/new/${client.UUID}?action=edit">
                                             <small>
                                                 <i class="fs-8 fa-regular fa-pen-to-square text-gray-700"></i>
                                             </small>
                                         </a>
-                                        <a href="javascript:void(0)" onclick="deleteClient(${client.ID})">
+                                        <a title="Delete Client" href="javascript:void(0)" onclick="deleteClient(${client.ID})">
                                             <small>
                                                 <i class="fs-8 fa-solid fa-trash-can text-danger"></i>
                                             </small>

@@ -157,12 +157,12 @@ function showDeals(deals, tbody) {
                                 <td>${formatAppDate(deal.CREATED_AT)}</td>
                                 <td class="text-end">
                                     <div class="d-flex align-items-center justify-content-end gap-3">
-                                        <a href="javascript:void(0)" onclick="openDealModal('edit', ${deal?.DEAL_ID})">
+                                        <a title="Edit Deal" href="javascript:void(0)" onclick="openDealModal('edit', ${deal?.DEAL_ID})">
                                             <small>
                                                 <i class="fs-8 fa-regular fa-pen-to-square text-primary"></i>
                                             </small>
                                         </a>
-                                        <a href="javascript:void(0)" onclick="deleteDeal(${deal?.DEAL_ID})">
+                                        <a title="Delete Deal" href="javascript:void(0)" onclick="deleteDeal(${deal?.DEAL_ID})">
                                             <small>
                                                 <i class="fs-8 fa-solid fa-trash-can text-danger"></i>
                                             </small>

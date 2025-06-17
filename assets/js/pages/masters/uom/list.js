@@ -87,12 +87,12 @@ function showUOM(uom, tbody) {
                             
                                 <td class="text-end">
                                     <div class="d-flex align-items-center justify-content-end gap-3">
-                                        <a href="javascript:void(0)" onclick="fetchUOMDetailsToEdit(${uom?.UOM_ID})">
+                                        <a title="Edit UOM" href="javascript:void(0)" onclick="fetchUOMDetailsToEdit(${uom?.UOM_ID})">
                                             <small>
                                                 <i class="fs-8 fa-regular fa-pen-to-square text-gray-700"></i>
                                             </small>
                                         </a>
-                                        <a href="javascript:void(0)" onclick="deleteUOM(${uom?.UOM_ID})">
+                                        <a title="Delete UOM" href="javascript:void(0)" onclick="deleteUOM(${uom?.UOM_ID})">
                                             <small>
                                                 <i class="fs-8 fa-solid fa-trash-can text-danger"></i>
                                             </small>

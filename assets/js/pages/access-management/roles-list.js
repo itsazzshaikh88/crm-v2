@@ -75,12 +75,12 @@ function showRoles(roles, tbody) {
                                 <td class="">${formatAppDate(role.CREATED_AT || '')}</td>
                                 <td class="text-end">
                                     <div class="d-flex align-items-center justify-content-end gap-3">
-                                        <a href="javascript:void(0)" onclick="openRoleModal('edit', ${role?.ID})">
+                                        <a title="Edit Role" href="javascript:void(0)" onclick="openRoleModal('edit', ${role?.ID})">
                                             <small>
                                                 <i class="fs-8 fa-regular fa-pen-to-square text-primary"></i>
                                             </small>
                                         </a>
-                                        <a href="javascript:void(0)" onclick="deleteRole(${role?.ID})">
+                                        <a title="Delete Role" href="javascript:void(0)" onclick="deleteRole(${role?.ID})">
                                             <small>
                                                 <i class="fs-8 fa-solid fa-trash-can text-danger"></i>
                                             </small>

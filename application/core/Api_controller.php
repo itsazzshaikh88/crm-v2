@@ -228,7 +228,7 @@ class Api_controller extends CI_Controller
             $mail->Host       = 'smtp.office365.com';
             $mail->SMTPAuth   = true;
             $mail->Username   = 'workflowmailer@zamilplastic.com';
-            $mail->Password   = 'Abc$1234';
+            $mail->Password   = 'Wf@20252423#';
             $mail->SMTPSecure = 'tls';
             $mail->Port       = 587;
 
