@@ -74,7 +74,7 @@ class Lead_model extends App_Model
     {
         $offset = get_limit_offset($currentPage, $limit);
 
-        $this->db->select("l.LEAD_ID, l.ORG_ID, l.LEAD_NUMBER, l.FIRST_NAME, l.LAST_NAME, l.EMAIL, l.PHONE, l.COMPANY_NAME, l.JOB_TITLE, l.LEAD_SOURCE, l.STATUS, l.ASSIGNED_TO, l.ASSIGNED_TO_ID, l.LEAD_SCORE, l.NOTES, l.CREATED_AT");
+        $this->db->select("l.LEAD_ID, l.ORG_ID, l.LEAD_NUMBER, l.FIRST_NAME, l.LAST_NAME, l.EMAIL, l.PHONE, l.COMPANY_NAME, l.JOB_TITLE, l.LEAD_SOURCE, l.STATUS, l.ASSIGNED_TO, l.ASSIGNED_TO_ID, l.FOLLOW_UP_DATE, l.LEAD_SCORE, l.NOTES, l.CREATED_AT");
         $this->db->from("xx_crm_leads l");
         $this->db->order_by("l.LEAD_ID", "DESC");
 
@@ -172,7 +172,7 @@ class Lead_model extends App_Model
 
     public function get_lead_details_by_id($leadID)
     {
-        return $this->db->query("SELECT lds.LEAD_ID, lds.UUID, lds.LEAD_NUMBER, lds.LEAD_SOURCE, lds.LEAD_EVENT, lds.STATUS, lds.ASSIGNED_TO, lds.ASSIGNED_TO_ID, lds.LEAD_SCORE, lds.ORG_ID,
+        return $this->db->query("SELECT lds.LEAD_ID, lds.UUID, lds.LEAD_NUMBER, lds.LEAD_SOURCE, lds.LEAD_EVENT, lds.STATUS, lds.ASSIGNED_TO, lds.ASSIGNED_TO_ID, lds.FOLLOW_UP_DATE, lds.LEAD_SCORE, lds.ORG_ID,
             cn.CONTACT_ID, cn.FIRST_NAME, cn.LAST_NAME, cn.EMAIL, cn.PHONE, cn.MOBILE, cn.COMPANY_NAME, cn.JOB_TITLE, cn.DEPARTMENT, cn.CONTACT_SOURCE, cn.LAST_CONTACTED, cn.PREFERRED_CONTACT_METHOD, cn.ADDRESS,
             dls.DEAL_ID, dls.DEAL_STAGE, dls.DEAL_TYPE, dls.DEAL_VALUE, dls.DEAL_PRIORITY, dls.EXPECTED_CLOSE_DATE, dls.ACTUAL_CLOSE_DATE, dls.PROBABILITY, dls.DEAL_SOURCE, dls.DEAL_STATUS, dls.DEAL_DESCRIPTION, dls.NOTES, dls.CONTRACT_TERMS, dls.CLOSE_REASON, dls.DEAL_NUMBER,
             CONCAT(u.FIRST_NAME, ' ', u.LAST_NAME) AS ASSIGNED_TO
@@ -198,7 +198,7 @@ class Lead_model extends App_Model
 
     public function get_lead_details_and_activities_by_id($leadID)
     {
-        $data['lead'] = $this->db->query("SELECT lds.LEAD_ID, lds.UUID, lds.LEAD_NUMBER, lds.LEAD_SOURCE, lds.LEAD_EVENT, lds.STATUS, lds.ASSIGNED_TO, lds.ASSIGNED_TO_ID, lds.LEAD_SCORE, lds.ORG_ID,
+        $data['lead'] = $this->db->query("SELECT lds.LEAD_ID, lds.UUID, lds.LEAD_NUMBER, lds.LEAD_SOURCE, lds.LEAD_EVENT, lds.STATUS, lds.ASSIGNED_TO, lds.ASSIGNED_TO_ID, lds.FOLLOW_UP_DATE, lds.LEAD_SCORE, lds.ORG_ID,
             cn.CONTACT_ID, cn.FIRST_NAME, cn.LAST_NAME, cn.EMAIL, cn.PHONE, cn.MOBILE, cn.COMPANY_NAME, cn.JOB_TITLE, cn.DEPARTMENT, cn.CONTACT_SOURCE, cn.LAST_CONTACTED, cn.PREFERRED_CONTACT_METHOD, cn.ADDRESS,
             dls.DEAL_ID, dls.DEAL_STAGE, dls.DEAL_TYPE, dls.DEAL_VALUE, dls.DEAL_PRIORITY, dls.EXPECTED_CLOSE_DATE, dls.ACTUAL_CLOSE_DATE, dls.PROBABILITY, dls.DEAL_SOURCE, dls.DEAL_STATUS, dls.DEAL_DESCRIPTION, dls.NOTES, dls.CONTRACT_TERMS, dls.CLOSE_REASON, dls.DEAL_NUMBER,
             CONCAT(u.FIRST_NAME, ' ', u.LAST_NAME) AS ASSIGNED_TO
@@ -326,6 +326,7 @@ class Lead_model extends App_Model
             'STATUS' => $data['STATUS'],
             'ASSIGNED_TO' => $data['ASSIGNED_TO'],
             'ASSIGNED_TO_ID' => $data['ASSIGNED_TO_ID'],
+            'FOLLOW_UP_DATE' => $data['FOLLOW_UP_DATE'],
             'CREATED_AT' => date('Y-m-d'),
         ];
 
@@ -434,7 +435,8 @@ class Lead_model extends App_Model
             'LEAD_EVENT' => $data['LEAD_EVENT'],
             'STATUS' => $data['STATUS'],
             'ASSIGNED_TO' => $data['ASSIGNED_TO'],
-            'ASSIGNED_TO_ID' => $data['ASSIGNED_TO_ID']
+            'ASSIGNED_TO_ID' => $data['ASSIGNED_TO_ID'],
+            'FOLLOW_UP_DATE' => $data['FOLLOW_UP_DATE']
         ];
 
         // Insert new lead

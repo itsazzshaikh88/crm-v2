@@ -96,28 +96,36 @@ $activities = LEAD_ACTIVITY_OPTIONS;
                                                     </div>
                                                 </div>
 
-                                                <div class="form-floating mb-2">
-                                                    <input type="text" placeholder="Enter Value" class="form-control border text-gray-700 border-blue-100 " name="LEAD_SOURCE" id="LEAD_SOURCE">
-                                                    <label for="LEAD_SOURCE" class="text-gray-600">Lead Source <span class="text-danger">*</span></label>
+                                                <div class="d-flex flex-row align-items-start justify-content-between gap-2 mb-2">
+                                                    <div class="form-floating w-50">
+                                                        <input type="text" placeholder="Enter Value" class="form-control border text-gray-700 border-blue-100 " name="LEAD_SOURCE" id="LEAD_SOURCE">
+                                                        <label for="LEAD_SOURCE" class="text-gray-600">Lead Source <span class="text-danger">*</span></label>
+                                                        <span class="text-danger err-lbl" id="lbl-LEAD_SOURCE"></span>
+                                                    </div>
+                                                    <div class="form-floating w-50">
+                                                        <input type="text" placeholder="Enter Value" class="form-control border text-gray-700 border-blue-100 " name="LEAD_EVENT" id="LEAD_EVENT">
+                                                        <label for="LEAD_EVENT" class="text-gray-600">Lead Event <span class="text-danger">*</span></label>
+                                                        <span class="text-danger err-lbl" id="lbl-LEAD_EVENT"></span>
+                                                    </div>
                                                 </div>
-                                                <span class="text-danger err-lbl" id="lbl-LEAD_SOURCE"></span>
-                                                <div class="form-floating mb-2">
-                                                    <input type="text" placeholder="Enter Value" class="form-control border text-gray-700 border-blue-100 " name="LEAD_EVENT" id="LEAD_EVENT">
-                                                    <label for="LEAD_EVENT" class="text-gray-600">Lead Event <span class="text-danger">*</span></label>
+                                                <div class="d-flex flex-row align-items-start justify-content-between gap-2 mb-2">
+                                                    <div class="form-floating w-50">
+                                                        <select class="form-select text-gray-700" name="STATUS" id="STATUS" aria-label="Floating label select example">
+                                                            <option value="">Choose Status</option>
+                                                            <option value="new">New</option>
+                                                            <option value="contacted">Contacted</option>
+                                                            <option value="engaged">Engaged</option>
+                                                            <option value="qualified">Qualified</option>
+                                                            <option value="disqualified">Disqualified</option>
+                                                        </select>
+                                                        <label for="STATUS">Status <span class="text-danger">*</span></label>
+                                                        <span class="text-danger err-lbl" id="lbl-STATUS"></span>
+                                                    </div>
+                                                    <div class="form-floating w-50">
+                                                        <input type="date" placeholder="Enter Date" class="form-control border text-gray-700 border-blue-100 " name="FOLLOW_UP_DATE" id="FOLLOW_UP_DATE">
+                                                        <label for="FOLLOW_UP_DATE" class="text-gray-600">Follow Up Date</label>
+                                                    </div>
                                                 </div>
-                                                <span class="text-danger err-lbl" id="lbl-LEAD_EVENT"></span>
-                                                <div class="form-floating mb-2">
-                                                    <select class="form-select text-gray-700" name="STATUS" id="STATUS" aria-label="Floating label select example">
-                                                        <option value="">Choose Status</option>
-                                                        <option value="new">New</option>
-                                                        <option value="contacted">Contacted</option>
-                                                        <option value="engaged">Engaged</option>
-                                                        <option value="qualified">Qualified</option>
-                                                        <option value="disqualified">Disqualified</option>
-                                                    </select>
-                                                    <label for="STATUS">Status <span class="text-danger">*</span></label>
-                                                </div>
-                                                <span class="text-danger err-lbl" id="lbl-STATUS"></span>
                                                 <!-- ASSIGNED TO -->
                                                 <div class="form-floating mb-2 position-relative">
                                                     <input
