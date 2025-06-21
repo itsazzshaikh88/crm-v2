@@ -40,6 +40,7 @@ class Deal_model extends App_Model
             'NOTES' => $data['NOTES'] ?? null,
             'CONTRACT_TERMS' => $data['CONTRACT_TERMS'] ?? null,
             'CLOSE_REASON' => $data['CLOSE_REASON'] ?? null,
+            'FOLLOW_UP_DATE' => $data['FOLLOW_UP_DATE'] ?? null,
         ];
 
         // Insert new deal
@@ -81,6 +82,7 @@ class Deal_model extends App_Model
             'NOTES' => $data['NOTES'] ?? null,
             'CONTRACT_TERMS' => $data['CONTRACT_TERMS'] ?? null,
             'CLOSE_REASON' => $data['CLOSE_REASON'] ?? null,
+            'FOLLOW_UP_DATE' => $data['FOLLOW_UP_DATE'] ?? null,
         ];
 
         // Insert new deal
@@ -91,7 +93,7 @@ class Deal_model extends App_Model
     {
         $offset = get_limit_offset($currentPage, $limit);
 
-        $this->db->select("d.DEAL_ID, d.UUID, d.ORG_ID, d.DEAL_NAME, d.ASSOCIATED_CONTACT_ID, d.DEAL_STAGE, d.DEAL_TYPE, d.DEAL_VALUE, d.DEAL_PRIORITY, d.EXPECTED_CLOSE_DATE, d.ACTUAL_CLOSE_DATE, d.PROBABILITY, d.ASSIGNED_TO,d.ASSIGNED_TO_ID, d.DEAL_SOURCE, d.DEAL_STATUS, d.DEAL_DESCRIPTION, d.CREATED_AT, d.UPDATED_AT, d.LAST_ACTIVITY_DATE, d.NOTES, d.CONTRACT_TERMS, d.CLOSE_REASON");
+        $this->db->select("d.DEAL_ID, d.UUID, d.ORG_ID, d.DEAL_NAME, d.ASSOCIATED_CONTACT_ID, d.FOLLOW_UP_DATE, d.DEAL_STAGE, d.DEAL_TYPE, d.DEAL_VALUE, d.DEAL_PRIORITY, d.EXPECTED_CLOSE_DATE, d.ACTUAL_CLOSE_DATE, d.PROBABILITY, d.ASSIGNED_TO,d.ASSIGNED_TO_ID, d.DEAL_SOURCE, d.DEAL_STATUS, d.DEAL_DESCRIPTION, d.CREATED_AT, d.UPDATED_AT, d.LAST_ACTIVITY_DATE, d.NOTES, d.CONTRACT_TERMS, d.CLOSE_REASON");
         $this->db->from($this->deal_table . " d");
         $this->db->order_by("d.DEAL_ID", "DESC");
 

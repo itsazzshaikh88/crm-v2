@@ -146,31 +146,37 @@ $activities = DEAL_ACTIVITY_OPTIONS;
                                         </div>
                                         <span class="text-danger err-lbl" id="lbl-DEAL_SOURCE"></span>
                                     </div>
-                                    <div class="form-floating w-100 mb-2">
-                                        <div class="form-floating mb-2 position-relative">
-                                            <input
-                                                type="text"
-                                                placeholder="Enter Value"
-                                                class="form-control border border-blue-100 text-gray-700"
-                                                name="ASSIGNED_TO"
-                                                id="ASSIGNED_TO"
-                                                readonly
-                                                autocomplete="off"
-                                                onclick="opensalesPersonListModal()">
-                                            <label for="ASSIGNED_TO" class="text-gray-600">Assigned To <span class="text-danger">*</span></label>
+                                    <div class="d-flex flex-row align-items-center justify-content-between mb-2">
+                                        <div class="d-inline-flex form-floating w-50">
+                                            <div class="form-floating position-relative w-100">
+                                                <input
+                                                    type="text"
+                                                    placeholder="Enter Value"
+                                                    class="form-control border border-blue-100 text-gray-700"
+                                                    name="ASSIGNED_TO"
+                                                    id="ASSIGNED_TO"
+                                                    readonly
+                                                    autocomplete="off"
+                                                    onclick="opensalesPersonListModal()">
+                                                <label for="ASSIGNED_TO" class="text-gray-600">Assigned To <span class="text-danger">*</span></label>
 
-                                            <!-- Hidden ID field -->
-                                            <input type="hidden" id="ASSIGNED_TO_ID" name="ASSIGNED_TO_ID" />
+                                                <!-- Hidden ID field -->
+                                                <input type="hidden" id="ASSIGNED_TO_ID" name="ASSIGNED_TO_ID" />
 
-                                            <!-- X Icon for clearing -->
-                                            <span
-                                                id="clearSalesPerson"
-                                                style="display:none; position:absolute; top:50%; transform:translateY(-50%); right:10px; cursor:pointer; font-weight:bold; font-size:18px; color:red;"
-                                                title="Clear Assigned To"
-                                                onclick="clearSalesPersonDetails()">&times;</span>
+                                                <!-- X Icon for clearing -->
+                                                <span
+                                                    id="clearSalesPerson"
+                                                    style="display:none; position:absolute; top:50%; transform:translateY(-50%); right:10px; cursor:pointer; font-weight:bold; font-size:18px; color:red;"
+                                                    title="Clear Assigned To"
+                                                    onclick="clearSalesPersonDetails()">&times;</span>
+                                            </div>
+                                            <span class="text-danger err-lbl" id="lbl-ASSIGNED_TO"></span>
+                                        </div>
+                                        <div class="d-inline-flex form-floating w-50">
+                                            <input type="date" placeholder="Enter Value" class="form-control border border-blue-100 text-gray-700 " name="FOLLOW_UP_DATE" id="FOLLOW_UP_DATE">
+                                            <label for="FOLLOW_UP_DATE" class="text-gray-600">Follow Up Date</label>
                                         </div>
                                     </div>
-                                    <span class="text-danger err-lbl" id="lbl-ASSIGNED_TO"></span>
                                     <div class="form-floating w-100 mb-2">
                                         <textarea type="text" placeholder="Enter Value" class="form-control border border-blue-100 text-gray-700" style="height: 120px;" name="DEAL_DESCRIPTION" id="DEAL_DESCRIPTION"></textarea>
                                         <label for="DEAL_DESCRIPTION" class="text-gray-600">Deal Description </label>

@@ -403,6 +403,7 @@ class Lead_model extends App_Model
             'NOTES' => $data['NOTES'] ?? null,
             'CONTRACT_TERMS' => $data['CONTRACT_TERMS'] ?? null,
             'CLOSE_REASON' => $data['CLOSE_REASON'] ?? null,
+            'FOLLOW_UP_DATE' => $data['FOLLOW_UP_DATE'] ?? null,
         ];
 
         // Insert new deal
@@ -516,6 +517,7 @@ class Lead_model extends App_Model
             'NOTES' => $data['NOTES'] ?? null,
             'CONTRACT_TERMS' => $data['CONTRACT_TERMS'] ?? null,
             'CLOSE_REASON' => $data['CLOSE_REASON'] ?? null,
+            'FOLLOW_UP_DATE' => $data['FOLLOW_UP_DATE'] ?? null,
         ];
 
         // Insert new deal
