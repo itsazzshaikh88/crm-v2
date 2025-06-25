@@ -57,19 +57,6 @@ class Deals extends Api_controller
             $data = $this->input->post();
             $data = array_map([$this->security, 'xss_clean'], $data);
 
-            // Check if the lead is already registered with the existing email address
-            $deal = $this->Deal_model->get_deal_by_email($data['EMAIL']);
-            if (!empty($deal)) {
-                $this->sendHTTPResponse(409, [
-                    'status' => 'error',
-                    'code' => 409,
-                    'error' => 'A Deal with this email already exists.',
-                    'message' => 'A Deal with this email already exists.'
-                ]);
-                return;
-            }
-
-
             // Save Data to the product table
             $created = $this->Deal_model->add_deal($data, $isAuthorized['userid']);
             $newlyCreatedDeal = $this->Deal_model->get_deal_by_uuid($data['UUID']);

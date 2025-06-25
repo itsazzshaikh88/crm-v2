@@ -129,3 +129,49 @@ $deal_activities = [
     ],
 ];
 define('DEAL_ACTIVITY_OPTIONS', $deal_activities);
+
+/*
+|--------------------------------------------------------------------------
+| Time Intervals Reference Table
+|--------------------------------------------------------------------------
+| This table provides standard time intervals with all units fully converted:
+| - Hours (decimal)
+| - Total Minutes (all hours converted to minutes)
+| - Total Seconds (all minutes converted to seconds)
+|
+| Format: [Label] => [Hours] | [Minutes] | [Seconds]
+|
+| Interval        => Hours   | Minutes | Seconds
+|---------------------------|---------|---------
+| 1 min           => 0.0167  | 1       | 60
+| 2 min           => 0.0333  | 2       | 120
+| 3 min           => 0.0500  | 3       | 180
+| 4 min           => 0.0667  | 4       | 240
+| 5 min           => 0.0833  | 5       | 300
+| 10 min          => 0.1667  | 10      | 600
+| 15 min          => 0.2500  | 15      | 900
+| 30 min          => 0.5000  | 30      | 1800
+| 45 min          => 0.7500  | 45      | 2700
+| 1 hour          => 1.0000  | 60      | 3600
+| 1.25 hours      => 1.2500  | 75      | 4500
+| 1.5 hours       => 1.5000  | 90      | 5400
+| 1.75 hours      => 1.7500  | 105     | 6300
+| 2 hours         => 2.0000  | 120     | 7200
+| 2.25 hours      => 2.2500  | 135     | 8100
+| 2.5 hours       => 2.5000  | 150     | 9000
+| 2.75 hours      => 2.7500  | 165     | 9900
+| 3 hours         => 3.0000  | 180     | 10800
+| 3.25 hours      => 3.2500  | 195     | 11700
+| 3.5 hours       => 3.5000  | 210     | 12600
+| 3.75 hours      => 3.7500  | 225     | 13500
+| 4 hours         => 4.0000  | 240     | 14400
+| 4.25 hours      => 4.2500  | 255     | 15300
+| 4.5 hours       => 4.5000  | 270     | 16200
+| 4.75 hours      => 4.7500  | 285     | 17100
+| 5 hours         => 5.0000  | 300     | 18000
+|
+*/
+
+
+// Notifications Intervals -> must be in seconds
+define('LEADS_NOTIFICATION_INTERVAL', 120);

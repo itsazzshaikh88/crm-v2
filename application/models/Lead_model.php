@@ -523,4 +523,15 @@ class Lead_model extends App_Model
         // Insert new deal
         return $this->db->where('ASSOCIATED_LEAD_ID', $data['ASSOC_LEAD_ID'])->update("xx_crm_deals", $deal_data);
     }
+
+    function get_leads_and_deals_followup_req()
+    {
+        $sql = "SELECT 'lead' AS source_type, l.LEAD_ID AS record_id, l.UUID, l.LEAD_NUMBER AS reference_number, '' AS ASSOCIATED_LEAD_ID, CONCAT(l.FIRST_NAME, ' ', l.LAST_NAME) AS customer_name, l.EMAIL, l.PHONE, l.COMPANY_NAME, l.JOB_TITLE, l.LEAD_SOURCE AS source, l.STATUS AS status, l.LEAD_SCORE, l.FOLLOW_UP_DATE, l.CREATED_AT, l.UPDATED_AT, u.ID AS assigned_user_id, CONCAT(u.FIRST_NAME, ' ', u.LAST_NAME) AS assigned_user_name, u.EMAIL AS assigned_user_email, u.PHONE_NUMBER AS assigned_user_phone, l.ORG_ID FROM xx_crm_leads l LEFT JOIN xx_crm_users u ON l.ASSIGNED_TO_ID = u.ID WHERE l.FOLLOW_UP_DATE BETWEEN CURDATE() AND CURDATE() + INTERVAL 1 DAY
+            UNION ALL
+            SELECT 'deal' AS source_type, d.DEAL_ID AS record_id, d.UUID, d.DEAL_NUMBER AS reference_number, d.ASSOCIATED_LEAD_ID, d.DEAL_NAME AS customer_name, d.EMAIL, d.CONTACT_NUMBER AS PHONE, '' AS COMPANY_NAME, '' AS JOB_TITLE, d.DEAL_SOURCE AS source, d.DEAL_STATUS AS status, d.PROBABILITY AS lead_score, d.FOLLOW_UP_DATE, d.CREATED_AT, d.UPDATED_AT, u.ID AS assigned_user_id, CONCAT(u.FIRST_NAME, ' ', u.LAST_NAME) AS assigned_user_name, u.EMAIL AS assigned_user_email, u.PHONE_NUMBER AS assigned_user_phone, d.ORG_ID FROM xx_crm_deals d LEFT JOIN xx_crm_users u ON d.ASSIGNED_TO_ID = u.ID WHERE d.FOLLOW_UP_DATE BETWEEN CURDATE() AND CURDATE() + INTERVAL 1 DAY;
+            ";
+
+
+        return $this->db->query($sql)->result_array();
+    }
 }

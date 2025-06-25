@@ -10,3 +10,4 @@ $route['updates/news-and-announcements'] = "portal/news_and_announcements";
 
 // Public Crone Job Routes
 $route['public/cron/purchase-orders/sync-status'] = "public/cron/purchase_order_status_service";
+$route['public/cron/notifications/deals-and-leads-followup'] = "public/services/notifications/deals_and_leads_followup";
